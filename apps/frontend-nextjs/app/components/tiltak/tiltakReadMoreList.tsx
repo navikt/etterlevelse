@@ -12,7 +12,7 @@ import { Button, ReadMore } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useMemo, useState } from 'react'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
-import TiltakView from './common/tiltakView'
+import { TiltakView } from './common/tiltakView'
 import SlettTiltakModal from './edit/slettTiltakModal'
 import TiltakForm from './form/tiltakForm'
 
@@ -272,5 +272,3 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     </div>
   )
 }
-
-export default TiltakReadMoreList

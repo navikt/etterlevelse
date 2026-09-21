@@ -25,7 +25,7 @@ type TProps = {
   customDelete?: (tiltakId: string) => void
 }
 
-export const SlettTiltakModal: FunctionComponent<TProps> = ({
+const SlettTiltakModal: FunctionComponent<TProps> = ({
   tiltak,
   risikoscenario,
   isDeleteModalOpen,

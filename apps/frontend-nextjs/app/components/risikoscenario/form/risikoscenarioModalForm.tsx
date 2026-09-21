@@ -20,7 +20,7 @@ type TProps = {
   formRef?: RefObject<any>
 }
 
-export const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
+const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
   headerText,
   isOpen,
   mode,

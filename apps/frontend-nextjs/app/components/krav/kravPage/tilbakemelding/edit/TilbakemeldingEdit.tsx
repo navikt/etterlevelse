@@ -6,7 +6,7 @@ import {
 import { Alert, Button, Textarea } from '@navikt/ds-react'
 import { Dispatch, SetStateAction, useState } from 'react'
 
-export const TilbakemeldingEdit = ({
+const TilbakemeldingEdit = ({
   tilbakemeldingId,
   melding,
   close,
@@ -53,4 +53,5 @@ export const TilbakemeldingEdit = ({
     </div>
   )
 }
+
 export default TilbakemeldingEdit

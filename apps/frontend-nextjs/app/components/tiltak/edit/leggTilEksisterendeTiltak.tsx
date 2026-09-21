@@ -18,7 +18,7 @@ interface IProps {
   formRef?: RefObject<any>
 }
 
-export const LeggTilEksisterendeTiltak = (props: IProps) => {
+const LeggTilEksisterendeTiltak = (props: IProps) => {
   const { risikoscenario, tiltakList, setIsAddExisitingMode, submit, formRef } = props
   const [selectedTiltak, setSelectedTiltak] = useState<string[]>([])
 
@@ -111,4 +111,5 @@ export const LeggTilEksisterendeTiltak = (props: IProps) => {
     </div>
   )
 }
+
 export default LeggTilEksisterendeTiltak

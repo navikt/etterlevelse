@@ -36,7 +36,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
+const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
   risikoscenario,
   risikoscenarioList,
   etterlevelseDokumentasjonId,

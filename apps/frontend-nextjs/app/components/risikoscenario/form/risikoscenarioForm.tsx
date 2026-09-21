@@ -5,7 +5,7 @@ import { Button, ErrorSummary } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
-import { RisikoscenarioKonsekvensnivaaField } from './field/risikoscenarioKonsekvensnivaaField'
+import RisikoscenarioKonsekvensnivaaField from './field/risikoscenarioKonsekvensnivaaField'
 import RisikoscenarioSannsynlighetField from './field/risikoscenarioSannsynlighetField'
 import { risikoscenarioCreateValidation } from './risikoscenarioSchema'
 
@@ -16,7 +16,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const RisikoscenarioForm: FunctionComponent<TProps> = ({
+const RisikoscenarioForm: FunctionComponent<TProps> = ({
   initialValues,
   submit,
   onClose,

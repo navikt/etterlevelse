@@ -8,7 +8,7 @@ type TProps = {
   meldingTilPvo: IMeldingTilPvo
 }
 
-export const BeskjedTilPvoReadOnly: FunctionComponent<TProps> = ({ meldingTilPvo }) => {
+const BeskjedTilPvoReadOnly: FunctionComponent<TProps> = ({ meldingTilPvo }) => {
   const nyRunde = meldingTilPvo.innsendingId > 1 ? 'ny ' : ''
 
   return (

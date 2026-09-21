@@ -14,7 +14,7 @@ type TProps = {
   pvkDokumentId: string
 }
 
-export const AlertPvoModal: FunctionComponent<TProps> = ({ isOpen, onClose, pvkDokumentId }) => {
+const AlertPvoModal: FunctionComponent<TProps> = ({ isOpen, onClose, pvkDokumentId }) => {
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -69,4 +69,5 @@ export const AlertPvoModal: FunctionComponent<TProps> = ({ isOpen, onClose, pvkD
     </Modal>
   )
 }
+
 export default AlertPvoModal

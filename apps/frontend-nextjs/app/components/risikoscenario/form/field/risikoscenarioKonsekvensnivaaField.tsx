@@ -4,7 +4,7 @@ import { Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import RisikoscenarioKonsekvensnivaaReadMore from '../../common/risikoscenarioKonsekvensnivaaReadMore'
 
-export const RisikoscenarioKonsekvensnivaaField = () => (
+const RisikoscenarioKonsekvensnivaaField = () => (
   <>
     <Heading level='3' size='small' className='my-5'>
       Risikoscenariets konsekvensnivå

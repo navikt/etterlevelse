@@ -6,7 +6,7 @@ import { FunctionComponent } from 'react'
 
 type TProps = { melding: ITilbakemeldingMelding }
 
-export const EndretInfo: FunctionComponent<TProps> = (props) => {
+const EndretInfo: FunctionComponent<TProps> = (props) => {
   const { melding } = props
 
   if (!melding.endretAvIdent) return null
@@ -23,4 +23,5 @@ export const EndretInfo: FunctionComponent<TProps> = (props) => {
     </div>
   )
 }
+
 export default EndretInfo

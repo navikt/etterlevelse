@@ -22,7 +22,7 @@ type TProps = {
   setTiltakList: (state: ITiltak[]) => void
 }
 
-export const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
+const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
   setIsEditModalOpen,
   kravnummer,
   risikoscenario,

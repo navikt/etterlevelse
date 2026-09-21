@@ -157,5 +157,3 @@ export const ExportEtterlevelseModal: FunctionComponent<IExportEtterlevelseModal
     </Modal>
   )
 }
-
-export default ExportEtterlevelseModalWithButton

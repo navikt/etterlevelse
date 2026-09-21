@@ -11,7 +11,7 @@ interface IProps {
   setIsNewVersionModalOpen: (state: boolean) => void
 }
 
-export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> = ({
+const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> = ({
   etterlevelseDokumentasjon,
   isNewVersionModalOpen,
   setIsNewVersionModalOpen,
@@ -66,4 +66,5 @@ export const NyVersjonEtterlevelseDokumentasjonModal: FunctionComponent<IProps> 
     </Modal>
   )
 }
+
 export default NyVersjonEtterlevelseDokumentasjonModal

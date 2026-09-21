@@ -7,7 +7,7 @@ import { Button } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import EtterlevelseModal from './etterlevelseModal'
 
-export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse }) => {
+const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [kravData, setKravData] = useState<IKrav>()
 
@@ -39,4 +39,5 @@ export const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse
     </div>
   )
 }
+
 export default EtterlevelseCard

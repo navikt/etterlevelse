@@ -65,5 +65,3 @@ export const ReadOnlyFieldDescriptionOptional: FunctionComponent<
     {isVisible && <BodyShort>{description}</BodyShort>}
   </div>
 )
-
-export default ReadOnlyField

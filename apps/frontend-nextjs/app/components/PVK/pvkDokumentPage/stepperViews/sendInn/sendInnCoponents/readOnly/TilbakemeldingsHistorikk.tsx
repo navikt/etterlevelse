@@ -16,7 +16,7 @@ type TProps = {
   defaultFirstOpen?: boolean
 }
 
-export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
+const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   antallInnsendingTilPvo,
   vurderinger = [],
   meldingerTilPvo,
@@ -81,4 +81,5 @@ export const TilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default TilbakemeldingsHistorikk

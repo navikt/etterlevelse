@@ -19,7 +19,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const CreateRisikoscenario: FunctionComponent<TProps> = ({
+const CreateRisikoscenario: FunctionComponent<TProps> = ({
   krav,
   pvkDokumentId,
   setIsCreateMode,

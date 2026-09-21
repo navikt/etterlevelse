@@ -26,7 +26,7 @@ import { KravRisikoscenarioOvrigeRisikoscenarierLink } from '../common/kravRisik
 import { KravRisikoscenarioReadMore } from '../common/kravRisikoscenarioReadMore'
 import CreateRisikoscenario from '../edit/createRisikoscenario'
 import LeggTilEksisterendeRisikoscenario from '../edit/leggTilEksisterendeRisikoscenario'
-import { KravRisikoscenarioAccordionContent } from './kravRisikoscenarioAccordionContent'
+import KravRisikoscenarioAccordionContent from './kravRisikoscenarioAccordionContent'
 
 type TProps = {
   krav: TKravQL
@@ -35,7 +35,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const KravRisikoscenarioer: FunctionComponent<TProps> = ({
+const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
   setIsPvkFormActive,

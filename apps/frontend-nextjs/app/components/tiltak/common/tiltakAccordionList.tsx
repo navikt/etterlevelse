@@ -2,7 +2,7 @@
 
 import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
-import TiltakView from '@/components/tiltak/common/tiltakView'
+import { TiltakView } from '@/components/tiltak/common/tiltakView'
 import TiltakForm from '@/components/tiltak/form/tiltakForm'
 import {
   EPvkDokumentStatus,

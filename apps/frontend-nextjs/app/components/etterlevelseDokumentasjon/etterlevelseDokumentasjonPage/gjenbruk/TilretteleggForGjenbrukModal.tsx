@@ -18,7 +18,7 @@ type TProps = {
   setIsGjenbrukModalOpen: (state: boolean) => void
 }
 
-export const TilretteleggForGjenbrukModal: FunctionComponent<TProps> = ({
+const TilretteleggForGjenbrukModal: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   isGjenbrukModalOpen,
@@ -109,4 +109,5 @@ export const TilretteleggForGjenbrukModal: FunctionComponent<TProps> = ({
     </Dialog>
   )
 }
+
 export default TilretteleggForGjenbrukModal

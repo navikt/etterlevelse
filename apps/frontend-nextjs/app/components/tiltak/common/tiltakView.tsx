@@ -2,7 +2,8 @@
 
 import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import ReadOnlyField, {
+import {
+  ReadOnlyField,
   ReadOnlyFieldBool,
   ReadOnlyFieldDescriptionOptional,
 } from '@/components/common/readOnlyFields'
@@ -300,4 +301,3 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
     </div>
   )
 }
-export default TiltakView

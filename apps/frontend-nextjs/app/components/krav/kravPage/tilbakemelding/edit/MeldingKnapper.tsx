@@ -13,7 +13,7 @@ import moment from 'moment'
 import { useContext, useState } from 'react'
 import TilbakemeldingEdit from './TilbakemeldingEdit'
 
-export const MeldingKnapper = (props: {
+const MeldingKnapper = (props: {
   melding: ITilbakemeldingMelding
   tilbakemeldingId: string
   oppdater: (t: ITilbakemelding) => void
@@ -117,4 +117,5 @@ export const MeldingKnapper = (props: {
     </div>
   )
 }
+
 export default MeldingKnapper

@@ -17,7 +17,7 @@ type TProps = {
   resetForm?: () => void
 }
 
-export const LagreOgFortsettSenereButton: FunctionComponent<TProps> = ({
+const LagreOgFortsettSenereButton: FunctionComponent<TProps> = ({
   setFieldValue,
   submitForm,
   initialStatus,
@@ -37,4 +37,5 @@ export const LagreOgFortsettSenereButton: FunctionComponent<TProps> = ({
     </Button>
   )
 }
+
 export default LagreOgFortsettSenereButton

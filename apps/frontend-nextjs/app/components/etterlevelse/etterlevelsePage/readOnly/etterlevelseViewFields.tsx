@@ -256,5 +256,3 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
     </Box>
   )
 }
-
-export default EtterlevelseViewFields

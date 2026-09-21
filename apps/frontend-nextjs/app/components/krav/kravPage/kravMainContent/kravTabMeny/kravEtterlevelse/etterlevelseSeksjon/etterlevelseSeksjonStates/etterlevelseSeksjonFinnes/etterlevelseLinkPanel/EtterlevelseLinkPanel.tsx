@@ -13,7 +13,7 @@ type TProps = {
   index: number
 }
 
-export const EtterlevelseLinkPanel: FunctionComponent<TProps> = ({
+const EtterlevelseLinkPanel: FunctionComponent<TProps> = ({
   etterlevelse,
   index,
   modalVersion,
@@ -61,4 +61,5 @@ export const EtterlevelseLinkPanel: FunctionComponent<TProps> = ({
     </LinkPanel.Title>
   </LinkPanel>
 )
+
 export default EtterlevelseLinkPanel

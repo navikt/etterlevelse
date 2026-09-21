@@ -39,7 +39,7 @@ type TProps = {
   formRef?: RefObject<any>
 }
 
-export const TiltakForm: FunctionComponent<TProps> = ({
+const TiltakForm: FunctionComponent<TProps> = ({
   title,
   initialValues,
   pvkDokumentId,

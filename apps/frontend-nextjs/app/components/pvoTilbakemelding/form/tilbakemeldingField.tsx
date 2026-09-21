@@ -25,7 +25,7 @@ type TProps = {
     'behandlingsInternDiskusjon' | 'kravInternDiskusjon' | 'risikovurderingInternDiskusjon'
 }
 
-export const TilbakemeldingField: FunctionComponent<TProps> = ({
+const TilbakemeldingField: FunctionComponent<TProps> = ({
   heading,
   setFieldValue,
   radioFieldName,
@@ -105,4 +105,5 @@ export const TilbakemeldingField: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default TilbakemeldingField

@@ -23,7 +23,7 @@ type TProps = {
   setRisikoscenarioer?: (state: IRisikoscenario[]) => void
 }
 
-export const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
+const SlettOvrigRisikoscenario: FunctionComponent<TProps> = ({
   risikoscenario,
   tiltakList,
   risikoscenarioer,

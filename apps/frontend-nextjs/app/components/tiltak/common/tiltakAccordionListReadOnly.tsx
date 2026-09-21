@@ -4,7 +4,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Accordion, Tag } from '@navikt/ds-react'
 import moment from 'moment'
-import TiltakView from './tiltakView'
+import { TiltakView } from './tiltakView'
 
 interface IProps {
   tiltakList: ITiltak[]

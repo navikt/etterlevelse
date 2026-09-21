@@ -6,7 +6,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { PencilIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Modal, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
-import TiltakView from '../common/tiltakView'
+import { TiltakView } from '../common/tiltakView'
 import TiltakForm from '../form/tiltakForm'
 
 type TProps = {
@@ -107,5 +107,3 @@ export const TiltakReadMoreContent: FunctionComponent<TContentProps> = ({
     </ReadMore>
   )
 }
-
-export default TiltakReadMoreListModalEdit

@@ -28,7 +28,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
+const KravRisikoscenarioReadOnly: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
   previousVurdering,

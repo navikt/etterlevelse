@@ -1,6 +1,6 @@
 'use client'
 
-import TiltakView from '@/components/tiltak/common/tiltakView'
+import { TiltakView } from '@/components/tiltak/common/tiltakView'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
@@ -18,7 +18,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const KravRisikoscenarioAccordionContentReadOnly: FunctionComponent<TProps> = ({
+const KravRisikoscenarioAccordionContentReadOnly: FunctionComponent<TProps> = ({
   risikoscenario,
   alleRisikoscenarioer,
   tiltakList,

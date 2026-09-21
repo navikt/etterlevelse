@@ -11,7 +11,7 @@ import { createTiltakAndRelasjonWithRisikoscenario } from '@/api/tiltak/tiltakAp
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import LeggTilEksisterendeTiltak from '@/components/tiltak/edit/leggTilEksisterendeTiltak'
 import TiltakForm from '@/components/tiltak/form/tiltakForm'
-import TiltakReadMoreList from '@/components/tiltak/tiltakReadMoreList'
+import { TiltakReadMoreList } from '@/components/tiltak/tiltakReadMoreList'
 import {
   IRisikoscenario,
   ITiltakRisikoscenarioRelasjon,
@@ -47,7 +47,7 @@ type TProps = {
   onMovedToKrav?: (payload: { risikoscenarioName: string; kravRefs: IKravReference[] }) => void
 }
 
-export const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
+const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   risikoscenario,
   risikoscenarioer,
   allRisikoscenarioList,

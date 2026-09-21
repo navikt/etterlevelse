@@ -7,7 +7,7 @@ import {
 } from '@/api/etterlevelse/etterlevelseApi'
 import { DateField } from '@/components/common/inputs'
 import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
-import { EtterlevelseCard } from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
+import EtterlevelseCard from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
 import {
   ERelationType,
   IDocumentRelation,
@@ -48,7 +48,7 @@ type TEditProps = {
   setEtterlevelseDokStatusAlert: (state: boolean) => void
 }
 
-export const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
+const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   krav,
   etterlevelse,
   submit,
