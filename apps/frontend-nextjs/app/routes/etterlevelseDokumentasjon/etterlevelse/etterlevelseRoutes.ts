@@ -1,7 +1,7 @@
 import { kravUrl } from '@/routes/krav/kravRoutes'
 
 export const etterlevelseUrl = '/etterlevelse'
-export const dokumentasjonUrl = '/dokumentasjon'
+const dokumentasjonUrl = '/dokumentasjon'
 export const etterlevelseDokumentasjonCreateUrl = `${dokumentasjonUrl}/create`
 
 export const etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl = (

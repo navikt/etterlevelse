@@ -17,7 +17,7 @@ type TProps = {
   customStepNumber?: number
 }
 
-export const InvolveringSummaryReadOnly: FunctionComponent<TProps> = ({
+const InvolveringSummaryReadOnly: FunctionComponent<TProps> = ({
   pvkDokument,
   personkategorier,
   databehandlere,
