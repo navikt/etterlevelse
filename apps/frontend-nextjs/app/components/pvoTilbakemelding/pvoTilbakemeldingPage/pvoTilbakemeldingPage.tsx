@@ -31,7 +31,7 @@ import BehandlingensArtOgOmfangPvoView from './stepperViews/behandlingensArtOgOm
 import BehandlingensLivslopPvoView from './stepperViews/behandlingensLivslopPvoView'
 import IdentifiseringAvRisikoscenarioerOgTiltakPvoView from './stepperViews/identifiseringAvRisikoscenarioerOgTiltakPvoView'
 import InvolveringAvEksternePvoView from './stepperViews/involveringAvEksternePvoView'
-import OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
+import { OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView } from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltakPvoView'
 import OversiktPvoView from './stepperViews/oversiktPvoView'
 import SendInnPvoView from './stepperViews/sendInnPvo/sendInnPvoView'
 import TilhorendeDokumentasjonPvoView from './stepperViews/tilhorendeDokumentasjonPvoView'

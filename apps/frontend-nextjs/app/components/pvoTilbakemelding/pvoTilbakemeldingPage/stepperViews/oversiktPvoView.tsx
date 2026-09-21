@@ -68,7 +68,7 @@ const StepTitle: string[] = [
   'Send tilbakemelding',
 ]
 
-export const OversiktPvoView: FunctionComponent<TProps> = ({
+const OversiktPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   activeStep,

@@ -12,7 +12,7 @@ type TProps = {
   brukerAlleOpplysningstyper?: boolean
 }
 
-export const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
+const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
   artOgOmfang,
   personkategorier,
   isChangesMadeSinceLastSubmission,

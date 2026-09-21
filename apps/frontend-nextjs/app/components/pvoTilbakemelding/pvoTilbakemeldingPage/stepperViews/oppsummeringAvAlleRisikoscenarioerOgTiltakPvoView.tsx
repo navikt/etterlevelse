@@ -516,5 +516,3 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
     </div>
   )
 }
-
-export default OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView

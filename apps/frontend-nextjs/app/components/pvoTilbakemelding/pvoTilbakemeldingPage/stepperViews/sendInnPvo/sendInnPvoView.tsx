@@ -45,7 +45,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const SendInnPvoView: FunctionComponent<TProps> = ({
+const SendInnPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   pvoTilbakemelding,
