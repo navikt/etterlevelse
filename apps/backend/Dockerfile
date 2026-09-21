@@ -7,7 +7,6 @@ RUN java -Djarmode=tools -jar application.jar extract --layers --destination ext
 # Runtime stage
 FROM eclipse-temurin:25-jre
 
-ENV MAIN_CLASS=org.springframework.boot.loader.launch.JarLauncher
 ENV JAVA_OPTS="-Xmx850m \
                -Djava.security.egd=file:/dev/./urandom"
 
