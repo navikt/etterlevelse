@@ -5,9 +5,9 @@ import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
-import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
-import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
+import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import { TiltakAccordionList } from '@/components/tiltak/common/tiltakAccordionList'
+import TiltakAccordionListReadOnly from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -56,8 +56,8 @@ import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterAp
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
 import OppsumeringAccordianListReadOnlyView from '../readOnlyViews/oppsumeringAccordianListReadOnlyView'
-import { OppsumeringAccordianList } from './oppsumeringAccordianList'
-import { OppsumeringAccordianListGodkjentView } from './oppsumeringAccordianListGodkjentView'
+import OppsumeringAccordianList from './oppsumeringAccordianList'
+import OppsumeringAccordianListGodkjentView from './oppsumeringAccordianListGodkjentView'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

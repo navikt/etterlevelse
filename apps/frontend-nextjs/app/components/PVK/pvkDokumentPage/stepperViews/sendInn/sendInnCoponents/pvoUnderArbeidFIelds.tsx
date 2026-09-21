@@ -10,32 +10,31 @@ type TProps = {
   isLoading: boolean
 }
 
-export const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, isLoading }) => {
-  return (
-    <div className='w-full max-w-[75ch]'>
-      <BeskjedTilPvoReadOnly
-        meldingTilPvo={
-          pvkDokument.meldingerTilPvo.filter(
-            (melding) =>
-              melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
-              melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
-          )[0]
-        }
-      />
-      {isLoading && (
-        <div className='flex justify-center items-center w-full'>
-          <Loader size='2xlarge' title='lagrer endringer' />
-        </div>
-      )}
-
-      <div>
-        <Alert variant='info' className='my-5'>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
+const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, isLoading }) => (
+  <div className='w-full max-w-[75ch]'>
+    <BeskjedTilPvoReadOnly
+      meldingTilPvo={
+        pvkDokument.meldingerTilPvo.filter(
+          (melding) =>
+            melding.innsendingId === pvkDokument.antallInnsendingTilPvo &&
+            melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
+        )[0]
+      }
+    />
+    {isLoading && (
+      <div className='flex justify-center items-center w-full'>
+        <Loader size='2xlarge' title='lagrer endringer' />
       </div>
+    )}
 
-      <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
+    <div>
+      <Alert variant='info' className='my-5'>
+        Status: {pvkDokumentStatusToText(pvkDokument.status)}
+      </Alert>
     </div>
-  )
-}
+
+    <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
+  </div>
+)
+
 export default PVOUnderArbeidFIelds

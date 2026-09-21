@@ -8,7 +8,7 @@ import { Button, Heading, Table, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ChangeEvent, useState } from 'react'
 
-export const ROSEdit = () => {
+const ROSEdit = () => {
   const [url, setUrl] = useState('')
   const [name, setName] = useState('')
   const [error, setError] = useState('')

@@ -1,7 +1,7 @@
 import { EPvkVurdering } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import * as yup from 'yup'
 
-export const pvkBehovSchema = () => {
+const pvkBehovSchema = () => {
   return yup.object({
     pvkVurderingsBegrunnelse: yup.string().test({
       name: 'pvkVurderingsBegrunnelse',
@@ -21,4 +21,5 @@ export const pvkBehovSchema = () => {
     }),
   })
 }
+
 export default pvkBehovSchema

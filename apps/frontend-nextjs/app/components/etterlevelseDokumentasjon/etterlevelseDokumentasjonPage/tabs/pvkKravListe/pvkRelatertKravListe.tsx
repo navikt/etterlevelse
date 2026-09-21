@@ -21,7 +21,8 @@ type TProps = {
   isRisikoscenarioLoading: boolean
   previousVurdering?: IVurdering
 }
-export const PvkRelatertKravListe: FunctionComponent<TProps> = ({
+
+const PvkRelatertKravListe: FunctionComponent<TProps> = ({
   temaListe,
   loading,
   relevanteStats,

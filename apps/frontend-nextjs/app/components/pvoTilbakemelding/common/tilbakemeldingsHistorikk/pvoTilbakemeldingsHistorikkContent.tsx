@@ -16,7 +16,7 @@ type TProps = {
   noHeader?: boolean
 }
 
-export const PvoTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
+const PvoTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
   tilbakemeldingsinnhold,
   forPvo,
   noHeader,

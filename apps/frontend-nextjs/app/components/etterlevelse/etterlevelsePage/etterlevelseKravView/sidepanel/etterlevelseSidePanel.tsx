@@ -44,7 +44,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
+const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
   etterlevelseMetadata,

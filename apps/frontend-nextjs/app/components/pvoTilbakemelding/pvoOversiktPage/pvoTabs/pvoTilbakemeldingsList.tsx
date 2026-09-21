@@ -1,7 +1,7 @@
 import { getAllPvkDokumentListItem } from '@/api/pvkDokument/pvkDokumentApi'
 import { getAllPvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { ListLayout2 } from '@/components/krav/kravlistePage/kravTabs/sisteRedigertKrav/listLayout/listLayout'
-import PvoStatusView from '@/components/pvoTilbakemelding/common/pvoStatusView'
+import { PvoStatusView } from '@/components/pvoTilbakemelding/common/pvoStatusView'
 import {
   EPvkDokumentStatus,
   IPvkDokumentListItem,

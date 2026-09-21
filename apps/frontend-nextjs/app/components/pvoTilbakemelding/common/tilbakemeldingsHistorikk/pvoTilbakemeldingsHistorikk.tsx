@@ -20,7 +20,7 @@ type TProps = {
   forPvo: boolean
 }
 
-export const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
+const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   fieldName,
   relevantVurdering,

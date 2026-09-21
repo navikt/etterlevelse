@@ -34,7 +34,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+const TilhorendeDokumentasjonPvoTilbakemeldingForm: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setPvoTilbakemelding,
   pvkDokumentId,

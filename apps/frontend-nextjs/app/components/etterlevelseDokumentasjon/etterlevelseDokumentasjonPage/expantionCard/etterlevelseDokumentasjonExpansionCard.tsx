@@ -1,7 +1,7 @@
 'use client'
 
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
-import ArdoqSystemerView from '@/components/ardoq/ardoqSystemerView'
+import { ArdoqSystemerView } from '@/components/ardoq/ardoqSystemerView'
 import { BehandlingList } from '@/components/behandlingskatalog/behandlingList'
 import { DpBehandlingList } from '@/components/behandlingskatalog/dpBehandlingList'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'

@@ -5,7 +5,7 @@ import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import RisikoscenarioAccordianListReadOnlyWithIverksetting from '@/components/risikoscenario/common/risikoscenarioAccordianListReadOnlyWithIverksetting'
 import CreateRisikoscenarioModal from '@/components/risikoscenario/edit/createRisikoscenarioModal'
 import RisikoscenarioAccordianList from '@/components/risikoscenario/generellScenario/risikoscenarioAccordianList'
-import { RisikoscenarioAccordianListReadOnlyView } from '@/components/risikoscenario/readOnly/risikoscenarioAccordianListReadOnlyView'
+import RisikoscenarioAccordianListReadOnlyView from '@/components/risikoscenario/readOnly/risikoscenarioAccordianListReadOnlyView'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {

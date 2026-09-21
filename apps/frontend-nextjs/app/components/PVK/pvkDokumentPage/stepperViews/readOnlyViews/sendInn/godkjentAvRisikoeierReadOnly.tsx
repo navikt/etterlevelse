@@ -20,7 +20,7 @@ type TProps = {
   pvoVurderingList: ICode[]
 }
 
-export const GodkjentAvRisikoeierReadOnly: FunctionComponent<TProps> = ({
+const GodkjentAvRisikoeierReadOnly: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   etterlevelseDokumentasjon,
@@ -61,4 +61,5 @@ export const GodkjentAvRisikoeierReadOnly: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default GodkjentAvRisikoeierReadOnly

@@ -68,8 +68,8 @@ const boolCheck = (fieldName: string, errorMessage?: string) =>
     })
     .nullable()
 
-export const pvkDocumentSchema = () => {
-  return yup.object({
+export const pvkDocumentSchema = () =>
+  yup.object({
     harInvolvertRepresentant: boolCheck(
       'harInvolvertRepresentant',
       'Dere må oppgi om dere har involvert en representant for de registrerte.'
@@ -96,6 +96,3 @@ export const pvkDocumentSchema = () => {
       'Dere må oppsummere for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding.'
     ),
   })
-}
-
-export default pvkDocumentSchema

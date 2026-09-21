@@ -14,7 +14,7 @@ type TProps = {
   setEtterlevelseMetadata: (state: IEtterlevelseMetadata) => void
 }
 
-export const TildeltTil: FunctionComponent<TProps> = ({
+const TildeltTil: FunctionComponent<TProps> = ({
   etterlevelseMetadata,
   setEtterlevelseMetadata,
 }) => {
@@ -70,4 +70,5 @@ export const TildeltTil: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default TildeltTil

@@ -23,7 +23,8 @@ type TProps = {
   pvoTilbakemelding?: IPvoTilbakemelding
   userHasAccess: boolean
 }
-export const SendtTilPvoFields: FunctionComponent<TProps> = ({
+
+const SendtTilPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   isLoading,
@@ -115,4 +116,5 @@ export const SendtTilPvoFields: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default SendtTilPvoFields

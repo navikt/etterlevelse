@@ -23,7 +23,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const RisikoscenarioAccordianListReadOnlyWithIverksetting: FunctionComponent<TProps> = ({
+const RisikoscenarioAccordianListReadOnlyWithIverksetting: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   tiltakList,

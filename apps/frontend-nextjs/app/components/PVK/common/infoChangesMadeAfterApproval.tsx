@@ -21,7 +21,7 @@ type TProps = {
   behandlingensArtOgOmfang?: IBehandlingensArtOgOmfang
 }
 
-export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
+const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
   pvkDokument,
   alleRisikoscenario,
   alleTiltak,
@@ -128,4 +128,5 @@ export const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
     </>
   )
 }
+
 export default InfoChangesMadeAfterApproval

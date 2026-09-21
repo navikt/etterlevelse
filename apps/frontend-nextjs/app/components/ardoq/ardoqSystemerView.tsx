@@ -50,5 +50,3 @@ export const ArdoqSystemerView: FunctionComponent<IProps> = ({ ardoqSystemData, 
     </div>
   </div>
 )
-
-export default ArdoqSystemerView

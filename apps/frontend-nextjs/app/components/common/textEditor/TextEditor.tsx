@@ -30,7 +30,7 @@ type TTextEditorProps = {
   withTextColor?: boolean
 }
 
-export const TextEditor = ({
+const TextEditor = ({
   initialValue,
   setValue,
   height,

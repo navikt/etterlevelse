@@ -246,5 +246,3 @@ export const TiltakAccordionContent: FunctionComponent<TContentProps> = ({
     </div>
   )
 }
-
-export default TiltakAccordionList

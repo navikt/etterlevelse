@@ -32,7 +32,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const OppsumeringAccordianListGodkjentView: FunctionComponent<TProps> = ({
+const OppsumeringAccordianListGodkjentView: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   etterlevelseDokumentasjonId,

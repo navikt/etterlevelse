@@ -26,7 +26,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const PvkKravListeTab: FunctionComponent<TProps> = ({
+const PvkKravListeTab: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
   temaListe,

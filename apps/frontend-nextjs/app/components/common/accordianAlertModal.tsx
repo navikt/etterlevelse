@@ -13,7 +13,7 @@ type TProps = {
   customOnClick?: () => void
 }
 
-export const AccordianAlertModal: FunctionComponent<TProps> = ({
+const AccordianAlertModal: FunctionComponent<TProps> = ({
   isOpen,
   setIsOpen,
   navigateUrl,

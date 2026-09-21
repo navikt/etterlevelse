@@ -2,7 +2,7 @@
 
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ListLayout2 } from '@/components/krav/kravlistePage/kravTabs/sisteRedigertKrav/listLayout/listLayout'
-import PvoStatusView from '@/components/pvoTilbakemelding/common/pvoStatusView'
+import { PvoStatusView } from '@/components/pvoTilbakemelding/common/pvoStatusView'
 import { IPageResponse } from '@/constants/commonConstants'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { TPvoTilbakemeldingQL } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
@@ -19,7 +19,7 @@ import { useMemo, useState } from 'react'
 
 const PAGE_SIZE = 20
 
-export const PvoSistRedigertView = () => {
+const PvoSistRedigertView = () => {
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE)
 
   const { data, loading: isLoading } = useQuery<

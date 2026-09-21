@@ -26,7 +26,7 @@ type TProps = {
   userHasAccess: boolean
 }
 
-export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
+const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   setFieldValue,
@@ -176,4 +176,5 @@ export const VurdertAvPvoFields: FunctionComponent<TProps> = ({
     </Field>
   )
 }
+
 export default VurdertAvPvoFields

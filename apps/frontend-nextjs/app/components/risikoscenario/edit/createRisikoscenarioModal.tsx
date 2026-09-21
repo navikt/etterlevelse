@@ -21,7 +21,7 @@ type TProps = {
   setIsCreateModalOpen: (state: boolean) => void
 }
 
-export const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
+const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
   pvkDokument,
   onSubmitStateUpdate,
   setIsIngenTilgangFormDirty,

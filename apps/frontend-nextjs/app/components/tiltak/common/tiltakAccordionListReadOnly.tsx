@@ -13,7 +13,7 @@ interface IProps {
   etterlevelseDokumentasjonId?: string
 }
 
-export const TiltakAccordionListReadOnly = (props: IProps) => {
+const TiltakAccordionListReadOnly = (props: IProps) => {
   const { tiltakList, risikoscenarioList, previousVurdering, etterlevelseDokumentasjonId } = props
 
   return (

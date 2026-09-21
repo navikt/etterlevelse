@@ -26,7 +26,7 @@ type TProps = {
   setIsUnsaved: (state: boolean) => void
 }
 
-export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
+const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   setRisikosenarioList,
   allRisikoscenarioList,

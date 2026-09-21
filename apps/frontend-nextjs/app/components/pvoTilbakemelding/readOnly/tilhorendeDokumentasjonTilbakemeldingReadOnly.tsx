@@ -12,7 +12,7 @@ type TProps = {
   noHeader?: boolean
 }
 
-export const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
+const TilhorendeDokumentasjonTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
   tilbakemeldingsinnhold,
   sentDate,
   forPvo,

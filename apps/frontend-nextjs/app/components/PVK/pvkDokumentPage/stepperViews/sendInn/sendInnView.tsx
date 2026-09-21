@@ -16,7 +16,7 @@ import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikosce
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
 import FormButtons from '@/components/PVK/edit/formButtons'
-import pvkDocumentSchema from '@/components/PVK/form/pvkDocumentSchema'
+import { pvkDocumentSchema } from '@/components/PVK/form/pvkDocumentSchema'
 import PVOUnderArbeidFIelds from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/pvoUnderArbeidFIelds'
 import SendtTilPvoFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/sendtTilPvoFields'
 import TrengerRisikoeierGodkjenningFields from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/trengerRisikoeierGodkjenningFields'

@@ -16,7 +16,7 @@ type TProps = {
   customStepNumber?: number
 }
 
-export const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
+const RisikoscenarioEtterTitak: FunctionComponent<TProps> = ({
   alleRisikoscenario,
   savnerVurderingError,
   customStepNumber,

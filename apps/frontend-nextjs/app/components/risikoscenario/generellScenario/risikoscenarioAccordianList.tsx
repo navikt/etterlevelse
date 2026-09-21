@@ -28,7 +28,7 @@ type TProps = {
   isCreateModalOpen: boolean
 }
 
-export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
+const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   setAllRisikoscenarioList,

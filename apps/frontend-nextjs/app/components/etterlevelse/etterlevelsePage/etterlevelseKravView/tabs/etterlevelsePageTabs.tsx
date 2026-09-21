@@ -71,7 +71,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
+const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
   etterlevelse,
@@ -378,4 +378,5 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     </>
   )
 }
+
 export default EtterlevelsePageTabs
