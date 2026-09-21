@@ -113,7 +113,7 @@ type TEditEtterlevelseDokumentasjonModalProps = {
   isEditButton?: boolean
 }
 
-export const EtterlevelseDokumentasjonForm: FunctionComponent<
+const EtterlevelseDokumentasjonForm: FunctionComponent<
   TEditEtterlevelseDokumentasjonModalProps
 > = ({ title, etterlevelseDokumentasjon, isEditButton }) => {
   const user = useContext(UserContext)

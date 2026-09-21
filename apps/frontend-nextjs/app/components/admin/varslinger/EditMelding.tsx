@@ -164,5 +164,3 @@ export const EditMelding: FunctionComponent<TProps> = ({
     </div>
   )
 }
-
-export default EditMelding

@@ -8,7 +8,7 @@ import { Heading, Tabs } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AuditRecentTable } from '../versjonering/AuditRecentTable'
-import EditMelding from './EditMelding'
+import { EditMelding } from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
 
 type TSection =
