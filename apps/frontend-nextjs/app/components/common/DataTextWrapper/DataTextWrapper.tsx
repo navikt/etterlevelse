@@ -7,7 +7,7 @@ type TProps = {
   className?: string
 }
 
-export const DataTextWrapper: FunctionComponent<TProps> = ({
+const DataTextWrapper: FunctionComponent<TProps> = ({
   children,
   customEmptyMessage,
   className,

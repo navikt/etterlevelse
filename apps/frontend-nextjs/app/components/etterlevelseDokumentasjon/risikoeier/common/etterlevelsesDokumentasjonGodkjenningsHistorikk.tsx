@@ -22,7 +22,7 @@ interface IProps {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 }
 
-export const EtterlevelsesDokumentasjonGodkjenningsHistorikk: FunctionComponent<IProps> = ({
+const EtterlevelsesDokumentasjonGodkjenningsHistorikk: FunctionComponent<IProps> = ({
   etterlevelseDokumentasjon,
 }) => {
   const [openItemId, setOpenItemId] = useState<string | null>(null)

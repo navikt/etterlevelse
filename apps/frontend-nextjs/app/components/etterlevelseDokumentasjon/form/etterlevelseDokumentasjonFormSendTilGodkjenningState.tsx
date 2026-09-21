@@ -92,7 +92,8 @@ import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSche
 type TProps = {
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
-export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TProps> = ({
+
+const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
 }) => {
   const user = useContext(UserContext)
@@ -974,4 +975,5 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
     </Formik>
   )
 }
+
 export default EtterlevelseDokumentasjonFormSendTilGodkjenningState
