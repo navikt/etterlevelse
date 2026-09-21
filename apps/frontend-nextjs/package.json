@@ -103,7 +103,7 @@
     "knip": "^6.35.1",
     "lint-staged": "17.5.1",
     "postcss": "^8.5.28",
-    "prettier": "^3.9.7",
+    "prettier": "^3.9.8",
     "react-select": "^5.10.2",
     "typescript": "^6.0.3"
   },
