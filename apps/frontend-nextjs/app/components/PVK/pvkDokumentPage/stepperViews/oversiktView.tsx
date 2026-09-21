@@ -563,5 +563,3 @@ export const OversiktView: FunctionComponent<TProps> = ({
     </div>
   )
 }
-
-export default OversiktView

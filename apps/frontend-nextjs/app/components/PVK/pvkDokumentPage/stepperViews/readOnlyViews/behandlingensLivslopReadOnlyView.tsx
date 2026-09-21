@@ -34,7 +34,7 @@ type TProps = {
   relevantVurdering?: IVurdering
 }
 
-export const BehandlingensLivslopReadOnlyView: FunctionComponent<TProps> = ({
+const BehandlingensLivslopReadOnlyView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   activeStep,

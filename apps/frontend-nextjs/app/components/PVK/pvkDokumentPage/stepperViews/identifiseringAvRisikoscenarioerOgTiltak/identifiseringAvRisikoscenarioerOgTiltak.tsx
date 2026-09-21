@@ -33,7 +33,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
+const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   activeStep,

@@ -556,5 +556,3 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
     </div>
   )
 }
-
-export default OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView

@@ -20,7 +20,7 @@ type TProps = {
   saerligKategorier: boolean
 }
 
-export const PvkBehovInfoContent: FunctionComponent<TProps> = ({
+const PvkBehovInfoContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   profilering,
   opplysningstyperMangler,

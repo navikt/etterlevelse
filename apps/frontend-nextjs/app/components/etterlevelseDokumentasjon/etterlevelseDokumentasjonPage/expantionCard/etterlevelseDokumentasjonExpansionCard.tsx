@@ -354,5 +354,3 @@ const RelevansView: FunctionComponent<TRelevansProps> = ({
     </div>
   )
 }
-
-export default EtterlevelseDokumentasjonExpansionCard

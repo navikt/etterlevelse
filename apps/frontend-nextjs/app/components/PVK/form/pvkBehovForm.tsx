@@ -81,7 +81,7 @@ type TProps = {
   artOgOmfangId?: string
 }
 
-export const PvkBehovForm: FunctionComponent<TProps> = ({
+const PvkBehovForm: FunctionComponent<TProps> = ({
   pvkDokument,
   setPvkDokument,
   etterlevelseDokumentasjon,

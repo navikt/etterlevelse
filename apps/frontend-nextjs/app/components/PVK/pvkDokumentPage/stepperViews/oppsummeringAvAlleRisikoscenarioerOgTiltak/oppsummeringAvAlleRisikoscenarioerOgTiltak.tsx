@@ -680,5 +680,3 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     </div>
   )
 }
-
-export default OppsummeringAvAlleRisikoscenarioerOgTiltak

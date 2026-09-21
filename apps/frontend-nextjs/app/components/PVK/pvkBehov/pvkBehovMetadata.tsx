@@ -14,8 +14,9 @@ type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
 }
 
-export const PvkBehovMetadata: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
+const PvkBehovMetadata: FunctionComponent<TProps> = ({ etterlevelseDokumentasjon }) => {
   const user = useContext(UserContext)
+
   return (
     <>
       <Heading level='2' size='small' className='mb-5'>
