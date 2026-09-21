@@ -57,19 +57,23 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.ArrayList;
@@ -88,8 +92,14 @@ public abstract class IntegrationTestBase {
         postgreSQLContainer.start();
     }
 
+    @LocalServerPort
+    private int port;
+    // Spring Boot 4 removed TestRestTemplate; use the auto-configured RestTemplateBuilder (which carries
+    // the app's HTTP message converters / Jackson config) and add a root URI for relative paths plus a
+    // non-throwing error handler so tests can assert on error statuses, mirroring TestRestTemplate.
     @Autowired
-    protected TestRestTemplate restTemplate;
+    private RestTemplateBuilder restTemplateBuilder;
+    protected RestTemplate restTemplate;
     @Autowired
     protected GenericStorageRepository<?> repository;
     @Autowired
@@ -154,6 +164,15 @@ public abstract class IntegrationTestBase {
     @BeforeEach
     @Transactional
     void setUpBase() {
+        restTemplate = restTemplateBuilder
+                .rootUri("http://localhost:" + port)
+                .errorHandler(new ResponseErrorHandler() {
+                    @Override
+                    public boolean hasError(ClientHttpResponse response) {
+                        return false; // let tests assert on the returned status, like TestRestTemplate did
+                    }
+                })
+                .build();
         repository.deleteAll();
         auditVersionRepository.deleteAll();
         CodelistStub.initializeCodelist();

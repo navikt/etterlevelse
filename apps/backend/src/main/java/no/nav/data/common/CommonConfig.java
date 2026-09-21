@@ -2,11 +2,16 @@ package no.nav.data.common;
 
 import javax.sql.DataSource;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import java.util.List;
+
+import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
@@ -53,6 +58,25 @@ public class CommonConfig {
         MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
         jsonConverter.setObjectMapper(omForHttpMessageConverter);
         return jsonConverter;
+    }
+
+    /**
+     * The custom Jackson converter bean above gets added ahead of the default StringHttpMessageConverter in
+     * Spring Boot 4, which makes it try to parse JSON into String.class (e.g. when tests read the raw body).
+     * Ensure String reads are handled by StringHttpMessageConverter by moving it to the front of the list.
+     */
+    @Bean
+    public RestTemplateCustomizer stringConverterFirstRestTemplateCustomizer() {
+        return restTemplate -> {
+            List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
+            List<HttpMessageConverter<?>> stringConverters = converters.stream()
+                    .filter(StringHttpMessageConverter.class::isInstance)
+                    .toList();
+            if (!stringConverters.isEmpty()) {
+                converters.removeAll(stringConverters);
+                converters.addAll(0, stringConverters);
+            }
+        };
     }
 
     /**
