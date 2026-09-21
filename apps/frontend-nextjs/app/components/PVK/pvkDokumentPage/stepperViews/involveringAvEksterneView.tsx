@@ -58,7 +58,7 @@ type TProps = {
   relevantVurdering?: IVurdering
 }
 
-export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
+const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
   personkategorier,
   databehandlere,
   etterlevelseDokumentasjon,

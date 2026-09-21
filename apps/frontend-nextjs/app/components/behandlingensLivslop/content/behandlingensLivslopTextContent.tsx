@@ -2,7 +2,7 @@ import { Alert, BodyShort, List, ReadMore } from '@navikt/ds-react'
 import Image from 'next/image'
 import { behandlingensLivslopImage } from '../images/image'
 
-export const BehandlingensLivslopTextContent = () => (
+const BehandlingensLivslopTextContent = () => (
   <>
     <BodyShort>
       “Behandlingens livsløp” beskriver hvor og hvordan personopplysninger flyter når de behandles i

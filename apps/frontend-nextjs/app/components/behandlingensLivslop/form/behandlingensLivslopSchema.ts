@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-export const behandlingensLivslopSchema = () =>
+const behandlingensLivslopSchema = () =>
   yup.object({
     rejectedFiles: yup.array().test({
       name: 'rejectedFiles test',
