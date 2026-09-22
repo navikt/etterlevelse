@@ -31,11 +31,11 @@ export const searchEtterlevelsedokumentasjon = async (
 export const updateKravPriorityEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  const domainToObject = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/kravpriority/${etterlevelseDokumentasjon.id}`,
-      dto
+      domainToObject
     )
   ).data
 }
@@ -51,11 +51,11 @@ export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonI
 export const createEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  const domainToObject = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.post<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon`,
-      dto
+      domainToObject
     )
   ).data
 }
@@ -63,11 +63,11 @@ export const createEtterlevelseDokumentasjon = async (
 export const updateEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  const domainToObject = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjon.id}`,
-      dto
+      domainToObject
     )
   ).data
 }
@@ -75,11 +75,11 @@ export const updateEtterlevelseDokumentasjon = async (
 export const newVersionEtterlevelseDokumentasjon = async (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  const domainToObject = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/ny-versjon/${etterlevelseDokumentasjon.id}`,
-      dto
+      domainToObject
     )
   ).data
 }
@@ -89,12 +89,12 @@ export const godkjennEtterlevelseDokumentasjonOgArkiver = async (
   kravTilstandHistorikk: IKravTilstandHistorikk[],
   onlyActiveKrav: boolean = true
 ) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  const domainToObject = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.put<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/godkjenning/${etterlevelseDokumentasjon.id}`,
       {
-        etterlevelseDokumentasjonRequest: dto,
+        etterlevelseDokumentasjonRequest: domainToObject,
         kravTilstandHistorikk: kravTilstandHistorikk,
         onlyActiveKrav: onlyActiveKrav,
       }
@@ -106,11 +106,11 @@ export const createEtterlevelseDokumentasjonWithRelataion = async (
   fromDocumentId: string,
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjonWithRelation
 ) => {
-  const dto = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
+  const domainToObject = etterlevelseDokumentasjonToDomainToObject(etterlevelseDokumentasjon)
   return (
     await axios.post<IEtterlevelseDokumentasjon>(
       `${env.backendBaseUrl}/etterlevelsedokumentasjon/relation/${fromDocumentId}`,
-      dto
+      domainToObject
     )
   ).data
 }
@@ -200,7 +200,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
   ardoqSystemData: etterlevelseDokumentasjon.ardoqSystemData || [],
 })
 
-export const etterlevelseDokumentasjonToDomainToObject = (
+const etterlevelseDokumentasjonToDomainToObject = (
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
 ): IEtterlevelseDokumentasjon => {
   const domainToObject = {

@@ -7,10 +7,6 @@ import {
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
-export const getByDocumentRelation = async (id: string) => {
-  return (await axios.get<IDocumentRelation>(`${env.backendBaseUrl}/documentrelation/${id}`)).data
-}
-
 export const getDocumentRelationPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IDocumentRelation>>(
