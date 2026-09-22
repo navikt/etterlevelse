@@ -6,7 +6,6 @@ import {
   IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import moment from 'moment'
 
@@ -17,75 +16,6 @@ export const isReadOnlyPvkStatus = (status: string) => {
     EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING.toString(),
     EPvkDokumentStatus.TRENGER_GODKJENNING.toString(),
   ].includes(status)
-}
-
-export const isPvkDokuemntNotStarted = (
-  risikoscenarioList: IRisikoscenario[],
-  pvkDokument?: IPvkDokument
-) =>
-  pvkDokument &&
-  pvkDokument.representantInvolveringsBeskrivelse === '' &&
-  pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse === '' &&
-  pvkDokument.harInvolvertRepresentant === null &&
-  pvkDokument.harDatabehandlerRepresentantInvolvering === null &&
-  risikoscenarioList.length === 0
-
-export const getPvkButtonText = (
-  pvkDokument: IPvkDokument,
-  risikoscenarioList: IRisikoscenario[],
-  isRisikoeier: boolean
-): string => {
-  const updatedAfterApprovedOfRisikoeier =
-    pvkDokument.godkjentAvRisikoeierDato !== '' &&
-    moment(pvkDokument.changeStamp.lastModifiedDate)
-      .seconds(0)
-      .milliseconds(0)
-      .isAfter(moment(pvkDokument.godkjentAvRisikoeierDato).seconds(0).milliseconds(0))
-
-  if (isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument)) {
-    return 'Påbegynn PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
-  ) {
-    return 'Fullfør PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    isReadOnlyPvkStatus(pvkDokument.status)
-  ) {
-    return 'Les PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    !isRisikoeier &&
-    [
-      EPvkDokumentStatus.VURDERT_AV_PVO,
-      EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
-      EPvkDokumentStatus.TRENGER_GODKJENNING,
-    ].includes(pvkDokument.status)
-  ) {
-    return 'Les tilbakemelding fra PVO'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    isRisikoeier &&
-    [EPvkDokumentStatus.TRENGER_GODKJENNING].includes(pvkDokument.status)
-  ) {
-    return 'Godkjenn PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-    !updatedAfterApprovedOfRisikoeier
-  ) {
-    return 'Les godkjent PVK'
-  } else if (
-    !isPvkDokuemntNotStarted(risikoscenarioList, pvkDokument) &&
-    pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-    updatedAfterApprovedOfRisikoeier
-  ) {
-    return 'Oppdater PVK'
-  }
-
-  // Fallback to a safe default to avoid rendering empty button text
-  return 'Les PVK'
 }
 
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
@@ -106,41 +36,6 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
       return 'Sendt til Risikoeier for godkjenning'
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
       return 'Godkjent av risikoeier og arkivert i Public360'
-  }
-}
-
-export const getPvkStatusText = (
-  pvkVurdering: EPvkVurdering,
-  pvkStatus: EPvkDokumentStatus,
-  hasPvkDocumentationStarted: boolean
-): string => {
-  if (!pvkVurdering && !pvkStatus) {
-    return 'Ikke vurdert behov'
-  } else {
-    if (pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) {
-      return 'Vurdert: ikke behov'
-    } else if (pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) {
-      return 'PVK i Word'
-    } else if (!hasPvkDocumentationStarted) {
-      return 'Ikke påbegynt'
-    } else if (pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
-      return 'Godkjent av risikoeier'
-    } else if (pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING) {
-      return 'Sendt til risikoeier'
-    } else if (
-      pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
-      pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
-      pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
-    )
-      return 'Til behandling hos PVO'
-    else if (
-      pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
-      pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
-    ) {
-      return 'Tilbakemelding fra PVO'
-    } else {
-      return 'Under arbeid'
-    }
   }
 }
 
