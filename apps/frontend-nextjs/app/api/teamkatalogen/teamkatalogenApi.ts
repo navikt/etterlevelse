@@ -77,7 +77,7 @@ export const getSlackUserById = async (id: string) => {
   return (await axios.get<ISlackUser>(`${env.backendBaseUrl}/team/slack/user/id/${id}`)).data
 }
 
-export const searchSlackChannel = async (name: string) => {
+const searchSlackChannel = async (name: string) => {
   return (
     await axios.get<IPageResponse<ISlackChannel>>(
       `${env.backendBaseUrl}/team/slack/channel/search/${name}`
@@ -207,7 +207,7 @@ export const useMyTeams = () => {
   return [data, loading] as [ITeam[], boolean]
 }
 
-export const useMyProductAreas = () => {
+const useMyProductAreas = () => {
   const user = useContext(UserContext)
   const ident = user.getIdent()
   const [data, setData] = useState<IProductArea[]>([])
