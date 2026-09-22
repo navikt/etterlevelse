@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  BodyLong,
   Button,
   Checkbox,
   CheckboxGroup,
@@ -113,10 +112,7 @@ export const TiltakForm: FunctionComponent<TProps> = ({
           <Field name='ansvarligTeam'>
             {(fieldRenderProps: FieldProps) => (
               <div className='flex-1'>
-                <LabelWithDescription
-                  label='Velg tiltaksansvarlig team'
-                  description='Søk team fra Teamkatalogen'
-                />
+                <LabelWithDescription label='Søk etter tiltaksansvarlig team' />
                 <div className='w-full'>
                   <AsyncSelect
                     aria-label='Søk etter team'
@@ -149,8 +145,7 @@ export const TiltakForm: FunctionComponent<TProps> = ({
           <Field name='ansvarlig'>
             {(fieldRenderProps: FieldProps) => (
               <div className='my-5'>
-                <LabelWithTooltip label='Velg tiltaksansvarlig person?' tooltip='' />
-                <BodyLong>Søk etter person</BodyLong>
+                <LabelWithTooltip label='Søk etter tiltaksansvarlig person' tooltip='' />
                 <div className='w-full'>
                   <AsyncSelect
                     aria-label='Søk etter person'
