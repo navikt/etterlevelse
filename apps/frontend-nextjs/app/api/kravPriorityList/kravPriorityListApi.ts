@@ -4,7 +4,7 @@ import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useRef, useState } from 'react'
 
-export const getKravPriorityListPage = async (pageNumber: number, pageSize: number) => {
+const getKravPriorityListPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IKravPriorityList>>(
       `${env.backendBaseUrl}/kravprioritylist?pageNumber=${pageNumber}&pageSize=${pageSize}`
