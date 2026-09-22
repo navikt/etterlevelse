@@ -672,8 +672,11 @@ public class WordDocUtils {
             newLine();
             addMarkdownText(tiltak.getBeskrivelse());
             newLine();
-            addLabel("Tiltaksansvarlig:");
-            addText(getAnsvarlig(tiltak.getAnsvarligTeam(), tiltak.getAnsvarlig()));
+            addLabel("Tiltaksansvarlig team:");
+            addText(getAnsvarligTeam(tiltak.getAnsvarligTeam()));
+            newLine();
+            addLabel("Tiltaksansvarlig person:");
+            addText(getAnsvarligPerson(tiltak.getAnsvarlig()));
             newLine();
             addLabel("Tiltaksfrist:");
             addText( dateToString(tiltak.getFrist()));
@@ -702,17 +705,18 @@ public class WordDocUtils {
         }
     }
 
-    public String getAnsvarlig(TeamResponse ansvarligTeam, Resource ansvarlig) {
-        boolean harTeam = ansvarligTeam != null && ansvarligTeam.getName() != null && !ansvarligTeam.getName().isEmpty();
-        boolean harPerson = ansvarlig != null && ansvarlig.getFullName() != null && !ansvarlig.getFullName().isEmpty();
+    public String getAnsvarligTeam(TeamResponse ansvarligTeam) {
+        if (ansvarligTeam == null || ansvarligTeam.getName() == null || ansvarligTeam.getName().isEmpty()) {
+            return "Ingen ansvarlig team er satt";
+        }
+        return ansvarligTeam.getName();
+    }
 
-        if (!harTeam && !harPerson) {
-            return "Ingen ansvarlig er satt";
+    public String getAnsvarligPerson(Resource ansvarlig) {
+        if (ansvarlig == null || ansvarlig.getFullName() == null || ansvarlig.getFullName().isEmpty()) {
+            return "Ingen ansvarlig person er satt";
         }
-        if (harTeam && harPerson) {
-            return ansvarligTeam.getName() + ", " + ansvarlig.getFullName();
-        }
-        return harTeam ? ansvarligTeam.getName() : ansvarlig.getFullName();
+        return ansvarlig.getFullName();
     }
 
     public String dateToString(LocalDate date) {
