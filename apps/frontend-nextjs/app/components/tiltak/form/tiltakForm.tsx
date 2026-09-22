@@ -1,20 +1,6 @@
 'use client'
 
 import {
-  searchResourceByNameOptions,
-  useSearchTeamOptions,
-} from '@/api/teamkatalogen/teamkatalogenApi'
-import { mapTiltakToFormValue } from '@/api/tiltak/tiltakApi'
-import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
-import { DateField, InputField } from '@/components/common/inputs'
-import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
-import { FormError } from '@/components/common/modalSchema/formError/formError'
-import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { env } from '@/util/env/env'
-import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import {
   BodyLong,
   Button,
   Checkbox,
@@ -28,6 +14,22 @@ import { Field, FieldProps, Form, Formik } from 'formik'
 import _ from 'lodash'
 import { ChangeEvent, FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
+import {
+  searchResourceByNameOptions,
+  useSearchTeamOptions,
+} from '@/api/teamkatalogen/teamkatalogenApi'
+import { mapTiltakToFormValue } from '@/api/tiltak/tiltakApi'
+import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { DateField, InputField } from '@/components/common/inputs'
+import LabelWithTooltip, {
+  LabelWithDescription,
+} from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
+import { FormError } from '@/components/common/modalSchema/formError/formError'
+import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { env } from '@/util/env/env'
+import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { tiltakSchemaValidation } from './tiltakSchema'
 
 type TProps = {
@@ -103,14 +105,18 @@ export const TiltakForm: FunctionComponent<TProps> = ({
             marginBottom
           />
 
-          <Heading level='2' size='small' spacing>
-            Legg til minst et team og/eller en person
-          </Heading>
+          <LabelWithDescription
+            label='Legg til tiltaksansvarlig'
+            description='Du må legge til minst et team og/eller en person'
+          />
 
           <Field name='ansvarligTeam'>
             {(fieldRenderProps: FieldProps) => (
               <div className='flex-1'>
-                <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                <LabelWithDescription
+                  label='Velg tiltaksansvarlig team'
+                  description='Søk team fra Teamkatalogen'
+                />
                 <div className='w-full'>
                   <AsyncSelect
                     aria-label='Søk etter team'
@@ -142,8 +148,8 @@ export const TiltakForm: FunctionComponent<TProps> = ({
 
           <Field name='ansvarlig'>
             {(fieldRenderProps: FieldProps) => (
-              <div className='mb-5'>
-                <LabelWithTooltip label='Hvem er tiltaksansvarlig?' tooltip='' />
+              <div className='my-5'>
+                <LabelWithTooltip label='Velg tiltaksansvarlig person?' tooltip='' />
                 <BodyLong>Søk etter person</BodyLong>
                 <div className='w-full'>
                   <AsyncSelect

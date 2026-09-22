@@ -64,6 +64,7 @@ import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -672,7 +673,7 @@ public class WordDocUtils {
             addMarkdownText(tiltak.getBeskrivelse());
             newLine();
             addLabel("Tiltaksansvarlig:");
-            addText(getAnsvarlig(tiltak.getAnsvarlig()));
+            addText(getAnsvarlig(tiltak.getAnsvarligTeam(), tiltak.getAnsvarlig()));
             newLine();
             addLabel("Tiltaksfrist:");
             addText( dateToString(tiltak.getFrist()));
@@ -701,12 +702,17 @@ public class WordDocUtils {
         }
     }
 
-    public String getAnsvarlig(Resource ansvarlig) {
-        if (ansvarlig.getFullName() == null || ansvarlig.getFullName().isEmpty()) {
+    public String getAnsvarlig(TeamResponse ansvarligTeam, Resource ansvarlig) {
+        boolean harTeam = ansvarligTeam != null && ansvarligTeam.getName() != null && !ansvarligTeam.getName().isEmpty();
+        boolean harPerson = ansvarlig != null && ansvarlig.getFullName() != null && !ansvarlig.getFullName().isEmpty();
+
+        if (!harTeam && !harPerson) {
             return "Ingen ansvarlig er satt";
-        } else {
-            return ansvarlig.getFullName();
         }
+        if (harTeam && harPerson) {
+            return ansvarligTeam.getName() + ", " + ansvarlig.getFullName();
+        }
+        return harTeam ? ansvarligTeam.getName() : ansvarlig.getFullName();
     }
 
     public String dateToString(LocalDate date) {

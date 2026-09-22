@@ -31,3 +31,11 @@ package-lock.json
 .classpath
 .project
 .settings
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

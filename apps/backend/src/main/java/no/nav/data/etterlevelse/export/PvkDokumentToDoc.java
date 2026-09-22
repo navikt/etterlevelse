@@ -32,7 +32,9 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
 import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
+import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
@@ -67,6 +69,7 @@ public class PvkDokumentToDoc {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
     private final TeamcatResourceClient teamcatResourceClient;
+    private final TeamcatTeamClient teamcatTeamClient;
 
     public BehandlingensLivslop getBehandlingensLivslop(UUID etterlevelseDokumentasjonId) {
         return behandlingensLivslopService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
@@ -139,6 +142,7 @@ public class PvkDokumentToDoc {
         tiltakList.forEach(tiltak -> {
             tiltak.setRisikoscenarioIds(tiltakService.getRisikoscenarioer(tiltak.getId()));
             addResourceData(tiltak);
+            addTeamData(tiltak);
         });
 
         return tiltakList;
@@ -153,6 +157,18 @@ public class PvkDokumentToDoc {
                 () -> tiltak.setAnsvarlig(Resource.builder()
                         .navIdent(navIdent)
                         .fullName("Fant ikke person med NAV ident: " + navIdent)
+                        .build()));
+    }
+
+    private void addTeamData(TiltakResponse tiltak) {
+        String teamId = tiltak.getAnsvarligTeam().getId();
+        if (teamId == null || teamId.isEmpty()) {
+            return;
+        }
+        teamcatTeamClient.getTeam(teamId).ifPresentOrElse(team -> tiltak.setAnsvarligTeam(team.toResponse()),
+                () -> tiltak.setAnsvarligTeam(TeamResponse.builder()
+                        .id(teamId)
+                        .name("Fant ikke team med id: " + teamId)
                         .build()));
     }
 
