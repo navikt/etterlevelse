@@ -1,9 +1,6 @@
 'use client'
 
-import NyttInnholdTag from './NyttInnholdTag'
-import RisikoscenarioView from './RisikoscenarioView'
-import { IdentifiseringAvRisikoscenarioAccordianHeader } from './risikoscenarioAccordionHeader'
-import { RisikoscenarioTiltakHeader } from './risikoscenarioTiltakHeader'
+import { TiltakViewWithIverksetting } from '@/components/tiltak/common/tiltakView'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
@@ -12,7 +9,10 @@ import { Accordion, BodyLong, LocalAlert, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useRef, useState } from 'react'
-import { TiltakViewWithIverksetting } from '@/components/tiltak/common/tiltakView'
+import NyttInnholdTag from './NyttInnholdTag'
+import RisikoscenarioView from './RisikoscenarioView'
+import { IdentifiseringAvRisikoscenarioAccordianHeader } from './risikoscenarioAccordionHeader'
+import { RisikoscenarioTiltakHeader } from './risikoscenarioTiltakHeader'
 
 type TProps = {
   risikoscenarioList: IRisikoscenario[]
