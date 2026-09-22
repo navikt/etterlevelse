@@ -23,7 +23,7 @@ export const getAllKrav = async () => {
   }
 }
 
-export const getKravPage = async (pageNumber: number, pageSize: number) => {
+const getKravPage = async (pageNumber: number, pageSize: number) => {
   return (
     await axios.get<IPageResponse<IKrav>>(
       `${env.backendBaseUrl}/krav?pageNumber=${pageNumber}&pageSize=${pageSize}`

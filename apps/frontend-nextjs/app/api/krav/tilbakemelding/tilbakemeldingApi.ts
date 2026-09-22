@@ -18,7 +18,7 @@ export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: 
   ).data
 }
 
-export const getTilbakemeldingForKravByKravNummer = async (
+const getTilbakemeldingForKravByKravNummer = async (
   kravNummer: number
 ): Promise<IPageResponse<ITilbakemelding>> => {
   return (

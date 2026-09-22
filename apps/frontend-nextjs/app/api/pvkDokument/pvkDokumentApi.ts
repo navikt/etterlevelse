@@ -44,7 +44,7 @@ export const getAllPvkDokumentListItem = async () => {
   }
 }
 
-export const getPvkDokumentPage = async (
+const getPvkDokumentPage = async (
   pageNumber: number,
   pageSize: number
 ): Promise<IPageResponse<IPvkDokument>> =>
