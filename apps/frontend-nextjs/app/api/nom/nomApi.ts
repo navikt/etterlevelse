@@ -2,7 +2,7 @@ import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
 
-export const getAllNomAvdelinger = async () => {
+const getAllNomAvdelinger = async () => {
   return (await axios.get<IOrgEnhet[]>(`${env.backendBaseUrl}/nom/avdelinger`)).data
 }
 
@@ -21,7 +21,7 @@ export const getAvdelingOptions = async () => {
   return []
 }
 
-export const getSeksjonByAvdelingId = async (avdelingId: string) => {
+const getSeksjonByAvdelingId = async (avdelingId: string) => {
   return (await axios.get<IOrgEnhet[]>(`${env.backendBaseUrl}/nom/seksjon/avdeling/${avdelingId}`))
     .data
 }
