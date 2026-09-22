@@ -24,6 +24,11 @@ import {
   tiltakFilterValues,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
+  filterValues,
+  tabValues,
+  visTomListeBeskrivelse,
+} from '@/constants/oppsummering/oppsummeringConstants'
+import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
   IVurdering,
@@ -68,31 +73,6 @@ type TProps = {
   formRef: RefObject<any>
   pvoTilbakemelding?: IPvoTilbakemelding
   relevantVurdering?: IVurdering
-}
-
-export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-export const filterValues = {
-  alleRisikoscenarioer: 'alle',
-  effektIkkeVurdert: 'ikke-vurdert',
-  hoyRisiko: 'hoy-risiko',
-  tiltakIkkeAktuelt: 'ingen-tiltak',
-}
-
-const visTomListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case filterValues.hoyRisiko:
-      textBody = 'Det finnes ingen risikoscenarioer med høy risiko 🎉'
-      break
-    case filterValues.tiltakIkkeAktuelt:
-      textBody = 'Det finnes ingen risikoscenario hvor tiltak ikke er aktuelt  🎉'
-      break
-    case filterValues.effektIkkeVurdert:
-      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
 const visTomTiltakListeBeskrivelse = (filter: string | null) => {

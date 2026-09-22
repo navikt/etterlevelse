@@ -16,6 +16,13 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
+  filterValues,
+  tabValues,
+  tiltakFilterValues,
+  visTomListeBeskrivelse,
+  visTomTiltakListeBeskrivelse,
+} from '@/constants/oppsummering/oppsummeringConstants'
+import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
   IVurdering,
@@ -47,51 +54,6 @@ type TProps = {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
-}
-
-const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-const filterValues = {
-  alleRisikoscenarioer: 'alle',
-  effektIkkeVurdert: 'ikke-vurdert',
-  hoyRisiko: 'hoy-risiko',
-  tiltakIkkeAktuelt: 'ingen-tiltak',
-}
-
-const tiltakFilterValues = {
-  alleTiltak: 'alleTiltak',
-  utenAnsvarlig: 'utenAnsvarlig',
-  utenFrist: 'utenFrist',
-}
-
-const visTomListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case filterValues.hoyRisiko:
-      textBody = 'Det finnes ingen risikoscenarioer med høy risiko 🎉'
-      break
-    case filterValues.tiltakIkkeAktuelt:
-      textBody = 'Det finnes ingen risikoscenarioer uten tiltak 🎉'
-      break
-    case filterValues.effektIkkeVurdert:
-      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
-}
-
-const visTomTiltakListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case tiltakFilterValues.utenAnsvarlig:
-      textBody = 'Det finnes tiltak uten en ansvarlig 🎉'
-      break
-    case tiltakFilterValues.utenFrist:
-      textBody = 'Det finnes ingen tiltak uten frist 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps> = ({
