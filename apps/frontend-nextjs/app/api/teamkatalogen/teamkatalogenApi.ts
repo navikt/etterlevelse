@@ -60,7 +60,7 @@ const myProductArea = async () => {
   ).data.content
 }
 
-export const searchTeam = async (teamSearch: string) => {
+const searchTeam = async (teamSearch: string) => {
   return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team/search/${teamSearch}`))
     .data.content
 }
