@@ -22,7 +22,7 @@
         <hypersistence-utils-hibernate-71.version>3.15.5</hypersistence-utils-hibernate-71.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <shedlock.version>7.10.1</shedlock.version>
-        <commons-collections4.version>4.5.0</commons-collections4.version>
+        <commons-collections4.version>4.6.0</commons-collections4.version>
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>24.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
@@ -496,6 +496,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-compress</artifactId>
                 <version>${commons-compress.version}</version>
+            </dependency>
+            <!-- poi/poi-ooxml pull commons-collections4 4.5.0 transitively; converge on our pinned 4.6.0 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
