@@ -31,6 +31,8 @@ import no.nav.data.etterlevelse.krav.KravService;
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.etterlevelse.krav.dto.RegelverkResponse;
+import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.pvk.behandlingensArtOgOmfang.BehandlingensArtOgOmfangService;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
@@ -64,6 +66,7 @@ public class PvkDokumentToDoc {
     private final TiltakService tiltakService;
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
+    private final TeamcatResourceClient teamcatResourceClient;
 
     public BehandlingensLivslop getBehandlingensLivslop(UUID etterlevelseDokumentasjonId) {
         return behandlingensLivslopService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
@@ -135,9 +138,22 @@ public class PvkDokumentToDoc {
 
         tiltakList.forEach(tiltak -> {
             tiltak.setRisikoscenarioIds(tiltakService.getRisikoscenarioer(tiltak.getId()));
+            addResourceData(tiltak);
         });
 
         return tiltakList;
+    }
+
+    private void addResourceData(TiltakResponse tiltak) {
+        String navIdent = tiltak.getAnsvarlig().getNavIdent();
+        if (navIdent == null || navIdent.isEmpty()) {
+            return;
+        }
+        teamcatResourceClient.getResource(navIdent).ifPresentOrElse(tiltak::setAnsvarlig,
+                () -> tiltak.setAnsvarlig(Resource.builder()
+                        .navIdent(navIdent)
+                        .fullName("Fant ikke person med NAV ident: " + navIdent)
+                        .build()));
     }
 
     public byte[] generateZipWithBLLFilesFromDoc(byte[] pvkDokument, UUID etterlevelseDokumentasjonId, String documentTittle) throws IOException {
