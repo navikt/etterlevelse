@@ -49,15 +49,15 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-export const filterValues = {
+const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
+const filterValues = {
   alleRisikoscenarioer: 'alle',
   effektIkkeVurdert: 'ikke-vurdert',
   hoyRisiko: 'hoy-risiko',
   tiltakIkkeAktuelt: 'ingen-tiltak',
 }
 
-export const tiltakFilterValues = {
+const tiltakFilterValues = {
   alleTiltak: 'alleTiltak',
   utenAnsvarlig: 'utenAnsvarlig',
   utenFrist: 'utenFrist',

@@ -12,7 +12,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { IKravReference, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { risikoscenarioUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { Accordion, Alert, Heading } from '@navikt/ds-react'
 import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'

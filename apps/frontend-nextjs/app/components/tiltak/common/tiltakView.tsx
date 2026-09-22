@@ -10,8 +10,10 @@ import {
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
+import {
+  risikoDokumentasjonTemaKravNummerVersjonUrl,
+  risikoscenarioUrl,
+} from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { PencilIcon } from '@navikt/aksel-icons'
 import { Button, Checkbox, CheckboxGroup, InlineMessage, List, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'

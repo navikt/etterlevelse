@@ -88,14 +88,6 @@ export const pvkDokumentasjonPvkBehovUrl = (
   pvkId: string
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentId}/pvkbehov/${pvkId}`
 
-export const risikoscenarioUrl = (risikoId: string, steg?: string): string => {
-  if (steg !== undefined) {
-    return `${window.location.pathname}?steg=${steg}&risikoscenario=${risikoId}`
-  } else {
-    return `${window.location.pathname}?risikoscenario=${risikoId}`
-  }
-}
-
 export const pvkDokumenteringPvoTilbakemeldingUrl = (
   pvkDokumentId: string | undefined,
   step: number,
