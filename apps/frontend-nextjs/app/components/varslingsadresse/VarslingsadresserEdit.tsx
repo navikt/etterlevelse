@@ -5,7 +5,6 @@ import {
   getSlackUserByEmail,
   getSlackUserById,
   usePersonSearch,
-  useSlackChannelSearch,
 } from '@/api/teamkatalogen/teamkatalogenApi'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
@@ -144,7 +143,7 @@ type TVarslingsadresserTagListProps = {
   remove: (i: number) => void
 }
 
-export const VarslingsadresserTagList: FunctionComponent<TVarslingsadresserTagListProps> = ({
+const VarslingsadresserTagList: FunctionComponent<TVarslingsadresserTagListProps> = ({
   varslingsadresser,
   remove,
 }) => {
@@ -227,31 +226,6 @@ type TAddVarslingsadresseProps = {
   added?: IVarslingsadresse[]
   close?: () => void
 }
-
-export const SlackChannelSearch: FunctionComponent<TAddVarslingsadresseProps> = ({
-  add,
-  close,
-}) => (
-  <AsyncSelect
-    aria-label='Søk etter slack-kanal'
-    placeholder='Søk etter slack-kanal'
-    tabSelectsValue={false}
-    noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-    controlShouldRenderValue={false}
-    loadingMessage={() => 'Søker...'}
-    isClearable={false}
-    components={{ DropdownIndicator }}
-    loadOptions={useSlackChannelSearch}
-    onChange={(slackKanal) => {
-      const channel = slackKanal as ISlackChannel
-      if (channel) add({ type: EAdresseType.SLACK, adresse: channel.id })
-      if (close) {
-        close()
-      }
-    }}
-    styles={selectOverrides}
-  />
-)
 
 export const SlackUserSearch: FunctionComponent<TAddVarslingsadresseProps> = ({ add, close }) => {
   const [error, setError] = useState('')
