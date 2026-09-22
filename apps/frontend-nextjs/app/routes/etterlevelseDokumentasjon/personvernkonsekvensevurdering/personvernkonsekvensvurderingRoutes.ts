@@ -2,7 +2,7 @@
 
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjonRoutes'
 
-export const personvernKonsekvensvurderingUrl = '/pvkdokument'
+const personvernKonsekvensvurderingUrl = '/pvkdokument'
 
 export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tab=pvk`
