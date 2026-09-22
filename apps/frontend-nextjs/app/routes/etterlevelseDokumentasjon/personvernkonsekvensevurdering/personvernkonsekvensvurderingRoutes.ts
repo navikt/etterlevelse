@@ -96,18 +96,6 @@ export const risikoscenarioUrl = (risikoId: string, steg?: string): string => {
   }
 }
 
-export const risikoscenarioTiltakUrl = (
-  steg: string,
-  activeRisikoscenarioId: string,
-  tiltakId: string
-): string => {
-  if (steg !== undefined) {
-    return `${window.location.pathname}?steg=${steg}&risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
-  } else {
-    return `${window.location.pathname}?srisikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
-  }
-}
-
 export const pvkDokumenteringPvoTilbakemeldingUrl = (
   pvkDokumentId: string | undefined,
   step: number,

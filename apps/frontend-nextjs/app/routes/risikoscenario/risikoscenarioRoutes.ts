@@ -5,6 +5,14 @@ export const tabTiltakQuery: string = '&tab=tiltak'
 const tabRisikoScenarioQuery: string = '&tab=risikoscenarioer'
 const filterAlleQuery: string = 'filter=alle'
 
+export const risikoscenarioUrl = (risikoId: string, steg?: string): string => {
+  if (steg !== undefined) {
+    return `${window.location.pathname}?steg=${steg}&risikoscenario=${risikoId}`
+  } else {
+    return `${window.location.pathname}?risikoscenario=${risikoId}`
+  }
+}
+
 export const risikoscenarioIdQuery = (
   risikoscenarioId: string,
   tiltakId?: string,
