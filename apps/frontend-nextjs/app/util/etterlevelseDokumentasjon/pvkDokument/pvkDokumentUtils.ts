@@ -3,7 +3,6 @@ import {
   EPVKTilstandStatus,
   EPvkDokumentStatus,
   EPvkVurdering,
-  IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
@@ -36,31 +35,6 @@ export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
       return 'Sendt til Risikoeier for godkjenning'
     case EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER:
       return 'Godkjent av risikoeier og arkivert i Public360'
-  }
-}
-
-export const addNewMeldingTilPvo = (
-  pvkDokument: IPvkDokument,
-  innsendingId: number,
-  etterlevelseDokumentVersjon: number
-): IPvkDokument => {
-  pvkDokument.meldingerTilPvo.push(
-    createNewMeldingTilPvo(innsendingId, etterlevelseDokumentVersjon)
-  )
-  return pvkDokument
-}
-
-export const createNewMeldingTilPvo = (
-  newInnsendingId: number,
-  newEtterlevelseDokumentVersjon: number
-): IMeldingTilPvo => {
-  return {
-    etterlevelseDokumentVersjon: newEtterlevelseDokumentVersjon,
-    innsendingId: newInnsendingId,
-    merknadTilPvo: '',
-    endringsNotat: '',
-    sendtTilPvoAv: '',
-    sendtTilPvoDato: '',
   }
 }
 
