@@ -1,4 +1,3 @@
-import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVKTilstandStatus,
@@ -11,35 +10,6 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import moment from 'moment'
 
-export const getVariantForPVKBehovButton = (
-  pvkDokument: IPvkDokument | undefined,
-  behandlingsLivslop: IBehandlingensLivslop | undefined
-) => {
-  if (pvkDokument) {
-    return 'tertiary'
-  } else if (
-    (behandlingsLivslop && behandlingsLivslop.filer.length > 0) ||
-    behandlingsLivslop?.beskrivelse
-  ) {
-    return 'primary'
-  } else {
-    return 'secondary'
-  }
-}
-
-export const getVariantForPVKButton = (
-  pvkDokument: IPvkDokument | undefined,
-  behandlingsLivslop: IBehandlingensLivslop | undefined
-) => {
-  if (pvkDokument?.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'tertiary'
-  if (
-    (behandlingsLivslop && behandlingsLivslop?.filer.length > 0) ||
-    behandlingsLivslop?.beskrivelse
-  )
-    return 'primary'
-  return 'secondary'
-}
-
 export const isReadOnlyPvkStatus = (status: string) => {
   return [
     EPvkDokumentStatus.PVO_UNDERARBEID.toString(),
@@ -48,11 +18,6 @@ export const isReadOnlyPvkStatus = (status: string) => {
     EPvkDokumentStatus.TRENGER_GODKJENNING.toString(),
   ].includes(status)
 }
-
-export const isPvkDokumentVurdert = (pvkDokument?: IPvkDokument) =>
-  !!pvkDokument &&
-  (pvkDokument.ytterligereEgenskaper.length !== 0 ||
-    (pvkDokument.pvkVurdering != null && pvkDokument.pvkVurdering !== EPvkVurdering.UNDEFINED))
 
 export const isPvkDokuemntNotStarted = (
   risikoscenarioList: IRisikoscenario[],
