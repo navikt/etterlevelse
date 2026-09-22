@@ -86,12 +86,6 @@ export const updateBehandlingensLivslop = async (
   ).data
 }
 
-export const deleteBehandlingensLivslop = async (id: string) => {
-  return (
-    await axios.delete<IBehandlingensLivslop>(`${env.backendBaseUrl}/behandlingenslivslop/${id}`)
-  ).data
-}
-
 export const useBehandlingensLivslop = (
   behandlingensLivslopId?: string,
   etterlevelseDokumentasjonId?: string
