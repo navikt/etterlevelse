@@ -47,12 +47,12 @@ const getAllTeams = async () => {
   return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team`)).data.content
 }
 
-export const myTeams = async () => {
+const myTeams = async () => {
   return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team?myTeams=true`)).data
     .content
 }
 
-export const myProductArea = async () => {
+const myProductArea = async () => {
   return (
     await axios.get<IPageResponse<IProductArea>>(
       `${env.backendBaseUrl}/team/productarea?myProductAreas=true`

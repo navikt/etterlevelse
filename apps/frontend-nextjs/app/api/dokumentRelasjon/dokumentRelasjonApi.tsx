@@ -81,27 +81,6 @@ export const deleteDocumentRelation = async (id: string) => {
     .data
 }
 
-export const updateDocumentRelation = async (documentRelation: IDocumentRelation) => {
-  const dto = documentRelationToDocumentRelationDomainObject(documentRelation)
-  return (
-    await axios.put<IDocumentRelation>(
-      `${env.backendBaseUrl}/documentrelation/${documentRelation.id}`,
-      dto
-    )
-  ).data
-}
-
-function documentRelationToDocumentRelationDomainObject(
-  documentRelation: IDocumentRelation
-): IDocumentRelation {
-  const domainToObject = {
-    ...documentRelation,
-  } as any
-  delete domainToObject.changeStamp
-  delete domainToObject.version
-  return domainToObject
-}
-
 export const documentRelationMapToFormVal = (
   documentRelation: Partial<IDocumentRelation>
 ): IDocumentRelation => ({
