@@ -9,11 +9,11 @@ import { useForceUpdate } from '@/util/hooks/customHooks/customHooks'
 import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'
 
-export const getResourceById = async (resourceId: string) => {
+const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data
 }
 
-export const searchResourceByName = async (resourceName: string) => {
+const searchResourceByName = async (resourceName: string) => {
   return (
     await axios.get<IPageResponse<ITeamResource>>(
       `${env.backendBaseUrl}/team/resource/search/${resourceName}`
@@ -37,13 +37,13 @@ export const searchResourceByNameOptions = async (searchParam: string) => {
   return []
 }
 
-export const getTeam = async (teamId: string) => {
+const getTeam = async (teamId: string) => {
   const data = (await axios.get<ITeam>(`${env.backendBaseUrl}/team/${teamId}`)).data
   data.members = data.members.sort((a, b) => (a.name || '').localeCompare(b.name || ''))
   return data
 }
 
-export const getAllTeams = async () => {
+const getAllTeams = async () => {
   return (await axios.get<IPageResponse<ITeam>>(`${env.backendBaseUrl}/team`)).data.content
 }
 
