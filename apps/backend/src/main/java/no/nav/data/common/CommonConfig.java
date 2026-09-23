@@ -20,6 +20,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.cfg.CoercionAction;
+import tools.jackson.databind.cfg.CoercionInputShape;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
@@ -57,7 +59,10 @@ public class CommonConfig {
         utcLocalDateTimeModule.addSerializer(LocalDateTime.class, new UtcLocalDateTimeJackson3Serializer());
         return builder -> builder
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
                 .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .withCoercionConfigDefaults(config -> config
+                        .setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull))
                 .addModule(utcLocalDateTimeModule);
     }
 

@@ -5,6 +5,8 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectReader;
+import tools.jackson.databind.cfg.CoercionAction;
+import tools.jackson.databind.cfg.CoercionInputShape;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
@@ -19,10 +21,15 @@ public final class JsonUtils {
     private static final JsonMapper objectMapper = createObjectMapper();
 
     public static JsonMapper createObjectMapper() {
-        // Jackson 3 auto-registers java.time support; keep dates as ISO strings and ignore unknown properties.
+        // Jackson 3 auto-registers java.time support. Match the previous (Jackson 2 / hypersistence) leniency so
+        // existing jsonb rows keep deserializing: ignore unknown properties, keep ISO date strings, coerce
+        // missing/null primitives to their default, and treat empty strings as null for scalar types.
         return JsonMapper.builder()
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
                 .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .withCoercionConfigDefaults(config -> config
+                        .setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull))
                 .build();
     }
 
