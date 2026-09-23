@@ -1,7 +1,5 @@
 package no.nav.data.common;
 
-import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import io.prometheus.client.CollectorRegistry;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
@@ -59,15 +57,10 @@ public class CommonConfig {
     public JsonMapperBuilderCustomizer restJsonMapperBuilderCustomizer() {
         SimpleModule utcLocalDateTimeModule = new SimpleModule();
         utcLocalDateTimeModule.addSerializer(LocalDateTime.class, new UtcLocalDateTimeJackson3Serializer());
-        JsonSetter.Value asEmpty = JsonSetter.Value.forValueNulls(Nulls.AS_EMPTY);
         return builder -> builder
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
                 .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .withConfigOverride(String.class, c -> c.setNullHandling(asEmpty))
-                .withConfigOverride(List.class, c -> c.setNullHandling(asEmpty))
-                .withConfigOverride(Integer.class, c -> c.setNullHandling(asEmpty))
-                .withConfigOverride(int.class, c -> c.setNullHandling(asEmpty))
                 .withCoercionConfigDefaults(config -> config
                         .setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull))
                 .addModule(utcLocalDateTimeModule);

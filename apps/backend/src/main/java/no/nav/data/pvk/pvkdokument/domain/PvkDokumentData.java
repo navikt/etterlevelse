@@ -2,7 +2,11 @@ package no.nav.data.pvk.pvkdokument.domain;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
@@ -44,6 +48,19 @@ public class PvkDokumentData {
 
     public List<CodelistResponse> ytterligereEgenskaperAsCodes() {
         return CodelistService.getCodelistResponseList(ListName.YTTERLIGERE_EGENSKAPER, ytterligereEgenskaper);
+    }
+
+    /**
+     * The {@code @Builder.Default} initializer is not applied when Jackson deserializes existing jsonb rows, so this
+     * can be {@code null} for legacy/never-sent documents. Treat a missing value as 0 to avoid NPEs where callers
+     * unbox the value (e.g. {@code == innsendingId} / {@code > innsendingId}).
+     * <p>
+     * Note: this is handled per-field rather than by coercing null->0 globally in the Jackson mapper, because the
+     * persistence mapper backs Hibernate's dirty-checking and coercing stored nulls to defaults on read would
+     * trigger spurious updates.
+     */
+    public Integer getAntallInnsendingTilPvo() {
+        return antallInnsendingTilPvo == null ? 0 : antallInnsendingTilPvo;
     }
 
 }
