@@ -20,8 +20,6 @@ import {
   filterValues,
   tabValues,
   tiltakFilterValues,
-  visTomListeBeskrivelse,
-  visTomTiltakListeBeskrivelse,
 } from '@/constants/oppsummering/oppsummeringConstants'
 import {
   EPvoTilbakemeldingStatus,
@@ -33,6 +31,10 @@ import {
   pvkDokumentasjonTabFilterTiltakUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  VisTomListeBeskrivelse,
+  VisTomTiltakListeBeskrivelse,
+} from '@/util/oppsummering/oppsummeringUtil'
 import { LinkIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -408,7 +410,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
 
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length === 0 &&
-                        visTomListeBeskrivelse(filterQuery)}
+                        VisTomListeBeskrivelse(filterQuery)}
 
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
@@ -465,7 +467,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
                       )}
 
                       {filteredTiltakList.length === 0 &&
-                        visTomTiltakListeBeskrivelse(tiltakFilter)}
+                        VisTomTiltakListeBeskrivelse(tiltakFilter)}
 
                       <CopyButton
                         variant='action'

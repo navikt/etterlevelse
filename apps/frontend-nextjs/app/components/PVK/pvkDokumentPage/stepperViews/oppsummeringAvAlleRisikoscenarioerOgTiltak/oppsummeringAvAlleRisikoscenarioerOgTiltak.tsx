@@ -23,11 +23,7 @@ import {
   filterTiltakList,
   tiltakFilterValues,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import {
-  filterValues,
-  tabValues,
-  visTomListeBeskrivelse,
-} from '@/constants/oppsummering/oppsummeringConstants'
+import { filterValues, tabValues } from '@/constants/oppsummering/oppsummeringConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -43,6 +39,7 @@ import {
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { VisTomListeBeskrivelse } from '@/util/oppsummering/oppsummeringUtil'
 import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -453,7 +450,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length === 0 &&
-                        visTomListeBeskrivelse(filterQuery)}
+                        VisTomListeBeskrivelse(filterQuery)}
 
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (

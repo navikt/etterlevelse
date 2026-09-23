@@ -1,20 +1,7 @@
+import { filterValues, tiltakFilterValues } from '@/constants/oppsummering/oppsummeringConstants'
 import { BodyLong } from '@navikt/ds-react'
 
-export const tiltakFilterValues = {
-  alleTiltak: 'alleTiltak',
-  utenAnsvarlig: 'utenAnsvarlig',
-  utenFrist: 'utenFrist',
-}
-
-export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-export const filterValues = {
-  alleRisikoscenarioer: 'alle',
-  effektIkkeVurdert: 'ikke-vurdert',
-  hoyRisiko: 'hoy-risiko',
-  tiltakIkkeAktuelt: 'ingen-tiltak',
-}
-
-export const visTomListeBeskrivelse = (filter: string | null) => {
+export const VisTomListeBeskrivelse = (filter: string | null) => {
   let textBody = ''
   switch (filter) {
     case filterValues.hoyRisiko:
@@ -31,7 +18,7 @@ export const visTomListeBeskrivelse = (filter: string | null) => {
   return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
-export const visTomTiltakListeBeskrivelse = (filter: string | null) => {
+export const VisTomTiltakListeBeskrivelse = (filter: string | null) => {
   let textBody = ''
   switch (filter) {
     case tiltakFilterValues.utenAnsvarlig:
