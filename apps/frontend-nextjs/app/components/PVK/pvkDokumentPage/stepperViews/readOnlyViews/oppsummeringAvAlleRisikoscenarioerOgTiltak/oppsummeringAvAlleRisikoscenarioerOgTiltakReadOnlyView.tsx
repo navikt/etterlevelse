@@ -1,5 +1,18 @@
 'use client'
 
+import { LinkIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  CopyButton,
+  Heading,
+  Loader,
+  ReadMore,
+  Tabs,
+  ToggleGroup,
+} from '@navikt/ds-react'
+import moment from 'moment'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { useLastApprovedRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { useLastApprovedTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
@@ -8,7 +21,6 @@ import FormButtons from '@/components/PVK/edit/formButtons'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import TiltakAccordionListReadOnly from '@/components/tiltak/common/tiltakAccordionListReadOnly'
-import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -32,19 +44,6 @@ import {
   VisTomListeBeskrivelse,
   VisTomTiltakListeBeskrivelse,
 } from '@/util/oppsummering/oppsummeringUtil'
-import { LinkIcon } from '@navikt/aksel-icons'
-import {
-  BodyLong,
-  CopyButton,
-  Heading,
-  Loader,
-  ReadMore,
-  Tabs,
-  ToggleGroup,
-} from '@navikt/ds-react'
-import moment from 'moment'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
 import OppsumeringAccordianListReadOnlyView from '../oppsumeringAccordianListReadOnlyView'
 
 type TProps = {

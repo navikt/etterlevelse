@@ -1,12 +1,11 @@
 'use client'
 
+import { FunctionComponent } from 'react'
 import { useLastApprovedRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { useLastApprovedTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import RisikoscenarioAccordianListReadOnlyView from '@/components/risikoscenario/readOnly/risikoscenarioAccordianListReadOnlyView'
-import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { FunctionComponent } from 'react'
 import InfoChangesMadeAfterApproval from '../../../../common/infoChangesMadeAfterApproval'
 import FormButtons from '../../../../edit/formButtons'
 import { IdentifiseringAvRisikoscenarioerOgTiltakReadOnlyContent } from './identifiseringAvRisikoscenarioerOgTiltakReadOnlyContent'

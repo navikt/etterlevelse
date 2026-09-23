@@ -19,11 +19,6 @@ import {
   risikoDokumentasjonTemaKravNummerVersjonUrl,
   risikoscenarioUrl,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, Checkbox, CheckboxGroup, InlineMessage, List, Modal } from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import moment from 'moment'
-import { FunctionComponent, useEffect, useState } from 'react'
 
 interface IProps {
   tiltak: ITiltak
