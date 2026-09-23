@@ -1,8 +1,8 @@
 'use client'
 
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { usePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
+import { useLastApprovedPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
+import { getLastPvoByApprovedPvkDokumentIdAndTimestamp } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
@@ -61,9 +61,8 @@ const PvkDokumentReadOnlyPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
   )
-  const [pvkDokument, setPvkDokument] = usePvkDokument(
-    params.pvkDokumentId,
-    params.etterlevelseDokumentasjonId
+  const [pvkDokument, setPvkDokument] = useLastApprovedPvkDokument(
+    params.etterlevelseDokumentasjonId || ''
   )
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
   const [activeStep, setActiveStep] = useState<number>(
@@ -132,10 +131,7 @@ const PvkDokumentReadOnlyPage = () => {
   const relevantVurdering: IVurdering | undefined = useMemo(() => {
     if (pvkDokument && pvoTilbakemelding && etterlevelseDokumentasjon) {
       const vurdering = pvoTilbakemelding.vurderinger.find(
-        (vurdering) =>
-          vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo &&
-          vurdering.etterlevelseDokumentVersjon ===
-            etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+        (vurdering) => vurdering.innsendingId === pvkDokument.antallInnsendingTilPvo
       )
       if (vurdering) {
         return vurdering
@@ -146,7 +142,7 @@ const PvkDokumentReadOnlyPage = () => {
         )
       }
     }
-  }, [etterlevelseDokumentasjon, pvoTilbakemelding, pvkDokument])
+  }, [pvoTilbakemelding, pvkDokument])
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -177,8 +173,14 @@ const PvkDokumentReadOnlyPage = () => {
     ;(async () => {
       if (pvkDokument && pvkDokument.id) {
         if (![EPvkDokumentStatus.UNDERARBEID].includes(pvkDokument.status)) {
-          await getPvoTilbakemeldingByPvkDokumentId(pvkDokument.id)
-            .then(setPvoTilbakemelding)
+          await getLastPvoByApprovedPvkDokumentIdAndTimestamp(
+            pvkDokument.id,
+            pvkDokument.changeStamp.lastModifiedDate
+          )
+            .then((resp) => {
+              console.debug(resp)
+              setPvoTilbakemelding(resp)
+            })
             .catch(() => undefined)
         }
       }

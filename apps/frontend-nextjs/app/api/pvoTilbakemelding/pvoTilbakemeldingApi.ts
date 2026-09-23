@@ -105,6 +105,17 @@ export const usePvoTilbakemelding = (pvkDokumentId?: string) => {
   ]
 }
 
+export const getLastPvoByApprovedPvkDokumentIdAndTimestamp = async (
+  pvkDokumentId: string,
+  timestamp: string
+) => {
+  return (
+    await axios.get<IPvoTilbakemelding>(
+      `${env.backendBaseUrl}/pvotilbakemelding/approved/pvkDokument/${pvkDokumentId}/${timestamp}`
+    )
+  ).data
+}
+
 export const createPvoTilbakemelding = async (pvoTilbakemelding: IPvoTilbakemelding) => {
   const dto = pvoTilbakemeldingToPvoTilbakemeldingDto(pvoTilbakemelding)
   return (await axios.post<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding`, dto)).data

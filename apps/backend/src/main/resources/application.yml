@@ -31,15 +31,23 @@ management:
         enabled: true
 
 server:
-  error:
-    include-message: always
   port: 8080
   shutdown: graceful
 spring:
+  # Spring Boot 4 moved error-attribute inclusion from `server.error.*` to `spring.web.error.*`
+  # (BasicErrorController now reads WebProperties.getError()). Keep the exception message in error responses.
+  web:
+    error:
+      include-message: always
   datasource:
     password: ${DB_PASSWORD}
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_DATABASE}
     username: ${DB_USERNAME}
+  jackson:
+    # Spring Boot 4 uses Jackson 3, which enables FAIL_ON_NULL_FOR_PRIMITIVES by default.
+    # Restore the Jackson 2 (lenient) behaviour so null JSON values map to primitive defaults.
+    deserialization:
+      fail-on-null-for-primitives: false
   flyway:
     baseline-on-migrate: true
     schemas: public

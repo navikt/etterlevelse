@@ -22,10 +22,17 @@ import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataData;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.krav.KravService;
-import no.nav.data.etterlevelse.krav.domain.*;
+import no.nav.data.etterlevelse.krav.domain.Krav;
+import no.nav.data.etterlevelse.krav.domain.KravData;
+import no.nav.data.etterlevelse.krav.domain.KravImage;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
+import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import no.nav.data.etterlevelse.krav.domain.Regelverk;
+import no.nav.data.etterlevelse.krav.domain.TilbakemeldingRepo;
 import no.nav.data.etterlevelse.kravprioritylist.domain.KravPriorityList;
 import no.nav.data.etterlevelse.melding.domain.Melding;
 import no.nav.data.integration.behandling.BehandlingService;
+import no.nav.data.integration.slack.SlackMeldingRepo;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangData;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfangRepo;
@@ -35,7 +42,11 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
-import no.nav.data.pvk.pvotilbakemelding.domain.*;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
+import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
+import no.nav.data.pvk.pvotilbakemelding.domain.Vurdering;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioData;
@@ -46,19 +57,23 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.ArrayList;
@@ -77,8 +92,14 @@ public abstract class IntegrationTestBase {
         postgreSQLContainer.start();
     }
 
+    @LocalServerPort
+    private int port;
+    // Spring Boot 4 removed TestRestTemplate; use the auto-configured RestTemplateBuilder (which carries
+    // the app's HTTP message converters / Jackson config) and add a root URI for relative paths plus a
+    // non-throwing error handler so tests can assert on error statuses, mirroring TestRestTemplate.
     @Autowired
-    protected TestRestTemplate restTemplate;
+    private RestTemplateBuilder restTemplateBuilder;
+    protected RestTemplate restTemplate;
     @Autowired
     protected GenericStorageRepository<?> repository;
     @Autowired
@@ -136,11 +157,22 @@ public abstract class IntegrationTestBase {
     @Autowired
     protected TilbakemeldingRepo tilbakemeldingRepo;
     @Autowired
+    protected SlackMeldingRepo slackMeldingRepo;
+    @Autowired
     protected BehandlingensArtOgOmfangRepo behandlingensArtOgOmfangRepo;
 
     @BeforeEach
     @Transactional
     void setUpBase() {
+        restTemplate = restTemplateBuilder
+                .rootUri("http://localhost:" + port)
+                .errorHandler(new ResponseErrorHandler() {
+                    @Override
+                    public boolean hasError(ClientHttpResponse response) {
+                        return false; // let tests assert on the returned status, like TestRestTemplate did
+                    }
+                })
+                .build();
         repository.deleteAll();
         auditVersionRepository.deleteAll();
         CodelistStub.initializeCodelist();
@@ -152,6 +184,7 @@ public abstract class IntegrationTestBase {
     void tearDownBase() {
         etterlevelseMetadataRepo.deleteAll();
         tilbakemeldingRepo.deleteAll();
+        slackMeldingRepo.deleteAll();
         repository.deleteAll();
         MockFilter.clearUser();
         etterlevelseRepo.deleteAll();

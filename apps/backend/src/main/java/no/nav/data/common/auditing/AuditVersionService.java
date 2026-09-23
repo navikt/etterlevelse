@@ -6,7 +6,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import no.nav.data.common.auditing.domain.*;
+import no.nav.data.common.auditing.domain.Action;
+import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.auditing.domain.AuditVersionCustomRepo;
+import no.nav.data.common.auditing.domain.AuditVersionRepository;
+import no.nav.data.common.auditing.domain.MailLogRepository;
+import no.nav.data.common.auditing.domain.SearchTypes;
 import no.nav.data.common.security.azure.support.MailLog;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
@@ -97,10 +102,6 @@ public class AuditVersionService {
         return repository.findByTableIdOrderByTimeDesc(id);
     }
 
-    public List<AuditVersion> findByTableIdOrderByTimeDesc(UUID id) {
-        return findByTableIdOrderByTimeDesc(id.toString());
-    }
-
     public Page<GenericStorage<MailLog>> findAllMailLog(Pageable pageable) {
         return mailLogRepository.findAll(pageable);
     }
@@ -113,15 +114,15 @@ public class AuditVersionService {
         return mailLogRepository.findByTo(user);
     }
 
-    public List<AuditVersion> getByTableIdAndTimestamp(String tableId, String timestamp) {
+    public List<AuditVersion> getByTableIdAndTimestamp(String tableId, LocalDateTime timestamp) {
         return customRepo.findLatestByTableIdAndTimeStamp(tableId, timestamp);
     }
 
     public List<AuditVersion> getByTableIdAndTimestamp(UUID tableId, LocalDateTime timestamp) {
-        return getByTableIdAndTimestamp(tableId.toString(), timestamp.toString());
+        return getByTableIdAndTimestamp(tableId.toString(), timestamp);
     }
 
-    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String etterlevelseDokumentasjonId, String timestamp) {
+    public List<AuditVersion> findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(String etterlevelseDokumentasjonId, LocalDateTime timestamp) {
         return customRepo.findLatestEtterlevelseByEtterlevelseDokumentIdAndTimestamp(etterlevelseDokumentasjonId, timestamp);
     }
 
@@ -135,5 +136,9 @@ public class AuditVersionService {
 
     public List<AuditVersion> findLatestPvoTilbakemeldingIdAndCurrentUser(String pvoTilbakemeldingId) {
         return customRepo.findLatestPvoTilbakemeldingIdAndCurrentUser(pvoTilbakemeldingId);
+    }
+
+    public List<AuditVersion> findByTableNameAndFieldNameAndFieldValueAndTimestamp(String tableName, String fieldName, String fieldValue, LocalDateTime timestamp) {
+        return customRepo.findByTableNameAndFieldNameAndFieldValueAndTimestamp(tableName, fieldName, fieldValue, timestamp);
     }
 }

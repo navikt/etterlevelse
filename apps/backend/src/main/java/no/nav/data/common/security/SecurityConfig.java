@@ -19,6 +19,9 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/oauth2/callback")
+                        // Azure posts the auth code back via response_mode=form_post (cross-site POST),
+                        // so the callback must accept POST in addition to GET.
+                        .allowedMethods("GET", "POST", "OPTIONS")
                         .allowedOrigins("*");
                 registry.addMapping("/**")
                         .allowCredentials(true)

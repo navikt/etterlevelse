@@ -19,6 +19,9 @@ etterlev:
     security:
         enabled: false
 
+scheduling:
+    enabled: false
+
 spring:
     main:
         allow-bean-definition-overriding: true

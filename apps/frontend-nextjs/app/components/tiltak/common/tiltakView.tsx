@@ -1,5 +1,10 @@
 'use client'
 
+import { PencilIcon } from '@navikt/aksel-icons'
+import { Button, Checkbox, CheckboxGroup, InlineMessage, List, Modal } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import moment from 'moment'
+import { FunctionComponent, useState } from 'react'
 import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import {
@@ -54,29 +59,7 @@ const getRisikoscenarioHref = (
 
 export const TiltakView = (props: IProps) => {
   const { tiltak, risikoscenarioList, noIverksattKommentar, etterlevelseDokumentasjonId } = props
-  const [ansvarligView, setAnsvarligView] = useState<string>('')
   const today = new Date()
-
-  useEffect(() => {
-    ;(async () => {
-      let ansvarlige = ''
-      if (tiltak.ansvarligTeam && tiltak.ansvarligTeam.name) {
-        ansvarlige += tiltak.ansvarligTeam.name
-      }
-      if (
-        tiltak.ansvarlig &&
-        tiltak.ansvarlig.fullName &&
-        tiltak.ansvarligTeam &&
-        tiltak.ansvarligTeam.name
-      ) {
-        ansvarlige += ', '
-      }
-      if (tiltak.ansvarlig && tiltak.ansvarlig.fullName) {
-        ansvarlige += tiltak.ansvarlig.fullName
-      }
-      setAnsvarligView(ansvarlige)
-    })()
-  }, [tiltak])
 
   return (
     <div className='mb-5 mt-3'>
@@ -119,15 +102,19 @@ export const TiltakView = (props: IProps) => {
       />
 
       <ReadOnlyFieldBool
-        label='Tiltaksansvarlig:'
-        description={ansvarligView}
-        className='flex gap-2'
-        isFalse={
-          (!tiltak.ansvarligTeam ||
-            (tiltak.ansvarligTeam && ['', null].includes(tiltak.ansvarligTeam.id))) &&
-          (!tiltak.ansvarlig || (tiltak.ansvarlig && tiltak.ansvarlig.navIdent === ''))
-        }
-        descriptionFalse='Det er ikke satt en ansvarlig for tiltaket'
+        label='Tiltaksansvarlig team:'
+        description={tiltak.ansvarligTeam?.name || ''}
+        className='mb-3'
+        isFalse={!tiltak.ansvarligTeam || ['', null].includes(tiltak.ansvarligTeam.id)}
+        descriptionFalse='Det er ikke satt et ansvarlig team for tiltaket'
+      />
+
+      <ReadOnlyFieldBool
+        label='Tiltaksansvarlig person:'
+        description={tiltak.ansvarlig?.fullName || ''}
+        className='mb-3'
+        isFalse={!tiltak.ansvarlig || tiltak.ansvarlig.navIdent === ''}
+        descriptionFalse='Det er ikke satt en ansvarlig person for tiltaket'
       />
 
       {!tiltak.iverksatt && (

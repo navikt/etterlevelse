@@ -2,6 +2,7 @@ package no.nav.data.common;
 
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import no.nav.data.common.utils.MdcUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,6 +18,7 @@ import java.util.concurrent.ScheduledFuture;
 @Configuration
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "PT10M", defaultLockAtLeastFor = "PT59s")
+@ConditionalOnProperty(value = "scheduling.enabled", matchIfMissing = true)
 public class SchedulerConfig implements SchedulingConfigurer {
 
     @Override

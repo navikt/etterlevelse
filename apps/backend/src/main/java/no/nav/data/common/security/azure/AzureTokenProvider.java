@@ -139,7 +139,9 @@ public class AzureTokenProvider implements TokenProvider {
         URL url = msalClient.getAuthorizationRequestUrl(AuthorizationRequestUrlParameters
                 .builder(redirectUri, MICROSOFT_GRAPH_SCOPES)
                 .state(new OAuthState(auth.getId().toString(), postLoginRedirectUri, postLoginErrorUri).toJson(encryptor))
-                .responseMode(ResponseMode.QUERY)
+                // msal4j 1.24+ deprecated ResponseMode.QUERY and forcibly rewrites it to FORM_POST,
+                // so Azure sends a cross-site auto-POST back to /oauth2/callback. Set it explicitly.
+                .responseMode(ResponseMode.FORM_POST)
                 .codeChallengeMethod(CodeChallengeMethod.S256.getValue())
                 .codeChallenge(codeChallenge)
                 .build());

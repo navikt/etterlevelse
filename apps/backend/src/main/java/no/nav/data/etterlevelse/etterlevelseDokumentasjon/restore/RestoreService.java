@@ -1,14 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.restore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.AuditVersion;
@@ -36,6 +27,14 @@ import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -46,11 +45,6 @@ public class RestoreService {
     private static final String TABLE_ETTERLEVELSE = "ETTERLEVELSE";
     private static final String TABLE_ETTERLEVELSE_METADATA = "ETTERLEVELSE_METADATA";
     private static final String TABLE_BEHANDLINGENS_LIVSLOP = "BEHANDLINGENS_LIVSLOP";
-    private static final String TABLE_BEHANDLINGENS_ART_OG_OMFANG = "BEHANDLINGENS_ART_OG_OMFANG";
-    private static final String TABLE_PVK_DOKUMENT = "PVK_DOKUMENT";
-    private static final String TABLE_RISIKOSCENARIO = "RISIKOSCENARIO";
-    private static final String TABLE_TILTAK = "TILTAK";
-    private static final String TABLE_PVO_TILBAKEMELDING = "PVO_TILBAKEMELDING";
 
     private static final String FK_ETTERLEVELSE_DOKUMENTASJON_ID = "etterlevelseDokumentasjonId";
     private static final String FK_ETTERLEVELSE_DOKUMENT_ID = "etterlevelseDokumentId";
@@ -79,7 +73,7 @@ public class RestoreService {
             }
             EtterlevelseDokumentasjon eDok = JsonUtils.toObject(audit.getData(), EtterlevelseDokumentasjon.class);
             boolean hadPvk = !auditVersionCustomRepo
-                    .findLatestDeletedByTableAndFk(TABLE_PVK_DOKUMENT, FK_ETTERLEVELSE_DOKUMENT_ID, id.toString()).isEmpty();
+                    .findLatestDeletedByTableAndFk(PvkDokument.TABLENAME, FK_ETTERLEVELSE_DOKUMENT_ID, id.toString()).isEmpty();
 
             result.add(DeletedEtterlevelseDokumentasjonResponse.builder()
                     .id(id.toString())
@@ -115,7 +109,7 @@ public class RestoreService {
                 .build();
 
         List<PvkDokument> restoredPvkDokumenter = restoreChildren(
-                TABLE_PVK_DOKUMENT, FK_ETTERLEVELSE_DOKUMENT_ID, id.toString(), PvkDokument.class, pvkDokumentRepo);
+                PvkDokument.TABLENAME, FK_ETTERLEVELSE_DOKUMENT_ID, id.toString(), PvkDokument.class, pvkDokumentRepo);
         result.setRestoredPvkDokument(restoredPvkDokumenter.size());
 
         result.setRestoredEtterlevelser(restoreChildren(
@@ -125,16 +119,16 @@ public class RestoreService {
         result.setRestoredBehandlingensLivslop(restoreChildren(
                 TABLE_BEHANDLINGENS_LIVSLOP, FK_ETTERLEVELSE_DOKUMENTASJON_ID, id.toString(), BehandlingensLivslop.class, behandlingensLivslopRepo).size());
         result.setRestoredBehandlingensArtOgOmfang(restoreChildren(
-                TABLE_BEHANDLINGENS_ART_OG_OMFANG, FK_ETTERLEVELSE_DOKUMENTASJON_ID, id.toString(), BehandlingensArtOgOmfang.class, behandlingensArtOgOmfangRepo).size());
+                BehandlingensArtOgOmfang.TABLENAME, FK_ETTERLEVELSE_DOKUMENTASJON_ID, id.toString(), BehandlingensArtOgOmfang.class, behandlingensArtOgOmfangRepo).size());
 
         for (PvkDokument pvkDokument : restoredPvkDokumenter) {
             String pvkId = pvkDokument.getId().toString();
             result.setRestoredRisikoscenario(result.getRestoredRisikoscenario() + restoreChildren(
-                    TABLE_RISIKOSCENARIO, FK_PVK_DOKUMENT_ID, pvkId, Risikoscenario.class, risikoscenarioRepo).size());
+                    Risikoscenario.TABLENAME, FK_PVK_DOKUMENT_ID, pvkId, Risikoscenario.class, risikoscenarioRepo).size());
             result.setRestoredTiltak(result.getRestoredTiltak() + restoreChildren(
-                    TABLE_TILTAK, FK_PVK_DOKUMENT_ID, pvkId, Tiltak.class, tiltakRepo).size());
+                    Tiltak.TABLENAME, FK_PVK_DOKUMENT_ID, pvkId, Tiltak.class, tiltakRepo).size());
             result.setRestoredPvoTilbakemelding(result.getRestoredPvoTilbakemelding() + restoreChildren(
-                    TABLE_PVO_TILBAKEMELDING, FK_PVK_DOKUMENT_ID, pvkId, PvoTilbakemelding.class, pvoTilbakemeldingRepo).size());
+                    PvoTilbakemelding.TABLENAME, FK_PVK_DOKUMENT_ID, pvkId, PvoTilbakemelding.class, pvoTilbakemeldingRepo).size());
         }
 
         if (result.getRestoredRisikoscenario() > 0 && result.getRestoredTiltak() > 0) {

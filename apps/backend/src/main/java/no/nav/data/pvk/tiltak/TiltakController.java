@@ -10,6 +10,7 @@ import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
@@ -17,7 +18,9 @@ import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
+import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.dto.TiltakRequest;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
@@ -25,9 +28,17 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -97,6 +108,11 @@ public class TiltakController {
                 request.setIverksattDato(LocalDate.now());
             }
             hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
+            Risikoscenario risikoscenario = risikoscenarioService.get(risikoscenarioId);
+            if (risikoscenario == null) {
+                log.warn("Could not find Risikoscenario with id = {}", risikoscenarioId);
+                throw new NotFoundException(String.format("Could not find Risikoscenario with id = %s", risikoscenarioId));
+            }
             Tiltak tiltak = service.save(request.convertToTiltak(), risikoscenarioId, false);
             TiltakResponse resp = TiltakResponse.buildFrom(tiltak);
             risikoscenarioService.updateTiltakOppdatertField(risikoscenarioId, true);
@@ -139,23 +155,53 @@ public class TiltakController {
     @DeleteMapping("/{id}")
     public ResponseEntity<TiltakResponse> deleteTiltakById(@PathVariable UUID id) {
         log.info("Delete tiltak id={}", id);
+        List<UUID> risikoscenarioIds = service.getRisikoscenarioer(id);
         Tiltak tiltak;
-        try {
-            tiltak = service.delete(id);
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Could delete Tiltak with id = {}: Tiltak is related to one or more Risikoscenario", id);
-            throw new ValidationException("Could delete Tiltak: Tiltak is related to one or more Risikoscenario");
-        }
-        if (tiltak == null) {
-            log.warn("Could not find tiltak with id = {} to delete", id);
-            return ResponseEntity.ok(null);
+
+        if (!risikoscenarioIds.isEmpty()) {
+            log.warn("Could not delete Tiltak with id = {}: Tiltak is related to one or more Risikoscenario", id);
+            throw new ValidationException("Could not delete Tiltak: Tiltak is related to one or more Risikoscenario");
         } else {
-            return ResponseEntity.ok(TiltakResponse.buildFrom(tiltak));
+
+            tiltak = service.delete(id);
+
+            if (tiltak == null) {
+                log.warn("Could not find tiltak with id = {} to delete", id);
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(TiltakResponse.buildFrom(tiltak));
+            }
         }
+
+    }
+
+    @Operation(summary = "Get last approved tiltak by Pvk Document and timestamp")
+    @ApiResponse(description = "ok")
+    @GetMapping("/approved/pvkDokument/{pvkDokumentId}/{timestamp}")
+    public ResponseEntity<List<TiltakResponse>> getApprovedTiltakByPvkDokumentAndIdAndTimestamp(@PathVariable String pvkDokumentId, @PathVariable String timestamp) {
+        log.info("Get approved Tiltak by Pvk Document {} and timestamp={}", pvkDokumentId, timestamp);
+        String normalizedTimestamp = UtcDateTimeUtil.stripTrailingZ(timestamp);
+        PvkDokument approvedPvkDokument = pvkDokumentService.getApprovedPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
+        if (approvedPvkDokument != null) {
+            List<Tiltak> tiltakList = service.getApprovedTiltakPvkDokumentByIdAndTimestamp(pvkDokumentId, LocalDateTime.parse(normalizedTimestamp));
+            List<TiltakResponse> tiltakResponseList = tiltakList.stream().map(TiltakResponse::buildFrom).toList();
+            tiltakResponseList.forEach(tiltakResponse -> {
+                addApprovedRisikoscenarioer(tiltakResponse, LocalDateTime.parse(normalizedTimestamp));
+                addResourceData(tiltakResponse);
+                addTeamData(tiltakResponse);
+            });
+            return ResponseEntity.ok(tiltakResponseList);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private TiltakResponse addRisikoscenarioer(TiltakResponse res) {
         res.setRisikoscenarioIds(service.getRisikoscenarioer(res.getId()));
+        return res;
+    }
+
+    private TiltakResponse addApprovedRisikoscenarioer(TiltakResponse res, LocalDateTime timestamp) {
+        res.setRisikoscenarioIds(service.getApprovedRisikoscenarioer(res.getId(), timestamp));
         return res;
     }
 

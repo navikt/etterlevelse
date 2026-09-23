@@ -1,7 +1,7 @@
 'use client'
 
-import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
-import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import { useLastApprovedRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
+import { useLastApprovedTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
@@ -11,10 +11,7 @@ import TiltakAccordionListReadOnly from '@/components/tiltak/common/tiltakAccord
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import {
-  ERisikoscenarioType,
-  IRisikoscenario,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
   filterValues,
@@ -77,8 +74,9 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
   const tiltakId: string | null = queryParams.get('tiltak')
   const filterQuery: string | null = queryParams.get('filter')
 
-  const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
-  const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
+  const [alleRisikoscenario] = useLastApprovedRisikoscenarioByPvkDokumentId(pvkDokument, true)
+  const [tiltakList] = useLastApprovedTiltakByPvkDokumentId(pvkDokument)
+
   const [filteredRisikoscenarioList, setFilteredRisikosenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakFilter, setTiltakFilter] = useState<string>(tiltakFilterValues.alleTiltak)
   const [filteredTiltakList, setFilteredTiltakList] = useState<ITiltak[]>([])
@@ -126,33 +124,23 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
     if (pvkDokument) {
       ;(async () => {
         setIsLoading(true)
-        await getRisikoscenarioByPvkDokumentId(pvkDokument.id, ERisikoscenarioType.ALL).then(
-          (risikoscenarioer: IPageResponse<IRisikoscenario>) => {
-            setRisikoscenarioList(risikoscenarioer.content)
-            setFilteredRisikosenarioList(risikoscenarioer.content)
-          }
-        )
-
-        await getTiltakByPvkDokumentId(pvkDokument.id).then((tiltak: IPageResponse<ITiltak>) => {
-          setTiltakList(tiltak.content)
-          setFilteredTiltakList(tiltak.content)
-        })
-
+        setFilteredRisikosenarioList(alleRisikoscenario)
+        setFilteredTiltakList(tiltakList)
         setIsLoading(false)
       })()
     }
-  }, [pvkDokument])
+  }, [alleRisikoscenario, tiltakList])
 
   useEffect(() => {
     ;(async () => {
-      if (risikoscenarioList.length !== 0) {
+      if (alleRisikoscenario.length !== 0) {
         setAntallTiltakIkkeAktuelt(
-          risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
+          alleRisikoscenario.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
             .length
         )
 
         setAntallEffektIkkeVurdert(
-          risikoscenarioList.filter(
+          alleRisikoscenario.filter(
             (risikoscenario: IRisikoscenario) =>
               !risikoscenario.ingenTiltak &&
               (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
@@ -162,21 +150,21 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
         )
 
         setAntallHoyRisiko(
-          risikoscenarioList.filter(
+          alleRisikoscenario.filter(
             (risikoscenario: IRisikoscenario) =>
               risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
           ).length
         )
       }
 
-      if (risikoscenarioList.length !== 0) {
+      if (alleRisikoscenario.length !== 0) {
         setAntallTiltakIkkeAktuelt(
-          risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
+          alleRisikoscenario.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
             .length
         )
 
         setAntallEffektIkkeVurdert(
-          risikoscenarioList.filter(
+          alleRisikoscenario.filter(
             (risikoscenario: IRisikoscenario) =>
               !risikoscenario.ingenTiltak &&
               (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
@@ -186,14 +174,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
         )
 
         setAntallHoyRisiko(
-          risikoscenarioList.filter(
+          alleRisikoscenario.filter(
             (risikoscenario: IRisikoscenario) =>
               risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
           ).length
         )
       }
     })()
-  }, [risikoscenarioList])
+  }, [alleRisikoscenario])
 
   useEffect(() => {
     ;(async () => {
@@ -223,16 +211,16 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
 
     switch (filter) {
       case filterValues.alleRisikoscenarioer:
-        setFilteredRisikosenarioList(risikoscenarioList)
+        setFilteredRisikosenarioList(alleRisikoscenario)
         break
       case filterValues.tiltakIkkeAktuelt:
         setFilteredRisikosenarioList(
-          risikoscenarioList.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
+          alleRisikoscenario.filter((risikoscenario: IRisikoscenario) => risikoscenario.ingenTiltak)
         )
         break
       case filterValues.effektIkkeVurdert:
         setFilteredRisikosenarioList(
-          risikoscenarioList.filter(
+          alleRisikoscenario.filter(
             (risikoscenario: IRisikoscenario) =>
               !risikoscenario.ingenTiltak &&
               (risikoscenario.konsekvensNivaaEtterTiltak === 0 ||
@@ -243,14 +231,14 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
         break
       case filterValues.hoyRisiko:
         setFilteredRisikosenarioList(
-          risikoscenarioList.filter(
+          alleRisikoscenario.filter(
             (risikoscenario: IRisikoscenario) =>
               risikoscenario.konsekvensNivaa === 5 || risikoscenario.sannsynlighetsNivaa === 5
           )
         )
         break
       default:
-        setFilteredRisikosenarioList(risikoscenarioList)
+        setFilteredRisikosenarioList(alleRisikoscenario)
         break
     }
 
@@ -261,11 +249,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
 
   useEffect(() => {
     ;(async () => {
-      if (risikoscenarioList.length !== 0 && filterQuery) {
+      if (alleRisikoscenario.length !== 0 && filterQuery) {
         onFilterChange(filterQuery)
       }
     })()
-  }, [filterQuery, risikoscenarioList])
+  }, [filterQuery, alleRisikoscenario])
 
   const onTabChange = (tab: string): void => {
     const filter: string = filterQuery ? filterQuery : filterValues.alleRisikoscenarioer
@@ -317,7 +305,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
             <div className='max-w-204 mt-5'>
               <InfoChangesMadeAfterApproval
                 pvkDokument={pvkDokument}
-                alleRisikoscenario={risikoscenarioList}
+                alleRisikoscenario={alleRisikoscenario}
                 alleTiltak={tiltakList}
               />
             </div>
@@ -365,7 +353,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
                             {antallEffektIkkeVurdert > 0 && (
                               <span className='w-3 h-3 bg-red-400 rounded-full mr-1'></span>
                             )}
-                            {`Vis risikoscenarioer (${risikoscenarioList.length})`}
+                            {`Vis risikoscenarioer (${alleRisikoscenario.length})`}
                           </span>
                         }
                       />
@@ -392,7 +380,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
                       >
                         <ToggleGroup.Item
                           value={filterValues.alleRisikoscenarioer}
-                          label={`Alle risikoscenarioer (${risikoscenarioList.length})`}
+                          label={`Alle risikoscenarioer (${alleRisikoscenario.length})`}
                         />
                         <ToggleGroup.Item
                           value={filterValues.effektIkkeVurdert}
@@ -408,17 +396,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
                         />
                       </ToggleGroup>
 
-                      {risikoscenarioList.length !== 0 &&
+                      {alleRisikoscenario.length !== 0 &&
                         filteredRisikoscenarioList.length === 0 &&
                         VisTomListeBeskrivelse(filterQuery)}
 
-                      {risikoscenarioList.length !== 0 &&
+                      {alleRisikoscenario.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
                           <div className='my-5'>
                             {pvkDokument && (
                               <OppsumeringAccordianListReadOnlyView
                                 risikoscenarioList={filteredRisikoscenarioList}
-                                allRisikoscenarioList={risikoscenarioList}
+                                allRisikoscenarioList={alleRisikoscenario}
                                 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                 tiltakList={tiltakList}
                                 noMarkdownCopyLinkButton
@@ -461,7 +449,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
                       {pvkDokument && filteredTiltakList.length !== 0 && (
                         <TiltakAccordionListReadOnly
                           tiltakList={filteredTiltakList}
-                          risikoscenarioList={risikoscenarioList}
+                          risikoscenarioList={alleRisikoscenario}
                           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         />
                       )}

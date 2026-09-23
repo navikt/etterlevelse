@@ -64,6 +64,7 @@ import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.behandling.dto.DataBehandler;
 import no.nav.data.integration.behandling.dto.PolicyResponse;
 import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -671,8 +672,11 @@ public class WordDocUtils {
             newLine();
             addMarkdownText(tiltak.getBeskrivelse());
             newLine();
-            addLabel("Tiltaksansvarlig:");
-            addText(getAnsvarlig(tiltak.getAnsvarlig()));
+            addLabel("Tiltaksansvarlig team:");
+            addText(getAnsvarligTeam(tiltak.getAnsvarligTeam()));
+            newLine();
+            addLabel("Tiltaksansvarlig person:");
+            addText(getAnsvarligPerson(tiltak.getAnsvarlig()));
             newLine();
             addLabel("Tiltaksfrist:");
             addText( dateToString(tiltak.getFrist()));
@@ -701,12 +705,18 @@ public class WordDocUtils {
         }
     }
 
-    public String getAnsvarlig(Resource ansvarlig) {
-        if (ansvarlig.getFullName() == null || ansvarlig.getFullName().isEmpty()) {
-            return "Ingen ansvarlig er satt";
-        } else {
-            return ansvarlig.getFullName();
+    public String getAnsvarligTeam(TeamResponse ansvarligTeam) {
+        if (ansvarligTeam == null || ansvarligTeam.getName() == null || ansvarligTeam.getName().isEmpty()) {
+            return "Ingen ansvarlig team er satt";
         }
+        return ansvarligTeam.getName();
+    }
+
+    public String getAnsvarligPerson(Resource ansvarlig) {
+        if (ansvarlig == null || ansvarlig.getFullName() == null || ansvarlig.getFullName().isEmpty()) {
+            return "Ingen ansvarlig person er satt";
+        }
+        return ansvarlig.getFullName();
     }
 
     public String dateToString(LocalDate date) {
