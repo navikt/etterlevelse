@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
-import no.nav.data.integration.ardoq.domain.ArdoqExportField;
+import no.nav.data.integration.ardoq.domain.ArdoqExportEtterlevelseDokumentField;
+import no.nav.data.integration.ardoq.domain.ArdoqSystemRelationField;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -75,13 +76,13 @@ public class ArdoqController {
 
     @Operation(summary = "Export Systems relations with etterlevelses document")
     @ApiResponse(description = "test endpoint for exporting ardoq with etterlevelses document relations")
-    @GetMapping("/export")
+    @GetMapping("/export/relations")
     public ResponseEntity<byte[]> ExportRelations() {
         log.info("Exporting ardoq with etterlevelses document relations");
-        List<ArdoqExportField> systems = ardoqExportService.getColumnData();
+        List<ArdoqSystemRelationField> systems = ardoqExportService.getArdoqSystemEtterlevelseDocRelationData();
         log.info("Successfully created export data");
         log.info("Generating excel file");
-        ByteArrayOutputStream excelFile = ardoqExportService.ardoqExportDataToExcel(systems);
+        ByteArrayOutputStream excelFile = ardoqExportService.ardoqExportSystemRelationDataToExcel(systems);
         log.info("Successfully generated excel file");
         String filename = "ArdoqSystemRaport.xlsx";
         HttpHeaders headers = new HttpHeaders();
@@ -93,6 +94,26 @@ public class ArdoqController {
                 .body(excelFile.toByteArray());
     }
 
+
+    @Operation(summary = "Export etterlevelses document")
+    @ApiResponse(description = "test endpoint for exporting etterlevelses document data for ardoq")
+    @GetMapping("/export/dokument")
+    public ResponseEntity<byte[]> ExportDokument() {
+        log.info("Exporting etterlevelses document for ardoq");
+        List<ArdoqExportEtterlevelseDokumentField> edocs= ardoqExportService.getEtterlevelseDocData();
+        log.info("Successfully created export data");
+        log.info("Generating excel file");
+        ByteArrayOutputStream excelFile = ardoqExportService.ardoqExportEtterlevelseDokumentDataToExcel(edocs);
+        log.info("Successfully generated excel file");
+        String filename = "ArdoqEtterlevelsesDokumentRaport.xlsx";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", filename);
+        headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(excelFile.toByteArray());
+    }
 
 
     private void validateLen(String name) {
