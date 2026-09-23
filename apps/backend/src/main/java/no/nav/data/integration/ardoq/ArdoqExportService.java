@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -109,7 +110,7 @@ public class ArdoqExportService {
                             .kravUnderArbeid(underArbeidEtterlevelseList.size())
                             .kravFerdig(oppfyltEtterlevelseList.size())
                             .linkTilEtterlevelsesDokument(frontendUrl + "/dokumentasjon/" + dokumentasjon.getId())
-                            .teams(dokumentasjon.getEtterlevelseDokumentasjonData().getResources())
+                            .teams(Optional.ofNullable(dokumentasjon.getEtterlevelseDokumentasjonData().getTeams()).orElseGet(List::of))
                             .build()
                 );
         });
@@ -173,10 +174,13 @@ public class ArdoqExportService {
                 row.createCell(6).setCellValue(ardoqExportEtterlevelseDokumentField.getKravFerdig());
                 row.createCell(7).setCellValue(ardoqExportEtterlevelseDokumentField.getLinkTilEtterlevelsesDokument());
 
-                for (String teamId : ardoqExportEtterlevelseDokumentField.getTeams()) {
-                    var teamRow = teamSheet.createRow(rowTeamIndex++);
-                    teamRow.createCell(0).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentId().toString());
-                    teamRow.createCell(1).setCellValue(teamId);
+                List<String> teams = ardoqExportEtterlevelseDokumentField.getTeams();
+                if (teams != null) {
+                    for (String teamId : teams) {
+                        var teamRow = teamSheet.createRow(rowTeamIndex++);
+                        teamRow.createCell(0).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentId().toString());
+                        teamRow.createCell(1).setCellValue(teamId);
+                    }
                 }
             }
 
