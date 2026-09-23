@@ -44,7 +44,7 @@ type TProps = {
   etterlevelseDokumentasjonId: string
 }
 
-export const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
+const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
   risikoscenario,
   setRisikoscenario,
   risikoscenarioList,

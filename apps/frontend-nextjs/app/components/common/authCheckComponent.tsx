@@ -12,7 +12,7 @@ type TProps = {
   pvoPage?: boolean
 }
 
-export const AuthCheckComponent: FunctionComponent<TProps> = ({
+const AuthCheckComponent: FunctionComponent<TProps> = ({
   children,
   adminPage,
   kraveierPage,

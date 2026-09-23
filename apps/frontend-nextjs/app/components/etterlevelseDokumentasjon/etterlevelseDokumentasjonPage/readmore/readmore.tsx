@@ -8,7 +8,7 @@ import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import { InfoCard, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import GjenbrukAlert from '../alert/GjenbrukAlert'
-import EtterlevelseDokumentasjonExpansionCard from '../expantionCard/etterlevelseDokumentasjonExpansionCard'
+import { EtterlevelseDokumentasjonExpansionCard } from '../expantionCard/etterlevelseDokumentasjonExpansionCard'
 import { TilgjengeligForGjenbruk } from '../tilgjengeligForGjenbruk/tilgjengeligForGjenbruk'
 
 type TProps = {

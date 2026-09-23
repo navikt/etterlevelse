@@ -1,4 +1,4 @@
-import TemaOversiktPage from '@/components/tema/TemaOversiktPage'
+import { TemaOversiktPage } from '@/components/tema/TemaOversiktPage'
 
 const Page = () => <TemaOversiktPage />
 

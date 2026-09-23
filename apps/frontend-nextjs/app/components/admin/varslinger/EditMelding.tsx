@@ -13,7 +13,7 @@ import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
 
-export const getAlertTypeText = (type: EAlertType) => {
+const getAlertTypeText = (type: EAlertType) => {
   if (!type) return ''
   switch (type) {
     case EAlertType.INFO:
@@ -164,5 +164,3 @@ export const EditMelding: FunctionComponent<TProps> = ({
     </div>
   )
 }
-
-export default EditMelding

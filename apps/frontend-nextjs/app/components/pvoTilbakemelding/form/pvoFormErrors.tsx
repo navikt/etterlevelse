@@ -10,7 +10,7 @@ type TProps = {
   errorSummaryRef: RefObject<HTMLDivElement | null>
 }
 
-export const PvoFormErrors: FunctionComponent<TProps> = ({ errors, errorSummaryRef }) => {
+const PvoFormErrors: FunctionComponent<TProps> = ({ errors, errorSummaryRef }) => {
   const getErrorMessage = (key: string, error: string) => {
     if (key === 'pvoVurdering') {
       return 'Dere må oppgi en vurdering'
@@ -40,4 +40,5 @@ export const PvoFormErrors: FunctionComponent<TProps> = ({ errors, errorSummaryR
     </>
   )
 }
+
 export default PvoFormErrors

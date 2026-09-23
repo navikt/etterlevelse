@@ -12,7 +12,7 @@ type TProps = {
   kravData: IKrav
 }
 
-export const EtterlevelseModal: FunctionComponent<TProps> = ({
+const EtterlevelseModal: FunctionComponent<TProps> = ({
   isModalOpen,
   setIsModalOpen,
   etterlevelse,

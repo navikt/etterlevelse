@@ -6,7 +6,7 @@ type TProps = {
   level: number
 }
 
-export const RisikoscenarioTag: FunctionComponent<TProps> = ({ text, level }) => {
+const RisikoscenarioTag: FunctionComponent<TProps> = ({ text, level }) => {
   const getVariantFromLevel = (level: number) => {
     switch (level) {
       case 1:

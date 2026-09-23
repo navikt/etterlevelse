@@ -159,5 +159,3 @@ const InnsendingHistorikkContent: FunctionComponent<IInnsendingHistroikkProps> =
     </div>
   )
 }
-
-export default InnsendingHistorikk

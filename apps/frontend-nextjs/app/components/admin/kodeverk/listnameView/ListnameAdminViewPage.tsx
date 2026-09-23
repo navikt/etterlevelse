@@ -13,7 +13,7 @@ import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import ModalCreateCodeList from '../edit/ModalCreateCodeList'
 import CodeListTable from './CodelistStyledTable'
 
-export const ListnameAdminViewPage = () => {
+const ListnameAdminViewPage = () => {
   const params = useParams()
   const router = useRouter()
   const listname = params.listname as string
@@ -138,4 +138,5 @@ export const ListnameAdminViewPage = () => {
     </PageLayout>
   )
 }
+
 export default ListnameAdminViewPage

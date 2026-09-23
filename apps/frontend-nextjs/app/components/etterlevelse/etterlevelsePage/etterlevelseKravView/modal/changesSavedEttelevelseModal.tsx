@@ -16,7 +16,7 @@ type TProps = {
   temaCode?: string
 }
 
-export const ChangesSavedEttelevelseModal: FunctionComponent<TProps> = ({
+const ChangesSavedEttelevelseModal: FunctionComponent<TProps> = ({
   isNavigationModalOpen,
   isTabAlertActive,
   setIsNavigationModalOpen,
@@ -86,4 +86,5 @@ export const ChangesSavedEttelevelseModal: FunctionComponent<TProps> = ({
     </Modal>
   )
 }
+
 export default ChangesSavedEttelevelseModal

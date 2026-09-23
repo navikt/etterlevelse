@@ -1,5 +1,4 @@
 import { IBehandlingensLivslopRequest } from '@/constants/behandlingensLivslop/behandlingensLivslop'
-import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { env } from '@/util/env/env'
 import axios from 'axios'
@@ -15,32 +14,7 @@ export const getBehandlingensLivslopByEtterlevelseDokumentId = async (
   ).data
 }
 
-export const getAllBehandlingensLivslop = async () => {
-  const pageSize = 100
-  const firstPage = await getBehandlingensLivslopPage(0, pageSize)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allBehandlingensLivslop: IBehandlingensLivslop[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allBehandlingensLivslop = [
-        ...allBehandlingensLivslop,
-        ...(await getBehandlingensLivslopPage(currentPage, pageSize)).content,
-      ]
-    }
-    return allBehandlingensLivslop
-  }
-}
-
-export const getBehandlingensLivslopPage = async (pageNumber: number, pageSize: number) => {
-  return (
-    await axios.get<IPageResponse<IBehandlingensLivslop>>(
-      `${env.backendBaseUrl}/behandlingenslivslop?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-}
-
-export const getBehandlingensLivslop = async (id: string) => {
+const getBehandlingensLivslop = async (id: string) => {
   return (
     await axios.get<IBehandlingensLivslop>(`${env.backendBaseUrl}/behandlingenslivslop/${id}`)
   ).data
@@ -109,12 +83,6 @@ export const updateBehandlingensLivslop = async (
         maxBodyLength: 5 * 1024 * 1024,
       }
     )
-  ).data
-}
-
-export const deleteBehandlingensLivslop = async (id: string) => {
-  return (
-    await axios.delete<IBehandlingensLivslop>(`${env.backendBaseUrl}/behandlingenslivslop/${id}`)
   ).data
 }
 

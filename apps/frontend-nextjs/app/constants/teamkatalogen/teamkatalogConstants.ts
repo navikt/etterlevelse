@@ -44,7 +44,7 @@ export interface IOrgEnhet {
   nomNivaa: ENomNivaa
 }
 
-export enum EOrgEnhetsType {
+enum EOrgEnhetsType {
   ARBEIDSLIVSSENTER = 'ARBEIDSLIVSSENTER',
   NAV_ARBEID_OG_YTELSER = 'NAV_ARBEID_OG_YTELSER',
   ARBEIDSRAADGIVNING = 'ARBEIDSRAADGIVNING',
@@ -61,7 +61,7 @@ export enum EOrgEnhetsType {
   NAV_OKONOMITJENESTE = 'NAV_OKONOMITJENESTE',
 }
 
-export enum ENomNivaa {
+enum ENomNivaa {
   LINJEENHET = 'LINJEENHET',
   DRIFTSENHET = 'DRIFTSENHET',
   ARBEIDSOMRAADE = 'ARBEIDSOMRAADE',

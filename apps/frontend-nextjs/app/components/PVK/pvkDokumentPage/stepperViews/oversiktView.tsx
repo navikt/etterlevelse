@@ -6,7 +6,7 @@ import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { mapPvkDokumentToFormValue, updatePvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
-import InnsendingHistorikk from '@/components/pvoTilbakemelding/pvoTilbakemeldingPage/stepperViews/oversiktPvoComponents/InnsendingsHistorikk'
+import { InnsendingHistorikk } from '@/components/pvoTilbakemelding/pvoTilbakemeldingPage/stepperViews/oversiktPvoComponents/InnsendingsHistorikk'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
@@ -563,5 +563,3 @@ export const OversiktView: FunctionComponent<TProps> = ({
     </div>
   )
 }
-
-export default OversiktView

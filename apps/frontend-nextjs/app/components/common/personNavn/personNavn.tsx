@@ -5,7 +5,7 @@ import { FunctionComponent } from 'react'
 
 type TProps = { ident: string; link?: boolean; kraveier?: boolean }
 
-export const PersonNavn: FunctionComponent<TProps> = (props) => {
+const PersonNavn: FunctionComponent<TProps> = (props) => {
   const { ident, link, kraveier } = props
   const name: string = usePersonName()(ident)
 

@@ -19,7 +19,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const LeggTilEksisterendeRisikoscenario: FunctionComponent<TProps> = ({
+const LeggTilEksisterendeRisikoscenario: FunctionComponent<TProps> = ({
   kravnummer,
   risikoscenarioer,
   setRisikoscenarioer,

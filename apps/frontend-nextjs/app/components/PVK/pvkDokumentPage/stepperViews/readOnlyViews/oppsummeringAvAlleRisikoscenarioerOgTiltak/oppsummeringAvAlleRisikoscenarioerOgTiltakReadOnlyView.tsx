@@ -1,27 +1,5 @@
 'use client'
 
-import { useLastApprovedRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
-import { useLastApprovedTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
-import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
-import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
-import FormButtons from '@/components/PVK/edit/formButtons'
-import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
-import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import {
-  EPvoTilbakemeldingStatus,
-  IPvoTilbakemelding,
-  IVurdering,
-} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import {
-  pvkDokumentasjonTabFilterRisikoscenarioUrl,
-  pvkDokumentasjonTabFilterTiltakUrl,
-  pvkDokumentasjonTabFilterUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { LinkIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -35,6 +13,37 @@ import {
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useState } from 'react'
+import { useLastApprovedRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
+import { useLastApprovedTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import InfoChangesMadeAfterApproval from '@/components/PVK/common/infoChangesMadeAfterApproval'
+import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
+import FormButtons from '@/components/PVK/edit/formButtons'
+import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
+import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import TiltakAccordionListReadOnly from '@/components/tiltak/common/tiltakAccordionListReadOnly'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import {
+  filterValues,
+  tabValues,
+  tiltakFilterValues,
+} from '@/constants/oppsummering/oppsummeringConstants'
+import {
+  EPvoTilbakemeldingStatus,
+  IPvoTilbakemelding,
+  IVurdering,
+} from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import {
+  pvkDokumentasjonTabFilterRisikoscenarioUrl,
+  pvkDokumentasjonTabFilterTiltakUrl,
+  pvkDokumentasjonTabFilterUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  VisTomListeBeskrivelse,
+  VisTomTiltakListeBeskrivelse,
+} from '@/util/oppsummering/oppsummeringUtil'
 import OppsumeringAccordianListReadOnlyView from '../oppsumeringAccordianListReadOnlyView'
 
 type TProps = {
@@ -45,51 +54,6 @@ type TProps = {
   setSelectedStep: (step: number) => void
   pvoTilbakemelding?: IPvoTilbakemelding
   relevantVurdering?: IVurdering
-}
-
-export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-export const filterValues = {
-  alleRisikoscenarioer: 'alle',
-  effektIkkeVurdert: 'ikke-vurdert',
-  hoyRisiko: 'hoy-risiko',
-  tiltakIkkeAktuelt: 'ingen-tiltak',
-}
-
-export const tiltakFilterValues = {
-  alleTiltak: 'alleTiltak',
-  utenAnsvarlig: 'utenAnsvarlig',
-  utenFrist: 'utenFrist',
-}
-
-const visTomListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case filterValues.hoyRisiko:
-      textBody = 'Det finnes ingen risikoscenarioer med høy risiko 🎉'
-      break
-    case filterValues.tiltakIkkeAktuelt:
-      textBody = 'Det finnes ingen risikoscenario hvor tiltak ikke er aktuelt  🎉'
-      break
-    case filterValues.effektIkkeVurdert:
-      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
-}
-
-const visTomTiltakListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case tiltakFilterValues.utenAnsvarlig:
-      textBody = 'Det finnes tiltak uten en ansvarlig 🎉'
-      break
-    case tiltakFilterValues.utenFrist:
-      textBody = 'Det finnes ingen tiltak uten frist 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionComponent<TProps> = ({
@@ -433,7 +397,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
 
                       {alleRisikoscenario.length !== 0 &&
                         filteredRisikoscenarioList.length === 0 &&
-                        visTomListeBeskrivelse(filterQuery)}
+                        VisTomListeBeskrivelse(filterQuery)}
 
                       {alleRisikoscenario.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
@@ -490,7 +454,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
                       )}
 
                       {filteredTiltakList.length === 0 &&
-                        visTomTiltakListeBeskrivelse(tiltakFilter)}
+                        VisTomTiltakListeBeskrivelse(tiltakFilter)}
 
                       <CopyButton
                         variant='action'
@@ -543,5 +507,3 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView: FunctionCom
     </div>
   )
 }
-
-export default OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView

@@ -197,5 +197,3 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
     </Modal>
   )
 }
-
-export default UnsavedChangesGuard

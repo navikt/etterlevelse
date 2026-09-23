@@ -20,7 +20,7 @@ type TEditNotatfeltProps = {
   formRef?: React.RefObject<any>
 }
 
-export const EditNotatfelt = ({
+const EditNotatfelt = ({
   isOpen,
   setIsNotatfeltOpen,
   etterlevelseMetadata,
@@ -108,4 +108,5 @@ export const EditNotatfelt = ({
     </Modal>
   )
 }
+
 export default EditNotatfelt

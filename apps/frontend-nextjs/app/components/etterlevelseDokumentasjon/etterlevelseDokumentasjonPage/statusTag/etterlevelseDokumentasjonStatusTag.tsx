@@ -125,5 +125,3 @@ export const EtterlevelseDokumentasjonStatusTag: FunctionComponent<TProps> = ({
     </Tag>
   </div>
 )
-
-export default EtterlevelseDokumentasjonStatusTag

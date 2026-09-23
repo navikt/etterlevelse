@@ -2,10 +2,10 @@
 
 import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
-import RisikoscenarioAccordianHeader from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
+import { RisikoscenarioAccordianHeader } from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
 import RisikoscenarioTag from '@/components/risikoscenario/common/risikoscenarioTag'
 import { RisikoscenarioTiltakHeader } from '@/components/risikoscenario/common/risikoscenarioTiltakHeader'
-import TiltakView from '@/components/tiltak/common/tiltakView'
+import { TiltakView } from '@/components/tiltak/common/tiltakView'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
@@ -31,7 +31,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = ({
+const OppsumeringAccordianListReadOnlyView: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   etterlevelseDokumentasjonId,

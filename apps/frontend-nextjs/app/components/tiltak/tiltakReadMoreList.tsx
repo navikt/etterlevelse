@@ -4,15 +4,17 @@ import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { updateTiltak } from '@/api/tiltak/tiltakApi'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { risikoscenarioTiltakUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
+import {
+  risikoscenarioTiltakUrl,
+  risikoscenarioUrl,
+} from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { Button, ReadMore } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useMemo, useState } from 'react'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
-import TiltakView from './common/tiltakView'
+import { TiltakView } from './common/tiltakView'
 import SlettTiltakModal from './edit/slettTiltakModal'
 import TiltakForm from './form/tiltakForm'
 
@@ -272,5 +274,3 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     </div>
   )
 }
-
-export default TiltakReadMoreList

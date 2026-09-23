@@ -27,9 +27,19 @@ interface IDokumentasjonCount {
   dokumentasjonCount?: number
 }
 
+export type TVariables = {
+  pageNumber?: number
+  pageSize?: number
+  sistRedigert?: number
+  mineEtterlevelseDokumentasjoner?: boolean
+  sok?: string
+  teams?: string[]
+  behandlingId?: string
+}
+
 export type TCustomTeamObject = IDokumentasjonCount & ITeam
 
-export const DokumentasjonTabs = () => {
+const DokumentasjonTabs = () => {
   const router = useRouter()
   const queryParams = useSearchParams()
 
@@ -140,16 +150,6 @@ export const DokumentasjonTabs = () => {
       </Tabs.Panel>
     </Tabs>
   )
-}
-
-export type TVariables = {
-  pageNumber?: number
-  pageSize?: number
-  sistRedigert?: number
-  mineEtterlevelseDokumentasjoner?: boolean
-  sok?: string
-  teams?: string[]
-  behandlingId?: string
 }
 
 export default DokumentasjonTabs

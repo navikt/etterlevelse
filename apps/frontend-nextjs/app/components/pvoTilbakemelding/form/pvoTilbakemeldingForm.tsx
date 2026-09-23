@@ -46,7 +46,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
+const PvoTilbakemeldingForm: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setPvoTilbakemelding,
   fieldName,

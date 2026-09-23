@@ -14,7 +14,7 @@ type TProps = {
   customButtons?: ReactNode
 }
 
-export const FormButtons: FunctionComponent<TProps> = ({
+const FormButtons: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjonId,
   activeStep,
   setActiveStep,

@@ -11,7 +11,7 @@ type TProps = {
   formRef?: RefObject<any>
 }
 
-export const UnsavedModalAlert: FunctionComponent<TProps> = ({
+const UnsavedModalAlert: FunctionComponent<TProps> = ({
   isOpen,
   setIsOpen,
   urlToNavigate,
@@ -69,4 +69,5 @@ export const UnsavedModalAlert: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default UnsavedModalAlert

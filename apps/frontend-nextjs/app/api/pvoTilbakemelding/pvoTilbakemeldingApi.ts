@@ -27,7 +27,7 @@ export const getAllPvoTilbakemelding = async () => {
   }
 }
 
-export const getPvoTilbakemeldingPage = async (
+const getPvoTilbakemeldingPage = async (
   pageNumber: number,
   pageSize: number
 ): Promise<IPageResponse<IPvoTilbakemelding>> =>
@@ -36,9 +36,6 @@ export const getPvoTilbakemeldingPage = async (
       `${env.backendBaseUrl}/pvotilbakemelding?pageNumber=${pageNumber}&pageSize=${pageSize}`
     )
   ).data
-
-export const getPvoTilbakemelding = async (id: string): Promise<IPvoTilbakemelding> =>
-  (await axios.get<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding/${id}`)).data
 
 export const getPvoTilbakemeldingByPvkDokumentId = async (
   pvkDokumentId: string
@@ -132,11 +129,6 @@ export const updatePvoTilbakemelding = async (pvoTilbakemelding: IPvoTilbakemeld
       dto
     )
   ).data
-}
-
-export const deletePvoTilbakemelding = async (id: string) => {
-  return (await axios.delete<IPvoTilbakemelding>(`${env.backendBaseUrl}/pvotilbakemelding/${id}`))
-    .data
 }
 
 const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakemelding) => {

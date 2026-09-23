@@ -1,5 +1,5 @@
 // Sort errors by the top-to-bottom position of their corresponding form field
-export const sortFormErrorsByFieldPosition = (a: [string, unknown], b: [string, unknown]) => {
+const sortFormErrorsByFieldPosition = (a: [string, unknown], b: [string, unknown]) => {
   const [keyA] = a
   const [keyB] = b
   const elementA = typeof document !== 'undefined' ? document.getElementById(keyA) : null

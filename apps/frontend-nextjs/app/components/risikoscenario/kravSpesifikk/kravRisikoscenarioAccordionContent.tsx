@@ -14,9 +14,9 @@ import {
   getTiltak,
 } from '@/api/tiltak/tiltakApi'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
-import { LeggTilEksisterendeTiltak } from '@/components/tiltak/edit/leggTilEksisterendeTiltak'
+import LeggTilEksisterendeTiltak from '@/components/tiltak/edit/leggTilEksisterendeTiltak'
 import TiltakForm from '@/components/tiltak/form/tiltakForm'
-import TiltakReadMoreList from '@/components/tiltak/tiltakReadMoreList'
+import { TiltakReadMoreList } from '@/components/tiltak/tiltakReadMoreList'
 import {
   IRisikoscenario,
   ITiltakRisikoscenarioRelasjon,
@@ -33,7 +33,7 @@ import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
 import RedigerRisikoscenarioButtons from '../edit/redigerRisikoscenarioButtons'
-import { IngenTiltakField } from '../form/field/ingenTiltakField'
+import IngenTiltakField from '../form/field/ingenTiltakField'
 import RisikoscenarioModalForm from '../form/risikoscenarioModalForm'
 
 type TProps = {
@@ -57,7 +57,7 @@ type TProps = {
   onRemovedFromThisKrav?: (payload: { risikoscenarioName: string }) => void
 }
 
-export const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
+const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   risikoscenario,
   risikoscenarioer,
   alleRisikoscenarioer,

@@ -24,7 +24,7 @@ type TProps = {
   customStepNumber?: number
 }
 
-export const RisikoscenarioSummary: FunctionComponent<TProps> = ({
+const RisikoscenarioSummary: FunctionComponent<TProps> = ({
   alleRisikoscenario,
   alleTiltak,
   risikoscenarioError,

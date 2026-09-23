@@ -8,7 +8,7 @@ interface IStatusViewProps {
   icon?: React.ReactNode
 }
 
-export const StatusView = ({ status, variant, icon }: IStatusViewProps) => {
+const StatusView = ({ status, variant, icon }: IStatusViewProps) => {
   const getStatusDisplay = (variant: any) => {
     return (
       <Tag variant={variant} className='h-fit'>
@@ -32,4 +32,5 @@ export const StatusView = ({ status, variant, icon }: IStatusViewProps) => {
     return getStatusDisplay('neutral')
   }
 }
+
 export default StatusView

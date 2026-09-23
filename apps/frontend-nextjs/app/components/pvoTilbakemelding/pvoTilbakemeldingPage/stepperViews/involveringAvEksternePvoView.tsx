@@ -15,7 +15,7 @@ import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
-import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
+import { PvoTilbakemeldingReadOnly } from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -31,7 +31,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
+const InvolveringAvEksternePvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   personkategorier,
   databehandlere,

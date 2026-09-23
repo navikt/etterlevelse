@@ -8,13 +8,13 @@ import { Heading, Tabs } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { AuditRecentTable } from '../versjonering/AuditRecentTable'
-import EditMelding from './EditMelding'
+import { EditMelding } from './EditMelding'
 import EditOmEtterlevelse from './EditOmEtterlevelse'
 
 type TSection =
   'utsendtMelding' | EMeldingType.SYSTEM | EMeldingType.FORSIDE | EMeldingType.OM_ETTERLEVELSE
 
-export const VarselAdminPage = () => {
+const VarselAdminPage = () => {
   const params = useParams<{ tab?: TSection }>()
 
   const [tab, setTab] = useState<TSection>(params.tab || 'utsendtMelding')

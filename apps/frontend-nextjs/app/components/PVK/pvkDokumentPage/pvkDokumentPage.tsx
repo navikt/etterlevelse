@@ -33,9 +33,9 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import BehandlingensLivslopView from './stepperViews/behandlingensLivslopView'
-import { IdentifiseringAvRisikoscenarioerOgTiltak } from './stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltak'
-import OppsummeringAvAlleRisikoscenarioerOgTiltak from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltak/oppsummeringAvAlleRisikoscenarioerOgTiltak'
-import OversiktView from './stepperViews/oversiktView'
+import IdentifiseringAvRisikoscenarioerOgTiltak from './stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltak'
+import { OppsummeringAvAlleRisikoscenarioerOgTiltak } from './stepperViews/oppsummeringAvAlleRisikoscenarioerOgTiltak/oppsummeringAvAlleRisikoscenarioerOgTiltak'
+import { OversiktView } from './stepperViews/oversiktView'
 import { SendInnView } from './stepperViews/sendInn/sendInnView'
 
 export const StepTitle: string[] = [
@@ -49,7 +49,7 @@ export const StepTitle: string[] = [
   'Les og send inn',
 ]
 
-export const PvkDokumentPage = () => {
+const PvkDokumentPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string

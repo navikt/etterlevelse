@@ -48,9 +48,9 @@ import {
   INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUtil'
@@ -92,7 +92,8 @@ import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSche
 type TProps = {
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
 }
-export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TProps> = ({
+
+const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
 }) => {
   const user = useContext(UserContext)
@@ -974,4 +975,5 @@ export const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionCompo
     </Formik>
   )
 }
+
 export default EtterlevelseDokumentasjonFormSendTilGodkjenningState

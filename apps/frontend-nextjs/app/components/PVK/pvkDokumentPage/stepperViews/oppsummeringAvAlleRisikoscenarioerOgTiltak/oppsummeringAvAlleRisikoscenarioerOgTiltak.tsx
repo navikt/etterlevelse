@@ -5,9 +5,9 @@ import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
-import TiltakAccordionList from '@/components/tiltak/common/tiltakAccordionList'
-import { TiltakAccordionListReadOnly } from '@/components/tiltak/common/tiltakAccordionListReadOnly'
+import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import { TiltakAccordionList } from '@/components/tiltak/common/tiltakAccordionList'
+import TiltakAccordionListReadOnly from '@/components/tiltak/common/tiltakAccordionListReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -23,6 +23,7 @@ import {
   filterTiltakList,
   tiltakFilterValues,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { filterValues, tabValues } from '@/constants/oppsummering/oppsummeringConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -38,6 +39,7 @@ import {
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { VisTomListeBeskrivelse } from '@/util/oppsummering/oppsummeringUtil'
 import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -56,8 +58,8 @@ import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterAp
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
 import OppsumeringAccordianListReadOnlyView from '../readOnlyViews/oppsumeringAccordianListReadOnlyView'
-import { OppsumeringAccordianList } from './oppsumeringAccordianList'
-import { OppsumeringAccordianListGodkjentView } from './oppsumeringAccordianListGodkjentView'
+import OppsumeringAccordianList from './oppsumeringAccordianList'
+import OppsumeringAccordianListGodkjentView from './oppsumeringAccordianListGodkjentView'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -68,31 +70,6 @@ type TProps = {
   formRef: RefObject<any>
   pvoTilbakemelding?: IPvoTilbakemelding
   relevantVurdering?: IVurdering
-}
-
-export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-export const filterValues = {
-  alleRisikoscenarioer: 'alle',
-  effektIkkeVurdert: 'ikke-vurdert',
-  hoyRisiko: 'hoy-risiko',
-  tiltakIkkeAktuelt: 'ingen-tiltak',
-}
-
-const visTomListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case filterValues.hoyRisiko:
-      textBody = 'Det finnes ingen risikoscenarioer med høy risiko 🎉'
-      break
-    case filterValues.tiltakIkkeAktuelt:
-      textBody = 'Det finnes ingen risikoscenario hvor tiltak ikke er aktuelt  🎉'
-      break
-    case filterValues.effektIkkeVurdert:
-      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
 const visTomTiltakListeBeskrivelse = (filter: string | null) => {
@@ -473,7 +450,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length === 0 &&
-                        visTomListeBeskrivelse(filterQuery)}
+                        VisTomListeBeskrivelse(filterQuery)}
 
                       {risikoscenarioList.length !== 0 &&
                         filteredRisikoscenarioList.length !== 0 && (
@@ -680,5 +657,3 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
     </div>
   )
 }
-
-export default OppsummeringAvAlleRisikoscenarioerOgTiltak

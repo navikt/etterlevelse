@@ -11,7 +11,7 @@ type TProps = {
   customButtons?: ReactNode
 }
 
-export const PvoFormButtons: FunctionComponent<TProps> = ({
+const PvoFormButtons: FunctionComponent<TProps> = ({
   activeStep,
   setActiveStep,
   setSelectedStep,

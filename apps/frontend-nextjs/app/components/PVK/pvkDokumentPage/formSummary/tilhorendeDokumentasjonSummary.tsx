@@ -24,7 +24,7 @@ type TProps = {
     | undefined
 }
 
-export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
+const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   manglerBehandlingError,
   pvkKravError,
@@ -124,4 +124,5 @@ export const TilhorendeDokumentasjonSummary: FunctionComponent<TProps> = ({
     </FormSummary>
   )
 }
+
 export default TilhorendeDokumentasjonSummary

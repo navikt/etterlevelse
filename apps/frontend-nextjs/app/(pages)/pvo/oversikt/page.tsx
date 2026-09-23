@@ -1,4 +1,4 @@
-import { AuthCheckComponent } from '@/components/common/authCheckComponent'
+import AuthCheckComponent from '@/components/common/authCheckComponent'
 import PvoOversiktPage from '@/components/pvoTilbakemelding/pvoOversiktPage/pvoOversiktPage'
 
 const Page = () => (

@@ -16,11 +16,7 @@ export const searchBehandling = async (name: string): Promise<IBehandling[]> => 
   ).data.content
 }
 
-export const getDpBehandling = async (id: string) => {
-  return (await axios.get<IDpBehandling>(`${env.backendBaseUrl}/dpbehandling/${id}`)).data
-}
-
-export const searchDpBehandling = async (name: string): Promise<IDpBehandling[]> => {
+const searchDpBehandling = async (name: string): Promise<IDpBehandling[]> => {
   return (
     await axios.get<IPageResponse<IDpBehandling>>(
       `${env.backendBaseUrl}/dpbehandling/search/${name}`

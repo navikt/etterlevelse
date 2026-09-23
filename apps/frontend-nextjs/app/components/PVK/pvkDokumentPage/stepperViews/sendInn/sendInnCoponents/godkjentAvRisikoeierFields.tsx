@@ -38,7 +38,7 @@ type TProps = {
   savedAlert: ReactNode
 }
 
-export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
+const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   etterlevelseDokumentasjon,
@@ -121,4 +121,5 @@ export const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default GodkjentAvRisikoeierFields

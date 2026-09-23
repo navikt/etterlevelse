@@ -16,6 +16,11 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
+  filterValues,
+  tabValues,
+  tiltakFilterValues,
+} from '@/constants/oppsummering/oppsummeringConstants'
+import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
   IVurdering,
@@ -27,6 +32,10 @@ import {
   pvkDokumentasjonTabFilterTiltakUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import {
+  VisTomListeBeskrivelse,
+  VisTomTiltakListeBeskrivelse,
+} from '@/util/oppsummering/oppsummeringUtil'
 import { LinkIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, CopyButton, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -35,7 +44,7 @@ import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
-import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
+import { PvoTilbakemeldingReadOnly } from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -47,51 +56,6 @@ type TProps = {
   setActiveStep: (step: number) => void
   setSelectedStep: (step: number) => void
   formRef: RefObject<any>
-}
-
-export const tabValues = { risikoscenarioer: 'risikoscenarioer', tiltak: 'tiltak' }
-export const filterValues = {
-  alleRisikoscenarioer: 'alle',
-  effektIkkeVurdert: 'ikke-vurdert',
-  hoyRisiko: 'hoy-risiko',
-  tiltakIkkeAktuelt: 'ingen-tiltak',
-}
-
-export const tiltakFilterValues = {
-  alleTiltak: 'alleTiltak',
-  utenAnsvarlig: 'utenAnsvarlig',
-  utenFrist: 'utenFrist',
-}
-
-const visTomListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case filterValues.hoyRisiko:
-      textBody = 'Det finnes ingen risikoscenarioer med høy risiko 🎉'
-      break
-    case filterValues.tiltakIkkeAktuelt:
-      textBody = 'Det finnes ingen risikoscenarioer uten tiltak 🎉'
-      break
-    case filterValues.effektIkkeVurdert:
-      textBody = 'Det finnes ingen risikoscenarioer der effekt ikke er vurdert 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
-}
-
-const visTomTiltakListeBeskrivelse = (filter: string | null) => {
-  let textBody = ''
-  switch (filter) {
-    case tiltakFilterValues.utenAnsvarlig:
-      textBody = 'Det finnes tiltak uten en ansvarlig 🎉'
-      break
-    case tiltakFilterValues.utenFrist:
-      textBody = 'Det finnes ingen tiltak uten frist 🎉'
-      break
-    default:
-  }
-  return <BodyLong className='my-5'>{textBody}</BodyLong>
 }
 
 export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps> = ({
@@ -382,7 +346,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
 
                           {risikoscenarioList.length !== 0 &&
                             filteredRisikoscenarioList.length === 0 &&
-                            visTomListeBeskrivelse(filterQuery)}
+                            VisTomListeBeskrivelse(filterQuery)}
 
                           {risikoscenarioList.length !== 0 &&
                             filteredRisikoscenarioList.length !== 0 && (
@@ -444,7 +408,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                           )}
 
                           {filteredTiltakList.length === 0 &&
-                            visTomTiltakListeBeskrivelse(tiltakFilter)}
+                            VisTomTiltakListeBeskrivelse(tiltakFilter)}
 
                           <CopyButton
                             variant='action'
@@ -516,5 +480,3 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
     </div>
   )
 }
-
-export default OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView

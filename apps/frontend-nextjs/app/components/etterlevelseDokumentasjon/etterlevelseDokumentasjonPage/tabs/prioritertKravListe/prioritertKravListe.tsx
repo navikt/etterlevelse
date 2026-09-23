@@ -32,7 +32,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const PrioritertKravListe: FunctionComponent<TProps> = ({
+const PrioritertKravListe: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   relevanteStats,

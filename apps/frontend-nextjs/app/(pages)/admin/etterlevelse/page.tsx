@@ -1,4 +1,4 @@
-import EtterlevelseAdminPage from '@/components/admin/etterlevelse/EtterlevelseAdminPage'
+import { EtterlevelseAdminPage } from '@/components/admin/etterlevelse/EtterlevelseAdminPage'
 import AuthCheckComponent from '@/components/common/authCheckComponent'
 
 const Page = () => (

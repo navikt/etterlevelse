@@ -1,7 +1,7 @@
 'use client'
 
 import { UserContext } from '@/provider/user/userProvider'
-import { adminAuditUrl } from '@/routes/admin/audit/auditRoutes'
+import { adminAuditUrl } from '@/routes/admin/adminRoutes'
 import { ClockDashedIcon } from '@navikt/aksel-icons'
 import { Button, ButtonProps, Link, Tooltip } from '@navikt/ds-react'
 import { FunctionComponent, useContext } from 'react'

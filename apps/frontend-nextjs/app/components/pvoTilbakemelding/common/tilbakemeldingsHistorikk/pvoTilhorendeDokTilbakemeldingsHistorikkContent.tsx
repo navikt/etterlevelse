@@ -9,7 +9,7 @@ type TProps = {
   forPvo?: boolean
 }
 
-export const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
+const PvoTilhorendeDokTilbakemeldingsHistorikkContent: FunctionComponent<TProps> = ({
   tilbakemeldingsinnhold,
 
   forPvo,

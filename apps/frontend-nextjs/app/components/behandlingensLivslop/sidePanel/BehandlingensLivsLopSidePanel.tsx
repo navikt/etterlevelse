@@ -11,7 +11,8 @@ import { FunctionComponent } from 'react'
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
 }
-export const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
+
+const BehandlingensLivsLopSidePanel: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
 }) => (
   <div>

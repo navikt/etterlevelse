@@ -16,7 +16,7 @@ type TProps = {
   pvoVurderingList: ICode[]
 }
 
-export const PvoSendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
+const PvoSendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   relevantVurderingsInnsendingId,
   pvkDokument,

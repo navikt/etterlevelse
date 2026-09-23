@@ -42,7 +42,7 @@ type TProps = {
   errorSummaryRef: RefObject<HTMLDivElement | null>
 }
 
-export const SendInnErrorSummary: FunctionComponent<TProps> = ({
+const SendInnErrorSummary: FunctionComponent<TProps> = ({
   errors,
   etterlevelseDokumentasjonId,
   pvkDokumentId,

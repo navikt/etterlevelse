@@ -28,7 +28,7 @@ interface IProps {
   setFilesToUpload: Dispatch<SetStateAction<File[]>>
 }
 
-export const CustomFileUpload = (props: IProps) => {
+const CustomFileUpload = (props: IProps) => {
   const ref = useRef<HTMLInputElement>(null)
   const { initialValues, rejectedFiles, setRejectedFiles, setFilesToUpload } = props
   const [files, setFiles] = useState<FileObject[]>([])

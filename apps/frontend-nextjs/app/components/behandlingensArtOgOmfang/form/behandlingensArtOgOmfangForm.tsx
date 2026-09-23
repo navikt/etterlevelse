@@ -51,7 +51,7 @@ type TProps = {
   hideUnsavedChangesGuard?: boolean
 }
 
-export const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
+const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   personkategorier,
   artOgOmfang,

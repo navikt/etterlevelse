@@ -35,7 +35,7 @@ type TProps = {
   setSuccessSubmit: (state: boolean) => void
 }
 
-export const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
+const SendInnPvoViewFerdig: FunctionComponent<TProps> = ({
   pvkDokument,
   pvoTilbakemelding,
   relevantVurdering,

@@ -92,5 +92,3 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
     </Accordion.Header>
   )
 }
-
-export default RisikoscenarioAccordianHeader

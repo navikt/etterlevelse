@@ -36,7 +36,8 @@ type TProps = {
   errors: FormikErrors<IPvkDokument>
   savedAlert: ReactNode
 }
-export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
+
+const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
   pvoTilbakemelding,
@@ -159,4 +160,5 @@ export const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
     </Field>
   )
 }
+
 export default TrengerRisikoeierGodkjenningFields

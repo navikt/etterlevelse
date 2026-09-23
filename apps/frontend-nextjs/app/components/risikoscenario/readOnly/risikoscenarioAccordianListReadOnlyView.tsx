@@ -1,10 +1,10 @@
 'use client'
 
-import TiltakView from '@/components/tiltak/common/tiltakView'
+import { TiltakView } from '@/components/tiltak/common/tiltakView'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { risikoscenarioUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { Accordion, BodyLong, LocalAlert, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -22,7 +22,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
+const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   tiltakList,

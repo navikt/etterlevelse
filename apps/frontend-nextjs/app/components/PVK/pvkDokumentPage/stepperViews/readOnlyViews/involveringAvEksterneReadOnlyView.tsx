@@ -5,7 +5,7 @@ import FormButtons from '@/components/PVK/edit/formButtons'
 import InvolveringAvEksterneReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/involveringAvEksterneReadOnlyContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -27,7 +27,7 @@ type TProps = {
   relevantVurdering?: IVurdering
 }
 
-export const InvolveringAvEksterneReadOnlyView: FunctionComponent<TProps> = ({
+const InvolveringAvEksterneReadOnlyView: FunctionComponent<TProps> = ({
   personkategorier,
   databehandlere,
   etterlevelseDokumentasjon,

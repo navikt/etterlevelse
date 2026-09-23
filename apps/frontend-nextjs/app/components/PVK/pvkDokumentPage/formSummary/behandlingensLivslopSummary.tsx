@@ -9,7 +9,8 @@ type TProps = {
   behandlingensLivslopError: boolean
   customLinkText?: string
 }
-export const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
+
+const BehandlingensLivslopSummary: FunctionComponent<TProps> = ({
   behandlingensLivslop,
   updateTitleUrlAndStep,
   behandlingensLivslopError,

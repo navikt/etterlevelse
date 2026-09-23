@@ -60,7 +60,7 @@ import CustomFileUpload from './fileUpload/customFileUpload'
 import behandlingensLivslopSchema from './form/behandlingensLivslopSchema'
 import BehandlingensLivsLopSidePanel from './sidePanel/BehandlingensLivsLopSidePanel'
 
-export const BehandlingensLivslopPage = () => {
+const BehandlingensLivslopPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string

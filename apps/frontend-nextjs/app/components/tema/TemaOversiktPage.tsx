@@ -9,19 +9,17 @@ import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt
 import { useContext, useEffect, useRef, useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 
-export const TemaOversiktPage = () => {
-  return (
-    <PageLayout pageTitle='Forstå kravene' currentPage='Forstå kravene'>
-      <div className='w-full flex justify-center items-center flex-col'>
-        <div className='w-full px-8'>
-          <TemaPanels />
-        </div>
+export const TemaOversiktPage = () => (
+  <PageLayout pageTitle='Forstå kravene' currentPage='Forstå kravene'>
+    <div className='w-full flex justify-center items-center flex-col'>
+      <div className='w-full px-8'>
+        <TemaPanels />
       </div>
-    </PageLayout>
-  )
-}
+    </div>
+  </PageLayout>
+)
 
-export const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
+const TemaPanels = ({ subContent }: { subContent?: boolean }) => {
   const numRef = useRef<{ [t: string]: number[] }>({})
   const [kravAntall, setKravAntall] = useState<number>(0)
   const codelist = useContext(CodelistContext)
@@ -73,7 +71,7 @@ interface ITemaPanelProps {
   subContent?: boolean
 }
 
-export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
+const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
   const codelist = useContext(CodelistContext)
   const lover: TLovCode[] = codelist.utils.getLovCodesForTema(tema.code)
   const { data, loading } = useKravCounter(
@@ -125,5 +123,3 @@ export const TemaPanel = ({ tema, setNum, subContent }: ITemaPanelProps) => {
     </>
   )
 }
-
-export default TemaOversiktPage

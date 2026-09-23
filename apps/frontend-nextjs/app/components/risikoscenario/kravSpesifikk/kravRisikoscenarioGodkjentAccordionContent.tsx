@@ -19,7 +19,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const KravRisikoscenarioGodkjentAccordionContent: FunctionComponent<TProps> = ({
+const KravRisikoscenarioGodkjentAccordionContent: FunctionComponent<TProps> = ({
   risikoscenario,
   alleRisikoscenarioer,
   tiltakList,

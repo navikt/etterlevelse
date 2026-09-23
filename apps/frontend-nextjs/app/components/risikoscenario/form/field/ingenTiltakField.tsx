@@ -11,7 +11,7 @@ type TProps = {
   setIsIngenTilgangFormDirty: (state: boolean) => void
 }
 
-export const IngenTiltakField: FunctionComponent<TProps> = ({
+const IngenTiltakField: FunctionComponent<TProps> = ({
   risikoscenario,
   submit,
   formRef,

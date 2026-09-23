@@ -26,7 +26,7 @@ type TProps = {
   savedAlert: ReactNode
 }
 
-export const UnderArbeidFields: FunctionComponent<TProps> = ({
+const UnderArbeidFields: FunctionComponent<TProps> = ({
   pvkDokument,
   errorSummaryComponent,
   isLoading,
@@ -123,4 +123,5 @@ export const UnderArbeidFields: FunctionComponent<TProps> = ({
     </Field>
   )
 }
+
 export default UnderArbeidFields

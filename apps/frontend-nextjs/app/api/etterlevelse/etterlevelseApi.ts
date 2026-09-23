@@ -11,7 +11,7 @@ import { env } from '@/util/env/env'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
-export const getEtterlevelse = async (id: string) => {
+const getEtterlevelse = async (id: string) => {
   return (await axios.get<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
 }
 

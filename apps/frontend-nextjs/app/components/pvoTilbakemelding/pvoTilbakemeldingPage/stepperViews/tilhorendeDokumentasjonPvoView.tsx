@@ -38,7 +38,7 @@ type TProps = {
   relevantVurdering: IVurdering
 }
 
-export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
+const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   pvkDokument,
   activeStep,
@@ -152,4 +152,5 @@ export const TilhorendeDokumentasjonPvoView: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default TilhorendeDokumentasjonPvoView

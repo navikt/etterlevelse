@@ -37,7 +37,7 @@ type TProps = {
   isRisikoscenarioLoading: boolean
 }
 
-export const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
+const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   temaListe,

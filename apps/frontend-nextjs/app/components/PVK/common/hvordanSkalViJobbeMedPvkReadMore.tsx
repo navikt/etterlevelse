@@ -1,6 +1,6 @@
 import { BodyShort, List, ReadMore } from '@navikt/ds-react'
 
-export const HvordanSkalViJobbeMedPvkReadMore = () => (
+const HvordanSkalViJobbeMedPvkReadMore = () => (
   <ReadMore className='mb-5 max-w-[766px]' header='Hvordan skal vi jobbe med PVK?'>
     <BodyShort spacing>
       I PVK-en skal dere beskrive deres behandling av personopplysninger, og gjøre en risikoanalyse.

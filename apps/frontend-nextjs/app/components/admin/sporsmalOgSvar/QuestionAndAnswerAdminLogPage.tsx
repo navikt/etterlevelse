@@ -33,7 +33,7 @@ import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 type TKravMessage = ITilbakemelding & TSporsmaalOgSvarKrav
 
-export const QuestionAndAnswerAdminLogPage = () => {
+const QuestionAndAnswerAdminLogPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])
   const [kravMessages, setKravMessages] = useState<TKravMessage[]>([])
   const [isloading, setIsLoading] = useState<boolean>(false)

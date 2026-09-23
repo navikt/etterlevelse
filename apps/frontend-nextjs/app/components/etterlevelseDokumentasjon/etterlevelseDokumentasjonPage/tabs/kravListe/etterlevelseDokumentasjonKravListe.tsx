@@ -44,7 +44,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
+const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   temaListe,
   loading,
   relevanteStats,

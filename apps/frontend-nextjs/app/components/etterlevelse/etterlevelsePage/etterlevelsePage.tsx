@@ -24,7 +24,7 @@ import { useParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { PageLayout } from '../../others/scaffold/scaffold'
 
-export const EtterlevelsePage = () => {
+const EtterlevelsePage = () => {
   const params = useParams<{
     etterlevelseDokumentasjonId: string
     tema: string
@@ -157,4 +157,5 @@ export const EtterlevelsePage = () => {
     </PageLayout>
   )
 }
+
 export default EtterlevelsePage

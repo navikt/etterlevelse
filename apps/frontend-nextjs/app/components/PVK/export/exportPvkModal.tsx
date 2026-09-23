@@ -9,7 +9,7 @@ type TExportPvkModalProps = {
   etterlevelseDokumentasjonId: string
 }
 
-export const ExportPvkModal = (props: TExportPvkModalProps) => {
+const ExportPvkModal = (props: TExportPvkModalProps) => {
   const { etterlevelseDokumentasjonId } = props
   const [isExportModalOpen, setIsExportModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)

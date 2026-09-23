@@ -16,7 +16,7 @@ type TProps = {
   customStepNumber?: number
 }
 
-export const InvolveringSummary: FunctionComponent<TProps> = ({
+const InvolveringSummary: FunctionComponent<TProps> = ({
   personkategorier,
   customLinktext,
   databehandlere,

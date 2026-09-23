@@ -14,7 +14,7 @@ type TFormSummaryPanelProps = {
   pvoView?: boolean
 }
 
-export const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
+const FormSummaryPanel: FunctionComponent<TFormSummaryPanelProps> = ({
   title,
   onClick,
   href,

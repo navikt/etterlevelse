@@ -314,7 +314,7 @@ export type TFilterKravProps = {
   aktivertDato: string
 }
 
-export const filterKrav = (
+const filterKrav = (
   kravPriority: IKravPriorityList,
   kravList?: TKravQL[],
   filterFerdigDokumentert?: boolean
@@ -367,7 +367,7 @@ export const filterKrav = (
   return mapped
 }
 
-export const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
+const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   etterlevelseId: etterlevelse?.id,
   etterleves: !!etterlevelse?.etterleves,
   frist: etterlevelse?.fristForFerdigstillelse,

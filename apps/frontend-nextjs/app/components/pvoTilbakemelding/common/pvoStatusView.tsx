@@ -89,5 +89,3 @@ export const PvoStatusView: FunctionComponent<TProps> = ({
       return getStatusDisplay('neutral')
   }
 }
-
-export default PvoStatusView

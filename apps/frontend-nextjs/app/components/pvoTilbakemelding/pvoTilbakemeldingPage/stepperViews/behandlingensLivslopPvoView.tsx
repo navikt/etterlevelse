@@ -21,7 +21,7 @@ import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import PvoTilbakemeldingForm from '../../form/pvoTilbakemeldingForm'
-import PvoTilbakemeldingReadOnly from '../../readOnly/pvoTilbakemeldingReadOnly'
+import { PvoTilbakemeldingReadOnly } from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {
   pvoTilbakemelding: IPvoTilbakemelding
@@ -35,7 +35,7 @@ type TProps = {
   formRef: RefObject<any>
 }
 
-export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
+const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   setPvoTilbakemelding,
   pvkDokument,
@@ -155,4 +155,5 @@ export const BehandlingensLivslopPvoView: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default BehandlingensLivslopPvoView

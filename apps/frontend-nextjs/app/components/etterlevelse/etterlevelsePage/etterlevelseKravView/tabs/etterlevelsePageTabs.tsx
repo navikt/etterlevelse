@@ -44,7 +44,7 @@ import {
   useState,
 } from 'react'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
-import { EtterlevelseEditFields } from '../form/EtterlevelseEditFields'
+import EtterlevelseEditFields from '../form/EtterlevelseEditFields'
 import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'
 import UnsavedEtterlevelseModal from '../modal/unsavedEtterlevelseModal'
 
@@ -71,7 +71,7 @@ type TProps = {
   previousVurdering?: IVurdering
 }
 
-export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
+const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
   etterlevelse,
@@ -378,4 +378,5 @@ export const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     </>
   )
 }
+
 export default EtterlevelsePageTabs

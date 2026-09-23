@@ -30,7 +30,7 @@ import { PageLayout } from '../others/scaffold/scaffold'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import BehandlingensArtOgOmfangForm from './form/behandlingensArtOgOmfangForm'
 
-export const BehandlingensArtOgOmfangPage = () => {
+const BehandlingensArtOgOmfangPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string

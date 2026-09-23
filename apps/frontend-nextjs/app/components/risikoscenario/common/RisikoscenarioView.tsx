@@ -21,7 +21,7 @@ type TProps = {
   markdownCopyLinkButton?: boolean
 }
 
-export const RisikoscenarioView: FunctionComponent<TProps> = ({
+const RisikoscenarioView: FunctionComponent<TProps> = ({
   risikoscenario,
   etterlevelseDokumentasjonId,
   noCopyButton,

@@ -1,6 +1,6 @@
 import { List, ReadMore } from '@navikt/ds-react'
 
-export const RisikoscenarioSannsynlighetReadMore = () => (
+const RisikoscenarioSannsynlighetReadMore = () => (
   <ReadMore header='Hva menes med de ulike sannsynlighetsnivåene?' className='my-5'>
     <h2>
       <b>Meget lite sannsynlig</b>

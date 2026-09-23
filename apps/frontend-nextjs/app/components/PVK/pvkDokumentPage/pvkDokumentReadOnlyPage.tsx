@@ -27,15 +27,15 @@ import { uniqBy } from 'lodash'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import OversiktView from './stepperViews/oversiktView'
+import { OversiktView } from './stepperViews/oversiktView'
 import BehandlingensArtOgOmfangReadOnlyView from './stepperViews/readOnlyViews/behandlingensArtOgOmfangReadOnlyView'
 import BehandlingensLivslopReadOnlyView from './stepperViews/readOnlyViews/behandlingensLivslopReadOnlyView'
 import IdentifiseringAvRisikoscenarioerOgTiltakReadOnlyView from './stepperViews/readOnlyViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltakReadOnlyView'
 import InvolveringAvEksterneReadOnlyView from './stepperViews/readOnlyViews/involveringAvEksterneReadOnlyView'
-import OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView from './stepperViews/readOnlyViews/oppsummeringAvAlleRisikoscenarioerOgTiltak/oppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView'
+import { OppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView } from './stepperViews/readOnlyViews/oppsummeringAvAlleRisikoscenarioerOgTiltak/oppsummeringAvAlleRisikoscenarioerOgTiltakReadOnlyView'
 import { SendInnReadOnlyView } from './stepperViews/readOnlyViews/sendInn/sendInnReadOnlyView'
 
-export const StepTitle: string[] = [
+export const stepTitle: string[] = [
   'Oversikt og status',
   'Behandlingens livsløp',
   'Behandlingens art og omfang',
@@ -46,7 +46,7 @@ export const StepTitle: string[] = [
   'Les og send inn',
 ]
 
-export const PvkDokumentReadOnlyPage = () => {
+const PvkDokumentReadOnlyPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
@@ -56,7 +56,7 @@ export const PvkDokumentReadOnlyPage = () => {
   const query = useSearchParams()
   const currentStep = query.get('steg') || '1'
   const [currentPage, setCurrentPage] = useState<string>(
-    currentStep !== null ? StepTitle[parseInt(currentStep) - 1] : 'Oversikt'
+    currentStep !== null ? stepTitle[parseInt(currentStep) - 1] : 'Oversikt'
   )
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
@@ -166,7 +166,7 @@ export const PvkDokumentReadOnlyPage = () => {
   const updateTitleUrlAndStep = (step: number) => {
     setActiveStep(step)
     updateUrlOnStepChange(step)
-    setCurrentPage(StepTitle[step - 1])
+    setCurrentPage(stepTitle[step - 1])
   }
 
   useEffect(() => {
@@ -215,7 +215,7 @@ export const PvkDokumentReadOnlyPage = () => {
                     }}
                     orientation='horizontal'
                   >
-                    {StepTitle.map((title) => {
+                    {stepTitle.map((title) => {
                       return (
                         <Stepper.Step key={title} as='button'>
                           {title}
@@ -227,13 +227,13 @@ export const PvkDokumentReadOnlyPage = () => {
                 <div className='md:hidden'>
                   <FormProgress
                     activeStep={activeStep}
-                    totalSteps={StepTitle.length}
+                    totalSteps={stepTitle.length}
                     onStepChange={(step) => {
                       setSelectedStep(step)
                       updateTitleUrlAndStep(step)
                     }}
                   >
-                    {StepTitle.map((title) => (
+                    {stepTitle.map((title) => (
                       <FormProgress.Step key={title}>{title}</FormProgress.Step>
                     ))}
                   </FormProgress>

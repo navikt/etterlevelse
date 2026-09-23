@@ -18,7 +18,7 @@ type TProps = {
   noHeader?: boolean
 }
 
-export const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
+const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingensLivslop,
   isChangesMadeSinceLastSubmission,

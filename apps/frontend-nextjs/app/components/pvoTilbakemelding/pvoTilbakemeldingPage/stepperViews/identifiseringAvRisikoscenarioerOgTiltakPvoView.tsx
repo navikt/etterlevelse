@@ -24,7 +24,7 @@ type TProps = {
   setSelectedStep: (step: number) => void
 }
 
-export const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps> = ({
+const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjonId,
   pvkDokument,
   pvoTilbakemelding,

@@ -1,7 +1,7 @@
 'use client'
 
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
-import ArdoqSystemerView from '@/components/ardoq/ardoqSystemerView'
+import { ArdoqSystemerView } from '@/components/ardoq/ardoqSystemerView'
 import { BehandlingList } from '@/components/behandlingskatalog/behandlingList'
 import { DpBehandlingList } from '@/components/behandlingskatalog/dpBehandlingList'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
@@ -9,8 +9,8 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { Teams } from '@/components/teamkatalog/teams'
 import { VarslingsadresserView } from '@/components/varslingsadresse/varslingsAddresseView'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
+import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { p360Url } from '@/routes/p360/p360Routes'
@@ -354,5 +354,3 @@ const RelevansView: FunctionComponent<TRelevansProps> = ({
     </div>
   )
 }
-
-export default EtterlevelseDokumentasjonExpansionCard

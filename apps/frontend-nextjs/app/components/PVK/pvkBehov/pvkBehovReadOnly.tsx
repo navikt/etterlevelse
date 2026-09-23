@@ -15,7 +15,7 @@ type TProps = {
   ytterligereEgenskaper: ICode[]
 }
 
-export const PvkBehovReadOnly: FunctionComponent<TProps> = ({
+const PvkBehovReadOnly: FunctionComponent<TProps> = ({
   pvkDokument,
   etterlevelseDokumentasjon,
   ytterligereEgenskaper,

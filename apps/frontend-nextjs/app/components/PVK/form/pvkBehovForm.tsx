@@ -67,7 +67,7 @@ import {
 } from 'formik'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
-import { pvkBehovSchema } from './pvkBehovSchema'
+import pvkBehovSchema from './pvkBehovSchema'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -81,7 +81,7 @@ type TProps = {
   artOgOmfangId?: string
 }
 
-export const PvkBehovForm: FunctionComponent<TProps> = ({
+const PvkBehovForm: FunctionComponent<TProps> = ({
   pvkDokument,
   setPvkDokument,
   etterlevelseDokumentasjon,

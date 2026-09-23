@@ -14,7 +14,7 @@ import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPVK,
@@ -58,7 +58,7 @@ type TProps = {
   relevantVurdering?: IVurdering
 }
 
-export const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
+const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
   personkategorier,
   databehandlere,
   etterlevelseDokumentasjon,

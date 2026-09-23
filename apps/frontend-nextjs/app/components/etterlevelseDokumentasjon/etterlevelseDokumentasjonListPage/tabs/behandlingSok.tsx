@@ -20,7 +20,7 @@ import AsyncSelect from 'react-select/async'
 import { TVariables } from '../dokumentasjonTabs'
 import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
 
-export const BehandlingSok = () => {
+const BehandlingSok = () => {
   const pageSize = 20
   const searchParams = useSearchParams()
   const behandlingUUID = searchParams.get('behandlingId')
@@ -174,4 +174,5 @@ export const BehandlingSok = () => {
     </div>
   )
 }
+
 export default BehandlingSok

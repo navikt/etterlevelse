@@ -2,7 +2,7 @@
 
 import { dokumentasjonUrl } from '../etterlevelseDokumentasjonRoutes'
 
-export const personvernKonsekvensvurderingUrl = '/pvkdokument'
+const personvernKonsekvensvurderingUrl = '/pvkdokument'
 
 export const etterlevelseDokumentasjonPvkTabUrl = (etterlevelseDokumentasjonId: string): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}?tab=pvk`
@@ -87,26 +87,6 @@ export const pvkDokumentasjonPvkBehovUrl = (
   etterlevelseDokumentId: string,
   pvkId: string
 ): string => `${dokumentasjonUrl}/${etterlevelseDokumentId}/pvkbehov/${pvkId}`
-
-export const risikoscenarioUrl = (risikoId: string, steg?: string): string => {
-  if (steg !== undefined) {
-    return `${window.location.pathname}?steg=${steg}&risikoscenario=${risikoId}`
-  } else {
-    return `${window.location.pathname}?risikoscenario=${risikoId}`
-  }
-}
-
-export const risikoscenarioTiltakUrl = (
-  steg: string,
-  activeRisikoscenarioId: string,
-  tiltakId: string
-): string => {
-  if (steg !== undefined) {
-    return `${window.location.pathname}?steg=${steg}&risikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
-  } else {
-    return `${window.location.pathname}?srisikoscenario=${activeRisikoscenarioId}&tiltak=${tiltakId}`
-  }
-}
 
 export const pvkDokumenteringPvoTilbakemeldingUrl = (
   pvkDokumentId: string | undefined,

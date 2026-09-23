@@ -7,15 +7,18 @@ import moment from 'moment'
 import { FunctionComponent, useState } from 'react'
 import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import ReadOnlyField, {
+import {
+  ReadOnlyField,
   ReadOnlyFieldBool,
   ReadOnlyFieldDescriptionOptional,
 } from '@/components/common/readOnlyFields'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
+import {
+  risikoDokumentasjonTemaKravNummerVersjonUrl,
+  risikoscenarioUrl,
+} from '@/routes/risikoscenario/risikoscenarioRoutes'
 
 interface IProps {
   tiltak: ITiltak
@@ -282,4 +285,3 @@ export const TiltakViewWithIverksetting: FunctionComponent<ITiltakViewWithIverks
     </div>
   )
 }
-export default TiltakView

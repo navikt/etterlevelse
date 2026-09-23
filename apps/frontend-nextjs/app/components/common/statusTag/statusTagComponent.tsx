@@ -9,7 +9,7 @@ interface IStatusTagProps {
   icon?: ReactNode
 }
 
-export const StatusTag = ({ status, variant, icon }: IStatusTagProps) => {
+const StatusTag = ({ status, variant, icon }: IStatusTagProps) => {
   const getStatusDisplay = (variant: any) => (
     <Tag variant={variant} className='h-fit'>
       <div className='flex items-center'>

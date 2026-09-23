@@ -1,42 +1,7 @@
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
-import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
 import axios, { AxiosError } from 'axios'
 import { useEffect, useRef, useState } from 'react'
-
-export const getAllBehandlingensArtOgOmfang = async () => {
-  const pageSize = 100
-  const firstPage = await getBehandlingensArtOgOmfangPage(0, pageSize)
-  if (firstPage.pages === 1) {
-    return firstPage.content.length > 0 ? [...firstPage.content] : []
-  } else {
-    let allBehandlingensArtOgOmfang: IBehandlingensArtOgOmfang[] = [...firstPage.content]
-    for (let currentPage = 1; currentPage < firstPage.pages; currentPage++) {
-      allBehandlingensArtOgOmfang = [
-        ...allBehandlingensArtOgOmfang,
-        ...(await getBehandlingensArtOgOmfangPage(currentPage, pageSize)).content,
-      ]
-    }
-    return allBehandlingensArtOgOmfang
-  }
-}
-
-export const getBehandlingensArtOgOmfangPage = async (
-  pageNumber: number,
-  pageSize: number
-): Promise<IPageResponse<IBehandlingensArtOgOmfang>> =>
-  (
-    await axios.get<IPageResponse<IBehandlingensArtOgOmfang>>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang?pageNumber=${pageNumber}&pageSize=${pageSize}`
-    )
-  ).data
-
-export const getBehandlingensArtOgOmfang = async (id: string): Promise<IBehandlingensArtOgOmfang> =>
-  (
-    await axios.get<IBehandlingensArtOgOmfang>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang/${id}`
-    )
-  ).data
 
 export const getBehandlingensArtOgOmfangByEtterlevelseDokumentId = async (
   etterlevelseDokumentId: string
@@ -70,15 +35,6 @@ export const updateBehandlingensArtOgOmfang = async (
     )
   ).data
 }
-
-export const deleteBehandlingensArtOgOmfang = async (
-  id: string
-): Promise<IBehandlingensArtOgOmfang> =>
-  (
-    await axios.delete<IBehandlingensArtOgOmfang>(
-      `${env.backendBaseUrl}/behandlingens-art-og-omfang/${id}`
-    )
-  ).data
 
 export const useBehandlingensArtOgOmfang = (etterlevelseDokumentasjonId?: string) => {
   const [data, setData] = useState<IBehandlingensArtOgOmfang>(

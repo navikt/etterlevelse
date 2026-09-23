@@ -29,7 +29,7 @@ type TProps = {
   setTiltakList: (state: ITiltak[]) => void
 }
 
-export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
+const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
   kravnummer,
   risikoscenario,
   risikoscenarioer,
@@ -215,4 +215,5 @@ export const FjernRisikoscenarioFraKrav: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default FjernRisikoscenarioFraKrav

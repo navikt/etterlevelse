@@ -4,8 +4,10 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'
-import { risikoscenarioUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
+import {
+  risikoDokumentasjonTemaKravNummerVersjonUrl,
+  risikoscenarioUrl,
+} from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { Accordion, List, LocalAlert } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
@@ -28,7 +30,7 @@ type TProps = {
   isCreateModalOpen: boolean
 }
 
-export const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
+const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   allRisikoscenarioList,
   setAllRisikoscenarioList,

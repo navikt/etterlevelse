@@ -14,16 +14,14 @@ type TProps = {
   children: ReactNode
 }
 
-export const DataProvider: FunctionComponent<TProps> = ({ children }) => {
-  return (
-    <HelmetProvider>
-      <Helmet>
-        <meta charSet='utf-8' />
-        <title>Etterlevelse</title>
-      </Helmet>
-      <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
-    </HelmetProvider>
-  )
-}
+const DataProvider: FunctionComponent<TProps> = ({ children }) => (
+  <HelmetProvider>
+    <Helmet>
+      <meta charSet='utf-8' />
+      <title>Etterlevelse</title>
+    </Helmet>
+    <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
+  </HelmetProvider>
+)
 
 export default DataProvider

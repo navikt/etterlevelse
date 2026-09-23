@@ -6,7 +6,7 @@ import { WrenchIcon } from '@navikt/aksel-icons'
 import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikHelpers } from 'formik'
 import { FunctionComponent, RefObject, useState } from 'react'
-import TiltakView from '../common/tiltakView'
+import { TiltakView } from '../common/tiltakView'
 
 type TProps = {
   tiltak: ITiltak
@@ -16,7 +16,7 @@ type TProps = {
   setIverksattFormDirty: (state: boolean) => void
 }
 
-export const IverksattTiltakForm: FunctionComponent<TProps> = ({
+const IverksattTiltakForm: FunctionComponent<TProps> = ({
   tiltak,
   risikoscenarioList,
   submit,

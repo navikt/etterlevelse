@@ -20,7 +20,7 @@ type TProps = {
   maxChar?: number
 }
 
-export const EditOmEtterlevelse: FunctionComponent<TProps> = ({
+const EditOmEtterlevelse: FunctionComponent<TProps> = ({
   melding,
   setMelding,
   isLoading,

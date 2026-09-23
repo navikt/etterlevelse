@@ -1,5 +1,5 @@
 export const dokumentasjonUrl = '/dokumentasjon'
-export const etterlevelseDokumentasjonGjenbrukUrl = `${dokumentasjonUrl}/gjenbruk`
+const etterlevelseDokumentasjonGjenbrukUrl = `${dokumentasjonUrl}/gjenbruk`
 
 export const etterlevelseDokumentasjonIdUrl = (etterlevelseDokumentasjonId?: string): string =>
   `${dokumentasjonUrl}/${etterlevelseDokumentasjonId}`

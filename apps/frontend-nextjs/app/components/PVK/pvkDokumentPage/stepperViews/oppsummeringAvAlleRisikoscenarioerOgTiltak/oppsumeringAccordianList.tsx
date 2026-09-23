@@ -1,7 +1,7 @@
 'use client'
 
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
-import RisikoscenarioAccordianHeader from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
+import { RisikoscenarioAccordianHeader } from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import {
@@ -26,7 +26,7 @@ type TProps = {
   setIsUnsaved: (state: boolean) => void
 }
 
-export const OppsumeringAccordianList: FunctionComponent<TProps> = ({
+const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   setRisikosenarioList,
   allRisikoscenarioList,

@@ -18,7 +18,7 @@ type TProps = {
   customStepNumber?: number
 }
 
-export const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
+const ArtOgOmFangSummary: FunctionComponent<TProps> = ({
   artOgOmfang,
   artOgOmfangError,
   updateTitleUrlAndStep,

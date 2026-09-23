@@ -111,7 +111,7 @@ export interface IEtterlevelseDokumentasjonStats {
   lovStats: ILovStats[]
 }
 
-export interface ILovStats {
+interface ILovStats {
   lovCode: ICode
   relevantKrav: TKravQL[]
   irrelevantKrav: TKravQL[]

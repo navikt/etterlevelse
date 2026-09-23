@@ -17,7 +17,7 @@ type TProps = {
   noCopyButton?: boolean
 }
 
-export const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
+const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
   risikoscenario,
   noCopyButton,
 }) => {

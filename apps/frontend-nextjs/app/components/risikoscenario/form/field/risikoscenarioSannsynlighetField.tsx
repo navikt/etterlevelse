@@ -4,7 +4,7 @@ import RisikoscenarioSannsynlighetReadMore from '@/components/risikoscenario/com
 import { Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 
-export const RisikoscenarioSannsynlighetField = () => (
+const RisikoscenarioSannsynlighetField = () => (
   <>
     <Heading level='3' size='small' className='my-5'>
       Risikoscenariets sannsynlighet

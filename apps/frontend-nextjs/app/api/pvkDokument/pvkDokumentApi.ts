@@ -45,7 +45,7 @@ export const getAllPvkDokumentListItem = async () => {
   }
 }
 
-export const getPvkDokumentPage = async (
+const getPvkDokumentPage = async (
   pageNumber: number,
   pageSize: number
 ): Promise<IPageResponse<IPvkDokument>> =>
@@ -55,7 +55,7 @@ export const getPvkDokumentPage = async (
     )
   ).data
 
-export const getPvkDokumentListItemPage = async (
+const getPvkDokumentListItemPage = async (
   pageNumber: number,
   pageSize: number
 ): Promise<IPageResponse<IPvkDokumentListItem>> =>
@@ -226,9 +226,7 @@ const pvkDokumentToPvkDokumentDto = (pvkDokument: IPvkDokument) => {
   return dto
 }
 
-export const mapMeldingTilPvoToFormValue = (
-  meldingTilPvo: Partial<IMeldingTilPvo>
-): IMeldingTilPvo => {
+const mapMeldingTilPvoToFormValue = (meldingTilPvo: Partial<IMeldingTilPvo>): IMeldingTilPvo => {
   return {
     etterlevelseDokumentVersjon: meldingTilPvo.etterlevelseDokumentVersjon || 1,
     innsendingId: meldingTilPvo.innsendingId || 1,
@@ -239,9 +237,7 @@ export const mapMeldingTilPvoToFormValue = (
   }
 }
 
-export const mapMeldingerTilPvoToFormValue = (
-  pvkDokument: Partial<IPvkDokument>
-): IMeldingTilPvo[] => {
+const mapMeldingerTilPvoToFormValue = (pvkDokument: Partial<IPvkDokument>): IMeldingTilPvo[] => {
   const meldingerTilPvo: IMeldingTilPvo[] = []
   if (pvkDokument.meldingerTilPvo && pvkDokument.meldingerTilPvo.length !== 0) {
     pvkDokument.meldingerTilPvo.forEach((melding: IMeldingTilPvo) =>

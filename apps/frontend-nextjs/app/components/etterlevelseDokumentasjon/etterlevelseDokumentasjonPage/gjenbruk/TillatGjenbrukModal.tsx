@@ -23,7 +23,7 @@ type TProps = {
   renderTrigger?: boolean
 }
 
-export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
+const TillatGjenbrukModal: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   isOpen: controlledIsOpen,
@@ -154,4 +154,5 @@ export const TillatGjenbrukModal: FunctionComponent<TProps> = ({
     </>
   )
 }
+
 export default TillatGjenbrukModal

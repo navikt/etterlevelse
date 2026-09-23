@@ -1,8 +1,8 @@
 'use client'
 
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { CodelistContext, IGetParsedOptionsProps } from '@/provider/kodeverk/kodeverkProvider'
+import { EListName, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { env } from '@/util/env/env'
 import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup, Select } from '@navikt/ds-react'
 import axios from 'axios'
@@ -157,5 +157,3 @@ export const ExportEtterlevelseModal: FunctionComponent<IExportEtterlevelseModal
     </Modal>
   )
 }
-
-export default ExportEtterlevelseModalWithButton

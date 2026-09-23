@@ -15,7 +15,7 @@ type TProps = {
   errorComponent: ReactNode
 }
 
-export const SendTilPvo: FunctionComponent<TProps> = ({
+const SendTilPvo: FunctionComponent<TProps> = ({
   relevantIndex,
   pvkDokument,
   fieldProps,
@@ -122,4 +122,5 @@ export const SendTilPvo: FunctionComponent<TProps> = ({
     </div>
   )
 }
+
 export default SendTilPvo

@@ -7,7 +7,7 @@ import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepper
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
-import PvoTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -28,7 +28,7 @@ type TProps = {
   relevantVurdering?: IVurdering
 }
 
-export const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = ({
+const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = ({
   personkategorier,
   etterlevelseDokumentasjon,
   pvkDokument,

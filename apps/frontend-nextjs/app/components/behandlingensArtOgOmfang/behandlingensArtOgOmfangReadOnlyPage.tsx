@@ -15,7 +15,7 @@ import BehandlingensLivsLopSidePanel from '../behandlingensLivslop/sidePanel/Beh
 import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../others/layout/content/content'
 import { PageLayout } from '../others/scaffold/scaffold'
 
-export const BehandlingensArtOgOmfangReadOnlyPage = () => {
+const BehandlingensArtOgOmfangReadOnlyPage = () => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string

@@ -100,5 +100,3 @@ export const PvoTilbakemeldingReadOnly: FunctionComponent<TProps> = ({
     </div>
   </div>
 )
-
-export default PvoTilbakemeldingReadOnly

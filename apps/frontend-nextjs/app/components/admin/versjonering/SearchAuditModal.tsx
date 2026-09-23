@@ -7,7 +7,7 @@ import { BodyLong, Button, Dialog, LocalAlert, Select, TextField } from '@navikt
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 
-export const SearchAuditModal = () => {
+const SearchAuditModal = () => {
   const [selectedDataType, setSelectedDataType] = useState<ESearchDataType>()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [error, setError] = useState<string>('')

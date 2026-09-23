@@ -14,7 +14,7 @@ type TProps = {
   loading: boolean
 }
 
-export const MineEtterlevelseDokumentasjoner: FunctionComponent<TProps> = ({
+const MineEtterlevelseDokumentasjoner: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjoner,
   teams,
   loading,

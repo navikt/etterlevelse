@@ -32,7 +32,7 @@ type TProps = {
   readOnly?: boolean
 }
 
-export const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
+const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   activeStep,
   pvkDokument,

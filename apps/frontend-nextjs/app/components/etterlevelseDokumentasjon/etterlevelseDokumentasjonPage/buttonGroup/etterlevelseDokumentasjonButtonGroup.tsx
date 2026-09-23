@@ -25,7 +25,7 @@ type TProps = {
   pvkDokument?: IPvkDokument
 }
 
-export const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = ({
+const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   setEtterlevelseDokumentasjon,
   relasjonLoading,
