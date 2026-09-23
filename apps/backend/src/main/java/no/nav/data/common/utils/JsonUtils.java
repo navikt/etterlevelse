@@ -1,5 +1,7 @@
 package no.nav.data.common.utils;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import no.nav.data.common.exceptions.TechnicalException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DeserializationFeature;
@@ -12,6 +14,7 @@ import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public final class JsonUtils {
 
@@ -24,10 +27,18 @@ public final class JsonUtils {
         // Jackson 3 auto-registers java.time support. Match the previous (Jackson 2 / hypersistence) leniency so
         // existing jsonb rows keep deserializing: ignore unknown properties, keep ISO date strings, coerce
         // missing/null primitives to their default, and treat empty strings as null for scalar types.
+        // Only coerce explicit JSON null into an empty value for String, List and int(eger) properties, so null
+        // strings become "", null lists become empty lists and null ints become 0. Other types (e.g. Boolean)
+        // keep their null value.
+        JsonSetter.Value asEmpty = JsonSetter.Value.forValueNulls(Nulls.AS_EMPTY);
         return JsonMapper.builder()
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
                 .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .withConfigOverride(String.class, c -> c.setNullHandling(asEmpty))
+                .withConfigOverride(List.class, c -> c.setNullHandling(asEmpty))
+                .withConfigOverride(Integer.class, c -> c.setNullHandling(asEmpty))
+                .withConfigOverride(int.class, c -> c.setNullHandling(asEmpty))
                 .withCoercionConfigDefaults(config -> config
                         .setCoercion(CoercionInputShape.EmptyString, CoercionAction.AsNull))
                 .build();
