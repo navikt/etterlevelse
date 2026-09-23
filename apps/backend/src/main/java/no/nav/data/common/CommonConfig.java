@@ -1,9 +1,13 @@
 package no.nav.data.common;
 
-import javax.sql.DataSource;
-
-import java.util.List;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.prometheus.client.CollectorRegistry;
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
+import no.nav.data.common.utils.JsonUtils;
+import no.nav.data.common.utils.UtcLocalDateTimeJackson3Serializer;
+import no.nav.data.common.web.TraceHeaderRequestInterceptor;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.boot.restclient.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -12,23 +16,19 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.module.SimpleModule;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.prometheus.client.CollectorRegistry;
-import net.javacrumbs.shedlock.core.LockProvider;
-import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
-import no.nav.data.common.utils.JsonUtils;
-import no.nav.data.common.web.TraceHeaderRequestInterceptor;
+import javax.sql.DataSource;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Configuration
 public class CommonConfig {
 
-    private static ObjectMapper omForHttpMessageConverter = JsonUtils.createRestObjectMapper();
-    
     @Primary
     @Bean
     public ObjectMapper objectMapper() {
@@ -53,17 +53,29 @@ public class CommonConfig {
                 .build();
     }
 
+    /**
+     * Customize Spring Boot's auto-configured Jackson 3 {@code JsonMapper} (used by the default
+     * {@code JacksonJsonHttpMessageConverter}) to match the previous REST serialization behavior:
+     * ignore unknown properties, write dates as ISO strings, and emit {@link LocalDateTime} as UTC with a 'Z' offset.
+     * <p>
+     * Customizing the default converter (instead of registering a custom Jackson converter bean) keeps the standard
+     * converter ordering, so {@code byte[]} responses such as the springdoc OpenAPI document served at
+     * {@code /swagger-docs} are written as raw bytes rather than Base64-encoded JSON strings.
+     */
     @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-        jsonConverter.setObjectMapper(omForHttpMessageConverter);
-        return jsonConverter;
+    public JsonMapperBuilderCustomizer restJsonMapperBuilderCustomizer() {
+        SimpleModule utcLocalDateTimeModule = new SimpleModule();
+        utcLocalDateTimeModule.addSerializer(LocalDateTime.class, new UtcLocalDateTimeJackson3Serializer());
+        return builder -> builder
+                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .addModule(utcLocalDateTimeModule);
     }
 
     /**
-     * The custom Jackson converter bean above gets added ahead of the default StringHttpMessageConverter in
-     * Spring Boot 4, which makes it try to parse JSON into String.class (e.g. when tests read the raw body).
-     * Ensure String reads are handled by StringHttpMessageConverter by moving it to the front of the list.
+     * In Spring Boot 4 a Jackson converter can be ordered ahead of the {@link StringHttpMessageConverter} on the
+     * {@link RestTemplate}, which makes it try to parse JSON into String.class (e.g. when tests read the raw body).
+     * Ensure String reads are handled by {@link StringHttpMessageConverter} by moving it to the front of the list.
      */
     @Bean
     public RestTemplateCustomizer stringConverterFirstRestTemplateCustomizer() {
