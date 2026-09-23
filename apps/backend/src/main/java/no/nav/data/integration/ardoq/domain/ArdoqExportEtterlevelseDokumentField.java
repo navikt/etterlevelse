@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ArdoqExportField {
-    private String ardoqId;
-    private String systemNavn;
+public class ArdoqExportEtterlevelseDokumentField {
+    private UUID etterlevelseDokumentId;
     private String etterlevelseDokumentNummer;
     private String etterlevelseDokumentNavn;
     private int antallKrav;
@@ -20,4 +22,5 @@ public class ArdoqExportField {
     private int kravUnderArbeid;
     private int kravFerdig;
     private String linkTilEtterlevelsesDokument;
+    private List<String> teams;
 }
