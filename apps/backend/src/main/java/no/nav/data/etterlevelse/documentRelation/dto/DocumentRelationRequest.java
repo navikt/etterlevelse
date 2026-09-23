@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.documentRelation.dto;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
+import tools.jackson.databind.JsonNode;
 
 import java.util.UUID;
 

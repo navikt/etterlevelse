@@ -3,13 +3,13 @@ package no.nav.data.etterlevelse.codelist.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
+import tools.jackson.databind.JsonNode;
 
 @Data
 @Builder

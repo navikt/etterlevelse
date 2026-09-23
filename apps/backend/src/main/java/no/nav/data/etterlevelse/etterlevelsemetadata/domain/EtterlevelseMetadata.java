@@ -1,15 +1,19 @@
 package no.nav.data.etterlevelse.etterlevelsemetadata.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.common.domain.KravId;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +42,7 @@ public class EtterlevelseMetadata extends Auditable implements KravId {
     @Column(name = "etterlevelse_dokumentasjon", nullable = false)
     private UUID etterlevelseDokumentasjonId;
     
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private EtterlevelseMetadataData data = new EtterlevelseMetadataData();

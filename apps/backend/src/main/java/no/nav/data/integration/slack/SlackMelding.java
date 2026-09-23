@@ -1,10 +1,5 @@
 package no.nav.data.integration.slack;
 
-import java.util.List;
-
-import org.hibernate.annotations.Type;
-
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +12,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.integration.slack.SlackMeldingData.MeldingPart;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 
 /**
@@ -37,7 +36,7 @@ public class SlackMelding {
     @Column(name = "id")
     private Integer id;
     
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private SlackMeldingData data = new SlackMeldingData();

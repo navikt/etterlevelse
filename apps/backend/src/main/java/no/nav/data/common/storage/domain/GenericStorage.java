@@ -1,8 +1,6 @@
 package no.nav.data.common.storage.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.JsonNode;
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,8 +16,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.common.utils.JsonUtils;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.util.Assert;
+import tools.jackson.databind.JsonNode;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +44,7 @@ public class GenericStorage<T extends DomainObject> extends Auditable {
     // Type er getSimpleName() av (sub-) klassen til domeneobjektet. 
     private String type;
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     private JsonNode data;
 

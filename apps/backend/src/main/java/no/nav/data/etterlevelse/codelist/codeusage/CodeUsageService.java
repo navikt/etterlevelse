@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.codelist.codeusage;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.prometheus.client.Summary;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.utils.StreamUtils;
@@ -19,6 +18,7 @@ import no.nav.data.etterlevelse.krav.domain.Regelverk;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.databind.JsonNode;
 
 import java.time.Duration;
 import java.util.List;

@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.krav.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,7 +20,8 @@ import no.nav.data.etterlevelse.krav.dto.TilbakemeldingNewMeldingRequest;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse;
 import no.nav.data.etterlevelse.krav.dto.TilbakemeldingResponse.MeldingResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
@@ -50,7 +50,7 @@ public class Tilbakemelding extends ChangeStamped implements KravId {
     @Column(name = "KRAV_VERSJON", nullable = false)
     private Integer kravVersjon;
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private TilbakemeldingData data = new TilbakemeldingData();

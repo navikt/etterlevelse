@@ -1,6 +1,5 @@
 package no.nav.data.pvk.risikoscenario.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,7 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -32,7 +32,7 @@ public class Risikoscenario extends Auditable {
     @Column(name = "PVK_DOKUMENT_ID", nullable = false)
     private UUID pvkDokumentId;
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Builder.Default
     @Column(name = "DATA", nullable = false)
     private RisikoscenarioData risikoscenarioData = new RisikoscenarioData();

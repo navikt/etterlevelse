@@ -1,18 +1,22 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +36,7 @@ public class EtterlevelseDokumentasjon extends Auditable  {
     @Column(name = "ID")
     private UUID id = UUID.randomUUID();
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private EtterlevelseDokumentasjonData etterlevelseDokumentasjonData = new EtterlevelseDokumentasjonData();

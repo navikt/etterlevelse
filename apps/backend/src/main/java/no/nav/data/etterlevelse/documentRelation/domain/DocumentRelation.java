@@ -1,7 +1,5 @@
 package no.nav.data.etterlevelse.documentRelation.domain;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import tools.jackson.databind.JsonNode;
 
 import java.util.UUID;
 
@@ -42,7 +42,7 @@ public class DocumentRelation extends Auditable {
     @Column(name = "TO_DOCUMENT", nullable = false)
     private UUID toDocument;
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA")
     private JsonNode data;
 

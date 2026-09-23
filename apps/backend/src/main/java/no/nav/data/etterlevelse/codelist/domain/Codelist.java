@@ -1,7 +1,5 @@
 package no.nav.data.etterlevelse.codelist.domain;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,7 +14,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import tools.jackson.databind.JsonNode;
 
 import java.io.Serializable;
 
@@ -45,7 +45,7 @@ public class Codelist extends Auditable {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA")
     private JsonNode data;
 

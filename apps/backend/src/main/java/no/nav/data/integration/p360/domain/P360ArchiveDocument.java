@@ -1,15 +1,19 @@
 package no.nav.data.integration.p360.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.auditing.domain.Auditable;
 import no.nav.data.integration.p360.dto.P360DocumentCreateRequest;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -27,7 +31,7 @@ public class P360ArchiveDocument extends Auditable {
     @Builder.Default
     private UUID id = UUID.randomUUID();
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private P360DocumentCreateRequest data = new P360DocumentCreateRequest();

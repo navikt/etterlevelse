@@ -10,9 +10,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Jackson 3 variant of {@link UtcLocalDateTimeSerializer}, used by the auto-configured
- * {@code JacksonJsonHttpMessageConverter} for HTTP responses.
- * Timestamps are stored as UTC {@link LocalDateTime}; emit them with a 'Z' offset so clients parse them as UTC.
+ * Serializes {@link LocalDateTime} for HTTP responses. Timestamps are stored as UTC {@code LocalDateTime};
+ * emit them with a 'Z' offset so clients parse them as UTC.
  */
 public class UtcLocalDateTimeJackson3Serializer extends StdSerializer<LocalDateTime> {
 

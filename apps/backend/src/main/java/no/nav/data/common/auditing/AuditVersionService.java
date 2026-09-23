@@ -1,9 +1,6 @@
 package no.nav.data.common.auditing;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.domain.Action;
@@ -21,6 +18,7 @@ import no.nav.data.etterlevelse.krav.domain.Krav;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -73,23 +71,15 @@ public class AuditVersionService {
             }).toList();
         } else if (table == SearchTypes.Krav) {
             return distinctData.stream().filter(auditVersion -> {
-                try {
-                    JsonNode data = new ObjectMapper().readTree(auditVersion.getData());
-                    String kravOldNavn = "K" + data.get("data").get("kravNummer") + "." + data.get("data").get("kravVersjon") + " " + data.get("data").get("navn");
-                    return kravOldNavn.toLowerCase().contains(search.toLowerCase());
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
+                JsonNode data = JsonUtils.toJsonNode(auditVersion.getData());
+                String kravOldNavn = "K" + data.get("data").get("kravNummer") + "." + data.get("data").get("kravVersjon") + " " + data.get("data").get("navn");
+                return kravOldNavn.toLowerCase().contains(search.toLowerCase());
             }).toList();
         } else {
             return distinctData.stream().filter(auditVersion -> {
-                try {
-                    JsonNode data = new ObjectMapper().readTree(auditVersion.getData());
-                    String eDokOldNavn = "E" + data.get("data").get("etterlevelseNummer") + " " + data.get("data").get("title");
-                    return eDokOldNavn.toLowerCase().contains(search.toLowerCase());
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
+                JsonNode data = JsonUtils.toJsonNode(auditVersion.getData());
+                String eDokOldNavn = "E" + data.get("data").get("etterlevelseNummer") + " " + data.get("data").get("title");
+                return eDokOldNavn.toLowerCase().contains(search.toLowerCase());
             }).toList();
         }
     }

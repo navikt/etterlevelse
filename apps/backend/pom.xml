@@ -19,7 +19,6 @@
         <lombok.version>1.18.48</lombok.version>
 
         <springdoc-openapi-starter-webmvc-ui.version>3.1.1</springdoc-openapi-starter-webmvc-ui.version>
-        <hypersistence-utils-hibernate-71.version>3.15.5</hypersistence-utils-hibernate-71.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <shedlock.version>7.10.1</shedlock.version>
         <commons-collections4.version>4.6.0</commons-collections4.version>
@@ -194,11 +193,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.hypersistence</groupId>
-            <artifactId>hypersistence-utils-hibernate-71</artifactId>
-            <version>${hypersistence-utils-hibernate-71.version}</version>
         </dependency>
 
         <dependency>

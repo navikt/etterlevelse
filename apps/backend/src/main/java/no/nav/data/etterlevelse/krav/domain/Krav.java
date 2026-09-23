@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.krav.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -17,7 +16,8 @@ import no.nav.data.etterlevelse.codelist.codeusage.dto.InstanceId;
 import no.nav.data.etterlevelse.common.domain.KravId;
 import no.nav.data.etterlevelse.krav.dto.KravRequest;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,7 +45,7 @@ public class Krav extends Auditable implements KravId {
     @Builder.Default
     private Integer kravVersjon = 1;
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private KravData data = new KravData();

@@ -1,6 +1,6 @@
 package no.nav.data.etterlevelse.export;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.utils.WordDocUtils;
@@ -88,7 +88,7 @@ public class CodelistToDoc {
             addText(codelist.getDescription());
 
             if(!codelistData.isEmpty()) {
-                codelistData.fieldNames().forEachRemaining(d -> {
+                codelistData.propertyNames().forEach(d -> {
                     addHeading4(d);
                     addText(codelistData.get(d).toString());
                 });

@@ -1,6 +1,5 @@
 package no.nav.data.etterlevelse.codelist;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.util.Collection;
 import java.util.HashSet;

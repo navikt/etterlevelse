@@ -1,6 +1,5 @@
 package no.nav.data.pvk.pvkdokument.domain;
 
-import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +12,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import no.nav.data.common.auditing.domain.Auditable;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -40,7 +40,7 @@ public class PvkDokument extends Auditable {
     @Enumerated(EnumType.STRING)
     private PvkDokumentStatus status = PvkDokumentStatus.UNDERARBEID;
 
-    @Type(value = JsonBinaryType.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private PvkDokumentData pvkDokumentData = new PvkDokumentData();

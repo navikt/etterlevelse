@@ -3,7 +3,6 @@ package no.nav.data.integration.slack.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.etterlevelse.varsel.domain.SlackChannel;
 import no.nav.data.etterlevelse.varsel.domain.SlackUser;
 import no.nav.data.integration.slack.SlackMeldingData.MeldingPart;
+import tools.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
 import java.util.List;

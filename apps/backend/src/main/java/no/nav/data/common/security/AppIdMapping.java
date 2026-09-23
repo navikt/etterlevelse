@@ -1,9 +1,9 @@
 package no.nav.data.common.security;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.Data;
 import no.nav.data.Constants;
 import no.nav.data.common.utils.JsonUtils;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.Collection;
 import java.util.HashMap;
