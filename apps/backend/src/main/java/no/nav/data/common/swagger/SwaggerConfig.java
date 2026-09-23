@@ -17,12 +17,13 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
+                .openapi("3.0.1")
                 .components(new Components().addSecuritySchemes("bearer-key",
                         new SecurityScheme().type(Type.HTTP).scheme("bearer").bearerFormat("token")))
                 .addSecurityItem(new SecurityRequirement().addList("bearer-key"))
                 .info(new Info().title("Etterlevelse")
                         .description("Rest API for Etterlevelse")
-                        .version("v1.0")
+                        .version("1.0.0")
                         .license(new License().name("MIT License")))
                 .externalDocs(new ExternalDocumentation()
                         .description("Etterlevelse på NAKA")
