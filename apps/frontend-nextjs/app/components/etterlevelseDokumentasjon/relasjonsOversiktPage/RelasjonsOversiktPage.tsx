@@ -1,5 +1,8 @@
 'use client'
 
+import { Heading, Link, Table } from '@navikt/ds-react'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { getDocumentRelationByFromIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { LoadingSkeleton } from '@/components/common/loadingSkeleton/loadingSkeletonComponent'
@@ -14,9 +17,6 @@ import {
   dokumentasjonBreadCrumbPath,
   dokumentasjonerBreadCrumbPath,
 } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Heading, Link, Table } from '@navikt/ds-react'
-import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 
 export const RelasjonsOversiktPage = () => {
   const params = useParams<{ etterlevelseDokumentasjonId: string }>()

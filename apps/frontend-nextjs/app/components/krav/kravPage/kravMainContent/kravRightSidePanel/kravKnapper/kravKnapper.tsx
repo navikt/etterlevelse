@@ -1,5 +1,9 @@
 'use client'
 
+import { Button, Spacer } from '@navikt/ds-react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { useRouter } from 'next/navigation'
+import { FunctionComponent, useContext } from 'react'
 import { deleteKrav } from '@/api/krav/kravApi'
 import { EKravStatus, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
@@ -9,10 +13,6 @@ import {
   kravlisteQueryUrl,
 } from '@/routes/krav/kravRoutes'
 import { hasKravExpired } from '@/util/krav/kravUtil'
-import { Button, Spacer } from '@navikt/ds-react'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { useRouter } from 'next/navigation'
-import { FunctionComponent, useContext } from 'react'
 import { KravSlettKnapp } from './kravSlettKnapp/kravSlettKnapp'
 
 type TProps = {

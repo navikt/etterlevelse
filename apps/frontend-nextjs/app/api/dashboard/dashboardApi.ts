@@ -1,5 +1,6 @@
 'use client'
 
+import axios from 'axios'
 import {
   IAvdelingDashboardStats,
   IDashboardDetailResponse,
@@ -8,7 +9,6 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const getDashboardStats = async (): Promise<IAvdelingDashboardStats[]> => {
   const response = await axios.get<IAvdelingDashboardStats[]>(`${env.backendBaseUrl}/dashboard`)

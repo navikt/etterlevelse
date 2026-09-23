@@ -1,5 +1,9 @@
 'use client'
 
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { InfoCard } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent, useMemo } from 'react'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -8,10 +12,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { InformationSquareIcon } from '@navikt/aksel-icons'
-import { InfoCard } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent, useMemo } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument

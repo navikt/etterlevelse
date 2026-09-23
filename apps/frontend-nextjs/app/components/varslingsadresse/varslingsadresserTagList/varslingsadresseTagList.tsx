@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { getSlackChannelById, getSlackUserById } from '@/api/teamkatalogen/teamkatalogenApi'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
@@ -7,7 +8,6 @@ import {
   TVarslingsadresseQL,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { slackChannelView } from '@/util/teamkatalog/utils'
-import { useEffect, useState } from 'react'
 
 export const VarslingsadresserTagList = ({
   varslingsadresser,

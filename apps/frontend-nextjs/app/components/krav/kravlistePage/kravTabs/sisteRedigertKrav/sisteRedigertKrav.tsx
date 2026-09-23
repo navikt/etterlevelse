@@ -1,10 +1,10 @@
 'use client'
 
+import { Alert, Label, Loader } from '@navikt/ds-react'
+import { useMemo } from 'react'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
-import { Alert, Label, Loader } from '@navikt/ds-react'
-import { useMemo } from 'react'
 import { KravPanels } from './kravPanels/KravPanels'
 
 export const SistRedigertKrav = () => {

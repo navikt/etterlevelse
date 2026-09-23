@@ -1,5 +1,18 @@
 'use client'
 
+import {
+  BodyShort,
+  Heading,
+  Link,
+  Loader,
+  Pagination,
+  Select,
+  SortState,
+  Spacer,
+  Table,
+} from '@navikt/ds-react'
+import moment from 'moment'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
 import { getTilbakemeldingForKrav } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
@@ -17,19 +30,6 @@ import { UserContext } from '@/provider/user/userProvider'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { handleSort } from '@/util/handleTableSort'
 import { getMelderInfo } from '@/util/krav/tilbakemelding/kravTilbakemeldingUtils'
-import {
-  BodyShort,
-  Heading,
-  Link,
-  Loader,
-  Pagination,
-  Select,
-  SortState,
-  Spacer,
-  Table,
-} from '@navikt/ds-react'
-import moment from 'moment'
-import { ChangeEvent, useContext, useEffect, useState } from 'react'
 
 type TKravMessage = ITilbakemelding & TSporsmaalOgSvarKrav
 

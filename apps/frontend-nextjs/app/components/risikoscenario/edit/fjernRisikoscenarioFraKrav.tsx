@@ -1,5 +1,9 @@
 'use client'
 
+import { TrashIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, List, Modal } from '@navikt/ds-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   deleteRisikoscenario,
@@ -13,10 +17,6 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { TrashIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, List, Modal } from '@navikt/ds-react'
-import { usePathname, useRouter } from 'next/navigation'
-import { FunctionComponent, useEffect, useState } from 'react'
 
 type TProps = {
   kravnummer: number

@@ -1,5 +1,10 @@
 'use client'
 
+import { useQuery } from '@apollo/client/react'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Label, List, Loader } from '@navikt/ds-react'
+import moment from 'moment'
+import { useMemo, useState } from 'react'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ListLayout2 } from '@/components/krav/kravlistePage/kravTabs/sisteRedigertKrav/listLayout/listLayout'
 import { PvoStatusView } from '@/components/pvoTilbakemelding/common/pvoStatusView'
@@ -11,11 +16,6 @@ import {
   getPvoTilbakemeldingListQuery,
 } from '@/query/personvernombudet/pvoTilbakemeldingQuery'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { useQuery } from '@apollo/client/react'
-import { PlusIcon } from '@navikt/aksel-icons'
-import { Button, Label, List, Loader } from '@navikt/ds-react'
-import moment from 'moment'
-import { useMemo, useState } from 'react'
 
 const PAGE_SIZE = 20
 

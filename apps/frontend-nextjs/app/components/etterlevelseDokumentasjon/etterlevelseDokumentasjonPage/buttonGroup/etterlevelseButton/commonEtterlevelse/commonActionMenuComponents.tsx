@@ -1,12 +1,12 @@
+import { ChevronDownIcon } from '@navikt/aksel-icons'
+import { ActionMenu, Button } from '@navikt/ds-react'
+import { FunctionComponent, PropsWithChildren } from 'react'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   etterlevelsesDokumentasjonEditUrl,
   etterlevelsesDokumentasjonRisikoeierGodkjenningUrl,
   etterlevelsesDokumentasjonSendTilGodkjenningUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent, PropsWithChildren } from 'react'
 
 export const ActionMenuButtonEtterlevelse = () => (
   <ActionMenu.Trigger>

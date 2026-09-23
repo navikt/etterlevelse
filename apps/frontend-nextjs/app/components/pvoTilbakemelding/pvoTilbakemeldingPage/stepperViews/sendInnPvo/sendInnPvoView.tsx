@@ -1,5 +1,8 @@
 'use client'
 
+import { AxiosError } from 'axios'
+import { Form, Formik } from 'formik'
+import { FunctionComponent, RefObject, useContext, useEffect, useMemo, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -23,9 +26,6 @@ import {
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { AxiosError } from 'axios'
-import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useContext, useEffect, useMemo, useState } from 'react'
 import SendInnPvoViewFerdig from './sendInnPvoViewFerdig'
 import SendInnPvoViewIkkeFerdig from './sendInnPvoViewIkkeFerdig'
 

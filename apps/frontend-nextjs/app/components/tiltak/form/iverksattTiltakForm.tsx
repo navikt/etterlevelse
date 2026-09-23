@@ -1,11 +1,11 @@
-import { mapTiltakToFormValue } from '@/api/tiltak/tiltakApi'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { WrenchIcon } from '@navikt/aksel-icons'
 import { Button, Checkbox, CheckboxGroup, Modal } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikHelpers } from 'formik'
 import { FunctionComponent, RefObject, useState } from 'react'
+import { mapTiltakToFormValue } from '@/api/tiltak/tiltakApi'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TiltakView } from '../common/tiltakView'
 
 type TProps = {

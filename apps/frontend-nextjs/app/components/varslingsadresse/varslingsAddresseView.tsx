@@ -1,3 +1,5 @@
+import { BodyLong } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
 import { getSlackChannelById, getSlackUserById } from '@/api/teamkatalogen/teamkatalogenApi'
 import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import {
@@ -6,8 +8,6 @@ import {
   TVarslingsadresseQL,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { slackLink, slackUserLink } from '@/util/config/config'
-import { BodyLong } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
 import { ExternalLink } from '../common/externalLink/externalLink'
 
 export const VarslingsadresserView = ({

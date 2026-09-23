@@ -1,11 +1,11 @@
 'use client'
 
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { adminCodelist } from '@/routes/admin/adminRoutes'
 import { Heading, Select } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import { adminCodelist } from '@/routes/admin/adminRoutes'
 
 const CodeListAdminPage = () => {
   const router = useRouter()

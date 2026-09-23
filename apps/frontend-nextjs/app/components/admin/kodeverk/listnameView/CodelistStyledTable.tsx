@@ -1,3 +1,7 @@
+import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
+import * as React from 'react'
+import { useEffect, useState } from 'react'
 import { deleteCodelist, getCodelistUsage, updateCodelist } from '@/api/kodeverk/kodeverkApi'
 import {
   EListName,
@@ -6,10 +10,6 @@ import {
   ICodeUsage,
 } from '@/constants/kodeverk/kodeverkConstants'
 import { handleSort } from '@/util/handleTableSort'
-import { DocPencilIcon, GlassesIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, SortState, Table, Tooltip } from '@navikt/ds-react'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
 import { AuditButton } from '../../versjonering/common/AuditButton'
 import DeleteCodeListModal from '../edit/ModalDeleteCodeList'
 import UpdateCodeListModal from '../edit/ModalUpdateCodeList'

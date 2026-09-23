@@ -1,3 +1,6 @@
+import { ChevronDownIcon } from '@navikt/aksel-icons'
+import { ActionMenu, Button } from '@navikt/ds-react'
+import { FunctionComponent, PropsWithChildren } from 'react'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -11,9 +14,6 @@ import {
   pvkDokumentasjonReadOnlyStepUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
-import { FunctionComponent, PropsWithChildren } from 'react'
 
 export const PvkActionMenuTrigger = () => (
   <ActionMenu.Trigger>

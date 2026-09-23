@@ -1,10 +1,10 @@
 'use client'
 
+import { Button } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
 import { getKravByKravNumberAndVersion } from '@/api/krav/kravApi'
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IKrav } from '@/constants/krav/kravConstants'
-import { Button } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
 import EtterlevelseModal from './etterlevelseModal'
 
 const EtterlevelseCard = ({ etterlevelse }: { etterlevelse: IEtterlevelse }) => {

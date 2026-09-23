@@ -1,13 +1,13 @@
 'use client'
 
+import { Button, Chips, Select, VStack } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import { ChangeEvent, FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { updateKravForRisikoscenarioer } from '@/api/risikoscenario/risikoscenarioApi'
 import {
   IKravRisikoscenarioRelasjon,
   IRisikoscenario,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { Button, Chips, Select, VStack } from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { ChangeEvent, FunctionComponent, RefObject, useEffect, useState } from 'react'
 
 type TProps = {
   kravnummer: number

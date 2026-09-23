@@ -1,5 +1,19 @@
 'use client'
 
+import { useQuery } from '@apollo/client/react'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  FormSummary,
+  Heading,
+  Label,
+  List,
+  LocalAlert,
+} from '@navikt/ds-react'
+import { Form, Formik } from 'formik'
+import { useParams } from 'next/navigation'
+import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
@@ -41,20 +55,6 @@ import {
   filterEtterlevelseDokumentasjonStatsData,
   getKravForTema,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { useQuery } from '@apollo/client/react'
-import {
-  Alert,
-  BodyLong,
-  Button,
-  FormSummary,
-  Heading,
-  Label,
-  List,
-  LocalAlert,
-} from '@navikt/ds-react'
-import { Form, Formik } from 'formik'
-import { useParams } from 'next/navigation'
-import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from './common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 import { GodkjenningAvRisikoeierKravFormSummary } from './common/godkjenningAvRisikoeierKravFormSummary'
 import { GodkjenningAvRisikoeierPvkFormSummary } from './common/godkjenningAvRisikoeierPvkFormSummary'

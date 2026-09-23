@@ -1,10 +1,10 @@
 'use client'
 
+import { Loader } from '@navikt/ds-react'
+import { FunctionComponent, useState } from 'react'
 import { useTilbakemeldinger } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { IKrav, IKravVersjon } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
-import { Loader } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
 import { KravTilbakemeldingKravValid } from './kravTilbakemeldingKravValid/kravTilbakemeldingKravValid'
 import { KravTilbakemeldingLoaded } from './kravTilbakemeldingLoaded/kravTilbakemeldingLoaded'
 

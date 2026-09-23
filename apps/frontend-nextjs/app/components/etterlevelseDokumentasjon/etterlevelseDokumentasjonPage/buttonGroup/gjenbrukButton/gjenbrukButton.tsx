@@ -1,12 +1,12 @@
 'use client'
 
+import { FunctionComponent } from 'react'
 import {
   EActionMenuRoles,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IUserContext } from '@/provider/user/userProvider'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
-import { FunctionComponent } from 'react'
 import TilstandGjenbruk from './tilstandGjenbruk/tilstandGjenbruk'
 
 type TProps = {

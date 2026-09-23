@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import moment from 'moment'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -8,8 +10,6 @@ import {
 import { INomSeksjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
-import _ from 'lodash'
-import moment from 'moment'
 import { kravNummerView } from '../krav/kravUtil'
 
 export const etterlevelseFilter = [

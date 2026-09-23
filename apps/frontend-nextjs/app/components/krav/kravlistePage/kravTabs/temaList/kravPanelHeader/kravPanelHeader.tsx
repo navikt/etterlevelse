@@ -1,6 +1,6 @@
-import { IKrav, TKravEtterlevelseData } from '@/constants/krav/kravConstants'
 import { BodyShort } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { IKrav, TKravEtterlevelseData } from '@/constants/krav/kravConstants'
 
 type TProps = {
   title: string

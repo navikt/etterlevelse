@@ -1,5 +1,9 @@
 'use client'
 
+import { BodyShort, Detail, Heading, Label, LinkPanel, List } from '@navikt/ds-react'
+import _ from 'lodash'
+import { useParams } from 'next/navigation'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { getKravPriorityListByTemaCode } from '@/api/kravPriorityList/kravPriorityListApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
@@ -15,10 +19,6 @@ import { useKravCounter } from '@/query/krav/kravQuery'
 import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { temaBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { kravNummerView, sortKravListeByPriority } from '@/util/krav/kravUtil'
-import { BodyShort, Detail, Heading, Label, LinkPanel, List } from '@navikt/ds-react'
-import _ from 'lodash'
-import { useParams } from 'next/navigation'
-import { FunctionComponent, useContext, useEffect, useState } from 'react'
 
 export const TemaPage = () => {
   const params = useParams()

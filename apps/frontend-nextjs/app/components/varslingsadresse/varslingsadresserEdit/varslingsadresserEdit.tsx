@@ -1,5 +1,8 @@
 'use client'
 
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, TextField } from '@navikt/ds-react'
+import { ChangeEvent, KeyboardEvent, useContext, useState } from 'react'
 import { Error } from '@/components/common/error/error'
 import { ContentLayout } from '@/components/others/layout/content/content'
 import {
@@ -8,9 +11,6 @@ import {
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { emailValidator } from '@/util/teamkatalog/utils'
-import { PlusIcon } from '@navikt/aksel-icons'
-import { Button, TextField } from '@navikt/ds-react'
-import { ChangeEvent, KeyboardEvent, useContext, useState } from 'react'
 
 type TProps = {
   add: (varslingsadresse: IVarslingsadresse) => void

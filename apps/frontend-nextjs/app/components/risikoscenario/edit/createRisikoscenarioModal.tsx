@@ -1,5 +1,8 @@
 'use client'
 
+import { Button, Loader, Modal } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, RefObject, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { createRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
@@ -7,9 +10,6 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { risikoscenarioUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Button, Loader, Modal } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useState } from 'react'
 import RisikoscenarioModalForm from '../form/risikoscenarioModalForm'
 
 type TProps = {

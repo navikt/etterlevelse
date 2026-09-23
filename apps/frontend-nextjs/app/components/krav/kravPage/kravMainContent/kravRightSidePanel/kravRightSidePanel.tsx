@@ -1,6 +1,6 @@
+import { FunctionComponent } from 'react'
 import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewInfo'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
-import { FunctionComponent } from 'react'
 import { KravKnapper } from './kravKnapper/kravKnapper'
 
 type TProps = {

@@ -1,3 +1,17 @@
+import { useQuery } from '@apollo/client/react'
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { Alert, BodyShort, Heading, InfoCard, ReadMore, Tag } from '@navikt/ds-react'
+import { FormikProps } from 'formik'
+import moment from 'moment'
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
@@ -19,20 +33,6 @@ import { EKravStatus, IKrav, IKravVersjon, TKravId, TKravQL } from '@/constants/
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
-import { useQuery } from '@apollo/client/react'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Heading, InfoCard, ReadMore, Tag } from '@navikt/ds-react'
-import { FormikProps } from 'formik'
-import moment from 'moment'
-import {
-  Dispatch,
-  FunctionComponent,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
 import TildeltTil from '../etterlevelseMetadata/tildeltTil/tildeltTil'
 import EtterlevelseSidePanel from './sidepanel/etterlevelseSidePanel'
 import EtterlevelsePageTabs from './tabs/etterlevelsePageTabs'

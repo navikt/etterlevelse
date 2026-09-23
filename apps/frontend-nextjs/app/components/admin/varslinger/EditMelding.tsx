@@ -1,5 +1,8 @@
 'use client'
 
+import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
+import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
 import {
   createMelding,
   deleteMelding,
@@ -9,9 +12,6 @@ import {
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
-import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
-import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
 
 const getAlertTypeText = (type: EAlertType) => {
   if (!type) return ''

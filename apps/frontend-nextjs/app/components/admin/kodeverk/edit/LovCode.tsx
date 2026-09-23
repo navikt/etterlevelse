@@ -1,3 +1,5 @@
+import { Label, TextField } from '@navikt/ds-react'
+import { Field, FieldProps } from 'formik'
 import { OptionList } from '@/components/common/inputs'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import {
@@ -5,8 +7,6 @@ import {
   ICodeListFormValues,
   ILovCodeData,
 } from '@/constants/kodeverk/kodeverkConstants'
-import { Label, TextField } from '@navikt/ds-react'
-import { Field, FieldProps } from 'formik'
 
 export const LovCodeDataForm = () => (
   <div className='flex w-full mt-4 items-center flex-col'>

@@ -1,3 +1,6 @@
+import { Alert, Button, Heading } from '@navikt/ds-react'
+import { FormikErrors } from 'formik'
+import { FunctionComponent } from 'react'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import BeskjedTilPvoReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilPvoReadOnly'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
@@ -7,9 +10,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument

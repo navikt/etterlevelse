@@ -1,5 +1,5 @@
-import { env } from '@/util/env/env'
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
+import { env } from '@/util/env/env'
 
 export const apolloClient: ApolloClient = new ApolloClient({
   link: new HttpLink({

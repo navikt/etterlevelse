@@ -1,8 +1,8 @@
 'use client'
 
-import { IDashboardTable } from '@/constants/dashboard/dashboardConstants'
 import { BodyShort, Popover } from '@navikt/ds-react'
 import { useState } from 'react'
+import { IDashboardTable } from '@/constants/dashboard/dashboardConstants'
 
 export const getKravTrafficColor = (ferdig: number, total: number): string => {
   if (total === 0) return '#C6C2BF'

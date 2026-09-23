@@ -1,5 +1,25 @@
 'use client'
 
+import {
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  Heading,
+  LocalAlert,
+  Radio,
+  RadioGroup,
+} from '@navikt/ds-react'
+import { Field, FieldProps, FormikErrors } from 'formik'
+import _ from 'lodash'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { arkiver } from '@/api/p360/p360Api'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
@@ -21,26 +41,6 @@ import {
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { env } from '@/util/env/env'
-import {
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  Heading,
-  LocalAlert,
-  Radio,
-  RadioGroup,
-} from '@navikt/ds-react'
-import { Field, FieldProps, FormikErrors } from 'formik'
-import _ from 'lodash'
-import {
-  Dispatch,
-  FunctionComponent,
-  RefObject,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

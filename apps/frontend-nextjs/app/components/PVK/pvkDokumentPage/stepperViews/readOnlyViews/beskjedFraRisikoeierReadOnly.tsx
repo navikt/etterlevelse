@@ -1,7 +1,7 @@
-import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
-import { Markdown } from '@/components/common/markdown/markdown'
 import { BodyLong, Heading, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import { Markdown } from '@/components/common/markdown/markdown'
 
 type TProps = {
   merknadFraRisikoeier: string

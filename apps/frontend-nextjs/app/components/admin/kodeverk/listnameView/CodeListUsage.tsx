@@ -1,11 +1,11 @@
 'use client'
 
+import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
+import { ChangeEvent, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { replaceCodelistUsage } from '@/api/kodeverk/kodeverkApi'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { ICodeUsage, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { Button, Label, Loader, Select, Table } from '@navikt/ds-react'
-import { ChangeEvent, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { ObjectLink } from '../../common/commonComponents'
 
 const UsageTable = (props: { usage: ICodeUsage }) => {

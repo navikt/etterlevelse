@@ -1,5 +1,9 @@
 'use client'
 
+import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Modal } from '@navikt/ds-react'
+import moment from 'moment'
+import { useContext, useState } from 'react'
 import { tilbakemeldingslettMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
 import {
@@ -7,10 +11,6 @@ import {
   ITilbakemeldingMelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Modal } from '@navikt/ds-react'
-import moment from 'moment'
-import { useContext, useState } from 'react'
 import { TilbakemeldingEdit } from '../tilbakemeldingEdit/tilbakemeldingEdit'
 
 const MeldingKnapper = (props: {

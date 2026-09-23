@@ -1,3 +1,8 @@
+import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Box, Button, Radio, RadioGroup, TextField, ToggleGroup, Tooltip } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import _ from 'lodash'
+import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -6,11 +11,6 @@ import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrange
 import TextEditor from '@/components/common/textEditor/TextEditor'
 import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Box, Button, Radio, RadioGroup, TextField, ToggleGroup, Tooltip } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import _ from 'lodash'
-import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
 
 type TKravSuksesskriterieEditProps = {
   newVersion?: boolean

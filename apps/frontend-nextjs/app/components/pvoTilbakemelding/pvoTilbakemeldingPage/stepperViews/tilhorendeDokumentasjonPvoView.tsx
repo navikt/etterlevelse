@@ -1,3 +1,4 @@
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
@@ -13,7 +14,6 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilhorendeDokTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilhorendeDokTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'

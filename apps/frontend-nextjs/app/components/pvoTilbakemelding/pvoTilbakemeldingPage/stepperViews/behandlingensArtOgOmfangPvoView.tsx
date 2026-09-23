@@ -1,5 +1,7 @@
 'use client'
 
+import moment from 'moment'
+import { FunctionComponent, RefObject, useMemo } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/artOgOmfangReadOnlyContent'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
@@ -11,8 +13,6 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import moment from 'moment'
-import { FunctionComponent, RefObject, useMemo } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'

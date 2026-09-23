@@ -1,9 +1,9 @@
+import { Heading, Label, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Heading, Label, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   artOgOmfang: IBehandlingensArtOgOmfang

@@ -1,3 +1,6 @@
+import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent } from 'react'
 import PersonNavn from '@/components/common/personNavn/personNavn'
 import { Portrait } from '@/components/common/portrait/portrait'
 import MeldingKnapper from '@/components/krav/kravPage/tilbakemelding/edit/MeldingKnapper'
@@ -7,9 +10,6 @@ import {
   ITilbakemelding,
   ITilbakemeldingMelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { BodyLong, BodyShort, Label } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent } from 'react'
 import EndretInfo from '../tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
 
 type TProps = {

@@ -1,5 +1,5 @@
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { FunctionComponent } from 'react'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   GjenbrukActionMenu,
   TilretteleggForGjenbrukActionMenu,

@@ -1,10 +1,10 @@
+import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { BodyLong, Heading, Label, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 import { BeskjedFraEtterleverReadOnly } from './beskjedFraEtterleverReadOnly'
 
 type TProps = {

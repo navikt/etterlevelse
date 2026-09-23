@@ -1,5 +1,9 @@
 'use client'
 
+import { FileTextIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
+import { Form, Formik, FormikProps } from 'formik'
+import React from 'react'
 import {
   createEtterlevelseMetadata,
   updateEtterlevelseMetadata,
@@ -7,10 +11,6 @@ import {
 import TextEditor from '@/components/common/textEditor/TextEditor'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
-import { FileTextIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
-import { Form, Formik, FormikProps } from 'formik'
-import React from 'react'
 
 type TEditNotatfeltProps = {
   isOpen: boolean

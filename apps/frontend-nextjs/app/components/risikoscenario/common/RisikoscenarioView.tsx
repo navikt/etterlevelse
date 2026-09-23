@@ -1,5 +1,8 @@
 'use client'
 
+import { LinkIcon } from '@navikt/aksel-icons'
+import { BodyLong, CopyButton, Label, List, LocalAlert } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'
@@ -9,9 +12,6 @@ import {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { LinkIcon } from '@navikt/aksel-icons'
-import { BodyLong, CopyButton, Label, List, LocalAlert } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 import RisikoscenarioTag from './risikoscenarioTag'
 
 type TProps = {

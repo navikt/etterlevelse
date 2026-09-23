@@ -1,5 +1,8 @@
 'use client'
 
+import { useQuery } from '@apollo/client/react'
+import { useParams } from 'next/navigation'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import {
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
   mapEtterlevelseToFormValue,
@@ -19,9 +22,6 @@ import { getKravMedPrioriteringOgEtterlevelseQuery } from '@/query/krav/kravQuer
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { sortKravListeByPriority, toKravId } from '@/util/krav/kravUtil'
-import { useQuery } from '@apollo/client/react'
-import { useParams } from 'next/navigation'
-import { useContext, useEffect, useMemo, useState } from 'react'
 import { PageLayout } from '../../others/scaffold/scaffold'
 
 const EtterlevelsePage = () => {

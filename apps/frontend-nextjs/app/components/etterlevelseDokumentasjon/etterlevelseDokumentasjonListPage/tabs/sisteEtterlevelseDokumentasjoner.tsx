@@ -1,8 +1,8 @@
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { PlusIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Label, Loader } from '@navikt/ds-react'
 import { useMemo, useState } from 'react'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { sortEtterlevelseDokumentasjonerByUsersLastModifiedDate } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
 
 const PAGE_SIZE = 20

@@ -1,8 +1,5 @@
 'use client'
 
-import { arkiver } from '@/api/p360/p360Api'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { p360Url } from '@/routes/p360/p360Routes'
 import {
   Alert,
   BodyLong,
@@ -15,6 +12,9 @@ import {
   RadioGroup,
 } from '@navikt/ds-react'
 import { useState } from 'react'
+import { arkiver } from '@/api/p360/p360Api'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { p360Url } from '@/routes/p360/p360Routes'
 
 type TArkiveringModalProps = {
   arkivModal: boolean

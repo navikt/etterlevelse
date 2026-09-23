@@ -1,6 +1,6 @@
+import { BodyLong, Label, List } from '@navikt/ds-react'
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { BodyLong, Label, List } from '@navikt/ds-react'
 import { ExternalLink } from '../common/externalLink/externalLink'
 
 interface IProps {

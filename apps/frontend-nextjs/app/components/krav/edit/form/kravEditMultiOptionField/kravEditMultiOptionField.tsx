@@ -1,15 +1,15 @@
 'use client'
 
+import { BodyShort } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { ReactNode, useContext } from 'react'
+import Select, { CSSObjectWithLabel } from 'react-select'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { TOr } from '@/constants/commonConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { ettlevColors } from '@/util/theme/theme'
-import { BodyShort } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { ReactNode, useContext } from 'react'
-import Select, { CSSObjectWithLabel } from 'react-select'
 
 interface IKravEditMultiOptionFieldProps {
   label: string

@@ -1,5 +1,8 @@
 'use client'
 
+import { BodyShort, Label, Loader, Switch, TextField } from '@navikt/ds-react'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import {
   IKravNivaaStatusFilter,
   ISuksesskriterieStatusFilter,
@@ -21,9 +24,6 @@ import {
   getNewestKravVersjon,
   isFerdigUtfylt,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { BodyShort, Label, Loader, Switch, TextField } from '@navikt/ds-react'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import {
   KravNivaaStatusFilter,
   SuksesskriterieStatusFilter,

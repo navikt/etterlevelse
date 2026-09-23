@@ -1,6 +1,6 @@
+import axios from 'axios'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const arkiver = async (
   etterlevelseDokumentasjonId: string,

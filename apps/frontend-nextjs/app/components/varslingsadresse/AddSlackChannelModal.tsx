@@ -1,3 +1,6 @@
+import { Button, Modal } from '@navikt/ds-react'
+import { FunctionComponent, useState } from 'react'
+import AsyncSelect from 'react-select/async'
 import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import {
@@ -5,9 +8,6 @@ import {
   IVarslingsadresse,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { Button, Modal } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
-import AsyncSelect from 'react-select/async'
 import { DropdownIndicator } from '../common/dropdownIndicator/dropdownIndicator'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
 

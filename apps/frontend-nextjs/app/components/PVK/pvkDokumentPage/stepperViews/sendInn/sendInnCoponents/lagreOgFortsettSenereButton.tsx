@@ -1,10 +1,10 @@
+import { Button } from '@navikt/ds-react'
+import { FormikErrors } from 'formik'
+import { FunctionComponent } from 'react'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Button } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   setFieldValue: (

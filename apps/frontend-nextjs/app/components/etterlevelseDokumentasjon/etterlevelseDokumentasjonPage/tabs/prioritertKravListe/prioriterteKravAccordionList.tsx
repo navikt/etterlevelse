@@ -1,5 +1,8 @@
 'use client'
 
+import { Accordion, CheckboxGroup } from '@navikt/ds-react'
+import { FieldArrayRenderProps } from 'formik'
+import { FunctionComponent, useContext, useState } from 'react'
 import { CheckList } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/checkList'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
@@ -7,9 +10,6 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { getKravForTema } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { Accordion, CheckboxGroup } from '@navikt/ds-react'
-import { FieldArrayRenderProps } from 'formik'
-import { FunctionComponent, useContext, useState } from 'react'
 
 type TProps = {
   fieldArrayRenderProps: FieldArrayRenderProps

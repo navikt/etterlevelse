@@ -1,9 +1,5 @@
 'use client'
 
-import { Error } from '@/components/common/modalSchema/ModalSchema'
-import { TOption, TOr } from '@/constants/commonConstants'
-import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import {
   Button,
   DatePicker,
@@ -16,6 +12,10 @@ import {
 } from '@navikt/ds-react'
 import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
 import React, { ChangeEvent, ReactNode, useContext, useRef, useState } from 'react'
+import { Error } from '@/components/common/modalSchema/ModalSchema'
+import { TOption, TOr } from '@/constants/commonConstants'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { FieldWrapper } from './fieldWrapper/fieldWrapper'
 import LabelWithTooltip from './labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from './modalSchema/formError/formError'

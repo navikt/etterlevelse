@@ -1,15 +1,15 @@
 'use client'
 
+import { ApolloClient, ObservableQuery, OperationVariables } from '@apollo/client'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
+import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 import { IPageResponse, TOption } from '@/constants/commonConstants'
 import { EListName, ICode, TLovCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, TKravFilters, TKravQL } from '@/constants/krav/kravConstants'
 import { EKravListFilter, ETab, TKravFilter } from '@/constants/krav/kravlist/kravlistConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { kravStatus } from '@/util/krav/kravUtil'
-import { ApolloClient, ObservableQuery, OperationVariables } from '@apollo/client'
-import { PlusIcon } from '@navikt/aksel-icons'
-import { BodyShort, Button, Label, Loader, Select } from '@navikt/ds-react'
-import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 import { KravPanels } from '../../sisteRedigertKrav/kravPanels/KravPanels'
 
 type TProps = {

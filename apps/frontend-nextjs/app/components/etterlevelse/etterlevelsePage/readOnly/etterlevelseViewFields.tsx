@@ -1,5 +1,8 @@
 'use client'
 
+import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -18,9 +21,6 @@ import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import { Alert, BodyShort, Box, Heading, Label, ReadMore, Tag } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import EtterlevelseCard from '../../etterlevelseModal/etterlevelseCard'
 
 type TProps = {

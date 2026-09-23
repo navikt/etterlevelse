@@ -1,3 +1,5 @@
+import { FunctionComponent } from 'react'
+import AsyncSelect from 'react-select/async'
 import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
@@ -6,8 +8,6 @@ import {
   IVarslingsadresse,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { FunctionComponent } from 'react'
-import AsyncSelect from 'react-select/async'
 
 type TProps = {
   add: (varsling: IVarslingsadresse) => void

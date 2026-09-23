@@ -1,5 +1,17 @@
 'use client'
 
+import {
+  BarChartIcon,
+  DocPencilIcon,
+  HouseIcon,
+  InformationIcon,
+  MenuHamburgerIcon,
+  PersonIcon,
+  ReceiptIcon,
+} from '@navikt/aksel-icons'
+import { Button, InternalHeader, Link } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { useContext } from 'react'
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
@@ -20,18 +32,6 @@ import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 import { loginUrl } from '@/routes/login/loginRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
-import {
-  BarChartIcon,
-  DocPencilIcon,
-  HouseIcon,
-  InformationIcon,
-  MenuHamburgerIcon,
-  PersonIcon,
-  ReceiptIcon,
-} from '@navikt/aksel-icons'
-import { Button, InternalHeader, Link } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import { useContext } from 'react'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
 import { UserInfoView } from '../user/userInfoView/userInfoView'

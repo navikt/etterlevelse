@@ -1,5 +1,8 @@
 'use client'
 
+import { Accordion } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { RisikoscenarioAccordianHeader } from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -8,9 +11,6 @@ import {
   pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Accordion } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import OppsumeringAccordianContent from './oppsumeringAccordianContent'
 
 type TProps = {

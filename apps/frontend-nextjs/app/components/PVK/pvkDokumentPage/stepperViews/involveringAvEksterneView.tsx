@@ -1,5 +1,19 @@
 'use client'
 
+import { LightBulbIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  Button,
+  Heading,
+  InfoCard,
+  Label,
+  List,
+  LocalAlert,
+  Modal,
+  ReadMore,
+} from '@navikt/ds-react'
+import { Form, Formik } from 'formik'
+import { FunctionComponent, RefObject, useContext, useState } from 'react'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -28,20 +42,6 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { LightBulbIcon } from '@navikt/aksel-icons'
-import {
-  BodyLong,
-  Button,
-  Heading,
-  InfoCard,
-  Label,
-  List,
-  LocalAlert,
-  Modal,
-  ReadMore,
-} from '@navikt/ds-react'
-import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
 
 type TProps = {

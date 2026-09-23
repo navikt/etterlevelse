@@ -1,7 +1,7 @@
-import { IArdoqSystem } from '@/constants/ardoqSystem/ardoqSystemConstants'
-import { ardoqSystemLink } from '@/util/config/config'
 import { Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { IArdoqSystem } from '@/constants/ardoqSystem/ardoqSystemConstants'
+import { ardoqSystemLink } from '@/util/config/config'
 
 interface IProps {
   ardoqSystemData: IArdoqSystem[]

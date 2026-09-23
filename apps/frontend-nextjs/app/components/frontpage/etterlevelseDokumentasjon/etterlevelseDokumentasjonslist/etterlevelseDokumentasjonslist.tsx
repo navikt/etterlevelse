@@ -1,10 +1,10 @@
+import { BodyLong, Heading, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   filteredEtterlevelsesDokumentasjoner,
   sortEtterlevelseDokumentasjonerByUsersLastModifiedDate,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { BodyLong, Heading, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 import { EtterlevelseDokumentasjonsPanel } from '../../../etterlevelseDokumentasjon/etterlevelseDokumentasjonListPage/panels/etterlevelseDokumentasjonsPanel'
 
 type TProps = {

@@ -1,9 +1,9 @@
 'use client'
 
-import { env } from '@/util/env/env'
 import { BodyShort, Box, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import axios from 'axios'
 import { useState } from 'react'
+import { env } from '@/util/env/env'
 
 type TExportPvkModalProps = {
   etterlevelseDokumentasjonId: string

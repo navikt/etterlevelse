@@ -1,6 +1,6 @@
-import { EKravStatus } from '@/constants/krav/kravConstants'
 import { Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { EKravStatus } from '@/constants/krav/kravConstants'
 
 type TPropsKravStandardButtons = {
   submitCancelButton: () => void

@@ -1,9 +1,9 @@
-import { IMeldingTilPvo } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Heading, ReadMore } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
+import { IMeldingTilPvo } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { BeskjedFraPvoReadOnly } from './beskjedFraPvoReadOnly'
 import BeskjedTilPvoReadOnly from './beskjedTilPvoReadOnly'
 

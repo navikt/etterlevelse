@@ -1,8 +1,8 @@
 'use client'
 
-import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
+import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import {
   AVDELING_SUKSESS_COLORS,
   BEHOV_COLORS,

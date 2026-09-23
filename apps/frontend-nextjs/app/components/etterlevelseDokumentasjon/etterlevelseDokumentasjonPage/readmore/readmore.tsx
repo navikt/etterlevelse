@@ -1,12 +1,12 @@
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { InfoCard, ReadMore } from '@navikt/ds-react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
   EEtterlevelseDokumentasjonStatus,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { InfoCard, ReadMore } from '@navikt/ds-react'
-import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import GjenbrukAlert from '../alert/GjenbrukAlert'
 import { EtterlevelseDokumentasjonExpansionCard } from '../expantionCard/etterlevelseDokumentasjonExpansionCard'
 import { TilgjengeligForGjenbruk } from '../tilgjengeligForGjenbruk/tilgjengeligForGjenbruk'

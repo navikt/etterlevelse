@@ -1,14 +1,14 @@
 'use client'
 
+import { FormSummary, List } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { FunctionComponent } from 'react'
 import { stepTitle } from '@/components/PVK/pvkDokumentPage/pvkDokumentReadOnlyPage'
 import BodyLongWithLineBreak from '@/components/common/bodyLongWithLineBreak'
 import {
   EPVK,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { FormSummary, List } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument

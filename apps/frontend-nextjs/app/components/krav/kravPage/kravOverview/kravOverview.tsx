@@ -1,10 +1,10 @@
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { LoadingSkeleton } from '@/components/common/loadingSkeleton/loadingSkeletonComponent'
 import StatusTag from '@/components/common/statusTag/statusTagComponent'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { kravNummerView } from '@/util/krav/kravUtil'
-import { InformationSquareIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Heading } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   kravLoading: boolean

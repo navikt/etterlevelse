@@ -1,8 +1,8 @@
+import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { kravNummerView } from '@/util/krav/kravUtil'
-import { BodyShort, Button, Heading, Modal } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 import { ViewEtterlevelse } from '../etterlevelseView/etterlevelseView'
 
 type TProps = {

@@ -1,8 +1,8 @@
-import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
-import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { Button, Modal } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import { FunctionComponent, RefObject } from 'react'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 
 type TProps = {
   isTabAlertActive: boolean

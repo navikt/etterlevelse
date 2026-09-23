@@ -1,13 +1,13 @@
 'use client'
 
+import { Button, Chips, Select, VStack } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import { RefObject, useState } from 'react'
 import {
   IRisikoscenario,
   ITiltakRisikoscenarioRelasjon,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
-import { Button, Chips, Select, VStack } from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { RefObject, useState } from 'react'
 
 interface IProps {
   risikoscenario: IRisikoscenario

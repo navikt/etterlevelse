@@ -1,10 +1,10 @@
-import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
-import StatusView from '@/components/common/statusTag/StatusTag'
-import { IKrav } from '@/constants/krav/kravConstants'
 import { BodyShort, Box, Label } from '@navikt/ds-react'
 import { FieldArrayRenderProps } from 'formik'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
+import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
+import StatusView from '@/components/common/statusTag/StatusTag'
+import { IKrav } from '@/constants/krav/kravConstants'
 
 type TProps = {
   krav: IKrav

@@ -1,3 +1,5 @@
+import { Accordion } from '@navikt/ds-react'
+import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { INomSeksjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
@@ -5,8 +7,6 @@ import {
   filteredEtterlevelseSorted,
   seksjonerSorted,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import { Accordion } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import EtterlevelseLinkPanel from './etterlevelseLinkPanel/EtterlevelseLinkPanel'
 
 type TProps = {

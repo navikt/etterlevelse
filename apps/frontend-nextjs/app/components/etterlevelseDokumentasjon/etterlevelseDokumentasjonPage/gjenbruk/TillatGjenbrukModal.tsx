@@ -1,5 +1,9 @@
 'use client'
 
+import { Button, Modal } from '@navikt/ds-react'
+import { Formik } from 'formik'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
@@ -7,10 +11,6 @@ import {
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { isEmptyArray, isMissingText } from '@/util/common/validationUtils'
-import { Button, Modal } from '@navikt/ds-react'
-import { Formik } from 'formik'
-import _ from 'lodash'
-import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { gjenbrukDokumentasjonSchema } from './form/gjenbrukSchema'
 import { IkkeTilgjengeligForGjenbrukModal } from './ikkeTilgjengeligForGjenbrukModal/ikkeTilgjengeligForGjenbrukModal'
 import { TilgjengeligForGjenbrukModal } from './tilgjengeligForGjenbrukModal/tilgjengeligForGjenbrukModal'

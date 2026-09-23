@@ -1,5 +1,8 @@
 'use client'
 
+import { Alert, Button, Loader } from '@navikt/ds-react'
+import { FunctionComponent, useContext, useState } from 'react'
+import AsyncSelect from 'react-select/async'
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '@/components/others/layout/content/content'
@@ -11,9 +14,6 @@ import {
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { Alert, Button, Loader } from '@navikt/ds-react'
-import { FunctionComponent, useContext, useState } from 'react'
-import AsyncSelect from 'react-select/async'
 
 type TProps = {
   add: (v: IVarslingsadresse) => void

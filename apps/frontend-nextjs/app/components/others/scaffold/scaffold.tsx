@@ -1,9 +1,9 @@
 'use client'
 
-import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
-import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { FunctionComponent, ReactNode } from 'react'
 import { Helmet } from 'react-helmet-async'
+import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
+import { IBreadCrumbPath } from '@/constants/commonConstants'
 
 type TProps = {
   children: ReactNode

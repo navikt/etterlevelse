@@ -1,11 +1,11 @@
+import { Alert, Button, ErrorSummary, Heading } from '@navikt/ds-react'
+import { FieldProps } from 'formik'
+import { FunctionComponent, ReactNode } from 'react'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Alert, Button, ErrorSummary, Heading } from '@navikt/ds-react'
-import { FieldProps } from 'formik'
-import { FunctionComponent, ReactNode } from 'react'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {

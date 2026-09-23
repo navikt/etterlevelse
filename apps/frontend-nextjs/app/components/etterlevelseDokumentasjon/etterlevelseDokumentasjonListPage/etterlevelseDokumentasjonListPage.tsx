@@ -1,11 +1,11 @@
 'use client'
 
-import { ListPageHeader } from '@/components/krav/kravlistePage/listPageHeader/listPageHeader'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { Button } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
+import { ListPageHeader } from '@/components/krav/kravlistePage/listPageHeader/listPageHeader'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import DokumentasjonTabs from './dokumentasjonTabs'
 
 const EtterlevelseDokumentasjonListPage = () => {

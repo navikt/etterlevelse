@@ -1,6 +1,19 @@
 'use client'
 
 import {
+  BodyShort,
+  Button,
+  ErrorSummary,
+  FileRejected,
+  Heading,
+  Loader,
+  LocalAlert,
+} from '@navikt/ds-react'
+import { AxiosError } from 'axios'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
+import _ from 'lodash'
+import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
+import {
   createBehandlingensLivslop,
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopRequestToFormValue,
@@ -34,19 +47,6 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import {
-  BodyShort,
-  Button,
-  ErrorSummary,
-  FileRejected,
-  Heading,
-  Loader,
-  LocalAlert,
-} from '@navikt/ds-react'
-import { AxiosError } from 'axios'
-import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
-import _ from 'lodash'
-import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '../../common/pvkSidePanelWrapper'
 import FormButtons from '../../edit/formButtons'

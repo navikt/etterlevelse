@@ -1,6 +1,6 @@
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { Button } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 
 type TPropsAvbrytKnapp = {
   isSubmitting: boolean

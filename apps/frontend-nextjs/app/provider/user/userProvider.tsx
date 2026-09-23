@@ -1,11 +1,11 @@
 'use client'
 
-import { getUserInfo } from '@/api/user/userApi'
-import { IUserInfo } from '@/constants/user/userConstants'
-import { loginUrl } from '@/routes/login/loginRoutes'
 import { AxiosResponse } from 'axios'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent, ReactNode, createContext, useEffect, useState } from 'react'
+import { getUserInfo } from '@/api/user/userApi'
+import { IUserInfo } from '@/constants/user/userConstants'
+import { loginUrl } from '@/routes/login/loginRoutes'
 
 export interface IUserContext {
   isLoggedIn: () => boolean

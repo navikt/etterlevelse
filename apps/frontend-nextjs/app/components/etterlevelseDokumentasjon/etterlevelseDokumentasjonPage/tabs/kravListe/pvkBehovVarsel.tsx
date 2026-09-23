@@ -1,5 +1,7 @@
 'use client'
 
+import { List, LocalAlert } from '@navikt/ds-react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getBehandlingensArtOgOmfangByEtterlevelseDokumentId } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
@@ -15,8 +17,6 @@ import {
   pvkDokumentasjonBehandlingsenLivslopUrl,
   pvkDokumentasjonPvkBehovUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { List, LocalAlert } from '@navikt/ds-react'
-import { FunctionComponent, useEffect, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjonId: string

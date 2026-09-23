@@ -1,5 +1,18 @@
 'use client'
 
+import { PencilIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Heading,
+  InlineMessage,
+  Label,
+  Radio,
+  RadioGroup,
+} from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   getRisikoscenario,
@@ -18,19 +31,6 @@ import {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { PencilIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  Button,
-  Heading,
-  InlineMessage,
-  Label,
-  Radio,
-  RadioGroup,
-} from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { PVKFieldWrapper, TopBottomWrapper } from '../common/stylingLayout'
 
 type TProps = {

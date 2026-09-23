@@ -1,7 +1,7 @@
-import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
-import { env } from '@/util/env/env'
 import axios, { AxiosError } from 'axios'
 import { useEffect, useRef, useState } from 'react'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { env } from '@/util/env/env'
 
 export const getBehandlingensArtOgOmfangByEtterlevelseDokumentId = async (
   etterlevelseDokumentId: string

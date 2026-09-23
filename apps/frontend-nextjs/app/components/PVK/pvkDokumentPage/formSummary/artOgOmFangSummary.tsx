@@ -1,11 +1,11 @@
+import { BodyLong, FormSummary, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import BodyLongWithLineBreak from '@/components/common/bodyLongWithLineBreak'
 import {
   IArtOgOmfangError,
   IBehandlingensArtOgOmfang,
 } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { BodyLong, FormSummary, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 import { StepTitle } from '../pvkDokumentPage'
 import FormAlert from './formAlert'
 

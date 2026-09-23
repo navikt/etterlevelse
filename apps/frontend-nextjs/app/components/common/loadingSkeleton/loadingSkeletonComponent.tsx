@@ -1,6 +1,6 @@
-import { ContentLayout } from '@/components/others/layout/content/content'
 import { Heading, Skeleton } from '@navikt/ds-react'
 import * as _ from 'lodash'
+import { ContentLayout } from '@/components/others/layout/content/content'
 
 export const LoadingSkeleton = (props: { header: string }) => {
   const { header } = props

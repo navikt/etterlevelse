@@ -1,5 +1,9 @@
 'use client'
 
+import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
+import moment from 'moment'
+import Image from 'next/image'
+import { useContext, useEffect, useState } from 'react'
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '@/api/etterlevelse/etterlevelseApi'
 import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
@@ -21,10 +25,6 @@ import {
   getEtterlevelseStatus,
   getStatusLabelColor,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
-import moment from 'moment'
-import Image from 'next/image'
-import { useContext, useEffect, useState } from 'react'
 
 interface IProps {
   krav: TKravEtterlevelseData

@@ -1,9 +1,9 @@
+import { BodyShort, Button, Link, Modal } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { etterlevelseDokumentasjonTemaUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { getEtterlevelseStatus } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { getNextKravUrl } from '@/util/krav/kravUtil'
-import { BodyShort, Button, Link, Modal } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   isNavigationModalOpen: boolean

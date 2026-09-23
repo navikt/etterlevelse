@@ -1,7 +1,7 @@
-import { ettlevColors } from '@/util/theme/theme'
 import { BodyShort, Heading } from '@navikt/ds-react'
 import Image from 'next/image'
 import { FunctionComponent, ReactNode } from 'react'
+import { ettlevColors } from '@/util/theme/theme'
 import IconInCircle from '../iconInCircle/iconInCircle'
 
 type TInfoBlockProps = { icon: string; alt: string; text: string; color: string }

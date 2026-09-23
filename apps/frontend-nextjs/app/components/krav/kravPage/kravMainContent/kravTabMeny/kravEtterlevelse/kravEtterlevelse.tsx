@@ -1,3 +1,5 @@
+import { Label, Loader, Select } from '@navikt/ds-react'
+import { ChangeEvent, FunctionComponent, useState } from 'react'
 import { InfoBlock } from '@/components/common/infoBlock/infoBlock'
 import EtterlevelseModal from '@/components/etterlevelse/etterlevelseModal/etterlevelseModal'
 import { EtterlevelseSeksjon } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/etterlevelseSeksjon/etterlevelseSeksjon'
@@ -6,8 +8,6 @@ import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterleve
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseFilter, etterlevelserSorted } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { ettlevColors } from '@/util/theme/theme'
-import { Label, Loader, Select } from '@navikt/ds-react'
-import { ChangeEvent, FunctionComponent, useState } from 'react'
 
 type TProps = {
   loading: boolean

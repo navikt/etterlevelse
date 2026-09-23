@@ -1,9 +1,9 @@
 'use client'
 
-import { deleteEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { Box, Button, Heading, TextField } from '@navikt/ds-react'
 import { useState } from 'react'
+import { deleteEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { UpdateMessage } from '../common/commonComponents'
 
 const EtterlevelseDokumentasjonAdminPage = () => {

@@ -1,8 +1,8 @@
+import { Button, List } from '@navikt/ds-react'
+import { useMemo, useState } from 'react'
 import { useKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { sortKravListeByPriority } from '@/util/krav/kravUtil'
-import { Button, List } from '@navikt/ds-react'
-import { useMemo, useState } from 'react'
 import { EditPriorityModal } from './editPriorityModal/editPriorityModal'
 import { KravTemaRowsWithLabel } from './kravTemaRowsWithLabel/kravTemaRowsWithLabel'
 

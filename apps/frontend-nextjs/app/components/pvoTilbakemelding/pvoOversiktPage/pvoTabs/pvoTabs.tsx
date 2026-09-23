@@ -1,10 +1,10 @@
 'use client'
 
+import { Tabs } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import PvoSistRedigertView from '@/components/pvoTilbakemelding/pvoOversiktPage/pvoTabs/pvoSistRedigertView'
 import { PvoTilbakemeldingsList } from '@/components/pvoTilbakemelding/pvoOversiktPage/pvoTabs/pvoTilbakemeldingsList'
 import { pvoTabQueryUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
-import { Tabs } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
 
 type TSection = 'siste' | 'alle'
 

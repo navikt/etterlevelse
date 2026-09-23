@@ -1,8 +1,8 @@
+import { BodyLong, Heading, Label } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { IMeldingTilPvo } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { BodyLong, Heading, Label } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   meldingTilPvo: IMeldingTilPvo

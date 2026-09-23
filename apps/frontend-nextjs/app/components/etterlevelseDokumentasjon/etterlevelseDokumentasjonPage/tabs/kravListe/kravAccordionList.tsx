@@ -1,4 +1,7 @@
 'use client'
+import { Accordion, Link, List, Loader, Tag } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent, useContext } from 'react'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -14,9 +17,6 @@ import {
   TFilterKravProps,
   getKravForTema,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { Accordion, Link, List, Loader, Tag } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent, useContext } from 'react'
 import { KravCard } from './kravCard'
 import { PvkBehovVarsel } from './pvkBehovVarsel'
 

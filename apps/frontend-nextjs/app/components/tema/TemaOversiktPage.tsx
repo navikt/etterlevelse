@@ -1,12 +1,12 @@
 'use client'
 
+import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt/ds-react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { EListName, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { useKravCounter } from '@/query/krav/kravQuery'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
-import { BodyLong, Heading, LinkPanel, List, Loader, Spacer, Tag } from '@navikt/ds-react'
-import { useContext, useEffect, useRef, useState } from 'react'
 import { PageLayout } from '../others/scaffold/scaffold'
 
 export const TemaOversiktPage = () => (

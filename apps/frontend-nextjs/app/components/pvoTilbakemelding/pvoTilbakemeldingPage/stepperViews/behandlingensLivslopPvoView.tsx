@@ -1,5 +1,8 @@
 'use client'
 
+import { Loader } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopRequestToFormValue,
@@ -14,9 +17,6 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Loader } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'

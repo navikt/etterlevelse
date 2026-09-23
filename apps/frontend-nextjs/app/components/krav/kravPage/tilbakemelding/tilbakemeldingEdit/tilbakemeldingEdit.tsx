@@ -1,10 +1,10 @@
+import { Alert, Button, Textarea } from '@navikt/ds-react'
+import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction, useState } from 'react'
 import { tilbakemeldingEditMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import {
   ITilbakemelding,
   ITilbakemeldingMelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import { Alert, Button, Textarea } from '@navikt/ds-react'
-import { ChangeEvent, Dispatch, FunctionComponent, SetStateAction, useState } from 'react'
 
 type TProps = {
   tilbakemeldingId: string

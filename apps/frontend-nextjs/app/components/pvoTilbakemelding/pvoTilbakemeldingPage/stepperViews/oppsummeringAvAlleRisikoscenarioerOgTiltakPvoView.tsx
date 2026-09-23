@@ -1,5 +1,9 @@
 'use client'
 
+import { LinkIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, CopyButton, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import OppsumeringAccordianListReadOnlyView from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/oppsumeringAccordianListReadOnlyView'
@@ -36,10 +40,6 @@ import {
   VisTomListeBeskrivelse,
   VisTomTiltakListeBeskrivelse,
 } from '@/util/oppsummering/oppsummeringUtil'
-import { LinkIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, CopyButton, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'

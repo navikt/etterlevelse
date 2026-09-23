@@ -1,7 +1,7 @@
-import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
 import { FilesIcon } from '@navikt/aksel-icons'
 import { CopyButton } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
 
 type TProps = {
   etterlevelseDokumentasjonId: string

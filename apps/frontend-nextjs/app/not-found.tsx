@@ -1,9 +1,9 @@
 'use client'
 
-import notFound from '@/resources/notfound.svg'
 import { Heading } from '@navikt/ds-react'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import notFound from '@/resources/notfound.svg'
 import { PageLayout } from './components/others/scaffold/scaffold'
 
 const NotFound = () => {

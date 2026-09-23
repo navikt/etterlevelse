@@ -1,5 +1,8 @@
 'use client'
 
+import { Alert, Button } from '@navikt/ds-react'
+import { Field, FieldProps, FormikErrors } from 'formik'
+import { FunctionComponent, ReactNode, useMemo } from 'react'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
@@ -11,9 +14,6 @@ import {
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button } from '@navikt/ds-react'
-import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useMemo } from 'react'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 
 type TProps = {

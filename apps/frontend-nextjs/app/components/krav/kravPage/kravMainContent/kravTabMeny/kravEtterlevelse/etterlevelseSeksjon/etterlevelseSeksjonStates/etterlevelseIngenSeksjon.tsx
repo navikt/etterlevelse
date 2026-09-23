@@ -1,3 +1,5 @@
+import { Label } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { INomSeksjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
@@ -6,8 +8,6 @@ import {
   etterlevelserSorted,
   seksjonerSorted,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import { Label } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   krav: TKravQL

@@ -1,9 +1,9 @@
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { IKravReference } from '@/constants/krav/kravConstants'
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Accordion, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent, RefObject } from 'react'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { IKravReference } from '@/constants/krav/kravConstants'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import NyttInnholdTag from './NyttInnholdTag'
 
 type TProps = {

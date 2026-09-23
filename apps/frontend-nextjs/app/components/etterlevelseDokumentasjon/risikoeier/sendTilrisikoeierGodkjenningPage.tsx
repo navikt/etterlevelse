@@ -1,12 +1,12 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { useParams } from 'next/navigation'
 import SendTilRisikoeierGodkjenning from './sendTilRisikoeierGodkjenning/sendTilRisikoeierGodkjenning'
 
 const SendTilRisikoeierGodkjenningPage = () => {

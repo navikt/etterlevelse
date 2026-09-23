@@ -1,10 +1,10 @@
+import { Button, Loader, Modal } from '@navikt/ds-react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Button, Loader, Modal } from '@navikt/ds-react'
-import { FunctionComponent, useEffect, useState } from 'react'
 
 type TProps = {
   isOpen: boolean

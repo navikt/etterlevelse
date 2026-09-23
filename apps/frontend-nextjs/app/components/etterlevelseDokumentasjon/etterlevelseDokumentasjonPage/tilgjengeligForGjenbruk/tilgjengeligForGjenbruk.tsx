@@ -1,12 +1,12 @@
+import { Button, Link } from '@navikt/ds-react'
+import { useRouter } from 'next/navigation'
+import { FunctionComponent } from 'react'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   etterlevelseDokumentasjonGjenbrukIdUrl,
   etterlevelseDokumentasjonRelasjonUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { Button, Link } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

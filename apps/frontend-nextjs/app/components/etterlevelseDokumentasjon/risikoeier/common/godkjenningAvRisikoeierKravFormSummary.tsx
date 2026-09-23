@@ -1,9 +1,9 @@
+import { FormSummary } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import {
   IKravTilstandHistorikk,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { FormSummary } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 interface IProps {
   kravHistorikk: IKravTilstandHistorikk

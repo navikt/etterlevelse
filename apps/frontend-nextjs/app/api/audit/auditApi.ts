@@ -1,3 +1,5 @@
+import axios from 'axios'
+import moment from 'moment'
 import {
   EAuditAction,
   EObjectType,
@@ -8,8 +10,6 @@ import {
 } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
-import moment from 'moment'
 
 export const getAuditLog = async (id: string) => {
   const auditLog = (await axios.get<IAuditLog>(`${env.backendBaseUrl}/audit/log/${id}`)).data

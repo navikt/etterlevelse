@@ -1,9 +1,9 @@
+import { Heading, Label, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Heading, Label, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   relevantVurdering: IVurdering

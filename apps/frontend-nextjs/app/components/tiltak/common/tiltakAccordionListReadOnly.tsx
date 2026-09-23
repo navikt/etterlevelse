@@ -1,9 +1,9 @@
+import { Accordion, Tag } from '@navikt/ds-react'
+import moment from 'moment'
 import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Accordion, Tag } from '@navikt/ds-react'
-import moment from 'moment'
 import { TiltakView } from './tiltakView'
 
 interface IProps {

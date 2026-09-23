@@ -1,6 +1,6 @@
+import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import { EtterlevelseIngenSeksjon } from './etterlevelseSeksjonStates/etterlevelseIngenSeksjon'
 import { EtterlevelseSeksjonFinnes } from './etterlevelseSeksjonStates/etterlevelseSeksjonFinnes/EtterlevelseSeksjonFinnes'
 

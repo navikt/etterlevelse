@@ -1,6 +1,6 @@
-import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { FormSummary, Tag } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import FormAlert from './formAlert'
 
 type TProps = {

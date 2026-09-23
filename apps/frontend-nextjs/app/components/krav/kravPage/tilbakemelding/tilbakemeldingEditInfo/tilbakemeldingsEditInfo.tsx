@@ -1,8 +1,8 @@
-import PersonNavn from '@/components/common/personNavn/personNavn'
-import { ITilbakemeldingMelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
+import PersonNavn from '@/components/common/personNavn/personNavn'
+import { ITilbakemeldingMelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 
 type TProps = { melding: ITilbakemeldingMelding }
 

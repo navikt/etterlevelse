@@ -1,12 +1,12 @@
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { InfoCard, Link, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import {
   EEtterlevelseDokumentSchemaMelding,
   EPaKrevdMember,
 } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { isEmptyArray, isMissingText } from '@/util/common/validationUtils'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { InfoCard, Link, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

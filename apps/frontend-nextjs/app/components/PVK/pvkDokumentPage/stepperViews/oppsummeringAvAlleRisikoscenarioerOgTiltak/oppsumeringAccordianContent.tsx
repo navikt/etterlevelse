@@ -1,5 +1,8 @@
 'use client'
 
+import { PencilIcon } from '@navikt/aksel-icons'
+import { Button, Link, List, LocalAlert } from '@navikt/ds-react'
+import { FunctionComponent, RefObject, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   syncKravRelasjonerForRisikoscenario,
@@ -20,9 +23,6 @@ import { IKravReference } from '@/constants/krav/kravConstants'
 import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoDokumentasjonTemaKravNummerVersjonUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, Link, List, LocalAlert } from '@navikt/ds-react'
-import { FunctionComponent, RefObject, useState } from 'react'
 
 type TProps = {
   risikoscenario: IRisikoscenario

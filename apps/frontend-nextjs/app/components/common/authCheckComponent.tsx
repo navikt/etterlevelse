@@ -1,8 +1,8 @@
 'use client'
 
-import { UserContext } from '@/provider/user/userProvider'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, ReactNode, useContext, useEffect, useState } from 'react'
+import { UserContext } from '@/provider/user/userProvider'
 import { CenteredLoader } from './centeredLoader/centeredLoader'
 
 type TProps = {

@@ -1,11 +1,11 @@
+import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent } from 'react'
 import { Markdown } from '@/components/common/markdown/markdown'
 import {
   ITilbakemeldingsinnhold,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { BodyLong, BodyShort, Heading, Label } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent } from 'react'
 
 export enum EBidragVerdier {
   TILSTREKKELIG = 'TILSTREKELIG',

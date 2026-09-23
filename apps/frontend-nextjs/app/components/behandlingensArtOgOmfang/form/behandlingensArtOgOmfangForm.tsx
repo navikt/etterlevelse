@@ -1,3 +1,19 @@
+import { ExclamationmarkTriangleIcon, LightBulbIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  Button,
+  Heading,
+  InfoCard,
+  InlineMessage,
+  Label,
+  Link,
+  List,
+  LocalAlert,
+  Modal,
+  ReadMore,
+} from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import { FunctionComponent, RefObject, useState } from 'react'
 import {
   createBehandlingensArtOgOmfang,
   getBehandlingensArtOgOmfangByEtterlevelseDokumentId,
@@ -21,22 +37,6 @@ import {
   etterlevelseDokumentasjonIdUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ExclamationmarkTriangleIcon, LightBulbIcon } from '@navikt/aksel-icons'
-import {
-  BodyLong,
-  Button,
-  Heading,
-  InfoCard,
-  InlineMessage,
-  Label,
-  Link,
-  List,
-  LocalAlert,
-  Modal,
-  ReadMore,
-} from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

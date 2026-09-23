@@ -1,8 +1,8 @@
 'use client'
 
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { Alert, BodyLong, Heading, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, ReactNode } from 'react'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 
 type TProps = {
   stylingHeading: string

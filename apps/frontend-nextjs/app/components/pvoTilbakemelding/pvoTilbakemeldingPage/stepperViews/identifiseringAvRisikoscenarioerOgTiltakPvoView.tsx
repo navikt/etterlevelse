@@ -1,5 +1,6 @@
 'use client'
 
+import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import { IdentifiseringAvRisikoscenarioerOgTiltakContent } from '@/components/PVK/pvkDokumentPage/stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltakContent'
@@ -12,7 +13,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import PvoFormButtons from '../../form/pvoFormButtons'
 
 type TProps = {

@@ -1,5 +1,7 @@
 'use client'
 
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
@@ -8,8 +10,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IKrav, ISuksesskriterie, TKravId } from '@/constants/krav/kravConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
 
 const getEtterlevelse = async (id: string) => {
   return (await axios.get<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data

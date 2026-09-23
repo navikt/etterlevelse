@@ -1,5 +1,19 @@
 'use client'
 
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import {
+  BodyShort,
+  Button,
+  FormSummary,
+  Heading,
+  InfoCard,
+  Link,
+  List,
+  LocalAlert,
+  Tag,
+} from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { FunctionComponent, JSX, useContext, useEffect, useState } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
@@ -37,20 +51,6 @@ import {
   isRisikoUnderarbeidCheck,
   risikoscenarioFieldCheck,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import {
-  BodyShort,
-  Button,
-  FormSummary,
-  Heading,
-  InfoCard,
-  Link,
-  List,
-  LocalAlert,
-  Tag,
-} from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import { FunctionComponent, JSX, useContext, useEffect, useState } from 'react'
 import FormSummaryPanel from '../../common/formSummaryPanel'
 import HvordanSkalViJobbeMedPvkReadMore from '../../common/hvordanSkalViJobbeMedPvkReadMore'
 import FormButtons from '../../edit/formButtons'

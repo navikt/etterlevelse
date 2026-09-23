@@ -1,13 +1,13 @@
 'use client'
 
+import { FormSummary } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { FunctionComponent, useMemo } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { pvkDokumentasjonTabFilterTiltakUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { risikoscenarioFieldCheck } from '@/util/risikoscenario/risikoscenarioUtils'
-import { FormSummary } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import { FunctionComponent, useMemo } from 'react'
 import FormAlert from './formAlert'
 
 type TProps = {

@@ -1,5 +1,35 @@
 'use client'
 
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  ErrorSummary,
+  Heading,
+  InfoCard,
+  Label,
+  List,
+  ReadMore,
+  Select,
+  Table,
+  TextField,
+} from '@navikt/ds-react'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import _ from 'lodash'
+import { usePathname, useRouter } from 'next/navigation'
+import {
+  ChangeEvent,
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import AsyncSelect from 'react-select/async'
 import { useArdoqSearch } from '@/api/ardoq/ardoqApi'
 import { getDocumentRelationByToIdAndRelationTypeWithData } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import {
@@ -57,36 +87,6 @@ import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUt
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  ErrorSummary,
-  Heading,
-  InfoCard,
-  Label,
-  List,
-  ReadMore,
-  Select,
-  Table,
-  TextField,
-} from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import _ from 'lodash'
-import { usePathname, useRouter } from 'next/navigation'
-import {
-  ChangeEvent,
-  FunctionComponent,
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import AsyncSelect from 'react-select/async'
 import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 
 type TProps = {

@@ -1,5 +1,19 @@
 'use client'
 
+import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
+import {
+  BodyLong,
+  CopyButton,
+  Heading,
+  InfoCard,
+  Loader,
+  ReadMore,
+  Tabs,
+  ToggleGroup,
+} from '@navikt/ds-react'
+import moment from 'moment'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
@@ -40,20 +54,6 @@ import {
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { VisTomListeBeskrivelse } from '@/util/oppsummering/oppsummeringUtil'
-import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
-import {
-  BodyLong,
-  CopyButton,
-  Heading,
-  InfoCard,
-  Loader,
-  ReadMore,
-  Tabs,
-  ToggleGroup,
-} from '@navikt/ds-react'
-import moment from 'moment'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'

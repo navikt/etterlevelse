@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   ERelationType,
@@ -5,7 +6,6 @@ import {
   IDocumentRelationWithEtterlevelseDokumetajson,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 const getDocumentRelationPage = async (pageNumber: number, pageSize: number) => {
   return (

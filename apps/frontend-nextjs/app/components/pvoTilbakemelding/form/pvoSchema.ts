@@ -1,5 +1,5 @@
-import { EPvoTilbakemeldingStatus } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import * as yup from 'yup'
+import { EPvoTilbakemeldingStatus } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 
 const boolCheck = (fieldName: string, errorMessage?: string) =>
   yup

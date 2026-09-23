@@ -1,6 +1,6 @@
-import { EAuditAction, IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
 import { Button } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { EAuditAction, IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
 import { ObjectLink } from '../../common/commonComponents'
 import { AuditLabel } from '../common/AuditLabel'
 

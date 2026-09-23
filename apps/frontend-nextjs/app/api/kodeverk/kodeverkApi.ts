@@ -1,6 +1,6 @@
+import axios from 'axios'
 import { EListName, IAllCodelists, ICode, ICodeUsage } from '@/constants/kodeverk/kodeverkConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 // refresh will force backend to re-read codelists from db, due to caching and multibackend
 export const getAllCodelists = async (refresh?: boolean) =>

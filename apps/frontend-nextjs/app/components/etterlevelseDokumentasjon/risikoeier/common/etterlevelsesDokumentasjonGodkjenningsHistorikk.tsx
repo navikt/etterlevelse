@@ -1,5 +1,9 @@
 'use client'
 
+import { Accordion, FormSummary } from '@navikt/ds-react'
+import { BodyLong, Heading } from '@navikt/ds-react/Typography'
+import moment from 'moment'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
@@ -11,10 +15,6 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { Accordion, FormSummary } from '@navikt/ds-react'
-import { BodyLong, Heading } from '@navikt/ds-react/Typography'
-import moment from 'moment'
-import { FunctionComponent, useEffect, useState } from 'react'
 import { GodkjenningAvRisikoeierKravFormSummary } from './godkjenningAvRisikoeierKravFormSummary'
 import { GodkjenningAvRisikoeierPvkFormSummary } from './godkjenningAvRisikoeierPvkFormSummary'
 

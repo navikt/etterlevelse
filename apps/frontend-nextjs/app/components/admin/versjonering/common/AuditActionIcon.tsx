@@ -1,6 +1,6 @@
-import { EAuditAction } from '@/constants/admin/audit/auditConstants'
 import { InformationSquareIcon, MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons'
 import { Tooltip } from '@navikt/ds-react'
+import { EAuditAction } from '@/constants/admin/audit/auditConstants'
 
 export const AuditActionIcon = (props: { action: EAuditAction; withText?: boolean }) => {
   const icon = (props.action === EAuditAction.CREATE && (

@@ -1,3 +1,6 @@
+import axios from 'axios'
+import moment from 'moment'
+import { useEffect, useRef, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   ETilbakemeldingMeldingStatus,
@@ -6,9 +9,6 @@ import {
   ITilbakemeldingNewMeldingRequest,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
-import moment from 'moment'
-import { useEffect, useRef, useState } from 'react'
 
 export const getTilbakemeldingForKrav = async (kravNummer: number, kravVersjon: number) => {
   return (

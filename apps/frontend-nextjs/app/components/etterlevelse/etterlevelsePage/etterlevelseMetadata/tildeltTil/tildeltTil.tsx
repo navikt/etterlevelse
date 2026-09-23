@@ -1,13 +1,13 @@
 'use client'
 
+import { BodyShort, Button } from '@navikt/ds-react'
+import { FunctionComponent, useContext } from 'react'
 import {
   createEtterlevelseMetadata,
   updateEtterlevelseMetadata,
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { BodyShort, Button } from '@navikt/ds-react'
-import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
   etterlevelseMetadata: IEtterlevelseMetadata

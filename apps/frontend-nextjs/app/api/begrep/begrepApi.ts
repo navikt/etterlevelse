@@ -1,7 +1,7 @@
+import axios from 'axios'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const searchBegrep = async (begrepSearch: string) => {
   return (

@@ -1,10 +1,10 @@
+import axios from 'axios'
+import { useEffect, useRef, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
-import { useEffect, useRef, useState } from 'react'
 
 export const getTiltak = async (id: string): Promise<ITiltak> =>
   (await axios.get<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data

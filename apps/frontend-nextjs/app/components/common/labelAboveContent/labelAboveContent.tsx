@@ -1,5 +1,5 @@
-import { TOr } from '@/constants/commonConstants'
 import { FunctionComponent, ReactNode } from 'react'
+import { TOr } from '@/constants/commonConstants'
 import DataText from '../dataText/dataText'
 import { Markdown } from '../markdown/markdown'
 

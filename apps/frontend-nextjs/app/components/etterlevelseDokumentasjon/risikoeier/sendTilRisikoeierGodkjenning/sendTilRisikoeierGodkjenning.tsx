@@ -1,3 +1,7 @@
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { BodyLong, Heading, InfoCard, List } from '@navikt/ds-react'
+import Link from 'next/link'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import {
   getEtterlevelseDokumentasjon,
   updateEtterlevelseDokumentasjon,
@@ -15,10 +19,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { BodyLong, Heading, InfoCard, List } from '@navikt/ds-react'
-import Link from 'next/link'
-import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from '../common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 import { SendTilRisikoeierGodkjenningReadOnly } from '../sendTilRisikoeierGodkjenningReadOnly/sendTilRisikoeierGodkjenningReadOnly'
 import SendTilRisikoeierGodkjenningUnderArbeid from '../sendTilRisikoeierGodkjenningUnderArbeid/sendTilRisikoeierGodkjenningUnderArbeid'

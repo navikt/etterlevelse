@@ -1,16 +1,6 @@
 'use client'
 
 import {
-  deletePvkDokument,
-  getAllPvkDokument,
-  mapPvkDokumentToFormValue,
-} from '@/api/pvkDokument/pvkDokumentApi'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { handleSort } from '@/util/handleTableSort'
-import {
   BodyShort,
   Button,
   Heading,
@@ -23,6 +13,16 @@ import {
   TextField,
 } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import {
+  deletePvkDokument,
+  getAllPvkDokument,
+  mapPvkDokumentToFormValue,
+} from '@/api/pvkDokument/pvkDokumentApi'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { handleSort } from '@/util/handleTableSort'
 import { UpdateMessage } from '../common/commonComponents'
 
 const PvkDokumentAdminPage = () => {

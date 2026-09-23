@@ -1,10 +1,10 @@
+import { Alert, Loader } from '@navikt/ds-react'
+import { useEffect, useMemo, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { ETab, TKravFilter } from '@/constants/krav/kravlist/kravlistConstants'
 import { useKravFilter } from '@/query/krav/kravQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
-import { Alert, Loader } from '@navikt/ds-react'
-import { useEffect, useMemo, useState } from 'react'
 import { sortKrav } from '../../sortKrav/sortKrav'
 import { Krav } from './krav/krav'
 

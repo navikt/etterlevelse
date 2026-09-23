@@ -1,5 +1,9 @@
 'use client'
 
+import { Alert, Heading, Label, Loader } from '@navikt/ds-react'
+import Image from 'next/image'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { getDocumentRelationByToIdAndRelationType } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -9,10 +13,6 @@ import {
   etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonerUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { Alert, Heading, Label, Loader } from '@navikt/ds-react'
-import Image from 'next/image'
-import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import GjenbrukEtterlevelseDokumentasjonForm from '../form/gjenbrukEtterlevelseDokumentasjonForm'
 
 const GjenbrukEtterlevelseDokumentasjonPage = () => {

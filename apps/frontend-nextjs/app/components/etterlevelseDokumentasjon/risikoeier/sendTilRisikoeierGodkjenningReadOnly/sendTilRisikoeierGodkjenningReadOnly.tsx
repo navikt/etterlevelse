@@ -1,3 +1,5 @@
+import { Alert, BodyLong, Button, Label } from '@navikt/ds-react'
+import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import {
@@ -5,8 +7,6 @@ import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Alert, BodyLong, Button, Label } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 
 type TProp = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

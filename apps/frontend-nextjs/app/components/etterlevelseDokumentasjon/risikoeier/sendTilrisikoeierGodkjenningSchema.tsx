@@ -1,5 +1,5 @@
-import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import * as yup from 'yup'
+import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 
 const meldingEtterlevelerTilRisikoeierCheck = yup.string().test({
   name: 'meldingEtterlevelerTilRisikoeierCheck',

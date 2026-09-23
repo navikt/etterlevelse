@@ -1,3 +1,5 @@
+import moment from 'moment'
+import { FunctionComponent } from 'react'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -5,8 +7,6 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import moment from 'moment'
-import { FunctionComponent } from 'react'
 import { PvkGodkjentReadOnlyActionMenuVariant } from '../commonActionMenuPVK/etterleverCommonPVK'
 
 type TProps = {

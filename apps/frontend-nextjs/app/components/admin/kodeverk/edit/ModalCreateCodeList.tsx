@@ -1,3 +1,5 @@
+import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'
+import { Field, FieldProps, Form, Formik } from 'formik'
 import { MarkdownInfo } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import {
@@ -6,8 +8,6 @@ import {
   ILovCodeData,
 } from '@/constants/kodeverk/kodeverkConstants'
 import { codeListSchema } from '@/provider/kodeverk/kodeverkProvider'
-import { BodyShort, Button, Modal, TextField, Textarea } from '@navikt/ds-react'
-import { Field, FieldProps, Form, Formik } from 'formik'
 import { LovCodeDataForm } from './LovCode'
 
 type TModalCreateProps = {

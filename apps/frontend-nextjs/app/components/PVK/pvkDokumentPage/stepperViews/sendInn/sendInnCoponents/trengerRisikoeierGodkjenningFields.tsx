@@ -1,5 +1,8 @@
 'use client'
 
+import { Alert, Button, Heading } from '@navikt/ds-react'
+import { Field, FieldProps, FormikErrors } from 'formik'
+import { FunctionComponent, ReactNode, useContext, useState } from 'react'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import BeskjedTilRisikoeierReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilRisikoeierReadOnly'
@@ -14,9 +17,6 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading } from '@navikt/ds-react'
-import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useContext, useState } from 'react'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 
 type TProps = {

@@ -1,5 +1,7 @@
 'use client'
 
+import { Link } from '@navikt/ds-react'
+import { FunctionComponent, useContext } from 'react'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
@@ -7,8 +9,6 @@ import {
   pvkDokumentasjonStepUrl,
   pvkDokumenteringPvoTilbakemeldingUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Link } from '@navikt/ds-react'
-import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument

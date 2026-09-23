@@ -1,8 +1,8 @@
-import { mapRisikoscenarioToFormValue } from '@/api/risikoscenario/risikoscenarioApi'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { Button, Checkbox, CheckboxGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { FunctionComponent, RefObject } from 'react'
+import { mapRisikoscenarioToFormValue } from '@/api/risikoscenario/risikoscenarioApi'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 
 type TProps = {
   risikoscenario: IRisikoscenario

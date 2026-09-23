@@ -1,12 +1,12 @@
 'use client'
 
+import { Heading } from '@navikt/ds-react'
+import { useRouter } from 'next/navigation'
+import { Dispatch, FunctionComponent, RefObject, SetStateAction, useEffect } from 'react'
 import { createRisikoscenarioKnyttetTilKrav } from '@/api/risikoscenario/risikoscenarioApi'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { risikoscenarioUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { Heading } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
-import { Dispatch, FunctionComponent, RefObject, SetStateAction, useEffect } from 'react'
 import RisikoscenarioForm from '../form/risikoscenarioForm'
 
 type TProps = {

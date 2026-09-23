@@ -1,5 +1,8 @@
 'use client'
 
+import { Detail, Tag } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent } from 'react'
 import {
   EEtterlevelseDokumentasjonStatus,
   TEtterlevelseDokumentasjonQL,
@@ -10,9 +13,6 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Detail, Tag } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

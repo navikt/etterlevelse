@@ -1,9 +1,9 @@
-import StatusView from '@/components/common/statusTag/StatusTag'
-import { IKrav } from '@/constants/krav/kravConstants'
-import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { BodyLong, BodyShort, Label, LinkPanel, List, Spacer } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent } from 'react'
+import StatusView from '@/components/common/statusTag/StatusTag'
+import { IKrav } from '@/constants/krav/kravConstants'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 
 type TProps = {
   kravListe: IKrav[]

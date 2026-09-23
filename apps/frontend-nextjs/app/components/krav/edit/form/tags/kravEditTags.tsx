@@ -1,8 +1,8 @@
-import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
-import { ettlevColors } from '@/util/theme/theme'
 import { BodyLong } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import Select, { CSSObjectWithLabel } from 'react-select'
+import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
+import { ettlevColors } from '@/util/theme/theme'
 
 export const KravEditTags = () => {
   const options = [

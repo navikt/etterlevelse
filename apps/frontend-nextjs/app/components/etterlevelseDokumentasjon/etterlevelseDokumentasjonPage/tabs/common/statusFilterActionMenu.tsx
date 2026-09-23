@@ -1,5 +1,8 @@
 'use client'
 
+import { ChevronDownIcon } from '@navikt/aksel-icons'
+import { ActionMenu, Button } from '@navikt/ds-react'
+import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import {
   EEtterlevelseStatus,
   ESuksesskriterieStatus,
@@ -8,9 +11,6 @@ import {
   IKravNivaaStatusFilter,
   ISuksesskriterieStatusFilter,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { ChevronDownIcon } from '@navikt/aksel-icons'
-import { ActionMenu, Button } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 
 interface IKravNivaaStatusFilterProps {
   kravNivaaStatusFilter: IKravNivaaStatusFilter

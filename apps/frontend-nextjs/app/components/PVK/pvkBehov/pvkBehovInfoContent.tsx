@@ -1,3 +1,6 @@
+import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
+import { BodyLong, BodyShort, Heading, InfoCard, Label, List } from '@navikt/ds-react'
+import { FunctionComponent, useContext } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -8,9 +11,6 @@ import {
   harBehandlinger,
   harKunDpBehandlinger,
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { BodyLong, BodyShort, Heading, InfoCard, Label, List } from '@navikt/ds-react'
-import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

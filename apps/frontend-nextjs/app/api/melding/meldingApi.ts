@@ -1,7 +1,7 @@
+import axios from 'axios'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType, IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const getMeldingByType = async (meldingType: EMeldingType) => {
   return (

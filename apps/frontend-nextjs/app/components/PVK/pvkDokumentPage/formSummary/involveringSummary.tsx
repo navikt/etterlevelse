@@ -1,11 +1,11 @@
 'use client'
 
-import BodyLongWithLineBreak from '@/components/common/bodyLongWithLineBreak'
-import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { BodyLong, FormSummary, List } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
 import { usePathname } from 'next/navigation'
 import { FunctionComponent } from 'react'
+import BodyLongWithLineBreak from '@/components/common/bodyLongWithLineBreak'
+import { EPVK } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { StepTitle } from '../pvkDokumentPage'
 import FormAlert from './formAlert'
 

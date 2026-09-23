@@ -1,3 +1,7 @@
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Button, InfoCard, Loader } from '@navikt/ds-react'
+import { Field, FieldProps, FormikErrors } from 'formik'
+import { FunctionComponent, ReactNode, RefObject } from 'react'
 import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
@@ -5,10 +9,6 @@ import {
   IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { Button, InfoCard, Loader } from '@navikt/ds-react'
-import { Field, FieldProps, FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, RefObject } from 'react'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {

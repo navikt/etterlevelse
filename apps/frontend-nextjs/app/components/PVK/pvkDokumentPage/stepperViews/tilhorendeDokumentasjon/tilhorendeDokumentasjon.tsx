@@ -1,3 +1,4 @@
+import { FunctionComponent } from 'react'
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
 import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
@@ -13,7 +14,6 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

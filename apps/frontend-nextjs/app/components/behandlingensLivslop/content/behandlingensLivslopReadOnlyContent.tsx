@@ -1,12 +1,12 @@
 'use client'
 
+import { BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
+import { FunctionComponent, useMemo } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
 import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import { IBehandlingensLivslopRequest } from '@/constants/behandlingensLivslop/behandlingensLivslop'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
-import { FunctionComponent, useMemo } from 'react'
 import BehandlingensLivsLopSidePanel from '../sidePanel/BehandlingensLivsLopSidePanel'
 import BehandlingensLivslopTextContent from './behandlingensLivslopTextContent'
 

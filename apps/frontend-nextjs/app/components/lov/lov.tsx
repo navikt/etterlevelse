@@ -1,5 +1,7 @@
 'use client'
 
+import { Link } from '@navikt/ds-react'
+import { FunctionComponent, ReactNode, useContext } from 'react'
 import {
   EListName,
   IAllCodelists,
@@ -8,8 +10,6 @@ import {
 } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext, ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { env } from '@/util/env/env'
-import { Link } from '@navikt/ds-react'
-import { FunctionComponent, ReactNode, useContext } from 'react'
 
 // unsure how to refactor code
 // eslint-disable-next-line @typescript-eslint/no-require-imports

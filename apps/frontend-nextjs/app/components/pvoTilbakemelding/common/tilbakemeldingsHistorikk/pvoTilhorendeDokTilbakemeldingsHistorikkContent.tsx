@@ -1,7 +1,7 @@
-import { Markdown } from '@/components/common/markdown/markdown'
-import { ITilhorendeDokumentasjonTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { BodyLong, Heading, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { Markdown } from '@/components/common/markdown/markdown'
+import { ITilhorendeDokumentasjonTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { EBidragVerdier, bidragsVerdierToText } from '../../readOnly/pvoTilbakemeldingReadOnly'
 
 type TProps = {

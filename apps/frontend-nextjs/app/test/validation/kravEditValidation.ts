@@ -1,7 +1,7 @@
+import * as yup from 'yup'
 import { IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKravVersjon, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { IVarslingsadresse } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import * as yup from 'yup'
 
 const isKravActiveStatus = (status: EKravStatus): boolean => status === EKravStatus.AKTIV
 

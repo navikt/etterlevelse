@@ -1,5 +1,9 @@
 'use client'
 
+import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
+import { Button, ReadMore } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { RefObject, useMemo, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { updateTiltak } from '@/api/tiltak/tiltakApi'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -9,10 +13,6 @@ import {
   risikoscenarioUrl,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, ReadMore } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { RefObject, useMemo, useState } from 'react'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
 import { TiltakView } from './common/tiltakView'
 import SlettTiltakModal from './edit/slettTiltakModal'

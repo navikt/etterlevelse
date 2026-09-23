@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -7,7 +8,6 @@ import { TSearchItem } from '@/constants/search/searchConstants'
 import { TVarslingsadresseQL } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { env } from '@/util/env/env'
 import { kravMap, kravName } from '@/util/krav/kravUtil'
-import axios from 'axios'
 
 export const getAllKrav = async () => {
   const PAGE_SIZE = 100

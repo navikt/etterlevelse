@@ -1,11 +1,11 @@
 'use client'
 
+import { Tabs } from '@navikt/ds-react'
+import { FunctionComponent, useState } from 'react'
 import { KravEtterlevelser } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravEtterlevelse/kravEtterlevelse'
 import { KravTilbakemeldinger } from '@/components/krav/kravPage/kravMainContent/kravTabMeny/kravTilbakemelding/kravTilbakemelding'
 import { EKravTab, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { useQueryParam } from '@/util/hooks/customHooks/customHooks'
-import { Tabs } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
 import { KravView } from './kravView/kravView'
 
 type TSection = 'krav' | 'etterlevelser' | 'tilbakemeldinger'

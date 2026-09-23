@@ -1,12 +1,12 @@
 'use client'
 
-import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
-import { Error, FormError } from '@/components/common/modalSchema/formError/formError'
 import { TrashIcon } from '@navikt/aksel-icons'
 import { Button, Heading, Table, TextField } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import { ChangeEvent, useState } from 'react'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
+import { Error, FormError } from '@/components/common/modalSchema/formError/formError'
 
 const ROSEdit = () => {
   const [url, setUrl] = useState('')

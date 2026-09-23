@@ -1,3 +1,6 @@
+import { Button, Label, Loader, Modal } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { Dispatch, FunctionComponent, SetStateAction, useState } from 'react'
 import {
   createKravPriorityList,
   updateKravPriorityList,
@@ -5,9 +8,6 @@ import {
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { IKrav } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
-import { Button, Label, Loader, Modal } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { Dispatch, FunctionComponent, SetStateAction, useState } from 'react'
 import { KravPriorityPanels } from '../kravPriorityPanels/kravPriorityPanels'
 
 type TProps = {

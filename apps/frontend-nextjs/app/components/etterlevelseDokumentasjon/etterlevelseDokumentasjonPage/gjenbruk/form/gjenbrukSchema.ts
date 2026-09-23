@@ -1,3 +1,4 @@
+import * as yup from 'yup'
 import {
   EEtterlevelseDokumentSchemaMelding,
   beskrivelseCheck,
@@ -6,7 +7,6 @@ import {
   titleCheck,
   varslingsadresserCheck,
 } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
-import * as yup from 'yup'
 
 const gjenbrukBeskrivelseCheck = yup.string().required('Påkrevd')
 

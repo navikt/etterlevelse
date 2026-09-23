@@ -1,11 +1,11 @@
 'use client'
 
-import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { PencilIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Modal, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
+import { mapTiltakToFormValue, updateTiltak } from '@/api/tiltak/tiltakApi'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TiltakView } from '../common/tiltakView'
 import TiltakForm from '../form/tiltakForm'
 

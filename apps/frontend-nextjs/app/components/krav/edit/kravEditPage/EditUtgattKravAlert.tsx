@@ -1,11 +1,11 @@
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { TKravQL } from '@/constants/krav/kravConstants'
-import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { Alert, Button } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent } from 'react'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { TKravQL } from '@/constants/krav/kravConstants'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import { kravBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 
 type TProps = {
   krav: TKravQL

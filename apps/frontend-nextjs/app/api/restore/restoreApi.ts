@@ -1,9 +1,9 @@
+import axios from 'axios'
 import {
   IDeletedEtterlevelseDokumentasjon,
   IRestoreResult,
 } from '@/constants/admin/restore/restoreConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const getDeletedEtterlevelseDokumentasjoner = async (): Promise<
   IDeletedEtterlevelseDokumentasjon[]

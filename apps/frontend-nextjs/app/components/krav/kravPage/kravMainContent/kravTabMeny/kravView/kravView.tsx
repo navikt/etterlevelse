@@ -1,10 +1,10 @@
 'use client'
 
-import { ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
-import { UserContext } from '@/provider/user/userProvider'
 import { BodyShort } from '@navikt/ds-react'
 import moment from 'moment'
 import { FunctionComponent, useContext } from 'react'
+import { ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import { SuksesskriterieCard } from './suksesskriterieCard/suksesskriterieCard'
 
 type TProps = { krav: TKravQL }

@@ -1,6 +1,6 @@
+import axios from 'axios'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 const getAllNomAvdelinger = async () => {
   return (await axios.get<IOrgEnhet[]>(`${env.backendBaseUrl}/nom/avdelinger`)).data

@@ -1,8 +1,8 @@
+import axios from 'axios'
+import { useEffect, useRef, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
-import { useEffect, useRef, useState } from 'react'
 
 const getKravPriorityListPage = async (pageNumber: number, pageSize: number) => {
   return (

@@ -1,9 +1,9 @@
 'use client'
 
-import { newVersionEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { BodyLong, Button, LocalAlert, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
+import { newVersionEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 
 interface IProps {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

@@ -1,29 +1,6 @@
 'use client'
 
 import {
-  getDashboardAvdelingStats,
-  getDashboardTableByAvdeling,
-} from '@/api/dashboard/dashboardApi'
-import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
-import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
-import { DashboardCard } from '@/components/dashboard/DashboardCard'
-import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import {
-  IAvdelingDashboardStats,
-  IDashboardDetailResponse,
-  IDashboardTable,
-} from '@/constants/dashboard/dashboardConstants'
-import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkDokumentStatus,
-  EPvkVurdering,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { handleSort } from '@/util/handleTableSort'
-import {
   DownloadIcon,
   ExclamationmarkTriangleFillIcon,
   InformationSquareIcon,
@@ -46,6 +23,29 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
+import {
+  getDashboardAvdelingStats,
+  getDashboardTableByAvdeling,
+} from '@/api/dashboard/dashboardApi'
+import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
+import { DashboardBarCard } from '@/components/dashboard/DashboardBarCard'
+import { DashboardCard } from '@/components/dashboard/DashboardCard'
+import { StickyHorizontalScroll } from '@/components/dashboard/StickyHorizontalScroll'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import {
+  IAvdelingDashboardStats,
+  IDashboardDetailResponse,
+  IDashboardTable,
+} from '@/constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  EPvkVurdering,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
+import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
+import { handleSort } from '@/util/handleTableSort'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { AvdelingDetailReadMore } from './DashboardReadmore/AvdelingDetailReadMore'
 import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'

@@ -1,8 +1,8 @@
-import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, ReactNode } from 'react'
+import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 
 type TProps = {
   activeStep: number

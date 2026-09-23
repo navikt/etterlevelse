@@ -1,5 +1,10 @@
 'use client'
 
+import { EnvelopeClosedIcon, HashtagIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
+import { Button, TextField } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
+import * as yup from 'yup'
 import { getSlackChannelById, getSlackUserById } from '@/api/teamkatalogen/teamkatalogenApi'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
@@ -10,11 +15,6 @@ import {
   TVarslingsadresseQL,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { EnvelopeClosedIcon, HashtagIcon, PersonIcon, PlusIcon } from '@navikt/aksel-icons'
-import { Button, TextField } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import React, { FunctionComponent, useContext, useEffect, useState } from 'react'
-import * as yup from 'yup'
 import { FieldWrapper } from '../common/fieldWrapper/fieldWrapper'
 import { LabelWithDescription } from '../common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Error } from '../common/modalSchema/ModalSchema'

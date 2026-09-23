@@ -1,13 +1,13 @@
 'use client'
 
+import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-react'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
 import { getMailLog } from '@/api/audit/auditApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IMailLog } from '@/constants/admin/audit/auditConstants'
 import { IPageResponse } from '@/constants/commonConstants'
-import { BodyShort, Box, Heading, Pagination, Select, Spacer } from '@navikt/ds-react'
-import moment from 'moment'
-import { useEffect, useState } from 'react'
 
 const MailLogAdminPage = () => {
   const [log, setLog] = useState<IPageResponse<IMailLog>>({

@@ -1,11 +1,11 @@
 'use client'
 
-import { apolloClient } from '@/api/apolloClient/apolloClient'
 import { ApolloProvider } from '@apollo/client/react'
 import moment from 'moment'
 import 'moment/locale/nb'
 import { FunctionComponent, ReactNode } from 'react'
 import { Helmet, HelmetProvider } from 'react-helmet-async'
+import { apolloClient } from '@/api/apolloClient/apolloClient'
 
 // Set Norwegian locale globally for moment
 moment.locale('nb')

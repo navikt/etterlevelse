@@ -1,7 +1,7 @@
-import { EKravStatus } from '@/constants/krav/kravConstants'
-import { kravStatus } from '@/util/krav/kravUtil'
 import { Detail, Tag } from '@navikt/ds-react'
 import { ReactNode } from 'react'
+import { EKravStatus } from '@/constants/krav/kravConstants'
+import { kravStatus } from '@/util/krav/kravUtil'
 
 interface IStatusTagProps {
   status: EKravStatus | string

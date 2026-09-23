@@ -1,14 +1,5 @@
 'use client'
 
-import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { EListName } from '@/constants/kodeverk/kodeverkConstants'
-import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
-import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
-import { handleSort } from '@/util/handleTableSort'
-import { kravStatus } from '@/util/krav/kravUtil'
 import {
   BodyShort,
   Heading,
@@ -21,6 +12,15 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { getAllKrav, kravMapToFormVal } from '@/api/krav/kravApi'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { EListName } from '@/constants/kodeverk/kodeverkConstants'
+import { IKrav, TKravQL } from '@/constants/krav/kravConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import { handleSort } from '@/util/handleTableSort'
+import { kravStatus } from '@/util/krav/kravUtil'
 
 const KravAdminPage = () => {
   const [tableContent, setTableContent] = useState<IKrav[]>([])

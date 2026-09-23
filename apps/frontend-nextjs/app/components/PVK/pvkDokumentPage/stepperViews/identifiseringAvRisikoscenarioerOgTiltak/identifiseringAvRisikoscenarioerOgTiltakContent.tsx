@@ -1,11 +1,11 @@
 'use client'
 
-import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
-import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Heading, InfoCard, ReadMore } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, ReactNode } from 'react'
+import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 
 type TProps = {
   stylingHeading: string

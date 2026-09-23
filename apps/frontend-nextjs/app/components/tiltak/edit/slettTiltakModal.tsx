@@ -1,13 +1,13 @@
 'use client'
 
+import { BodyLong, Button, List, Modal } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, SetStateAction } from 'react'
 import { removeTiltakToRisikoscenario } from '@/api/risikoscenario/risikoscenarioApi'
 import { deleteTiltak, getTiltak } from '@/api/tiltak/tiltakApi'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { risikoscenarioUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { BodyLong, Button, List, Modal } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, SetStateAction } from 'react'
 
 type TProps = {
   tiltak: ITiltak

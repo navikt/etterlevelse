@@ -1,5 +1,5 @@
-import { filterValues, tiltakFilterValues } from '@/constants/oppsummering/oppsummeringConstants'
 import { BodyLong } from '@navikt/ds-react'
+import { filterValues, tiltakFilterValues } from '@/constants/oppsummering/oppsummeringConstants'
 
 export const VisTomListeBeskrivelse = (filter: string | null) => {
   let textBody = ''

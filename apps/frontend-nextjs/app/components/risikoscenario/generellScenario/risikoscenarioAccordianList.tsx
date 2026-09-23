@@ -1,5 +1,8 @@
 'use client'
 
+import { Accordion, List, LocalAlert } from '@navikt/ds-react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
@@ -8,9 +11,6 @@ import {
   risikoDokumentasjonTemaKravNummerVersjonUrl,
   risikoscenarioUrl,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { Accordion, List, LocalAlert } from '@navikt/ds-react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import AccordianAlertModal from '../../common/accordianAlertModal'
 import { IdentifiseringAvRisikoscenarioAccordianHeader } from '../common/risikoscenarioAccordionHeader'
 import RisikoscenarioAccordionContent from './risikoscenarioAccordionContent'

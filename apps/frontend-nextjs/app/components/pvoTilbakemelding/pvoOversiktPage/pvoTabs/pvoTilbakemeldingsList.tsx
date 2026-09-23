@@ -1,3 +1,6 @@
+import { Label, List, Pagination, Search, Select, Skeleton } from '@navikt/ds-react'
+import moment from 'moment'
+import { useEffect, useMemo, useState } from 'react'
 import { getAllPvkDokumentListItem } from '@/api/pvkDokument/pvkDokumentApi'
 import { getAllPvoTilbakemelding } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { ListLayout2 } from '@/components/krav/kravlistePage/kravTabs/sisteRedigertKrav/listLayout/listLayout'
@@ -11,9 +14,6 @@ import {
   IPvoTilbakemelding,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { pvkDokumenteringPvoTilbakemeldingUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { Label, List, Pagination, Search, Select, Skeleton } from '@navikt/ds-react'
-import moment from 'moment'
-import { useEffect, useMemo, useState } from 'react'
 
 const PAGE_SIZE = 20
 

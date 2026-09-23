@@ -1,10 +1,10 @@
+import axios from 'axios'
 import {
   IBehandling,
   IDpBehandling,
 } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const getBehandling = async (id: string) => {
   return (await axios.get<IBehandling>(`${env.backendBaseUrl}/behandling/${id}`)).data

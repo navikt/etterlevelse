@@ -1,10 +1,10 @@
+import { BodyShort, Checkbox, Detail } from '@navikt/ds-react'
 import StatusView from '@/components/common/statusTag/StatusTag'
 import { TKravEtterlevelseData } from '@/constants/krav/kravConstants'
 import {
   getEtterlevelseStatus,
   getStatusLabelColor,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import { BodyShort, Checkbox, Detail } from '@navikt/ds-react'
 
 interface IProps {
   krav: TKravEtterlevelseData

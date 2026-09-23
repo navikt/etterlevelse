@@ -1,7 +1,7 @@
+import axios from 'axios'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion = async (
   etterlevelseDokumentasjonId: string,

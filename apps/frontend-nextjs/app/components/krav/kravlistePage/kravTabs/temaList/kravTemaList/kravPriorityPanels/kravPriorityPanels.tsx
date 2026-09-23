@@ -1,7 +1,7 @@
-import { IKrav } from '@/constants/krav/kravConstants'
 import { List } from '@navikt/ds-react'
 import { FieldArrayRenderProps } from 'formik'
 import { FunctionComponent } from 'react'
+import { IKrav } from '@/constants/krav/kravConstants'
 import { KravPriorityPanel } from '../kravPriorityPanel/kravPriorityPanel'
 
 type TProps = {

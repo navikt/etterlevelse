@@ -1,3 +1,7 @@
+import { Alert, Button, ErrorSummary } from '@navikt/ds-react'
+import { Form, Formik } from 'formik'
+import _ from 'lodash'
+import { Dispatch, FunctionComponent, RefObject, SetStateAction, useRef } from 'react'
 import { etterlevelseDokumentasjonMapToFormVal } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
@@ -5,10 +9,6 @@ import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { Alert, Button, ErrorSummary } from '@navikt/ds-react'
-import { Form, Formik } from 'formik'
-import _ from 'lodash'
-import { Dispatch, FunctionComponent, RefObject, SetStateAction, useRef } from 'react'
 import { sendTilRisikoGodkjenningSchema } from '../sendTilrisikoeierGodkjenningSchema'
 
 type TProp = {

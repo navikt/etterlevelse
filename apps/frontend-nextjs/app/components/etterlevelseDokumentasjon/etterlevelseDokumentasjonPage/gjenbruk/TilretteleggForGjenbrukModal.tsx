@@ -1,5 +1,7 @@
 'use client'
 
+import { BodyLong, Button, Dialog, List, LocalAlert } from '@navikt/ds-react'
+import { FunctionComponent, useState } from 'react'
 import {
   getEtterlevelseDokumentasjon,
   updateEtterlevelseDokumentasjon,
@@ -8,8 +10,6 @@ import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { BodyLong, Button, Dialog, List, LocalAlert } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

@@ -1,5 +1,9 @@
 'use client'
 
+import { Accordion, BodyLong, Label, LocalAlert, ReadMore } from '@navikt/ds-react'
+import moment from 'moment'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import RisikoscenarioView from '@/components/risikoscenario/common/RisikoscenarioView'
 import { RisikoscenarioAccordianHeader } from '@/components/risikoscenario/common/risikoscenarioAccordionHeader'
@@ -17,10 +21,6 @@ import {
   getKonsekvenssnivaaText,
   getSannsynlighetsnivaaText,
 } from '@/util/risikoscenario/risikoscenarioUtils'
-import { Accordion, BodyLong, Label, LocalAlert, ReadMore } from '@navikt/ds-react'
-import moment from 'moment'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 
 type TProps = {
   risikoscenarioList: IRisikoscenario[]

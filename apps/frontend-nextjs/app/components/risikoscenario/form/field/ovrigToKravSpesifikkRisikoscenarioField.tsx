@@ -1,14 +1,14 @@
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Checkbox, CheckboxGroup, InfoCard, Label, List } from '@navikt/ds-react'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
+import AsyncSelect from 'react-select/async'
 import { useSearchKravToOptionsPvk } from '@/api/krav/kravApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { IKravReference } from '@/constants/krav/kravConstants'
 import { kravNummerView } from '@/util/krav/kravUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { Checkbox, CheckboxGroup, InfoCard, Label, List } from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
-import { FunctionComponent, useEffect, useRef, useState } from 'react'
-import AsyncSelect from 'react-select/async'
 
 type TProps = {
   generelScenarioFormValue: boolean

@@ -1,5 +1,8 @@
 'use client'
 
+import { BodyShort, Button } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import {
   etterlevelseDokumentasjonMapToFormVal,
   getEtterlevelseDokumentasjon,
@@ -15,9 +18,6 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { BodyShort, Button } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps, Form, Formik } from 'formik'
-import { FunctionComponent, useContext, useEffect, useState } from 'react'
 
 type TProps = {
   loading: boolean

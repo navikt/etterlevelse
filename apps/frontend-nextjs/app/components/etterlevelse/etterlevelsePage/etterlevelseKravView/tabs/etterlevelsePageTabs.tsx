@@ -1,5 +1,18 @@
 'use client'
 
+import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
+import { FormikProps } from 'formik'
+import { useParams } from 'next/navigation'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import {
   createEtterlevelse,
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
@@ -30,19 +43,6 @@ import {
   isEtterlevelseIkkePaabegynt,
   syncEtterlevelseKriterieBegrunnelseWithKrav,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
-import { AxiosError } from 'axios'
-import { FormikProps } from 'formik'
-import { useParams } from 'next/navigation'
-import {
-  Dispatch,
-  FunctionComponent,
-  RefObject,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
 import EtterlevelseEditFields from '../form/EtterlevelseEditFields'
 import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'

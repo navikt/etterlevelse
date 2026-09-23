@@ -1,12 +1,12 @@
 'use client'
 
+import { Button, Label, Modal, Radio, RadioGroup, TextField } from '@navikt/ds-react'
+import { useContext, useState } from 'react'
 import {
   EAdresseType,
   TVarslingsadresseQL,
 } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { Button, Label, Modal, Radio, RadioGroup, TextField } from '@navikt/ds-react'
-import { useContext, useState } from 'react'
 import { Error } from '../common/modalSchema/ModalSchema'
 import { emailValidator } from './VarslingsadresserEdit'
 

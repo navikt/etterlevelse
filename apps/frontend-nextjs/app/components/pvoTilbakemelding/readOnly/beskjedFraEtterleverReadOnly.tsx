@@ -1,7 +1,7 @@
-import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 
 type TBeskjedFraEtterleverReadOnlyProps = {
   pvkDokument: IPvkDokument

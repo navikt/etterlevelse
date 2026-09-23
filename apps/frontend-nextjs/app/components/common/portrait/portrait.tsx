@@ -1,8 +1,8 @@
-import { avatarPlaceholder } from '@/components/others/images/images'
-import { personImageLink } from '@/util/teamkatalog/utils'
 import { Loader } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useState } from 'react'
+import { avatarPlaceholder } from '@/components/others/images/images'
+import { personImageLink } from '@/util/teamkatalog/utils'
 
 export const Portrait = (props: { ident: string; size?: string }) => {
   const [loading, setLoading] = useState(true)

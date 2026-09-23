@@ -1,6 +1,6 @@
+import test, { expect } from '@playwright/test'
 import { mockNyligeEtterlevelseDokumentasjoner } from '@/tests/utils/mocks'
 import { mockAdmin, mockIdent } from '@/tests/utils/roller'
-import test, { expect } from '@playwright/test'
 
 test.describe('nagivation to dokumentasjon page', () => {
   test('go to dokumentere etterlevelse list page with admin user via menu buttons', async ({

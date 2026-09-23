@@ -1,3 +1,5 @@
+import { BodyShort, Heading, Label, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
@@ -6,8 +8,6 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { harKunDpBehandlinger } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { BodyShort, Heading, Label, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument

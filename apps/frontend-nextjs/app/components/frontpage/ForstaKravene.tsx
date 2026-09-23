@@ -1,7 +1,7 @@
 'use client'
 
-import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { LinkPanel } from '@navikt/ds-react'
+import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 
 const ForstaKravene = () => (
   <div className='w-full mr-2.5'>

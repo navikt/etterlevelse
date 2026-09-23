@@ -1,3 +1,5 @@
+import { BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
+import { FunctionComponent, useContext } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import {
   IBehandling,
@@ -7,8 +9,6 @@ import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjo
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { behandlingName, dpBehandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
-import { FunctionComponent, useContext } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

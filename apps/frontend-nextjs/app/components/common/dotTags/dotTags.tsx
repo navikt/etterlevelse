@@ -1,11 +1,11 @@
 'use client'
 
+import { BodyShort } from '@navikt/ds-react'
+import { Fragment, FunctionComponent, ReactNode, useContext } from 'react'
 import { TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { urlForObject } from '@/routes/urlForObject/urlForObject'
-import { BodyShort } from '@navikt/ds-react'
-import { Fragment, FunctionComponent, ReactNode, useContext } from 'react'
 import { ExternalLink } from '../externalLink/externalLink'
 import { Markdown } from '../markdown/markdown'
 

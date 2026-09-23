@@ -1,7 +1,7 @@
-import { IPageResponse } from '@/constants/commonConstants'
-import { TKravFilters, TKravQL } from '@/constants/krav/kravConstants'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
+import { IPageResponse } from '@/constants/commonConstants'
+import { TKravFilters, TKravQL } from '@/constants/krav/kravConstants'
 
 export const useKravCounter = (
   variables: { lover: string[] },

@@ -1,3 +1,7 @@
+import { Heading } from '@navikt/ds-react'
+import { uniqBy } from 'lodash'
+import { useParams } from 'next/navigation'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
@@ -24,10 +28,6 @@ import {
   harKunDpBehandlinger,
   isReadOnlyPvkStatus,
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Heading } from '@navikt/ds-react'
-import { uniqBy } from 'lodash'
-import { useParams } from 'next/navigation'
-import { useContext, useEffect, useMemo, useState } from 'react'
 import PvkBehovForm from '../form/pvkBehovForm'
 import PvkBehovInfoContent from './pvkBehovInfoContent'
 import PvkBehovMetadata from './pvkBehovMetadata'

@@ -1,5 +1,9 @@
 'use client'
 
+import { PencilIcon } from '@navikt/aksel-icons'
+import { Button, LocalAlert } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   addTiltakToRisikoscenario,
@@ -20,10 +24,6 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { IKravReference } from '@/constants/krav/kravConstants'
 import { risikoscenarioTiltakUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { PencilIcon } from '@navikt/aksel-icons'
-import { Button, LocalAlert } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
 import SlettOvrigRisikoscenario from '../edit/slettOvrigRisikoscenario'

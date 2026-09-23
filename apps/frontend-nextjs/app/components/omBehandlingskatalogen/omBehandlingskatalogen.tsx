@@ -1,12 +1,12 @@
 'use client'
 
-import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { BodyLong, Button, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import OmBehandlingskatalogenImage from './images/OmBehandlingskatalogenImage.png'
 
 const HvordanBrukeBK = '/videos/HvordanBrukeBK.mov'

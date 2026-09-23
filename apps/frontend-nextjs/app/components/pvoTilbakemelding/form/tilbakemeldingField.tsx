@@ -1,8 +1,8 @@
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import { ITilhorendeDokumentasjonTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Button, Heading, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent } from 'react'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { ITilhorendeDokumentasjonTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { EBidragVerdier } from './pvoTilbakemeldingForm'
 
 type TProps = {

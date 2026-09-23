@@ -1,5 +1,7 @@
 'use client'
 
+import { BodyLong } from '@navikt/ds-react'
+import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 import MeldingKnapper from '@/components/krav/kravPage/tilbakemelding/edit/MeldingKnapper'
 import EndretInfo from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingEditInfo/tilbakemeldingsEditInfo'
 import TilbakemeldingResponseMelding from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingResponseMelding/tilbakemeldingResponseMelding'
@@ -10,8 +12,6 @@ import {
   ITilbakemeldingMelding,
 } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { BodyLong } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
   tilbakemelding: ITilbakemelding

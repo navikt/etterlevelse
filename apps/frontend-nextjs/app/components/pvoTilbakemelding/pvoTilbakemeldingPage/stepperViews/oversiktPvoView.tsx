@@ -1,5 +1,8 @@
 'use client'
 
+import { Alert, BodyShort, FormSummary, Heading, Label, Link, List, Tag } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
@@ -33,9 +36,6 @@ import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConst
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { risikoscenarioFilterAlleUrl } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { Alert, BodyShort, FormSummary, Heading, Label, Link, List, Tag } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { InnsendingTag } from '../../common/pvoStatusTags'
 import PvoFormButtons from '../../form/pvoFormButtons'
 import { PvoTilbakemeldingAnsvarligForm } from '../../form/pvoTilbakemeldingAnsvarligForm'

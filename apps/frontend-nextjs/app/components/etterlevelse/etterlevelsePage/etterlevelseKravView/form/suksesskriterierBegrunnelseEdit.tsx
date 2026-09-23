@@ -1,5 +1,21 @@
 'use client'
 
+import {
+  Alert,
+  BodyShort,
+  Box,
+  Checkbox,
+  CheckboxGroup,
+  Heading,
+  Label,
+  List,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  ToggleGroup,
+} from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
@@ -18,22 +34,6 @@ import {
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
-import {
-  Alert,
-  BodyShort,
-  Box,
-  Checkbox,
-  CheckboxGroup,
-  Heading,
-  Label,
-  List,
-  Radio,
-  RadioGroup,
-  ReadMore,
-  ToggleGroup,
-} from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { FunctionComponent, useEffect, useState } from 'react'
 
 type TPropsSuksesskriterierBegrunnelseEdit = {
   suksesskriterie: ISuksesskriterie[]

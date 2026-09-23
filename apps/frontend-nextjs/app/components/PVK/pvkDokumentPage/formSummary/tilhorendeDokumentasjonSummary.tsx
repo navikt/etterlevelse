@@ -1,5 +1,8 @@
 'use client'
 
+import { FormSummary, List } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { FunctionComponent, useMemo } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
@@ -8,9 +11,6 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { behandlingName } from '@/util/behandling/behandlingUtil'
-import { FormSummary, List } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import { FunctionComponent, useMemo } from 'react'
 import FormAlert from './formAlert'
 
 type TProps = {

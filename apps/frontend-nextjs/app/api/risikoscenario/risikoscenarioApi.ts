@@ -1,3 +1,5 @@
+import axios from 'axios'
+import { useEffect, useRef, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -7,8 +9,6 @@ import {
   ITiltakRisikoscenarioRelasjon,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
-import { useEffect, useRef, useState } from 'react'
 
 export const getRisikoscenario = async (id: string): Promise<IRisikoscenario> =>
   (await axios.get<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data

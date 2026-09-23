@@ -1,5 +1,9 @@
 'use client'
 
+import { Search } from '@navikt/ds-react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { useRouter } from 'next/navigation'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { searchBehandling } from '@/api/behandlingskatalog/behandlingskatalogApi'
 import { searchEtterlevelsedokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { kravMainHeaderSearch } from '@/api/krav/kravApi'
@@ -10,10 +14,6 @@ import { TSearchItem } from '@/constants/search/searchConstants'
 import { behandlingName } from '@/util/behandling/behandlingUtil'
 import { etterlevelseDokumentasjonName } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage } from '@/util/search/searchUtil'
-import { Search } from '@navikt/ds-react'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { useRouter } from 'next/navigation'
-import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 type TSearchGroup = { label: string; options: TSearchItem[] }
 

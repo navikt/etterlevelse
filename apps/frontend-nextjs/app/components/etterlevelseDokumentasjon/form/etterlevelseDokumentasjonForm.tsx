@@ -1,5 +1,36 @@
 'use client'
 
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  ErrorSummary,
+  Heading,
+  InfoCard,
+  Label,
+  List,
+  Modal,
+  ReadMore,
+  Select,
+  TextField,
+} from '@navikt/ds-react'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import _ from 'lodash'
+import { usePathname, useRouter } from 'next/navigation'
+import {
+  ChangeEvent,
+  Fragment,
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import AsyncSelect from 'react-select/async'
 import { useArdoqSearch } from '@/api/ardoq/ardoqApi'
 import { getBehandlingensArtOgOmfangByEtterlevelseDokumentId } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { getBehandlingensLivslopByEtterlevelseDokumentId } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
@@ -73,37 +104,6 @@ import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUt
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { InformationSquareIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  ErrorSummary,
-  Heading,
-  InfoCard,
-  Label,
-  List,
-  Modal,
-  ReadMore,
-  Select,
-  TextField,
-} from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import _ from 'lodash'
-import { usePathname, useRouter } from 'next/navigation'
-import {
-  ChangeEvent,
-  Fragment,
-  FunctionComponent,
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import AsyncSelect from 'react-select/async'
 import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 import ROSEdit from './rosEdit'
 

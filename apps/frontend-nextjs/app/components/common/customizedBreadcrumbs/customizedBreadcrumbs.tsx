@@ -1,9 +1,9 @@
 'use client'
 
-import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { ChevronRightIcon } from '@navikt/aksel-icons'
 import { BodyShort, Link } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { IBreadCrumbPath } from '@/constants/commonConstants'
 
 interface ICustomizedProps {
   paths?: IBreadCrumbPath[]

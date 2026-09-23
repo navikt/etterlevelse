@@ -1,6 +1,6 @@
+import axios from 'axios'
 import { IArdoqSystem } from '@/constants/ardoqSystem/ardoqSystemConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
 
 export const getArdoqSystemById = async (ardoqId: string) => {
   return (await axios.get<IArdoqSystem>(`${env.backendBaseUrl}/ardoq/${ardoqId}`)).data

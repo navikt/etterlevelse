@@ -1,12 +1,12 @@
+import { Chips } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import AsyncSelect from 'react-select/async'
 import { useSearchKrav } from '@/api/krav/kravApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { Chips } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import AsyncSelect from 'react-select/async'
 
 export const KravEditRelasjoner = () => (
   <FieldWrapper>

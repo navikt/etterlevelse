@@ -1,5 +1,6 @@
 'use client'
 
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import RisikoscenarioAccordianListReadOnlyWithIverksetting from '@/components/risikoscenario/common/risikoscenarioAccordianListReadOnlyWithIverksetting'
@@ -19,7 +20,6 @@ import {
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
 import InfoChangesMadeAfterApproval from '../../../common/infoChangesMadeAfterApproval'
 import FormButtons from '../../../edit/formButtons'
 import { IdentifiseringAvRisikoscenarioerOgTiltakContent } from './identifiseringAvRisikoscenarioerOgTiltakContent'

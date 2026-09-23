@@ -1,8 +1,5 @@
 'use client'
 
-import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import { EKravTab } from '@/constants/krav/kravConstants'
-import { UserContext } from '@/provider/user/userProvider'
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
 import {
   Accordion,
@@ -16,6 +13,9 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { EKravTab } from '@/constants/krav/kravConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import VisMegHvorJegFinnerDigitalPVK from '../omPvk/images/VisMegHvorJegFinnerDigitalPVK.png'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 

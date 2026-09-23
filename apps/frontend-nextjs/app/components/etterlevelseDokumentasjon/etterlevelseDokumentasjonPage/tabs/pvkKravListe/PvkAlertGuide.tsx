@@ -1,12 +1,12 @@
+import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyLong, InfoCard, Link, List } from '@navikt/ds-react'
+import { Fragment, FunctionComponent } from 'react'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { pvkDokumentasjonStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import { BodyLong, InfoCard, Link, List } from '@navikt/ds-react'
-import { Fragment, FunctionComponent } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument

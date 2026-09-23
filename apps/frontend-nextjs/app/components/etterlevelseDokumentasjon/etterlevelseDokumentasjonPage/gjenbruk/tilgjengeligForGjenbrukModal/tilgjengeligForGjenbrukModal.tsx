@@ -1,7 +1,7 @@
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { Button, InlineMessage, Modal } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { BeskrivelseAvGjenbruk } from '../beskrivelseAvGjenbruk/beskrivelseAvGjenbruk'
 import { AvbrytKnapp, LagreTilSenereKnapp } from '../common/knapper'
 import { GjenbrukFeilmelding } from '../feilmelding/feilmelding'

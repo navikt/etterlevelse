@@ -1,5 +1,7 @@
 'use client'
 
+import { Heading } from '@navikt/ds-react'
+import { Dispatch, FunctionComponent, SetStateAction, useContext, useEffect, useState } from 'react'
 import { getKravByKravNummer } from '@/api/krav/kravApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { ContentLayout, MainPanelLayout } from '@/components/others/layout/content/content'
@@ -8,8 +10,6 @@ import { EListName, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkCon
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { hasKravExpired } from '@/util/krav/kravUtil'
-import { Heading } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction, useContext, useEffect, useState } from 'react'
 import ExpiredAlert from '../expiredAlert/expiredAlertComponent'
 import { KravRightSidePanel } from './kravRightSidePanel/kravRightSidePanel'
 import { KravTabMeny } from './kravTabMeny/kravTabMeny'

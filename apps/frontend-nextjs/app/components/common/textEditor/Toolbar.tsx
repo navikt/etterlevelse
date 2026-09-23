@@ -1,9 +1,9 @@
 'use client'
 
-import { ettlevColors } from '@/util/theme/theme'
 import { LinkIcon, XMarkIcon } from '@navikt/aksel-icons'
 import { Editor } from '@tiptap/react'
 import { useEffect, useRef, useState } from 'react'
+import { ettlevColors } from '@/util/theme/theme'
 import { highlightColors, textColors } from './extensions'
 
 type TToolbarProps = {

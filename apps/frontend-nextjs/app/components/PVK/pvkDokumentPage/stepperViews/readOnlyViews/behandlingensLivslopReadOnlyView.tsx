@@ -1,5 +1,7 @@
 'use client'
 
+import { AxiosError } from 'axios'
+import { FunctionComponent, useEffect, useState } from 'react'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
   mapBehandlingensLivslopRequestToFormValue,
@@ -19,8 +21,6 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { AxiosError } from 'axios'
-import { FunctionComponent, useEffect, useState } from 'react'
 import { PvkSidePanelWrapper } from '../../../common/pvkSidePanelWrapper'
 import FormButtons from '../../../edit/formButtons'
 

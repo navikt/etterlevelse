@@ -1,5 +1,8 @@
 'use client'
 
+import { Button } from '@navikt/ds-react'
+import { useRouter } from 'next/navigation'
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   addTiltakToRisikoscenario,
@@ -27,9 +30,6 @@ import {
   risikoscenarioTiltakUrl,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Button } from '@navikt/ds-react'
-import { useRouter } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import RisikoscenarioView from '../common/RisikoscenarioView'
 import { RisikoscenarioTiltakHeader } from '../common/risikoscenarioTiltakHeader'
 import RedigerRisikoscenarioButtons from '../edit/redigerRisikoscenarioButtons'

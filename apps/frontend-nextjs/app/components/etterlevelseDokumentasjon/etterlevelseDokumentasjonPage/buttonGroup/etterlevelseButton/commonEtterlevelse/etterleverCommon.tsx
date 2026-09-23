@@ -1,8 +1,8 @@
 'use client'
 
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { ExportEtterlevelseModal } from '../../../export/exportEtterlevelseModal'
 import NyVersjonEtterlevelseDokumentasjonModal from '../../../nyVersjon/nyVersjonEtterlevelseDokumentasjonModal'
 import {

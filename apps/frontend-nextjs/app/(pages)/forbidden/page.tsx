@@ -1,7 +1,7 @@
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import notFound from '@/resources/notfound.svg'
 import { Heading } from '@navikt/ds-react'
 import Image from 'next/image'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import notFound from '@/resources/notfound.svg'
 
 const Forbidden = () => {
   // ampli.logEvent('sidevisning', { side: 'Forbidden', sidetittel: '403 forbidden' })

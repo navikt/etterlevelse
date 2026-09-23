@@ -1,5 +1,8 @@
 'use client'
 
+import { FormSummary } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import { FunctionComponent } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
@@ -8,9 +11,6 @@ import {
   risikoscenarioFilterAlleUrl,
   tabTiltakQuery,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { FormSummary } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import { FunctionComponent } from 'react'
 import FormAlert from './formAlert'
 
 type TProps = {

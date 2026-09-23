@@ -1,8 +1,8 @@
-import { IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
 import { ArrowRightLeftIcon } from '@navikt/aksel-icons'
 import { Button, Modal } from '@navikt/ds-react'
 import { Differ, Viewer } from 'json-diff-kit'
 import { useState } from 'react'
+import { IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
 
 type TComparisonViewProps = {
   auditLog: IAuditLog

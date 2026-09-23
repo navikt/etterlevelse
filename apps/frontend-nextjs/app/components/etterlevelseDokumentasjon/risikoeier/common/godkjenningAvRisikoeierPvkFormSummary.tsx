@@ -1,10 +1,10 @@
+import { FormSummary } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { Markdown } from '@/components/common/markdown/markdown'
 import {
   EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { FormSummary } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 interface IProp {
   pvkDokument?: IPvkDokument

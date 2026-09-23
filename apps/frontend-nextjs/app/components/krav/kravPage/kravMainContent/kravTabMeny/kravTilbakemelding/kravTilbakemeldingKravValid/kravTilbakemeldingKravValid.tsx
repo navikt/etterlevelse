@@ -1,11 +1,11 @@
 'use client'
 
+import { BodyLong, Button, Heading } from '@navikt/ds-react'
+import { FunctionComponent, useState } from 'react'
 import { TilbakemeldingNyModal } from '@/components/krav/kravPage/tilbakemelding/tilbakemeldingNyModal/tilbakemeldingNyModal'
 import { IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { ITilbakemelding } from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
 import { hasKravExpired } from '@/util/krav/kravUtil'
-import { BodyLong, Button, Heading } from '@navikt/ds-react'
-import { FunctionComponent, useState } from 'react'
 
 type TProps = {
   krav: IKrav

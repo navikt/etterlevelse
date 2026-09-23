@@ -1,3 +1,5 @@
+import { BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
@@ -5,8 +7,6 @@ import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjo
 import { behandlingskatalogenProcessUrl } from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
-import { BodyShort, Heading, Label, Link, List } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

@@ -1,8 +1,8 @@
+import { WatchQueryFetchPolicy } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { IKravDataProps } from '@/constants/krav/edit/kravEditConstant'
 import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
-import { WatchQueryFetchPolicy } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
 
 export const GetKravData = (
   params: Readonly<Partial<TKravIdParams>>

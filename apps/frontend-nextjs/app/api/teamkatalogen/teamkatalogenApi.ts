@@ -1,13 +1,13 @@
 'use client'
 
+import axios from 'axios'
+import { useContext, useEffect, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { ISlackChannel, ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import { IProductArea, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
 import { useForceUpdate } from '@/util/hooks/customHooks/customHooks'
-import axios from 'axios'
-import { useContext, useEffect, useState } from 'react'
 
 const getResourceById = async (resourceId: string) => {
   return (await axios.get<ITeamResource>(`${env.backendBaseUrl}/team/resource/${resourceId}`)).data

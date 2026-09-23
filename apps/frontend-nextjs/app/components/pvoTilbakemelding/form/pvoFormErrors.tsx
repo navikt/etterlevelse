@@ -1,9 +1,9 @@
-import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import sortFormErrorsByFieldPosition from '@/util/common/sortFormErrorsByFieldPosition'
 import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject } from 'react'
+import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import sortFormErrorsByFieldPosition from '@/util/common/sortFormErrorsByFieldPosition'
 
 type TProps = {
   errors: FormikErrors<IVurdering>

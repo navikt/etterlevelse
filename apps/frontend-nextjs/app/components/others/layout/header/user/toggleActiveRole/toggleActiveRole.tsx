@@ -1,7 +1,7 @@
-import { EGroup, UserContext } from '@/provider/user/userProvider'
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons'
 import { Button, Switch } from '@navikt/ds-react'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { EGroup, UserContext } from '@/provider/user/userProvider'
 
 export const ToggleActiveRole = () => {
   const [viewRoller, setViewRoller] = useState(true)

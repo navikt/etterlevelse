@@ -1,5 +1,17 @@
 'use client'
 
+import { FileTextIcon } from '@navikt/aksel-icons'
+import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
+import { usePathname } from 'next/navigation'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
@@ -18,18 +30,6 @@ import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { FileTextIcon } from '@navikt/aksel-icons'
-import { Button, Heading, Label, Tabs } from '@navikt/ds-react'
-import { usePathname } from 'next/navigation'
-import {
-  Dispatch,
-  FunctionComponent,
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
 import EditNotatfelt from '../../etterlevelseMetadata/editNotatfelt'
 
 type TProps = {

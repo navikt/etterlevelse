@@ -1,8 +1,8 @@
+import { FunctionComponent } from 'react'
 import {
   EEtterlevelseDokumentasjonStatus,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { FunctionComponent } from 'react'
 import {
   EtterlevelseReadOnlyActionMenuVariant,
   RisikoeierOgEtterleverGodkjenningAvEtterlevelseActionMenuVariant,

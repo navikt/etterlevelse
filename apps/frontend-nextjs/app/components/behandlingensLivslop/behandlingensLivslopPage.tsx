@@ -1,5 +1,19 @@
 'use client'
 
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import {
+  BodyShort,
+  Button,
+  ErrorSummary,
+  FileRejected,
+  Heading,
+  Loader,
+  LocalAlert,
+} from '@navikt/ds-react'
+import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
+import _ from 'lodash'
+import { useParams, useRouter } from 'next/navigation'
+import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import {
   createBehandlingensLivslop,
@@ -25,20 +39,6 @@ import {
 import { pvkDokumentasjonBehandlingsenArtOgOmfangUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import {
-  BodyShort,
-  Button,
-  ErrorSummary,
-  FileRejected,
-  Heading,
-  Loader,
-  LocalAlert,
-} from '@navikt/ds-react'
-import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
-import _ from 'lodash'
-import { useParams, useRouter } from 'next/navigation'
-import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import ForbiddenAlert from '../common/forbiddenAlert'
 import { TextAreaField } from '../common/textAreaField/textAreaField'
 import {

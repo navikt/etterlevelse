@@ -1,15 +1,6 @@
 'use client'
 
 import {
-  getDeletedEtterlevelseDokumentasjoner,
-  restoreEtterlevelseDokumentasjon,
-} from '@/api/restore/restoreApi'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import {
-  IDeletedEtterlevelseDokumentasjon,
-  IRestoreResult,
-} from '@/constants/admin/restore/restoreConstants'
-import {
   Alert,
   BodyShort,
   Button,
@@ -23,6 +14,15 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { ChangeEvent, useEffect, useState } from 'react'
+import {
+  getDeletedEtterlevelseDokumentasjoner,
+  restoreEtterlevelseDokumentasjon,
+} from '@/api/restore/restoreApi'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import {
+  IDeletedEtterlevelseDokumentasjon,
+  IRestoreResult,
+} from '@/constants/admin/restore/restoreConstants'
 
 const GjenopprettDokumentasjonAdminPage = () => {
   const [deletedDokumenter, setDeletedDokumenter] = useState<IDeletedEtterlevelseDokumentasjon[]>(

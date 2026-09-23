@@ -1,5 +1,11 @@
 'use client'
 
+import { useQuery } from '@apollo/client/react'
+import { PlusIcon } from '@navikt/aksel-icons'
+import { Button, Label, Loader } from '@navikt/ds-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import AsyncSelect from 'react-select/async'
 import {
   getBehandling,
   searchBehandlingOptions,
@@ -11,12 +17,6 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { useQuery } from '@apollo/client/react'
-import { PlusIcon } from '@navikt/aksel-icons'
-import { Button, Label, Loader } from '@navikt/ds-react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import AsyncSelect from 'react-select/async'
 import { TVariables } from '../dokumentasjonTabs'
 import { EtterlevelseDokumentasjonsPanels } from '../panels/etterlevelseDokumentasjonPanels'
 

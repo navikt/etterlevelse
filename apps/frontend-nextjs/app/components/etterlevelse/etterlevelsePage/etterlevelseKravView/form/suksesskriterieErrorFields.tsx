@@ -1,8 +1,8 @@
-import { ISuksesskriterieBegrunnelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { ErrorSummary } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
 import { Fragment, FunctionComponent } from 'react'
+import { ISuksesskriterieBegrunnelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 
 type TProps = {
   errors: FormikErrors<ISuksesskriterieBegrunnelse>[]

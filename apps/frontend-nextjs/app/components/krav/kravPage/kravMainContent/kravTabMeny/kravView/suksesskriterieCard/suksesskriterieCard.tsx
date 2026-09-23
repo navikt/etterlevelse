@@ -1,7 +1,7 @@
-import { Markdown } from '@/components/common/markdown/markdown'
-import { ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { Box, Heading, Label } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { Markdown } from '@/components/common/markdown/markdown'
+import { ISuksesskriterie } from '@/constants/krav/kravConstants'
 
 type TProps = {
   suksesskriterie: ISuksesskriterie

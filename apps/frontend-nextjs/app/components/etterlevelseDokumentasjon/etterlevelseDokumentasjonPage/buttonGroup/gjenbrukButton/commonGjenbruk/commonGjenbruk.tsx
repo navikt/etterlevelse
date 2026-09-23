@@ -1,9 +1,9 @@
 'use client'
 
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { ChevronDownIcon } from '@navikt/aksel-icons'
 import { ActionMenu, Button } from '@navikt/ds-react'
 import { FunctionComponent, PropsWithChildren, useState } from 'react'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import TillatGjenbrukModal from '../../../gjenbruk/TillatGjenbrukModal'
 import TilretteleggForGjenbrukModal from '../../../gjenbruk/TilretteleggForGjenbrukModal'
 

@@ -1,11 +1,11 @@
 'use client'
 
+import { Accordion, BodyShort } from '@navikt/ds-react'
+import { useContext, useEffect, useState } from 'react'
 import { getAllKrav } from '@/api/krav/kravApi'
 import { EListName, IRegelverk, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav } from '@/constants/krav/kravConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import { Accordion, BodyShort } from '@navikt/ds-react'
-import { useContext, useEffect, useState } from 'react'
 import { KravPanelHeader } from './kravPanelHeader/kravPanelHeader'
 import { KravTemaList } from './kravTemaList/kravTemaList'
 

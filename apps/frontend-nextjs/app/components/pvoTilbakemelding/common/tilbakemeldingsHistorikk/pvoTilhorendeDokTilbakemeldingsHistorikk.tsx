@@ -1,11 +1,11 @@
+import { Accordion, Heading, Label } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent } from 'react'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Accordion, Heading, Label } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent } from 'react'
 import PvoTilhorendeDokTilbakemeldingsHistorikkContent from './pvoTilhorendeDokTilbakemeldingsHistorikkContent'
 
 type TProps = {

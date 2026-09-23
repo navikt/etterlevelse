@@ -1,5 +1,8 @@
 'use client'
 
+import { useQuery } from '@apollo/client/react'
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
 import { getBreadcrumbPaths } from '@/components/common/breadcrumbs/breadcrumbs'
 import { KravMainContent } from '@/components/krav/kravPage/kravMainContent/kravMainContent'
 import { KravOverview } from '@/components/krav/kravPage/kravOverview/kravOverview'
@@ -8,9 +11,6 @@ import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravId, TKravIdParams, TKravQL } from '@/constants/krav/kravConstants'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
 import { kravNummerView } from '@/util/krav/kravUtil'
-import { useQuery } from '@apollo/client/react'
-import { useParams } from 'next/navigation'
-import { useState } from 'react'
 
 const getQueryVariableFromParams = (params: Readonly<Partial<TKravIdParams>>) => {
   if (params.kravNummer && !params.kravVersjon) {

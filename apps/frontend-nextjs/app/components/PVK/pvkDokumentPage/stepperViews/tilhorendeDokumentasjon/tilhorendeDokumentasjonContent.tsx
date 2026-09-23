@@ -1,19 +1,5 @@
 'use client'
 
-import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
-import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
-import { IPageResponse } from '@/constants/commonConstants'
-import {
-  EEtterlevelseStatus,
-  TEtterlevelseQL,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { TKravQL } from '@/constants/krav/kravConstants'
-import { behandlingskatalogenProcessUrl } from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
-import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   BodyLong,
@@ -29,6 +15,20 @@ import {
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useMemo } from 'react'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
+import { IPageResponse } from '@/constants/commonConstants'
+import {
+  EEtterlevelseStatus,
+  TEtterlevelseQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TKravQL } from '@/constants/krav/kravConstants'
+import { behandlingskatalogenProcessUrl } from '@/routes/behandlingskatalog/behandlingskatalogRoutes'
+import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { etterlevelseDokumentasjonPvkTabUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { behandlingName, getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

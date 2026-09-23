@@ -1,5 +1,7 @@
 'use client'
 
+import { Loader } from '@navikt/ds-react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
@@ -9,8 +11,6 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
-import { Loader } from '@navikt/ds-react'
-import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { EtterlevelseButton } from './etterlevelseButton/etterlevelseButton'
 import GjenbrukButton from './gjenbrukButton/gjenbrukButton'
 import { PersonvernkonsekvensvurderingButton } from './personvernkonsekvensvurderingButton/personvernkonsekvensvurderingButton'

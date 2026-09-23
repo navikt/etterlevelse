@@ -1,7 +1,7 @@
 'use client'
 
-import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { Heading } from '@navikt/ds-react'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { AuditRecentTable } from './AuditRecentTable'
 
 const VersjoneringAdminPage = () => (

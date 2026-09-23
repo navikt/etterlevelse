@@ -1,5 +1,8 @@
 'use client'
 
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { BodyLong, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
+import { FunctionComponent, useContext, useEffect, useState } from 'react'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { ArdoqSystemerView } from '@/components/ardoq/ardoqSystemerView'
 import { BehandlingList } from '@/components/behandlingskatalog/behandlingList'
@@ -16,9 +19,6 @@ import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokument
 import { p360Url } from '@/routes/p360/p360Routes'
 import { env } from '@/util/env/env'
 import { ettlevColors } from '@/util/theme/theme'
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { BodyLong, Heading, Label, Link, ReadMore, Tag } from '@navikt/ds-react'
-import { FunctionComponent, useContext, useEffect, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL

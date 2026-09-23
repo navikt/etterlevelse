@@ -1,3 +1,5 @@
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IEtterlevelseDokumentasjonWithRelation } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import {
@@ -7,8 +9,6 @@ import {
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { env } from '@/util/env/env'
-import axios from 'axios'
-import { useEffect, useState } from 'react'
 
 export const getEtterlevelseDokumentasjon = async (id: string) => {
   return (

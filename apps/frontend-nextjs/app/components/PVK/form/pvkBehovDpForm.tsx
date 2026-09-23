@@ -1,5 +1,31 @@
 'use client'
 
+import { ChevronLeftIcon, ChevronRightIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyLong,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  CopyButton,
+  Link,
+  List,
+  LocalAlert,
+  Radio,
+  RadioGroup,
+  ReadMore,
+} from '@navikt/ds-react'
+import {
+  Field,
+  FieldArray,
+  FieldArrayRenderProps,
+  FieldProps,
+  Form,
+  Formik,
+  FormikHelpers,
+} from 'formik'
+import { useRouter } from 'next/navigation'
+import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
 import {
   createPvkDokument,
   getPvkDokumentByEtterlevelseDokumentId,
@@ -30,32 +56,6 @@ import {
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ChevronLeftIcon, ChevronRightIcon, EnvelopeClosedIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  CopyButton,
-  Link,
-  List,
-  LocalAlert,
-  Radio,
-  RadioGroup,
-  ReadMore,
-} from '@navikt/ds-react'
-import {
-  Field,
-  FieldArray,
-  FieldArrayRenderProps,
-  FieldProps,
-  Form,
-  Formik,
-  FormikHelpers,
-} from 'formik'
-import { useRouter } from 'next/navigation'
-import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
 import pvkBehovSchema from './pvkBehovSchema'
 
 type TProps = {

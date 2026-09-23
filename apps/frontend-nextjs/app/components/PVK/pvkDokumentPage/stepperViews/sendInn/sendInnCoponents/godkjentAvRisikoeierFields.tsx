@@ -1,5 +1,8 @@
 'use client'
 
+import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
+import { FormikErrors } from 'formik'
+import { FunctionComponent, ReactNode, useContext } from 'react'
 import { arkiver } from '@/api/p360/p360Api'
 import {
   EEtterlevelseDokumentasjonStatus,
@@ -13,9 +16,6 @@ import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
-import { FunctionComponent, ReactNode, useContext } from 'react'
 import BeskjedFraRisikoeierReadOnly from '../../readOnlyViews/beskjedFraRisikoeierReadOnly'
 import CopyAndExportButtons from './copyAndExportButtons'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'

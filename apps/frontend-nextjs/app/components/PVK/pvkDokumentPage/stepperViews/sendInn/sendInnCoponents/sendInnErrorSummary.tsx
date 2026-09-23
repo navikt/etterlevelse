@@ -1,3 +1,7 @@
+import { ErrorSummary } from '@navikt/ds-react'
+import { FormikErrors } from 'formik'
+import _ from 'lodash'
+import { FunctionComponent, RefObject } from 'react'
 import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
@@ -15,10 +19,6 @@ import {
   risikoscenarioFilterAlleUrl,
   tabTiltakQuery,
 } from '@/routes/risikoscenario/risikoscenarioRoutes'
-import { ErrorSummary } from '@navikt/ds-react'
-import { FormikErrors } from 'formik'
-import _ from 'lodash'
-import { FunctionComponent, RefObject } from 'react'
 
 type TProps = {
   errors: FormikErrors<IPvkDokument>

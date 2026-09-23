@@ -1,5 +1,5 @@
-import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import * as yup from 'yup'
+import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import { env } from '../env/env'
 
 export const personImageLink = (navIdent: string) => `/api/team/resource/${navIdent}/photo`

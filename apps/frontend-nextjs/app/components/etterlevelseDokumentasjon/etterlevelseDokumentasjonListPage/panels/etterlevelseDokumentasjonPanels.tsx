@@ -1,7 +1,7 @@
+import { List } from '@navikt/ds-react'
 import { SkeletonPanel } from '@/components/common/loadingSkeleton/loadingSkeletonComponent'
 import { EtterlevelseDokumentasjonsPanel } from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonListPage/panels/etterlevelseDokumentasjonsPanel'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { List } from '@navikt/ds-react'
 
 interface IEtterlevelseDokumentasjonsPanels {
   etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]

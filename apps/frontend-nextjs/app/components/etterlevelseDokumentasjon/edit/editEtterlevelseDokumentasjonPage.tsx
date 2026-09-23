@@ -1,5 +1,8 @@
 'use client'
 
+import { Loader } from '@navikt/ds-react'
+import { useParams } from 'next/navigation'
+import { useContext } from 'react'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import ForbiddenAlert from '@/components/common/forbiddenAlert'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
@@ -9,9 +12,6 @@ import {
   etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonerUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { Loader } from '@navikt/ds-react'
-import { useParams } from 'next/navigation'
-import { useContext } from 'react'
 import EtterlevelseDokumentasjonForm from '../form/etterlevelseDokumentasjonForm'
 import EtterlevelseDokumentasjonFormSendTilGodkjenningState from '../form/etterlevelseDokumentasjonFormSendTilGodkjenningState'
 

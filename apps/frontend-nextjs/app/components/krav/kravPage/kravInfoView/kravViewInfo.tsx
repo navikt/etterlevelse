@@ -1,5 +1,8 @@
 'use client'
 
+import { BodyShort, Label } from '@navikt/ds-react'
+import moment from 'moment'
+import { FunctionComponent, useContext } from 'react'
 import { DotTags } from '@/components/common/dotTags/dotTags'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
@@ -12,9 +15,6 @@ import { IKrav, IKravVersjon, TKravViewInfoProps } from '@/constants/krav/kravCo
 import { UserContext } from '@/provider/user/userProvider'
 import { kravUrl } from '@/routes/krav/kravRoutes'
 import { termUrl } from '@/util/config/config'
-import { BodyShort, Label } from '@navikt/ds-react'
-import moment from 'moment'
-import { FunctionComponent, useContext } from 'react'
 
 interface IProps extends TKravViewInfoProps {
   alleKravVersjoner: IKravVersjon[]

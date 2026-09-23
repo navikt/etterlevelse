@@ -1,5 +1,5 @@
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { List } from '@navikt/ds-react'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 
 export const BeskrivelseAvGjenbruk = () => (
   <>

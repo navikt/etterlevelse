@@ -1,9 +1,9 @@
-import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { etterlevelseUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
-import { etterlevelseTeamNavnId } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { BodyShort, LinkPanel, Spacer } from '@navikt/ds-react'
 import moment from 'moment'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
+import { TEtterlevelseQL } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { etterlevelseUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
+import { etterlevelseTeamNavnId } from '@/util/etterlevelseUtil/etterlevelseUtil'
 
 type TProps = {
   modalVersion?: boolean

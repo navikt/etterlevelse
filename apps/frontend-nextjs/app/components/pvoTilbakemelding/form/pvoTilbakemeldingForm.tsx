@@ -1,5 +1,10 @@
 'use client'
 
+import { BodyShort, Button, Heading, LocalAlert, Radio, RadioGroup } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
+import { Field, FieldProps, Form, Formik } from 'formik'
+import moment from 'moment'
+import { FunctionComponent, RefObject, useContext, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   createPvoTilbakemelding,
@@ -19,11 +24,6 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { createNewPvoVurderning } from '@/util/pvoTilbakemelding/pvoTilbakemeldingUtils'
-import { BodyShort, Button, Heading, LocalAlert, Radio, RadioGroup } from '@navikt/ds-react'
-import { AxiosError } from 'axios'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import moment from 'moment'
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
 import AlertPvoModal from '../common/alertPvoModal'
 
 export enum EBidragVerdier {

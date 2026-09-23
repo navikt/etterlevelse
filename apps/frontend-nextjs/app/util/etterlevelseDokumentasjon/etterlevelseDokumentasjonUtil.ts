@@ -1,3 +1,5 @@
+import _ from 'lodash'
+import moment from 'moment'
 import { kravPrioritingMapToFormValue } from '@/api/kravPriorityList/kravPriorityListApi'
 import { IChangeStamp, IPageResponse } from '@/constants/commonConstants'
 import {
@@ -20,8 +22,6 @@ import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravCon
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { IMember, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
-import _ from 'lodash'
-import moment from 'moment'
 import { getNumberOfMonthsBetween } from '../checkAge/checkAgeUtil'
 import { sortKravListeByPriority } from '../krav/kravUtil'
 

@@ -1,10 +1,10 @@
 'use client'
 
-import { ETab } from '@/constants/krav/kravlist/kravlistConstants'
-import { kravlisteUrl } from '@/routes/krav/kravRoutes'
 import { Tabs } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { ETab } from '@/constants/krav/kravlist/kravlistConstants'
+import { kravlisteUrl } from '@/routes/krav/kravRoutes'
 import { AllKrav } from './alle/alleKrav'
 import { SistRedigertKrav } from './sisteRedigertKrav/sisteRedigertKrav'
 import { TemaList } from './temaList/temaList'

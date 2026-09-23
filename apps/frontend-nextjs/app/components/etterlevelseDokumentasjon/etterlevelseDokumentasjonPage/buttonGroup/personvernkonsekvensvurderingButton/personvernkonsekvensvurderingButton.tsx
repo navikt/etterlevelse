@@ -1,5 +1,6 @@
 'use client'
 
+import { FunctionComponent } from 'react'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -10,7 +11,6 @@ import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernko
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { IUserContext } from '@/provider/user/userProvider'
 import { getRolle } from '@/util/etterlevelseDokumentasjon/rolle/rolleUtil'
-import { FunctionComponent } from 'react'
 import LesRollePvk from './LesRollePvk/LesRollePvk'
 import AdminRollePVK from './adminRollePVK/adminRollePVK'
 import EtterleverOgRisikoeierRollePVK from './etterleverOgRisikoeierRollePVK/etterleverOgRisikoeierRollePVK'

@@ -1,5 +1,8 @@
 'use client'
 
+import { Heading, Loader } from '@navikt/ds-react'
+import { useParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import {
   mapBehandlingensLivslopRequestToFormValue,
   useBehandlingensLivslop,
@@ -10,9 +13,6 @@ import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
-import { Heading, Loader } from '@navikt/ds-react'
-import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../others/layout/content/content'
 import { PageLayout } from '../others/scaffold/scaffold'
 import BehandlingensLivslopReadOnlyContent from './content/behandlingensLivslopReadOnlyContent'

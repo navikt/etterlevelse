@@ -1,5 +1,7 @@
 'use client'
 
+import { Button, LocalAlert } from '@navikt/ds-react'
+import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 import { arkiver } from '@/api/p360/p360Api'
 import AlertPvoModal from '@/components/pvoTilbakemelding/common/alertPvoModal'
 import { CopyLinkPvoButton } from '@/components/pvoTilbakemelding/common/copyLinkPvoButton'
@@ -15,8 +17,6 @@ import {
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { env } from '@/util/env/env'
-import { Button, LocalAlert } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction, useContext } from 'react'
 
 type TProps = {
   pvkDokument: IPvkDokument

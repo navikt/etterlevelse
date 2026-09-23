@@ -1,10 +1,5 @@
 'use client'
 
-import { getDashboardStats } from '@/api/dashboard/dashboardApi'
-import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
-import { DashboardReadMore } from '@/components/dashboard/DashboardReadmore/DashboardReadMore'
-import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
   Heading,
@@ -18,6 +13,11 @@ import {
   Tag,
 } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
+import { getDashboardStats } from '@/api/dashboard/dashboardApi'
+import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewCard'
+import { DashboardReadMore } from '@/components/dashboard/DashboardReadmore/DashboardReadMore'
+import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 const DashboardPage = () => {

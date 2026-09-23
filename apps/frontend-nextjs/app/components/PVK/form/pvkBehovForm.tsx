@@ -1,39 +1,6 @@
 'use client'
 
 import {
-  createPvkDokument,
-  getPvkDokumentByEtterlevelseDokumentId,
-  mapPvkDokumentToFormValue,
-  updatePvkDokument,
-} from '@/api/pvkDokument/pvkDokumentApi'
-import { ExternalLink } from '@/components/common/externalLink/externalLink'
-import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
-import { Markdown } from '@/components/common/markdown/markdown'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
-import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
-import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
-import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
-import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkVurdering,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
-import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
-import {
-  etterlevelseDokumentasjonIdUrl,
-  etterlevelsesDokumentasjonEditUrl,
-} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import {
-  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
-  pvkDokumentasjonBehandlingsenLivslopUrl,
-  pvkDokumentasjonPvkBehovUrl,
-  pvkDokumentasjonStepUrl,
-} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import {
   ChevronLeftIcon,
   ChevronRightIcon,
   EnvelopeClosedIcon,
@@ -67,6 +34,39 @@ import {
 } from 'formik'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useContext, useRef, useState } from 'react'
+import {
+  createPvkDokument,
+  getPvkDokumentByEtterlevelseDokumentId,
+  mapPvkDokumentToFormValue,
+  updatePvkDokument,
+} from '@/api/pvkDokument/pvkDokumentApi'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
+import { Markdown } from '@/components/common/markdown/markdown'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
+import UnsavedModalAlert from '@/components/common/unsavedModalAlert/unsavedModalAlert'
+import { StickyFooterButtonLayout } from '@/components/others/layout/content/content'
+import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
+import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import {
+  etterlevelseDokumentasjonIdUrl,
+  etterlevelsesDokumentasjonEditUrl,
+} from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import {
+  pvkDokumentasjonBehandlingsenArtOgOmfangUrl,
+  pvkDokumentasjonBehandlingsenLivslopUrl,
+  pvkDokumentasjonPvkBehovUrl,
+  pvkDokumentasjonStepUrl,
+} from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import pvkBehovSchema from './pvkBehovSchema'
 
 type TProps = {

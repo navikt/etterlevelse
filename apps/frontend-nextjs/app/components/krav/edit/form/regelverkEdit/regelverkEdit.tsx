@@ -1,5 +1,9 @@
 'use client'
 
+import { Button, Label, TextField } from '@navikt/ds-react'
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { ChangeEvent, useContext, useState } from 'react'
+import Select, { CSSObjectWithLabel, SingleValue } from 'react-select'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Error } from '@/components/common/modalSchema/ModalSchema'
@@ -10,10 +14,6 @@ import { EListName, IRegelverk, TLovCode } from '@/constants/kodeverk/kodeverkCo
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { borderWidth } from '@/util/style/Style'
 import { ettlevColors } from '@/util/theme/theme'
-import { Button, Label, TextField } from '@navikt/ds-react'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { ChangeEvent, useContext, useState } from 'react'
-import Select, { CSSObjectWithLabel, SingleValue } from 'react-select'
 
 export const RegelverkEdit = () => {
   const [lov, setLov] = useState({ value: '', label: '', description: '' })

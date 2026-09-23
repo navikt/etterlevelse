@@ -1,8 +1,8 @@
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FieldProps } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {

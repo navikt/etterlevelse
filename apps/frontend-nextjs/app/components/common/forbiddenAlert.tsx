@@ -1,6 +1,6 @@
-import alertGif from '@/resources/no_no_no.webp'
 import { Alert } from '@navikt/ds-react'
 import Image from 'next/image'
+import alertGif from '@/resources/no_no_no.webp'
 
 const ForbiddenAlert = () => (
   <div className='flex w-full justify-center mt-5'>

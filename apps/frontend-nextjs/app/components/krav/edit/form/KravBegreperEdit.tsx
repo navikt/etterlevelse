@@ -1,3 +1,5 @@
+import { FieldArray, FieldArrayRenderProps } from 'formik'
+import AsyncSelect from 'react-select/async'
 import { useBegrepSearch } from '@/api/begrep/begrepApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
@@ -6,8 +8,6 @@ import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
-import AsyncSelect from 'react-select/async'
 
 export const EditBegreper = () => (
   <FieldWrapper>

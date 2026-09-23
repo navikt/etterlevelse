@@ -1,5 +1,32 @@
 'use client'
 
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  ErrorSummary,
+  Heading,
+  InfoCard,
+  Radio,
+  RadioGroup,
+  ReadMore,
+  TextField,
+} from '@navikt/ds-react'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import _ from 'lodash'
+import { useRouter } from 'next/navigation'
+import {
+  ChangeEvent,
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
+import AsyncSelect from 'react-select/async'
 import { useArdoqSearch } from '@/api/ardoq/ardoqApi'
 import {
   searchBehandlingOptions,
@@ -50,33 +77,6 @@ import { behandlingName, dpBehandlingName } from '@/util/behandling/behandlingUt
 import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { InformationSquareIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  Button,
-  Checkbox,
-  CheckboxGroup,
-  ErrorSummary,
-  Heading,
-  InfoCard,
-  Radio,
-  RadioGroup,
-  ReadMore,
-  TextField,
-} from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
-import _ from 'lodash'
-import { useRouter } from 'next/navigation'
-import {
-  ChangeEvent,
-  FunctionComponent,
-  RefObject,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import AsyncSelect from 'react-select/async'
 import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokumentasjonSchema'
 import ROSEdit from './rosEdit'
 

@@ -1,7 +1,7 @@
-import { usePersonName } from '@/api/teamkatalogen/teamkatalogenApi'
-import { teamKatPersonLink } from '@/util/config/config'
 import { Link } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { usePersonName } from '@/api/teamkatalogen/teamkatalogenApi'
+import { teamKatPersonLink } from '@/util/config/config'
 
 type TProps = { ident: string; link?: boolean; kraveier?: boolean }
 

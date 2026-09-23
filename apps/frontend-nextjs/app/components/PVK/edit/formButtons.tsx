@@ -1,10 +1,10 @@
 'use client'
 
-import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, ReactNode } from 'react'
+import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 
 type TProps = {
   etterlevelseDokumentasjonId: string

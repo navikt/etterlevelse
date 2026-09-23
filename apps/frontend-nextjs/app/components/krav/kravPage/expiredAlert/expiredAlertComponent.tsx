@@ -1,7 +1,7 @@
-import { EKravStatus, IKravVersjon } from '@/constants/krav/kravConstants'
-import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 import { Alert, BodyLong, Link } from '@navikt/ds-react'
 import { FunctionComponent, ReactNode } from 'react'
+import { EKravStatus, IKravVersjon } from '@/constants/krav/kravConstants'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
 
 type TProps = {
   alleKravVersjoner: IKravVersjon[]

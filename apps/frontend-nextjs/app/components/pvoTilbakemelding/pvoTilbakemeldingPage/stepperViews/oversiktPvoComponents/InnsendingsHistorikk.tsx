@@ -1,5 +1,9 @@
 'use client'
 
+import { Label, List, Loader, ReadMore } from '@navikt/ds-react'
+import { ListItem } from '@navikt/ds-react/List'
+import moment from 'moment'
+import { Fragment, FunctionComponent, useEffect, useState } from 'react'
 import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { mapPvkDokumentToFormValue } from '@/api/pvkDokument/pvkDokumentApi'
 import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
@@ -9,10 +13,6 @@ import {
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { Label, List, Loader, ReadMore } from '@navikt/ds-react'
-import { ListItem } from '@navikt/ds-react/List'
-import moment from 'moment'
-import { Fragment, FunctionComponent, useEffect, useState } from 'react'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon

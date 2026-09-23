@@ -1,5 +1,9 @@
 'use client'
 
+import { TrashIcon } from '@navikt/aksel-icons'
+import { Button, Heading, List, Modal } from '@navikt/ds-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { FunctionComponent, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   deleteRisikoscenario,
@@ -11,10 +15,6 @@ import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/aler
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { TrashIcon } from '@navikt/aksel-icons'
-import { Button, Heading, List, Modal } from '@navikt/ds-react'
-import { usePathname, useRouter } from 'next/navigation'
-import { FunctionComponent, useState } from 'react'
 
 type TProps = {
   risikoscenario: IRisikoscenario

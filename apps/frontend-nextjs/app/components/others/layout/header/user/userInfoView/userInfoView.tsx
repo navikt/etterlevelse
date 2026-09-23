@@ -1,10 +1,10 @@
 'use client'
 
-import { Portrait } from '@/components/common/portrait/portrait'
-import { UserContext } from '@/provider/user/userProvider'
 import { Label, Link } from '@navikt/ds-react'
 import { usePathname } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
+import { Portrait } from '@/components/common/portrait/portrait'
+import { UserContext } from '@/provider/user/userProvider'
 
 export const UserInfoView = () => {
   const pathname: string = usePathname()

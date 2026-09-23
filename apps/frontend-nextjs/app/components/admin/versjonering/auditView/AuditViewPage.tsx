@@ -1,13 +1,13 @@
 'use client'
 
+import { Box, Heading, Label, Loader } from '@navikt/ds-react'
+import { useParams, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { getAuditLog } from '@/api/audit/auditApi'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAuditItem, IAuditLog } from '@/constants/admin/audit/auditConstants'
 import { adminAuditUrl } from '@/routes/admin/adminRoutes'
 import { useRefs } from '@/util/hooks/customHooks/customHooks'
-import { Box, Heading, Label, Loader } from '@navikt/ds-react'
-import { useParams, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import AuditItemList from './AuditItemList'
 import AuditOversiktView from './AuditOversiktView'
 

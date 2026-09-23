@@ -1,7 +1,7 @@
-import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { EPvoTilbakemeldingStatus } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { Detail, Tag } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { EPvoTilbakemeldingStatus } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { InnsendingTag } from './pvoStatusTags'
 
 type TProps = {

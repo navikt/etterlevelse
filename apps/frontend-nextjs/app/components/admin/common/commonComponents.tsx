@@ -1,7 +1,7 @@
+import { BodyShort } from '@navikt/ds-react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IAuditItem, TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { urlForObject } from '@/routes/urlForObject/urlForObject'
-import { BodyShort } from '@navikt/ds-react'
 import { AuditButton } from '../versjonering/common/AuditButton'
 
 export const UpdateMessage = ({ message }: { message?: string }) => {

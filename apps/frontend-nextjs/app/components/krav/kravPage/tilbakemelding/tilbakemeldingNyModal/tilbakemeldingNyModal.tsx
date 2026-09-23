@@ -1,22 +1,3 @@
-import { createNewTilbakemelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
-import { Markdown } from '@/components/common/markdown/markdown'
-import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
-import { SlackChannelSearch } from '@/components/varslingsadresse/slackChannelSearch/slackChannelSearch'
-import { SlackUserSearch } from '@/components/varslingsadresse/slackUserSearch/slackUserSearch'
-import { AddEmail } from '@/components/varslingsadresse/varslingsadresserEdit/varslingsadresserEdit'
-import { VarslingsadresserTagList } from '@/components/varslingsadresse/varslingsadresserTagList/varslingsadresseTagList'
-import { IKrav, ISuksesskriterie } from '@/constants/krav/kravConstants'
-import {
-  ETilbakemeldingMeldingStatus,
-  ETilbakemeldingType,
-  ICreateTilbakemeldingRequest,
-  ITilbakemelding,
-} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
-import {
-  EAdresseType,
-  IVarslingsadresse,
-} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
-import { getMessageType } from '@/util/tilbakemelding/tilbakemeldingUtils'
 import { faSlackHash } from '@fortawesome/free-brands-svg-icons'
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -36,6 +17,25 @@ import {
 import { Field, FieldProps, Form, Formik } from 'formik'
 import { useState } from 'react'
 import * as yup from 'yup'
+import { createNewTilbakemelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
+import { Markdown } from '@/components/common/markdown/markdown'
+import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { SlackChannelSearch } from '@/components/varslingsadresse/slackChannelSearch/slackChannelSearch'
+import { SlackUserSearch } from '@/components/varslingsadresse/slackUserSearch/slackUserSearch'
+import { AddEmail } from '@/components/varslingsadresse/varslingsadresserEdit/varslingsadresserEdit'
+import { VarslingsadresserTagList } from '@/components/varslingsadresse/varslingsadresserTagList/varslingsadresseTagList'
+import { IKrav, ISuksesskriterie } from '@/constants/krav/kravConstants'
+import {
+  ETilbakemeldingMeldingStatus,
+  ETilbakemeldingType,
+  ICreateTilbakemeldingRequest,
+  ITilbakemelding,
+} from '@/constants/krav/tilbakemelding/tilbakemeldingConstants'
+import {
+  EAdresseType,
+  IVarslingsadresse,
+} from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { getMessageType } from '@/util/tilbakemelding/tilbakemeldingUtils'
 
 type TNyTilbakemeldingModalProps = {
   open?: boolean

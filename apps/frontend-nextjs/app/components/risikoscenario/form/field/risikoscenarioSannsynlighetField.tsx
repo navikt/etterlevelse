@@ -1,8 +1,8 @@
+import { Heading, Radio, RadioGroup } from '@navikt/ds-react'
+import { Field, FieldProps } from 'formik'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import RisikoscenarioSannsynlighetReadMore from '@/components/risikoscenario/common/risikoscenarioSannsynlighetReadMore'
-import { Heading, Radio, RadioGroup } from '@navikt/ds-react'
-import { Field, FieldProps } from 'formik'
 
 const RisikoscenarioSannsynlighetField = () => (
   <>

@@ -1,5 +1,9 @@
 'use client'
 
+import { FilesIcon } from '@navikt/aksel-icons'
+import { Alert, BodyLong, CopyButton, Heading } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
+import { FunctionComponent, useEffect, useState } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -26,10 +30,6 @@ import { TKravQL } from '@/constants/krav/kravConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { FilesIcon } from '@navikt/aksel-icons'
-import { Alert, BodyLong, CopyButton, Heading } from '@navikt/ds-react'
-import { AxiosError } from 'axios'
-import { FunctionComponent, useEffect, useState } from 'react'
 import ArtOgOmFangSummary from '../../../formSummary/artOgOmFangSummary'
 import BehandlingensLivslopSummary from '../../../formSummary/behandlingensLivslopSummary'
 import RisikoscenarioEtterTitak from '../../../formSummary/risikoscenarioEtterTitak'

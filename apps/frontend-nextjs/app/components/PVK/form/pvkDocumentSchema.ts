@@ -1,5 +1,5 @@
-import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import * as yup from 'yup'
+import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 
 const editStatus = [
   EPvkDokumentStatus.SENDT_TIL_PVO,

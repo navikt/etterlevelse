@@ -1,5 +1,8 @@
 'use client'
 
+import { Button, Heading, Loader } from '@navikt/ds-react'
+import { Form, Formik, FormikProps } from 'formik'
+import React, { FunctionComponent, useState } from 'react'
 import {
   createMelding,
   deleteMelding,
@@ -9,9 +12,6 @@ import {
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
-import { Button, Heading, Loader } from '@navikt/ds-react'
-import { Form, Formik, FormikProps } from 'formik'
-import React, { FunctionComponent, useState } from 'react'
 
 type TProps = {
   melding: IMelding | undefined

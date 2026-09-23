@@ -1,5 +1,19 @@
 'use client'
 
+import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  BodyShort,
+  Button,
+  Detail,
+  Heading,
+  InfoCard,
+  Label,
+  Link,
+  Select,
+  Tabs,
+} from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import AsyncSelect from 'react-select/async'
 import {
   getDashboardAvdelingStats,
   getDashboardStats,
@@ -18,20 +32,6 @@ import {
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
-import { DownloadIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import {
-  BodyShort,
-  Button,
-  Detail,
-  Heading,
-  InfoCard,
-  Label,
-  Link,
-  Select,
-  Tabs,
-} from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
-import AsyncSelect from 'react-select/async'
 import { TemaDashboardHowToReadmore } from './DashboardReadmore/TemaDashboardHowToReadmore'
 import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'

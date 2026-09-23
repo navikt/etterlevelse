@@ -1,6 +1,6 @@
-import { MultiInputField } from '@/components/common/inputs'
 import { Heading } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
+import { MultiInputField } from '@/components/common/inputs'
 
 type TProps = {
   maxInputWidth: string

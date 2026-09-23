@@ -1,7 +1,7 @@
 'use client'
 
-import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import { Link as AkselLink, BodyShort, Detail, Heading } from '@navikt/ds-react'
+import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import {
   AVDELING_SUKSESS_COLORS,
   BEHOV_COLORS,

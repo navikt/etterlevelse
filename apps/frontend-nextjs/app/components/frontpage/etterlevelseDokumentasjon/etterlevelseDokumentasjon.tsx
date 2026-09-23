@@ -1,5 +1,10 @@
 'use client'
 
+import { useQuery } from '@apollo/client/react'
+import { Alert, Button, Heading, Skeleton } from '@navikt/ds-react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { useRouter } from 'next/navigation'
+import { useContext, useEffect, useState } from 'react'
 import { getMeldingByType } from '@/api/melding/meldingApi'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
@@ -9,11 +14,6 @@ import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonListQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { useQuery } from '@apollo/client/react'
-import { Alert, Button, Heading, Skeleton } from '@navikt/ds-react'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { useRouter } from 'next/navigation'
-import { useContext, useEffect, useState } from 'react'
 import { EtterlevelseDokumentasjonList } from './etterlevelseDokumentasjonslist/etterlevelseDokumentasjonslist'
 
 type TVariables = {

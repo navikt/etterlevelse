@@ -1,5 +1,6 @@
 'use client'
 
+import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import InvolveringAvEksterneReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/involveringAvEksterneReadOnlyContent'
 import { ContentLayout } from '@/components/others/layout/content/content'
@@ -10,7 +11,6 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'

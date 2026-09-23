@@ -1,11 +1,11 @@
 'use client'
 
-import { searchAuditsByTableAndSearchTerm } from '@/api/audit/auditApi'
-import { ESearchDataType, IAuditItem } from '@/constants/admin/audit/auditConstants'
-import { searchDataTypeToOptions } from '@/util/auditUtils/auditUtils'
 import { BodyLong, Button, Dialog, LocalAlert, Select, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
+import { searchAuditsByTableAndSearchTerm } from '@/api/audit/auditApi'
+import { ESearchDataType, IAuditItem } from '@/constants/admin/audit/auditConstants'
+import { searchDataTypeToOptions } from '@/util/auditUtils/auditUtils'
 
 const SearchAuditModal = () => {
   const [selectedDataType, setSelectedDataType] = useState<ESearchDataType>()

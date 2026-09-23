@@ -1,6 +1,6 @@
+import { Detail, Tag } from '@navikt/ds-react'
 import { EKravStatus } from '@/constants/krav/kravConstants'
 import { kravStatus } from '@/util/krav/kravUtil'
-import { Detail, Tag } from '@navikt/ds-react'
 
 interface IStatusViewProps {
   status: EKravStatus | string

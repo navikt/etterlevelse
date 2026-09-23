@@ -1,5 +1,21 @@
 'use client'
 
+import { TrashIcon } from '@navikt/aksel-icons'
+import {
+  Alert,
+  BodyLong,
+  BodyShort,
+  Button,
+  Checkbox,
+  Heading,
+  Label,
+  Loader,
+  Modal,
+  Select,
+  Textarea,
+} from '@navikt/ds-react'
+import moment from 'moment'
+import { useContext, useState } from 'react'
 import {
   tilbakemeldingNewMelding,
   tilbakemeldingSlettMelding,
@@ -17,22 +33,6 @@ import {
   getParsedOptionsforTilbakeMelding,
   getTilbakeMeldingStatusToOption,
 } from '@/util/tilbakemelding/tilbakemeldingUtils'
-import { TrashIcon } from '@navikt/aksel-icons'
-import {
-  Alert,
-  BodyLong,
-  BodyShort,
-  Button,
-  Checkbox,
-  Heading,
-  Label,
-  Loader,
-  Modal,
-  Select,
-  Textarea,
-} from '@navikt/ds-react'
-import moment from 'moment'
-import { useContext, useState } from 'react'
 
 type TTilbakemeldingSvarProps = {
   tilbakemelding: ITilbakemelding
