@@ -56,6 +56,9 @@ public class AuditVersion {
     @Column(name = "USER_ID", nullable = false, updatable = false)
     private String user;
 
+    @Column(name = "DELETE_REASON", updatable = false)
+    private String deleteMessage;
+
     @Column(name = "VERSION", nullable = false, updatable = false)
     private Integer version;
 
@@ -83,15 +86,16 @@ public class AuditVersion {
     }
 
     public AuditResponse toResponse() {
-        return AuditResponse.builder()
-                .id(id.toString())
-                .action(action)
-                .table(table)
-                .tableId(tableId)
-                .time(time)
-                .user(user)
-                .data(JsonUtils.toJsonNode(this.data))
-                .build();
+        AuditResponse response = new AuditResponse();
+        response.setId(id.toString());
+        response.setAction(action);
+        response.setTable(table);
+        response.setTableId(tableId);
+        response.setTime(time);
+        response.setUser(user);
+        response.setDeleteMessage(deleteMessage);
+        response.setData(JsonUtils.toJsonNode(this.data));
+        return response;
     }
 
     public static String tableNameFor(Object entity) {
