@@ -1,13 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto;
 
-import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
-import static no.nav.data.common.utils.StreamUtils.copyOf;
-
-import java.util.List;
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +21,12 @@ import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
+
+import java.util.List;
+import java.util.UUID;
+
+import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @SuperBuilder
@@ -84,7 +83,7 @@ public class EtterlevelseDokumentasjonResponse {
     private String P360CaseNumber;
 
     //versjonering
-    private Integer etterlevelseDokumentVersjon;
+    private int etterlevelseDokumentVersjon;
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {
