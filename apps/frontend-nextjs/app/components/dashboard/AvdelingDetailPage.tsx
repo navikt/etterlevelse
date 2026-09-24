@@ -75,21 +75,6 @@ const getPvkOnlyStatusText = (
   if (!pvkVurdering || pvkVurdering === EPvkVurdering.UNDEFINED) return '-'
   if (pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return '-'
   if (pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) return '-'
-  if (pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE) {
-    if (pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) return 'Godkjent av risikoeier'
-    if (
-      pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
-      pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
-      pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
-    )
-      return 'Til behandling hos PVO'
-    if (
-      pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
-      pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
-    )
-      return 'Tilbakemelding fra PVO'
-    return 'Under arbeid'
-  }
   if (!hasPvkDocumentationStarted) return 'Ikke påbegynt'
   if (pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) return 'Godkjent av risikoeier'
   if (pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING) return 'Sendt til godkjenning'
@@ -380,37 +365,25 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         d.pvkVurdering === EPvkVurdering.SKAL_UTFORE ||
         d.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE
     )
-    const isPvoTrack = (d: IDashboardTable): boolean =>
-      d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
-      d.pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
-      d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING ||
-      d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
-      d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID
-    // LEGGE_OVER-dokumenter på risikoeier-sporet telles som "Under arbeid" fram til godkjenning
-    const leggeOverRisikoeierTrack = (d: IDashboardTable): boolean =>
-      d.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE &&
-      !isPvoTrack(d) &&
-      d.pvkStatus !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
-    const normalFlow = digitalePvk.filter((d) => !leggeOverRisikoeierTrack(d))
 
-    const pvkIkkePaabegynt = normalFlow.filter((d) => !d.hasPvkDocumentationStarted).length
+    const pvkIkkePaabegynt = digitalePvk.filter((d) => !d.hasPvkDocumentationStarted).length
     const pvkGodkjent = digitalePvk.filter(
       (d) => d.pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
     ).length
-    const pvkTilBehandling = normalFlow.filter(
+    const pvkTilBehandling = digitalePvk.filter(
       (d) =>
         d.hasPvkDocumentationStarted &&
         (d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
           d.pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
           d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
     ).length
-    const pvkTilbakemelding = normalFlow.filter(
+    const pvkTilbakemelding = digitalePvk.filter(
       (d) =>
         d.hasPvkDocumentationStarted &&
         (d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
           d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
     ).length
-    const pvkSendtTilGodkjenning = normalFlow.filter(
+    const pvkSendtTilGodkjenning = digitalePvk.filter(
       (d) => d.hasPvkDocumentationStarted && d.pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING
     ).length
     const pvkUnderArbeid =

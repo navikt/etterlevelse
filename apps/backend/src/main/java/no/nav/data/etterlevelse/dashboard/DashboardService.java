@@ -517,53 +517,40 @@ public class DashboardService {
                     }
                     pvkTotal++;
                     var pvkDokData = pvk.getFirst().getPvkDokumentData();
-                    boolean isPvoTrack = pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
-                            || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
-                            || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
-                            || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
-                            || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID;
-                    if (isLeggeOver && !isPvoTrack) {
-                        if (isGodkjent) {
+                    List<Risikoscenario> risikoscenarioer = risikoscenarioService.getByPvkDokument(pvk.getFirst().getId().toString(), RisikoscenarioType.ALL);
+                    var relevantMeldingTilPvo = pvkDokData.getMeldingerTilPvo().stream()
+                            .filter(melding -> melding.getInnsendingId() == pvkDokData.getAntallInnsendingTilPvo())
+                            .toList();
+                    boolean hasPvkStarted = false;
+                    if (!risikoscenarioer.isEmpty()) {
+                        hasPvkStarted = true;
+                    }
+                    if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
+                        hasPvkStarted = true;
+                    }
+                    if (pvkDokData.getHarInvolvertRepresentant() != null || pvkDokData.getHarDatabehandlerRepresentantInvolvering() != null ||
+                            (pvkDokData.getRepresentantInvolveringsBeskrivelse() != null && !Objects.equals(pvkDokData.getRepresentantInvolveringsBeskrivelse(), "")) ||
+                            (pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse() != null && !Objects.equals(pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""))) {
+                        hasPvkStarted = true;
+                    } else {
+                        hasPvkStarted = false;
+                    }
+                    if (!hasPvkStarted) {
+                        pvkIkkePaabegynt++;
+                    } else {
+                        if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
                             pvkGodkjent++;
+                        } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
+                                || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
+                                || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+                            pvkTilBehandlingPvo++;
+                        } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
+                                || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
+                            pvkTilbakemeldingPvo++;
+                        } else if (pvkStatus == PvkDokumentStatus.TRENGER_GODKJENNING) {
+                            pvkSendtTilGodkjenning++;
                         } else {
                             pvkUnderArbeid++;
-                        }
-                    } else {
-                        List<Risikoscenario> risikoscenarioer = risikoscenarioService.getByPvkDokument(pvk.getFirst().getId().toString(), RisikoscenarioType.ALL);
-                        var relevantMeldingTilPvo = pvkDokData.getMeldingerTilPvo().stream()
-                                .filter(melding -> melding.getInnsendingId() == pvkDokData.getAntallInnsendingTilPvo())
-                                .toList();
-                        boolean hasPvkStarted = false;
-                        if (!risikoscenarioer.isEmpty()) {
-                            hasPvkStarted = true;
-                        }
-                        if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
-                            hasPvkStarted = true;
-                        }
-                        if (pvkDokData.getHarInvolvertRepresentant() != null || pvkDokData.getHarDatabehandlerRepresentantInvolvering() != null ||
-                                (pvkDokData.getRepresentantInvolveringsBeskrivelse() != null && !Objects.equals(pvkDokData.getRepresentantInvolveringsBeskrivelse(), "")) ||
-                                (pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse() != null && !Objects.equals(pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""))) {
-                            hasPvkStarted = true;
-                        } else {
-                            hasPvkStarted = false;
-                        }
-                        if (!hasPvkStarted) {
-                            pvkIkkePaabegynt++;
-                        } else {
-                            if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
-                                pvkGodkjent++;
-                            } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
-                                    || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
-                                    || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-                                pvkTilBehandlingPvo++;
-                            } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
-                                    || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
-                                pvkTilbakemeldingPvo++;
-                            } else if (pvkStatus == PvkDokumentStatus.TRENGER_GODKJENNING) {
-                                pvkSendtTilGodkjenning++;
-                            } else {
-                                pvkUnderArbeid++;
-                            }
                         }
                     }
                 }
