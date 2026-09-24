@@ -99,13 +99,9 @@ public class PvoTilbakemeldingGraphQlController {
     }
 
     @SchemaMapping(typeName = "PvoTilbakemelding")
-    public Integer antallInnsendingTilPvo(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse){
+    public int antallInnsendingTilPvo(PvoTilbakemeldingGraphqlResponse pvoTilbakemeldingGraphqlResponse){
         var pvkDokument = pvkDokumentService.get(UUID.fromString(pvoTilbakemeldingGraphqlResponse.getPvkDokumentId()));
-        if (pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo() != null) {
-            return pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo();
-        } else {
-            return 0;
-        }
+        return pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo();
     }
 
     private LocalDateTime sistEndretAudit(List<AuditVersion> etterlevelser) {

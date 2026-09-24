@@ -22,7 +22,7 @@ import java.util.List;
 public class PvkDokumentData {
 
     @Builder.Default
-    private Integer antallInnsendingTilPvo = 0;
+    private int antallInnsendingTilPvo = 0;
     private boolean dpProcessProfilering;
     private boolean dpProcessHelautomatiskBehandling;
     private List<String> ytterligereEgenskaper;
@@ -41,7 +41,8 @@ public class PvkDokumentData {
     private String merknadTilRisikoeier;
     private String merknadFraRisikoeier;
 
-    private List<MeldingTilPvo> meldingerTilPvo;
+    @Builder.Default
+    private List<MeldingTilPvo> meldingerTilPvo = List.of();
 
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
