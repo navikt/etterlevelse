@@ -492,7 +492,7 @@ public class WordDocUtils {
         addText("Dersom dere har gjennomført en eller flere risikovurderinger, skal disse legges ved etterlevelsesdokumentasjonen.");
         newLine();
         addText("Dere har koblet følgende dokumenter på dette dokumentet:");
-        if(etterlevelseDokumentasjon.getRisikovurderinger().isEmpty()){
+        if(etterlevelseDokumentasjon.getRisikovurderinger() == null || etterlevelseDokumentasjon.getRisikovurderinger().isEmpty()){
             addMarkdownText("- Ingen dokumenter");
         } else {
             etterlevelseDokumentasjon.getRisikovurderinger().forEach(risikovurdering -> {
