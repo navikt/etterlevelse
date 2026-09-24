@@ -1,5 +1,14 @@
 package no.nav.data.etterlevelse.export;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.ZipFile;
@@ -41,15 +50,7 @@ import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
-import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
-
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -232,6 +233,9 @@ public class PvkDokumentToDoc {
                 doc.addHeading4("Begrunnelse av vurderingen");
                 doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
                 doc.pageBreak();
+            } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.LEGGE_OVER_EKSISTERENDE) {
+                doc.addText("Vi skal legge over en eksisterende, godkjent PVK fra Word");
+                doc.newLine();
             } else {
                 doc.addText("Vi skal gjennomføre en PVK.");
                 doc.newLine();
