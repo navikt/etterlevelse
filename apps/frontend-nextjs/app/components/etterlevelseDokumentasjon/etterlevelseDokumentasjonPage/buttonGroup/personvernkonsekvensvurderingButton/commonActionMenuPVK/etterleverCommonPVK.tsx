@@ -161,7 +161,7 @@ export const PvkGodkjentReadOnlyActionMenuVariant: FunctionComponent<TProps> = (
         pvkDokument={pvkDokument}
         readOnlyUrl={true}
       >
-        Les PVK
+        Les sist godkjent PVK
       </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem

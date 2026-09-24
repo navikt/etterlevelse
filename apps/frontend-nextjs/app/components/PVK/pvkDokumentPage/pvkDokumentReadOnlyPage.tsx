@@ -178,7 +178,6 @@ const PvkDokumentReadOnlyPage = () => {
             pvkDokument.changeStamp.lastModifiedDate
           )
             .then((resp) => {
-              console.debug(resp)
               setPvoTilbakemelding(resp)
             })
             .catch(() => undefined)

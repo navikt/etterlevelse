@@ -1,7 +1,7 @@
 'use client'
 
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Button, InfoCard, List, ReadMore, Tabs } from '@navikt/ds-react'
+import { InfoCard, List, ReadMore, Tabs } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
@@ -18,7 +18,6 @@ import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { skalHaPvkDokument } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
-import { ArkiveringModal } from '../arkivering/arkiveringModal'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
 import PvkKravListeTab from './pvkKravListe/pvkKravListeTab'
 
@@ -47,7 +46,6 @@ const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
   risikoscenarioList,
   isRisikoscenarioLoading,
 }) => {
-  const [isArkivModalOpen, setIsArkivModalOpen] = useState<boolean>(false)
   const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
   const queryParams = useSearchParams()
   const tabQuery = queryParams.get('tab')
@@ -116,7 +114,7 @@ const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       </Tabs.List>
 
       <Tabs.Panel value='alleKrav'>
-        <div className='pt-4 flex flex-col gap-4'>
+        <div className='pt-4 flex flex-col gap-4 pb-4'>
           <EtterlevelseDokumentasjonKravListe
             temaListe={temaListe}
             relevanteStats={relevanteStats}
@@ -129,20 +127,6 @@ const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
             isRisikoscenarioLoading={isRisikoscenarioLoading}
             previousVurdering={previousVurdering}
           />
-
-          <div className='w-full flex justify-end items-center'>
-            <div>
-              <Button variant='tertiary' size='small' onClick={() => setIsArkivModalOpen(true)}>
-                Arkiver i Public 360
-              </Button>
-              <ArkiveringModal
-                arkivModal={isArkivModalOpen}
-                setArkivModal={setIsArkivModalOpen}
-                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                setEtterlevelseDokumentasjon={setEtterlevelseDokumentasjon}
-              />
-            </div>
-          </div>
         </div>
       </Tabs.Panel>
       <Tabs.Panel value='prioritertKravliste'>
