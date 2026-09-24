@@ -71,7 +71,11 @@ export const getPvkTilstand = (
     skalHaPvkDokument(pvkDokument.pvkVurdering) &&
     pvkDokument.hasPvkDocumentationStarted === true
   ) {
-    if (pvkDokument.antallInnsendingTilPvo === 0) {
+    if (pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) {
+      return EPVKTilstandStatus.TILSTAND_STATUS_EIGHT
+    } else if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+      return EPVKTilstandStatus.TILSTAND_STATUS_NINE
+    } else if (pvkDokument.antallInnsendingTilPvo === 0) {
       return EPVKTilstandStatus.TILSTAND_STATUS_FOUR
     } else if (
       [EPvkDokumentStatus.SENDT_TIL_PVO, EPvkDokumentStatus.PVO_UNDERARBEID].includes(
@@ -104,10 +108,6 @@ export const getPvkTilstand = (
       }
     } else if (pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
       return EPVKTilstandStatus.TILSTAND_STATUS_SEVEN
-    } else if (pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING) {
-      return EPVKTilstandStatus.TILSTAND_STATUS_EIGHT
-    } else if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
-      return EPVKTilstandStatus.TILSTAND_STATUS_NINE
     } else {
       return ''
     }

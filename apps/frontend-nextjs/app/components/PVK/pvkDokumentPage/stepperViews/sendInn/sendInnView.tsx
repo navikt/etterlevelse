@@ -854,7 +854,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
-                      pvoTilbakemelding && (
+                      (pvoTilbakemelding || pvkDokument.antallInnsendingTilPvo === 0) && (
                         <TrengerRisikoeierGodkjenningFields
                           pvkDokument={pvkDokument}
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
@@ -901,7 +901,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                       )}
 
                     {pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-                      pvoTilbakemelding && (
+                      (pvoTilbakemelding || pvkDokument.antallInnsendingTilPvo === 0) && (
                         <GodkjentAvRisikoeierFields
                           pvkDokument={pvkDokument}
                           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
