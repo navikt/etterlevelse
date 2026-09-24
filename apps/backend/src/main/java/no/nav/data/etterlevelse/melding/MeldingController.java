@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.melding;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -103,7 +105,7 @@ public class MeldingController {
         return ResponseEntity.ok(melding.toResponse());
     }
 
-    @Operation(summary = "Delete melding")
+    @Operation(summary = "Delete melding", parameters = {@Parameter(name = "comment", description = "Reason for deleting the melding", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "ok")
     @DeleteMapping("/{id}")
     public ResponseEntity<MeldingResponse> deleteMelding(@PathVariable UUID id) {

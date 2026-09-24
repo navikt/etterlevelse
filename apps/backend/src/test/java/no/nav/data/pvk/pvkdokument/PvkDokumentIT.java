@@ -91,7 +91,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
     void deletePvkDokument() {
         PvkDokument pvkDokument = createPvkDokument();
 
-        restTemplate.delete("/pvkdokument/{id}", pvkDokument.getId());
+        restTemplate.delete("/pvkdokument/{id}?comment=test cleanup", pvkDokument.getId());
 
         assertThat(pvkDokumentRepo.count()).isEqualTo(0);
     }

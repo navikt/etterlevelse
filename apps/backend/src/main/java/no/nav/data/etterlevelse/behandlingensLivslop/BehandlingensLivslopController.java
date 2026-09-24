@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.behandlingensLivslop;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,7 +19,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -121,7 +130,7 @@ public class BehandlingensLivslopController {
         return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
     }
 
-     @Operation(summary = "Delete Behandlingens Livsløp")
+     @Operation(summary = "Delete Behandlingens Livsløp", parameters = {@Parameter(name = "comment", description = "Reason for deleting the behandlingens livsløp", required = true, in = ParameterIn.QUERY)})
      @ApiResponse(description = "Behandlingens Livsløp deleted")
      @DeleteMapping("/{id}")
      public ResponseEntity<BehandlingensLivslopResponse> deleteBehandlingensLivslopById(@PathVariable UUID id) {

@@ -5,11 +5,19 @@ import no.nav.data.IntegrationTestBase;
 import no.nav.data.TestConfig;
 import no.nav.data.etterlevelse.codelist.CodelistStub;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.KravTilstandHistorikk;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGodkjenningsRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import no.nav.data.pvk.pvkdokument.domain.*;
+import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingData;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
@@ -76,7 +84,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
         createEtterlevelseMetadata(etterlevelseDokumentasjon_1.getId(), 201, 1);
         createEtterlevelseMetadata(etterlevelseDokumentasjon_2.getId(), 200, 1);
 
-        restTemplate.delete("/etterlevelsedokumentasjon/{id}", etterlevelseDokumentasjon_1.getId());
+        restTemplate.delete("/etterlevelsedokumentasjon/{id}?comment=test cleanup", etterlevelseDokumentasjon_1.getId());
 
         assertThat(etterlevelseDokumentasjonRepo.findAll().size()).isEqualTo(1); // Only etterlevelseDokumentasjon_2 should remain
         assertThat(etterlevelseService.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon_1.getId()).size()).isEqualTo(0);

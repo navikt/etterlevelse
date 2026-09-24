@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.krav;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +60,7 @@ public class TilbakemeldingController {
         return ResponseEntity.ok(tilbakemelding.toResponse());
     }
 
-    @Operation(summary = "Delete Melding on Tilbakemelding")
+    @Operation(summary = "Delete Melding on Tilbakemelding", parameters = {@Parameter(name = "comment", description = "Reason for deleting the melding on tilbakemelding", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Melding deleted")
     @DeleteMapping("/{tilbakemeldingId}/{meldingNr}")
     public ResponseEntity<TilbakemeldingResponse> tilbakemeldingDeleteMelding(@PathVariable UUID tilbakemeldingId, @PathVariable int meldingNr) {

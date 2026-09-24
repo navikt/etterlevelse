@@ -143,7 +143,7 @@ public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase
         otherDocumentRelationToNotDelete.setFromDocument(otherFromId);
         documentRelationService.save(otherDocumentRelationToNotDelete, false);
         
-        restTemplate.delete("/documentrelation/{id}", documentRelationToDelete.getId());
+        restTemplate.delete("/documentrelation/{id}?comment=test-cleanup", documentRelationToDelete.getId());
 
         Page<DocumentRelation> resp = documentRelationService.getAll(Pageable.ofSize(100));
         Assertions.assertThat(resp.getTotalElements()).isEqualTo(1L);
