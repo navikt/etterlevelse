@@ -14,11 +14,11 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
-  EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelsesDokumentasjonEditUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { skalHaPvkDokument } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import EtterlevelsesDokumentasjonGodkjenningsHistorikk from '../common/etterlevelsesDokumentasjonGodkjenningsHistorikk'
 import { SendTilRisikoeierGodkjenningReadOnly } from '../sendTilRisikoeierGodkjenningReadOnly/sendTilRisikoeierGodkjenningReadOnly'
 import SendTilRisikoeierGodkjenningUnderArbeid from '../sendTilRisikoeierGodkjenningUnderArbeid/sendTilRisikoeierGodkjenningUnderArbeid'
@@ -60,7 +60,7 @@ const SendTilRisikoeierGodkjenning: FunctionComponent<TProps> = ({
 
   const pvkBlocksSending =
     pvkDokument !== undefined &&
-    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+    skalHaPvkDokument(pvkDokument.pvkVurdering) &&
     pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
 
   const submit = async (submitValues: IEtterlevelseDokumentasjon, skipSaveAlert?: boolean) => {
@@ -73,7 +73,7 @@ const SendTilRisikoeierGodkjenning: FunctionComponent<TProps> = ({
         )
         if (
           pvkDokument &&
-          pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+          skalHaPvkDokument(pvkDokument.pvkVurdering) &&
           pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
           submitValues.status ===
             EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER

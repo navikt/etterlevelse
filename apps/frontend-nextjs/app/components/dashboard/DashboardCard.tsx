@@ -123,6 +123,13 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
             </span>
           </BodyShort>
           <BodyShort>
+            Overfører godkjent PVK{' '}
+            <span className='font-bold'>
+              {stats.behovForPvk.overforerGodkjentPvk} av{' '}
+              {stats.behovForPvk.totalMedPersonopplysninger}
+            </span>
+          </BodyShort>
+          <BodyShort>
             PVK i Word <span className='font-bold'>{stats.pvk.pvkIWord}</span>
           </BodyShort>
         </div>

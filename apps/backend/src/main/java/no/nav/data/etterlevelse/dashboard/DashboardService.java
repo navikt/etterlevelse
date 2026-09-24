@@ -1,11 +1,37 @@
 package no.nav.data.etterlevelse.dashboard;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.codelist.CodelistService;
 import no.nav.data.etterlevelse.codelist.domain.Codelist;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.dashboard.dto.*;
+import no.nav.data.etterlevelse.dashboard.dto.BehovForPvkStats;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DashboardTableResponse;
+import no.nav.data.etterlevelse.dashboard.dto.DokumenterStats;
+import no.nav.data.etterlevelse.dashboard.dto.KravDashboardResponse;
+import no.nav.data.etterlevelse.dashboard.dto.PvkStats;
+import no.nav.data.etterlevelse.dashboard.dto.SeksjonOption;
+import no.nav.data.etterlevelse.dashboard.dto.SuksesskriterierStats;
+import no.nav.data.etterlevelse.dashboard.dto.TemaDashboardResponse;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
@@ -32,13 +58,6 @@ import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -463,6 +482,7 @@ public class DashboardService {
         int ikkeVurdertBehov = 0;
         int vurdertIkkeBehov = 0;
         int behovIkkePaabegynt = 0;
+        int overforerGodkjentPvk = 0;
 
         int pvkTotal = 0;
         int pvkIkkePaabegynt = 0;
@@ -487,44 +507,63 @@ public class DashboardService {
                 } else if (vurdering == null || vurdering == PvkVurdering.UNDEFINED) {
                     ikkeVurdertBehov++;
                 } else {
-                    behovIkkePaabegynt++;
+                    var pvkStatus = pvk.getFirst().getStatus();
+                    boolean isLeggeOver = vurdering == PvkVurdering.LEGGE_OVER_EKSISTERENDE;
+                    boolean isGodkjent = pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER;
+                    if (isLeggeOver && !isGodkjent) {
+                        overforerGodkjentPvk++;
+                    } else {
+                        behovIkkePaabegynt++;
+                    }
                     pvkTotal++;
                     var pvkDokData = pvk.getFirst().getPvkDokumentData();
-                    List<Risikoscenario> risikoscenarioer = risikoscenarioService.getByPvkDokument(pvk.getFirst().getId().toString(), RisikoscenarioType.ALL);
-                    var relevantMeldingTilPvo = pvkDokData.getMeldingerTilPvo().stream()
-                            .filter(melding -> melding.getInnsendingId() == pvkDokData.getAntallInnsendingTilPvo())
-                            .toList();
-                    boolean hasPvkStarted = false;
-                    if (!risikoscenarioer.isEmpty()) {
-                        hasPvkStarted = true;
-                    }
-                    if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
-                        hasPvkStarted = true;
-                    }
-                    if (pvkDokData.getHarInvolvertRepresentant() != null || pvkDokData.getHarDatabehandlerRepresentantInvolvering() != null ||
-                            (pvkDokData.getRepresentantInvolveringsBeskrivelse() != null && !Objects.equals(pvkDokData.getRepresentantInvolveringsBeskrivelse(), "")) ||
-                            (pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse() != null && !Objects.equals(pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""))) {
-                        hasPvkStarted = true;
-                    } else {
-                        hasPvkStarted = false;
-                    }
-                    if (!hasPvkStarted) {
-                        pvkIkkePaabegynt++;
-                    } else {
-                        var pvkStatus = pvk.getFirst().getStatus();
-                        if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                    boolean isPvoTrack = pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
+                            || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
+                            || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+                            || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
+                            || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID;
+                    if (isLeggeOver && !isPvoTrack) {
+                        if (isGodkjent) {
                             pvkGodkjent++;
-                        } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
-                                || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
-                                || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
-                            pvkTilBehandlingPvo++;
-                        } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
-                                || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
-                            pvkTilbakemeldingPvo++;
-                        } else if (pvkStatus == PvkDokumentStatus.TRENGER_GODKJENNING) {
-                            pvkSendtTilGodkjenning++;
                         } else {
                             pvkUnderArbeid++;
+                        }
+                    } else {
+                        List<Risikoscenario> risikoscenarioer = risikoscenarioService.getByPvkDokument(pvk.getFirst().getId().toString(), RisikoscenarioType.ALL);
+                        var relevantMeldingTilPvo = pvkDokData.getMeldingerTilPvo().stream()
+                                .filter(melding -> melding.getInnsendingId() == pvkDokData.getAntallInnsendingTilPvo())
+                                .toList();
+                        boolean hasPvkStarted = false;
+                        if (!risikoscenarioer.isEmpty()) {
+                            hasPvkStarted = true;
+                        }
+                        if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
+                            hasPvkStarted = true;
+                        }
+                        if (pvkDokData.getHarInvolvertRepresentant() != null || pvkDokData.getHarDatabehandlerRepresentantInvolvering() != null ||
+                                (pvkDokData.getRepresentantInvolveringsBeskrivelse() != null && !Objects.equals(pvkDokData.getRepresentantInvolveringsBeskrivelse(), "")) ||
+                                (pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse() != null && !Objects.equals(pvkDokData.getDataBehandlerRepresentantInvolveringBeskrivelse(), ""))) {
+                            hasPvkStarted = true;
+                        } else {
+                            hasPvkStarted = false;
+                        }
+                        if (!hasPvkStarted) {
+                            pvkIkkePaabegynt++;
+                        } else {
+                            if (pvkStatus == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+                                pvkGodkjent++;
+                            } else if (pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO
+                                    || pvkStatus == PvkDokumentStatus.PVO_UNDERARBEID
+                                    || pvkStatus == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+                                pvkTilBehandlingPvo++;
+                            } else if (pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO
+                                    || pvkStatus == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID) {
+                                pvkTilbakemeldingPvo++;
+                            } else if (pvkStatus == PvkDokumentStatus.TRENGER_GODKJENNING) {
+                                pvkSendtTilGodkjenning++;
+                            } else {
+                                pvkUnderArbeid++;
+                            }
                         }
                     }
                 }
@@ -536,6 +575,7 @@ public class DashboardService {
                 .ikkeVurdertBehov(ikkeVurdertBehov)
                 .vurdertIkkeBehov(vurdertIkkeBehov)
                 .behovIkkePaabegynt(behovIkkePaabegynt)
+                .overforerGodkjentPvk(overforerGodkjentPvk)
                 .build());
 
         avdelingResponse.setPvk(PvkStats.builder()

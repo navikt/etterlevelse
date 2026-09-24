@@ -128,6 +128,7 @@ export interface IAvdelingDashboardStats {
     ikkeVurdertBehov: number
     vurdertIkkeBehov: number
     behovIkkePaabegynt: number
+    overforerGodkjentPvk: number
   }
   pvk: {
     total: number

@@ -23,13 +23,15 @@ import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/ett
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
-  EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
-import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import {
+  isReadOnlyPvkStatus,
+  skalHaPvkDokument,
+} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import EditNotatfelt from '../../etterlevelseMetadata/editNotatfelt'
 
 type TProps = {
@@ -72,7 +74,7 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
     ;(async () => {
       if (
         pvkDokument &&
-        pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+        skalHaPvkDokument(pvkDokument.pvkVurdering) &&
         krav.tagger.includes('Personvernkonsekvensvurdering')
       ) {
         setActiveTab('pvkDokumentasjon')
@@ -118,7 +120,7 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
               }
             />
             {pvkDokument &&
-              pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+              skalHaPvkDokument(pvkDokument.pvkVurdering) &&
               krav.tagger.includes('Personvernkonsekvensvurdering') && (
                 <Tabs.Tab
                   className='whitespace-nowrap'
@@ -145,7 +147,7 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
             </div>
           </Tabs.Panel>
 
-          {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+          {pvkDokument && skalHaPvkDokument(pvkDokument.pvkVurdering) && (
             <Tabs.Panel className='overflow-auto h-[90vh]' value='pvkDokumentasjon'>
               <div className='mt-2 p-4 mb-52'>
                 {userHasAccess() &&

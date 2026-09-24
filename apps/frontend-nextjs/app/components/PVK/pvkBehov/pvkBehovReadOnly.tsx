@@ -103,6 +103,10 @@ const PvkBehovReadOnly: FunctionComponent<TProps> = ({
           pvkDokument.pvkVurdering === EPvkVurdering.UNDEFINED) &&
           'Ingen vurdering'}
         {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && 'Vi skal gjennomføre en PVK'}
+        {pvkDokument.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE &&
+          'Vi skal legge over en eksisterende, godkjent PVK fra Word'}
+        {pvkDokument.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT &&
+          'Vi beholder vår eksisterende, godkjente PVK i Word'}
         {pvkDokument.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE &&
           'Vi skal ikke gjennomføre PVK'}
       </DataTextWrapper>

@@ -11,15 +11,13 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import PrioritertKravListe from '@/components/etterlevelseDokumentasjon/etterlevelseDokumentasjonPage/tabs/prioritertKravListe/prioritertKravListe'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import {
-  EPvkVurdering,
-  IPvkDokument,
-} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
+import { skalHaPvkDokument } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import { ArkiveringModal } from '../arkivering/arkiveringModal'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
 import PvkKravListeTab from './pvkKravListe/pvkKravListeTab'
@@ -112,7 +110,7 @@ const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
       <Tabs.List>
         <Tabs.Tab value='alleKrav' label='Alle Krav' />
         <Tabs.Tab value='prioritertKravliste' label='Prioritert kravliste' />
-        {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+        {pvkDokument && skalHaPvkDokument(pvkDokument.pvkVurdering) && (
           <Tabs.Tab value='pvkRelaterteKrav' label='PVK-relaterte krav' />
         )}
       </Tabs.List>
@@ -200,7 +198,7 @@ const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
           />
         </div>
       </Tabs.Panel>
-      {pvkDokument && pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
+      {pvkDokument && skalHaPvkDokument(pvkDokument.pvkVurdering) && (
         <Tabs.Panel value='pvkRelaterteKrav'>
           <PvkKravListeTab
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
