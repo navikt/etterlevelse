@@ -18,6 +18,8 @@ spring:
     main:
         allow-bean-definition-overriding: true
         lazy-initialization: true
+    jackson:
+      use-jackson2-defaults: true
 
 DB_DATABASE: etterlevelsedb
 DB_HOST: localhost
