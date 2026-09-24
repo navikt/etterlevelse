@@ -1,6 +1,13 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto;
 
+import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
+import static no.nav.data.common.utils.StreamUtils.copyOf;
+
+import java.util.List;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +15,12 @@ import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -16,12 +28,6 @@ import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
-
-import java.util.List;
-import java.util.UUID;
-
-import static no.nav.data.common.utils.ListUtils.nullsafeCopyOf;
-import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @SuperBuilder
@@ -109,7 +115,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .seksjoner(nullsafeCopyOf(eDokData.getSeksjoner()))
                 .enheter(nullsafeCopyOf(eDokData.getEnheter()))
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
-                .risikovurderinger(eDokData.getRisikovurderinger())
+                .risikovurderinger(nullsafeCopyOf(eDokData.getRisikovurderinger()))
                 .P360Recno(eDokData.getP360Recno())
                 .P360CaseNumber(eDokData.getP360CaseNumber())
                 .ardoqSystemIds(eDokData.getArdoqSystemIds())
