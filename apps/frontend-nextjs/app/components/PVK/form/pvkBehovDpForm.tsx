@@ -55,6 +55,7 @@ import {
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
+import { env } from '@/util/env/env'
 import {
   isReadOnlyPvkStatus,
   skalHaPvkDokument,
@@ -268,12 +269,14 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                       >
                         Vi skal gjennomføre en PVK
                       </Radio>
-                      <Radio
-                        value={EPvkVurdering.LEGGE_OVER_EKSISTERENDE}
-                        description='Dette valget forutsetter at PVK-materien legges inn as-is, og at det dermed ikke er behov for en ny vurdering hos personvernombudet. Det blir imidlertid mulig for risikoeier å godkjenne PVK-en digitalt.'
-                      >
-                        Vi skal legge over en eksisterende, godkjent PVK fra Word
-                      </Radio>
+                      {env.isDev && (
+                        <Radio
+                          value={EPvkVurdering.LEGGE_OVER_EKSISTERENDE}
+                          description='Dette valget forutsetter at PVK-materien legges inn as-is, og at det dermed ikke er behov for en ny vurdering hos personvernombudet. Det blir imidlertid mulig for risikoeier å godkjenne PVK-en digitalt.'
+                        >
+                          Vi skal legge over en eksisterende, godkjent PVK fra Word
+                        </Radio>
+                      )}
                       <Radio value={EPvkVurdering.ALLEREDE_UTFORT}>
                         Vi beholder vår eksisterende, godkjente PVK i Word
                       </Radio>

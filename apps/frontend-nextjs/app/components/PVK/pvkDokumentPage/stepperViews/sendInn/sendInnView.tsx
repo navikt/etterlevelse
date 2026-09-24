@@ -224,6 +224,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     setPvkDokument(savedResponse)
                     setAngretAvRisikoeier(false)
                     setSavedSuccess(true)
+                    formRef.current?.resetForm({
+                      values: mapPvkDokumentToFormValue(savedResponse),
+                    })
                   }
                 )
               } else {
