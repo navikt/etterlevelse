@@ -8,13 +8,48 @@ const createdDocument = {
   departmentId: 'avdeling-1',
   departmentName: 'Testavdelingen',
   email: 'bat.man@nav.no',
+  sectionName: 'Testseksjonen',
+  unitName: 'Testenheten',
+  riskOwnerName: 'Test Risikoeier',
+  teamName: 'Testteamet',
+  treatmentName: 'B101 Testformål: Testbehandling',
+  dataProcessorTreatmentName: 'D202: Databehandlerbehandling',
+  systemName: 'Testsystemet',
+  riskAssessment: 'ROS-analyse for testdokumentet',
+  p360CaseNumber: 'SAK-12345',
+  reuseDescription: 'Veiledning for gjenbruk av testdokumentet',
 }
 
 test.describe('Som en admin bruker skal jeg kunne', () => {
   test('trykke «Opprett nytt etterlevelsesdokument» på forsiden og deretter bli navigert til «Opprett nytt etterlevelsesdokument» siden', async ({
+    context,
     page,
   }) => {
     await mockAdmin(page)
+
+    await context.route('**/graphql', async (route) => {
+      const requestBody = route.request().postDataJSON() as { operationName?: string }
+
+      if (requestBody.operationName === 'getEtterlevelseDokumentasjoner') {
+        await route.fulfill({
+          json: {
+            data: {
+              etterlevelseDokumentasjoner: {
+                pageNumber: 0,
+                pageSize: 20,
+                pages: 0,
+                numberOfElements: 0,
+                totalElements: 0,
+                content: [],
+              },
+            },
+          },
+        })
+        return
+      }
+
+      await route.continue()
+    })
 
     await page.goto('http://localhost:3000/')
 
@@ -147,13 +182,42 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       await route.fulfill({
         json: {
           id: createdDocument.id,
+          changeStamp: {
+            createdDate: '2026-09-24T08:00:00Z',
+            lastModifiedDate: '2026-09-24T08:00:00Z',
+            lastModifiedBy: mockIdent,
+          },
+          version: 1,
           title: createdDocument.title,
           beskrivelse: createdDocument.description,
           status: 'UNDER_ARBEID',
+          meldingEtterlevelerTilRisikoeier: '',
+          meldingRisikoeierTilEtterleveler: '',
           etterlevelseNummer: 1,
           etterlevelseDokumentVersjon: 1,
+          behandlingIds: ['behandling-1'],
+          behandlinger: [
+            {
+              id: 'behandling-1',
+              navn: 'Testbehandling',
+              nummer: 101,
+              overordnetFormaal: { shortName: 'Testformål' },
+            },
+          ],
+          dpBehandlingIds: ['dp-behandling-1'],
+          dpBehandlinger: [
+            {
+              id: 'dp-behandling-1',
+              navn: 'Databehandlerbehandling',
+              nummer: 202,
+            },
+          ],
           nomAvdelingId: createdDocument.departmentId,
           avdelingNavn: createdDocument.departmentName,
+          seksjoner: [{ nomSeksjonId: 'seksjon-1', nomSeksjonName: createdDocument.sectionName }],
+          enheter: [{ nomEnhetId: 'enhet-1', nomEnhetName: createdDocument.unitName }],
+          teams: ['team-1'],
+          teamsData: [{ id: 'team-1', name: createdDocument.teamName, members: [] }],
           resources: [mockIdent],
           resourcesData: [
             {
@@ -165,11 +229,47 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
               resourceType: mockIdent,
             },
           ],
+          risikoeiere: ['R123456'],
+          risikoeiereData: [
+            {
+              navIdent: 'R123456',
+              givenName: 'Test',
+              familyName: 'Risikoeier',
+              fullName: createdDocument.riskOwnerName,
+              email: 'test.risikoeier@nav.no',
+              resourceType: 'INTERNAL',
+            },
+          ],
           varslingsadresser: [{ type: 'EPOST', adresse: createdDocument.email }],
           irrelevansFor: [],
+          prioritertKravNummer: [],
+          risikovurderinger: [createdDocument.riskAssessment],
+          p360Recno: 12345,
+          p360CaseNumber: createdDocument.p360CaseNumber,
+          ardoqSystemIds: ['ardoq-system-1'],
+          ardoqSystemData: [
+            {
+              ardoqUrlId: 'ardoq-url-1',
+              ardoqID: 'ardoq-system-1',
+              navn: createdDocument.systemName,
+            },
+          ],
+          behandlerPersonopplysninger: true,
+          forGjenbruk: true,
+          tilgjengeligForGjenbruk: true,
+          gjenbrukBeskrivelse: createdDocument.reuseDescription,
+          versjonHistorikk: [{ versjon: 1, kravTilstandHistorikk: [] }],
           hasCurrentUserAccess: true,
         },
       })
+    })
+    await context.route('**/api/team/team-1', async (route) => {
+      await route.fulfill({
+        json: { id: 'team-1', name: createdDocument.teamName, members: [] },
+      })
+    })
+    await context.route('**/nom/enhet/seksjon/seksjon-1', async (route) => {
+      await route.fulfill({ json: [{ id: 'enhet-1', navn: createdDocument.unitName }] })
     })
     await context.route(`**/documentrelation/todocument/${createdDocument.id}**`, async (route) => {
       await route.fulfill({ json: [] })
@@ -227,12 +327,33 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
     await expect(page).toHaveURL(`http://localhost:3000/dokumentasjon/${createdDocument.id}`)
     await expect(page.getByRole('heading', { name: `E1.1 ${createdDocument.title}` })).toBeVisible()
+    await expect(page.getByText('Etterlevelse: Under arbeid')).toBeVisible()
+    await expect(page.getByText('PVK: Ikke vurdert behov')).toBeVisible()
+    await expect(page.getByRole('tab', { name: 'Alle Krav' })).toBeVisible()
+    await expect(page.getByRole('tab', { name: 'Prioritert kravliste' })).toBeVisible()
 
     await page.getByRole('button', { name: 'Les mer om dette dokumentet' }).click()
 
     await expect(page.getByText(createdDocument.description)).toBeVisible()
     await expect(page.getByText('Behandler personopplysninger')).toBeVisible()
+    await expect(page.getByRole('link', { name: createdDocument.treatmentName })).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: createdDocument.dataProcessorTreatmentName })
+    ).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: new RegExp(createdDocument.systemName) })
+    ).toBeVisible()
+    await expect(page.getByText(createdDocument.riskAssessment)).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: new RegExp(createdDocument.p360CaseNumber) })
+    ).toBeVisible()
     await expect(page.getByText(createdDocument.departmentName)).toBeVisible()
+    await expect(page.getByText(createdDocument.sectionName)).toBeVisible()
+    await expect(page.getByText(createdDocument.unitName)).toBeVisible()
+    await expect(page.getByText(createdDocument.riskOwnerName)).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: new RegExp(createdDocument.teamName) })
+    ).toBeVisible()
     await expect(
       page
         .getByText('Personer:', { exact: true })
@@ -240,5 +361,19 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         .getByText(mockIdent, { exact: true })
     ).toBeVisible()
     await expect(page.getByRole('link', { name: createdDocument.email })).toBeVisible()
+
+    await expect(
+      page.getByRole('button', { name: 'Du kan gjenbruke dette etterlevelsesdokumentet' })
+    ).toBeVisible()
+    await page
+      .getByRole('button', { name: 'Du kan gjenbruke dette etterlevelsesdokumentet' })
+      .click()
+    await expect(page.getByText(createdDocument.reuseDescription)).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Gjenbruk dokumentet' })).toBeVisible()
+    await expect(
+      page.getByRole('link', {
+        name: 'Se hvilke etterlevelser som allerede gjenbruker dette dokumentet',
+      })
+    ).toBeVisible()
   })
 })
