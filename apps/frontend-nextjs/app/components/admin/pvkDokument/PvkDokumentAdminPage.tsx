@@ -35,6 +35,7 @@ const PvkDokumentAdminPage = () => {
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
+  const [isError, setIsError] = useState<boolean>(false)
 
   const loadData = async () => {
     const allPvkDokument = await getAllPvkDokument()
@@ -84,6 +85,7 @@ const PvkDokumentAdminPage = () => {
           onClick={async () => {
             deletePvkDokument(deletePvkDokumentId)
               .then(() => {
+                setIsError(false)
                 setDeletePvkDokumentId('')
                 setReloadTable(!reloadTable)
                 setDeleteMessage(
@@ -91,7 +93,10 @@ const PvkDokumentAdminPage = () => {
                 )
               })
               .catch((e) => {
-                setDeleteMessage('Sletting mislykket, error: ' + e)
+                setIsError(true)
+                setDeleteMessage(
+                  `Sletting mislykket, error: ${e.status}, ${e.response?.data.message}`
+                )
               })
           }}
         >
@@ -99,7 +104,7 @@ const PvkDokumentAdminPage = () => {
         </Button>
       </div>
 
-      <UpdateMessage message={deleteMessage} />
+      <UpdateMessage message={deleteMessage} isError={isError} />
 
       <div className='mt-8 w-full'>
         <Heading level='2' size='small'>

@@ -1,22 +1,19 @@
-import { BodyShort } from '@navikt/ds-react'
+import { LocalAlert } from '@navikt/ds-react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IAuditItem, TNavigableItem } from '@/constants/admin/audit/auditConstants'
 import { urlForObject } from '@/routes/urlForObject/urlForObject'
 import { AuditButton } from '../versjonering/common/AuditButton'
 
-export const UpdateMessage = ({ message }: { message?: string }) => {
+export const UpdateMessage = ({ message, isError }: { message?: string; isError?: boolean }) => {
   return (
-    <div>
-      {message ? (
-        <div>
-          {message.match('error') ? (
-            <BodyShort className='text-nav-red'>{message}</BodyShort>
-          ) : (
-            <BodyShort>{message}</BodyShort>
-          )}
-        </div>
-      ) : (
-        <div />
+    <div className='my-5'>
+      {message && (
+        <LocalAlert status={isError ? 'error' : 'success'}>
+          <LocalAlert.Header>
+            <LocalAlert.Title>{isError ? 'Error' : 'Vellykket'}</LocalAlert.Title>
+          </LocalAlert.Header>
+          <LocalAlert.Content>{message}</LocalAlert.Content>
+        </LocalAlert>
       )}
     </div>
   )

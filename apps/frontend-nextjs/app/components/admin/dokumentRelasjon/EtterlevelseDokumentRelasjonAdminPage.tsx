@@ -12,6 +12,7 @@ import {
   Table,
   TextField,
 } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import {
   deleteDocumentRelation,
@@ -28,6 +29,8 @@ import { UpdateMessage } from '../common/commonComponents'
 const EtterlevelseDokumentRelasjonAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [deleleDokumentRelasjonId, setDeleteDokumentRelasjonId] = useState<string>('')
+  const [isError, setIsError] = useState<boolean>(false)
+
   const [reloadTable, setReloadTable] = useState(false)
 
   const [tableContent, setTableContent] = useState<IDocumentRelation[]>([])
@@ -110,21 +113,26 @@ const EtterlevelseDokumentRelasjonAdminPage = () => {
             deleteDocumentRelation(deleleDokumentRelasjonId)
               .then(() => {
                 setDeleteDokumentRelasjonId('')
+                setIsError(false)
                 setReloadTable(!reloadTable)
                 setDeleteMessage(
                   'Sletting vellykket for relasjon til etterlevelse dokumentasjon med uid: ' +
                     deleleDokumentRelasjonId
                 )
               })
-              .catch((e) => {
-                setDeleteMessage('Sletting mislykket, error: ' + e)
+              .catch((e: AxiosError<{ message?: string }>) => {
+                setIsError(true)
+                setDeleteMessage(
+                  `Sletting mislykket, error: ${e.status}, ${e.response?.data.message}`
+                )
               })
           }}
         >
           Slett
         </Button>
       </div>
-      <UpdateMessage message={deleteMessage} />
+
+      <UpdateMessage message={deleteMessage} isError={isError} />
 
       <div className='mt-8 w-full'>
         <Heading level='2' size='small'>
