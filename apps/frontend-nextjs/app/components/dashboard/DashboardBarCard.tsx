@@ -136,7 +136,12 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
       value: stats.behovForPvk.behovIkkePaabegynt,
       color: BEHOV_COLORS[2],
     },
-    { name: 'PVK i Word', value: stats.pvk.pvkIWord, color: BEHOV_COLORS[3] },
+    {
+      name: 'Overfører godkjent PVK',
+      value: stats.behovForPvk.overforerGodkjentPvk,
+      color: BEHOV_COLORS[3],
+    },
+    { name: 'PVK i Word', value: stats.pvk.pvkIWord, color: BEHOV_COLORS[4] },
   ]
 
   const pvkData: IBarSegment[] = [

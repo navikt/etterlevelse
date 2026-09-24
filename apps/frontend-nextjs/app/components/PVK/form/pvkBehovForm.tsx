@@ -274,12 +274,23 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                         fieldProps.form.setFieldValue('pvkVurdering', value)
                       }}
                     >
-                      <Radio value={EPvkVurdering.SKAL_UTFORE}>Vi skal gjennomføre en PVK</Radio>
-                      <Radio value={EPvkVurdering.SKAL_IKKE_UTFORE}>
-                        Vi skal ikke gjennomføre PVK
+                      <Radio
+                        value={EPvkVurdering.SKAL_UTFORE}
+                        description='Dette valget innebærer innsending av PVK-en til personvernombudets vurdering.'
+                      >
+                        Vi skal gjennomføre en PVK
+                      </Radio>
+                      <Radio
+                        value={EPvkVurdering.LEGGE_OVER_EKSISTERENDE}
+                        description='Dette valget forutsetter at PVK-materien legges inn as-is, og at det dermed ikke er behov for en ny vurdering hos personvernombudet. Det blir imidlertid mulig for risikoeier å godkjenne PVK-en digitalt.'
+                      >
+                        Vi skal legge over en eksisterende, godkjent PVK fra Word
                       </Radio>
                       <Radio value={EPvkVurdering.ALLEREDE_UTFORT}>
-                        Vi har en PVK i Word som ikke trenger en ny vurdering
+                        Vi beholder vår eksisterende, godkjente PVK i Word
+                      </Radio>
+                      <Radio value={EPvkVurdering.SKAL_IKKE_UTFORE}>
+                        Vi skal ikke gjennomføre PVK
                       </Radio>
                     </RadioGroup>
                   )}

@@ -14,4 +14,5 @@ public class BehovForPvkStats {
     private int ikkeVurdertBehov;
     private int vurdertIkkeBehov;
     private int behovIkkePaabegynt;
+    private int overforerGodkjentPvk;
 }

@@ -17,6 +17,11 @@ export const isReadOnlyPvkStatus = (status: string) => {
   ].includes(status)
 }
 
+// Begge vurderingene låser opp selve PVK-dokumentet (steg 1-8).
+export const skalHaPvkDokument = (pvkVurdering?: EPvkVurdering): boolean =>
+  pvkVurdering === EPvkVurdering.SKAL_UTFORE ||
+  pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE
+
 export const pvkDokumentStatusToText = (status: EPvkDokumentStatus) => {
   switch (status) {
     case EPvkDokumentStatus.UNDERARBEID:
@@ -57,13 +62,13 @@ export const getPvkTilstand = (
     return EPVKTilstandStatus.TILSTAND_STATUS_TWO
   } else if (
     pvkDokument &&
-    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+    skalHaPvkDokument(pvkDokument.pvkVurdering) &&
     pvkDokument.hasPvkDocumentationStarted === false
   ) {
     return EPVKTilstandStatus.TILSTAND_STATUS_THREE
   } else if (
     pvkDokument &&
-    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+    skalHaPvkDokument(pvkDokument.pvkVurdering) &&
     pvkDokument.hasPvkDocumentationStarted === true
   ) {
     if (pvkDokument.antallInnsendingTilPvo === 0) {
