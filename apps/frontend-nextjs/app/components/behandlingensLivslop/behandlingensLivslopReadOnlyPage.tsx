@@ -2,7 +2,7 @@
 
 import { Heading, Loader } from '@navikt/ds-react'
 import { useParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import {
   mapBehandlingensLivslopRequestToFormValue,
   useBehandlingensLivslop,
@@ -18,7 +18,11 @@ import { PageLayout } from '../others/scaffold/scaffold'
 import BehandlingensLivslopReadOnlyContent from './content/behandlingensLivslopReadOnlyContent'
 import BehandlingensLivsLopSidePanel from './sidePanel/BehandlingensLivsLopSidePanel'
 
-const BehandlingensLivslopReadOnlyPage = () => {
+interface IProps {
+  editorMode?: boolean
+}
+
+const BehandlingensLivslopReadOnlyPage: FunctionComponent<IProps> = ({ editorMode }) => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
@@ -85,6 +89,8 @@ const BehandlingensLivslopReadOnlyPage = () => {
                 behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(behandlingsLivslop)}
                 noSidePanelContent
                 noHeader
+                editorMode={editorMode}
+                pvkDokumentId={pvkDokument.id}
               />
             )}
           </MainPanelLayout>

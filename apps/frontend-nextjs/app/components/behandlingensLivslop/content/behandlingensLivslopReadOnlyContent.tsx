@@ -1,6 +1,15 @@
 'use client'
 
-import { BodyLong, FileObject, FileUpload, Heading, Label, VStack } from '@navikt/ds-react'
+import {
+  BodyLong,
+  FileObject,
+  FileUpload,
+  Heading,
+  InlineMessage,
+  Label,
+  Link,
+  VStack,
+} from '@navikt/ds-react'
 import { FunctionComponent, useMemo } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -16,6 +25,8 @@ type TProps = {
   isChangesMadeSinceLastSubmission?: boolean
   noSidePanelContent?: boolean
   noHeader?: boolean
+  editorMode?: boolean
+  pvkDokumentId?: string
 }
 
 const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
@@ -24,6 +35,8 @@ const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
   isChangesMadeSinceLastSubmission,
   noSidePanelContent,
   noHeader,
+  editorMode,
+  pvkDokumentId,
 }) => {
   const files = useMemo<FileObject[]>(() => {
     if (!behandlingensLivslop.filer || behandlingensLivslop.filer.length === 0) {
@@ -44,6 +57,17 @@ const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
           )}
 
           {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+
+          {editorMode && pvkDokumentId && (
+            <InlineMessage status='info' className='mb-5'>
+              For å kunne redigere denne siden, må du først{' '}
+              <Link
+                href={`/dokumentasjon/${etterlevelseDokumentasjon.id}/pvkdokument/${pvkDokumentId}?steg=1`}
+              >
+                låse opp PVK.
+              </Link>
+            </InlineMessage>
+          )}
 
           <BehandlingensLivslopTextContent />
 
