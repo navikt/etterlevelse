@@ -175,6 +175,7 @@ const BehandlingensLivslopView: FunctionComponent<TProps> = ({
         <ContentLayout>
           {pvkDokument &&
             !isReadOnlyPvkStatus(pvkDokument.status) &&
+            pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
             (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
               <div
                 className={`pt-6 pr-4 flex flex-col gap-4 col-span-8 ${hasPvoComment ? 'w-1/2' : 'flex-1'}`}
@@ -310,7 +311,9 @@ const BehandlingensLivslopView: FunctionComponent<TProps> = ({
               </div>
             )}
 
-          {((pvkDokument && isReadOnlyPvkStatus(pvkDokument.status)) ||
+          {((pvkDokument &&
+            (isReadOnlyPvkStatus(pvkDokument.status) ||
+              pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) ||
             !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
             <BehandlingensLivslopReadOnlyContent
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
