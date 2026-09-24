@@ -1,5 +1,12 @@
 import test, { expect } from '@playwright/test'
-import { mockAdmin, mockIdent } from '@/tests/utils/roller'
+import {
+  mockAdmin,
+  mockIdent,
+  mockKraveier,
+  mockPersonvernombud,
+  mockRead,
+  mockWrite,
+} from '@/tests/utils/roller'
 
 const createdDocument = {
   id: 'created-document-id',
@@ -26,6 +33,18 @@ const visibleRequirements = [
   { number: 201, version: 1, name: 'Dokumentere internkontroll' },
 ]
 
+const roleScenarios = [
+  { name: 'admin', mockUser: mockAdmin, canEditWithoutDocumentAccess: true },
+  { name: 'kraveier', mockUser: mockKraveier, canEditWithoutDocumentAccess: false },
+  { name: 'lesebruker', mockUser: mockRead, canEditWithoutDocumentAccess: false },
+  { name: 'skrivebruker', mockUser: mockWrite, canEditWithoutDocumentAccess: false },
+  {
+    name: 'personvernombud',
+    mockUser: mockPersonvernombud,
+    canEditWithoutDocumentAccess: false,
+  },
+]
+
 test.describe('Som en admin bruker skal jeg kunne', () => {
   test('trykke «Opprett nytt etterlevelsesdokument» på forsiden og deretter bli navigert til «Opprett nytt etterlevelsesdokument» siden', async ({
     context,
@@ -33,6 +52,24 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
   }) => {
     await mockAdmin(page)
 
+    await context.route('**/api/codelist?refresh=false', async (route) => {
+      await route.fulfill({ json: { codelist: {} } })
+    })
+    await context.route('**/api/team?myTeams=true', async (route) => {
+      await route.fulfill({
+        json: {
+          pageNumber: 0,
+          pageSize: 20,
+          pages: 0,
+          numberOfElements: 0,
+          totalElements: 0,
+          content: [],
+        },
+      })
+    })
+    await context.route('**/nom/avdelinger', async (route) => {
+      await route.fulfill({ json: [] })
+    })
     await context.route('**/graphql', async (route) => {
       const requestBody = route.request().postDataJSON() as { operationName?: string }
 
@@ -126,6 +163,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         resources: [mockIdent],
         varslingsadresser: [{ type: 'EPOST', adresse: createdDocument.email }],
       })
+
       await route.fulfill({ json: { id: createdDocument.id } })
     })
 
@@ -630,4 +668,150 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       ).toBeVisible()
     }
   })
+})
+
+test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', () => {
+  for (const role of roleScenarios) {
+    test(`${role.name} kan opprette og lese, med forventet redigeringstilgang`, async ({
+      context,
+      page,
+    }) => {
+      await role.mockUser(page)
+
+      await context.route('**/api/codelist?refresh=false', async (route) => {
+        await route.fulfill({ json: { codelist: {} } })
+      })
+
+      await context.route('**/api/team?myTeams=true', async (route) => {
+        await route.fulfill({
+          json: {
+            pageNumber: 0,
+            pageSize: 20,
+            pages: 0,
+            numberOfElements: 0,
+            totalElements: 0,
+            content: [],
+          },
+        })
+      })
+
+      await context.route('**/nom/avdelinger', async (route) => {
+        await route.fulfill({ json: [] })
+      })
+
+      await context.route(
+        `**/api/etterlevelsedokumentasjon/${createdDocument.id}`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              id: createdDocument.id,
+              title: createdDocument.title,
+              beskrivelse: createdDocument.description,
+              status: 'UNDER_ARBEID',
+              etterlevelseNummer: 1,
+              etterlevelseDokumentVersjon: 1,
+              resources: [],
+              resourcesData: [],
+              teams: [],
+              teamsData: [],
+              risikoeiere: [],
+              risikoeiereData: [],
+              irrelevansFor: [],
+              varslingsadresser: [{ type: 'EPOST', adresse: createdDocument.email }],
+              hasCurrentUserAccess: false,
+            },
+          })
+        }
+      )
+      await context.route(
+        `**/documentrelation/todocument/${createdDocument.id}**`,
+        async (route) => {
+          await route.fulfill({ json: [] })
+        }
+      )
+      await context.route(
+        `**/pvkdokument/etterlevelsedokument/${createdDocument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route(
+        `**/behandlingenslivslop/etterlevelsedokument/${createdDocument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route(
+        `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${createdDocument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route('**/kravprioritylist?pageNumber=0&pageSize=100', async (route) => {
+        await route.fulfill({
+          json: {
+            pageNumber: 0,
+            pageSize: 100,
+            pages: 0,
+            numberOfElements: 0,
+            totalElements: 0,
+            content: [],
+          },
+        })
+      })
+
+      await context.route('**/graphql', async (route) => {
+        const requestBody = route.request().postDataJSON() as { operationName?: string }
+
+        if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
+          await route.fulfill({
+            json: {
+              data: {
+                etterlevelseDokumentasjon: {
+                  content: [{ stats: { relevantKrav: [], utgaattKrav: [] } }],
+                },
+              },
+            },
+          })
+          return
+        }
+
+        await route.continue()
+      })
+
+      await page.goto('http://localhost:3000/dokumentasjon/create')
+      await expect(
+        page.getByRole('heading', { name: 'Opprett nytt etterlevelsesdokument' })
+      ).toBeVisible()
+
+      await page.goto(`http://localhost:3000/dokumentasjon/${createdDocument.id}`)
+      await expect(
+        page.getByRole('heading', { name: `E1.1 ${createdDocument.title}` })
+      ).toBeVisible()
+
+      await page.getByRole('button', { name: 'Etterlevelse' }).click()
+      await expect(page.getByRole('menuitem', { name: 'Eksporter til Word' })).toBeVisible()
+
+      const editDocumentLink = page.getByRole('menuitem', {
+        name: 'Rediger dokumentegenskaper',
+      })
+      if (role.canEditWithoutDocumentAccess) {
+        await expect(editDocumentLink).toBeVisible()
+      } else {
+        await expect(editDocumentLink).toHaveCount(0)
+      }
+
+      await page.keyboard.press('Escape')
+      await page.getByRole('button', { name: 'Les mer om dette dokumentet' }).click()
+
+      if (role.canEditWithoutDocumentAccess) {
+        await expect(page.getByRole('link', { name: createdDocument.email })).toBeVisible()
+      } else {
+        await expect(
+          page.getByText(/Trenger du tilgang til å redigere dette dokumentet/)
+        ).toBeVisible()
+        await expect(page.getByRole('link', { name: createdDocument.email })).toHaveCount(0)
+      }
+    })
+  }
 })
