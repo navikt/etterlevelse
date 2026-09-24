@@ -66,7 +66,10 @@ import {
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import {
+  isReadOnlyPvkStatus,
+  skalHaPvkDokument,
+} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import pvkBehovSchema from './pvkBehovSchema'
 
 type TProps = {
@@ -429,30 +432,28 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                 >
                   Gå til Temaoversikt
                 </Button>
-                {pvkDokument &&
-                  pvkDokument.id &&
-                  values.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
-                    <Button
-                      icon={<ChevronRightIcon aria-hidden />}
-                      iconPosition='right'
-                      type='button'
-                      variant={'tertiary'}
-                      onClick={() => {
-                        if (dirty) {
-                          setIsUnsavedModalOpen(true)
-                          setUrlToNavigate(
-                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                          )
-                        } else {
-                          router.push(
-                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                          )
-                        }
-                      }}
-                    >
-                      Gå til PVK
-                    </Button>
-                  )}
+                {pvkDokument && pvkDokument.id && skalHaPvkDokument(pvkDokument.pvkVurdering) && (
+                  <Button
+                    icon={<ChevronRightIcon aria-hidden />}
+                    iconPosition='right'
+                    type='button'
+                    variant={'tertiary'}
+                    onClick={() => {
+                      if (dirty) {
+                        setIsUnsavedModalOpen(true)
+                        setUrlToNavigate(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      } else {
+                        router.push(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      }
+                    }}
+                  >
+                    Gå til PVK
+                  </Button>
+                )}
               </StickyFooterButtonLayout>
             </Form>
           )
