@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.kravprioritylist;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -123,7 +125,7 @@ public class KravPriorityListController {
         return ResponseEntity.ok(kravPriorityList.toResponse());
     }
 
-    @Operation(summary = "Delete krav prioritering")
+    @Operation(summary = "Delete krav prioritering", parameters = {@Parameter(name = "comment", description = "Reason for deleting the krav prioritering", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "ok")
     @DeleteMapping("/{id}")
     public ResponseEntity<KravPriorityListResponse> deleteKravPriorityList(@PathVariable UUID id) {

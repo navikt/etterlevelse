@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -224,7 +226,7 @@ public class PvkDokumentController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Delete Pvk Document")
+    @Operation(summary = "Delete Pvk Document", parameters = {@Parameter(name = "comment", description = "Reason for deleting the PVK document", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Pvk Document deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {

@@ -1,6 +1,8 @@
 package no.nav.data.pvk.behandlingensArtOgOmfang;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -16,7 +18,14 @@ import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResp
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -104,7 +113,7 @@ public class BehandlingensArtOgOmfangController {
         return ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang));
     }
 
-    @Operation(summary = "Delete Behandlingens art og omfang")
+    @Operation(summary = "Delete Behandlingens art og omfang", parameters = {@Parameter(name = "comment", description = "Reason for deleting the behandlingens art og omfang", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Behandlingens art og omfang deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<BehandlingensArtOgOmfangResponse> deleteBehandlingensArtOgOmfangById(@PathVariable UUID id) {

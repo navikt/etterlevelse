@@ -210,7 +210,7 @@ public class KravIT extends IntegrationTestBase {
     @Test
     void deleteKrav() {
         var krav = createKrav();
-        restTemplate.delete("/krav/{id}", krav.getId());
+        restTemplate.delete("/krav/{id}?comment=test-cleanup", krav.getId());
 
         assertThat(kravRepo.count()).isZero();
     }
@@ -220,7 +220,7 @@ public class KravIT extends IntegrationTestBase {
         var eDok = createEtterlevelseDokumentasjon();
         var krav = createKrav();
         etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok.getId()).kravNummer(50).kravVersjon(1).build());
-        restTemplate.delete("/krav/{id}", krav.getId());
+        restTemplate.delete("/krav/{id}?comment=test-cleanup", krav.getId());
 
         assertThat(kravRepo.count()).isEqualTo(1);
     }
@@ -234,7 +234,7 @@ public class KravIT extends IntegrationTestBase {
                 .kravNummer(50).kravVersjon(1)
                 .build();
         tilbakemeldingRepo.save(tilbakemelding);
-        restTemplate.delete("/krav/{id}", krav.getId());
+        restTemplate.delete("/krav/{id}?comment=test-cleanup", krav.getId());
 
         assertThat(kravRepo.count()).isEqualTo(1);
     }
@@ -244,7 +244,7 @@ public class KravIT extends IntegrationTestBase {
         // Delete krav should fail if the krav is referenced by a risikoscenario, and there is no other versions of that krav
         int kravNummer = insertRisikoscenario().getRisikoscenarioData().getRelevanteKravNummer().get(0);
         UUID kravId = kravRepo.findByKravNummer(kravNummer).get(0).getId();
-        ResponseEntity<?> resp = restTemplate.exchange("/krav/{id}", HttpMethod.DELETE, null, Void.class, kravId);
+        ResponseEntity<?> resp = restTemplate.exchange("/krav/{id}?comment=test-cleanup", HttpMethod.DELETE, null, Void.class, kravId);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(kravRepo.count()).isOne();
     }
@@ -255,7 +255,7 @@ public class KravIT extends IntegrationTestBase {
         int kravNummer = insertRisikoscenario().getRisikoscenarioData().getRelevanteKravNummer().get(0);
         UUID kravId = kravRepo.findByKravNummer(kravNummer).get(0).getId();
         createKrav("Another Krav", kravNummer, 2);
-        ResponseEntity<KravResponse> resp = restTemplate.exchange("/krav/{id}", HttpMethod.DELETE, null, KravResponse.class, kravId);
+        ResponseEntity<KravResponse> resp = restTemplate.exchange("/krav/{id}?comment=test-cleanup", HttpMethod.DELETE, null, KravResponse.class, kravId);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(kravRepo.count()).isOne();
     }

@@ -17,6 +17,7 @@ public final class MdcUtils {
     private static final String CALL_ID = "callId";
     private static final String USER_ID = "userId";
     private static final String CONSUMER_ID = "consumerId";
+    private static final String DELETE_COMMENT = "deleteComment";
 
     private static final String REQUEST_PATH = "RequestPath";
     private static final String REQUEST_METHOD = "RequestMethod";
@@ -77,6 +78,18 @@ public final class MdcUtils {
         MDC.remove(CONSUMER_ID);
     }
 
+    public static String getDeleteComment() {
+        return MDC.get(DELETE_COMMENT);
+    }
+
+    public static void setDeleteComment(String comment) {
+        MDC.put(DELETE_COMMENT, comment);
+    }
+
+    public static void clearDeleteComment() {
+        MDC.remove(DELETE_COMMENT);
+    }
+
     public static void setRequestPath(String path) {
         MDC.put(REQUEST_PATH, path);
     }
@@ -117,6 +130,7 @@ public final class MdcUtils {
         clearCallId();
         clearUser();
         clearConsumerId();
+        clearDeleteComment();
         clearRequestPath();
         clearRequestMethod();
     }

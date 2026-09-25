@@ -220,7 +220,7 @@ class CodelistControllerIT extends IntegrationTestBase {
             saveCodelist(createCodelist(ListName.RELEVANS, "DELETE_CODE"));
             assertTrue(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
 
-            ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
+            ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE?comment=test-cleanup", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
 
             assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
             assertFalse(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
@@ -235,7 +235,7 @@ class CodelistControllerIT extends IntegrationTestBase {
             );
             assertTrue(repository.findByListAndCode(ListName.RELEVANS, "DELETE_CODE").isPresent());
 
-            ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
+            ResponseEntity<String> responseEntity = restTemplate.exchange("/codelist/RELEVANS/DELETE_CODE?comment=test-cleanup", HttpMethod.DELETE, HttpEntity.EMPTY, String.class);
 
             assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
             assertThat(responseEntity.getBody()).contains("The code DELETE_CODE in list RELEVANS cannot be erased.");

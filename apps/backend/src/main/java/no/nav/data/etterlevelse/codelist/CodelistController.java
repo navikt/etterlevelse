@@ -2,6 +2,8 @@ package no.nav.data.etterlevelse.codelist;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -99,7 +101,7 @@ public class CodelistController {
         return service.update(requests).stream().map(Codelist::toResponse).collect(Collectors.toList());
     }
 
-    @Operation(summary = "Delete Codelist")
+    @Operation(summary = "Delete Codelist", parameters = {@Parameter(name = "comment", description = "Reason for deleting the codelist entry", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Codelist deleted")
     @DeleteMapping("/{listName}/{code}")
     @Transactional

@@ -75,7 +75,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
     void deleteEtterlevelse() {
         var eDok = createEtterlevelseDokumentasjon();
         var etterlevelse = etterlevelseService.save(Etterlevelse.builder().kravNummer(50).kravVersjon(1).etterlevelseDokumentasjonId(eDok.getId()).build());
-        restTemplate.delete("/etterlevelse/{id}", etterlevelse.getId());
+        restTemplate.delete("/etterlevelse/{id}?comment=test-cleanup", etterlevelse.getId());
 
         assertThat(etterlevelseRepo.count()).isEqualTo(0);
     }
@@ -107,7 +107,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
 
         var krav = createKrav();
 
-        restTemplate.delete("/etterlevelse/{id}", krav.getId());
+        restTemplate.delete("/etterlevelse/{id}?comment=test-cleanup", krav.getId());
 
         var resp = restTemplate.getForEntity("/krav/{id}", KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
