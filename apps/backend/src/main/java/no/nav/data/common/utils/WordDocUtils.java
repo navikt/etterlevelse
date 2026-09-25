@@ -22,6 +22,8 @@ import org.docx4j.model.table.TblFactory;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.FooterPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.docx4j.openpackaging.parts.relationships.Namespaces;
+import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.BooleanDefaultTrue;
 import org.docx4j.wml.Br;
 import org.docx4j.wml.CTBorder;
@@ -37,12 +39,26 @@ import org.docx4j.wml.PPrBase;
 import org.docx4j.wml.R;
 import org.docx4j.wml.RFonts;
 import org.docx4j.wml.RPr;
+import org.docx4j.wml.RStyle;
 import org.docx4j.wml.STBrType;
 import org.docx4j.wml.Styles;
 import org.docx4j.wml.Tbl;
 import org.docx4j.wml.Text;
 
-import com.vladsch.flexmark.docx.converter.DocxRenderer;
+import com.vladsch.flexmark.ast.AutoLink;
+import com.vladsch.flexmark.ast.BulletList;
+import com.vladsch.flexmark.ast.Code;
+import com.vladsch.flexmark.ast.Emphasis;
+import com.vladsch.flexmark.ast.FencedCodeBlock;
+import com.vladsch.flexmark.ast.HardLineBreak;
+import com.vladsch.flexmark.ast.Heading;
+import com.vladsch.flexmark.ast.HtmlInline;
+import com.vladsch.flexmark.ast.IndentedCodeBlock;
+import com.vladsch.flexmark.ast.Link;
+import com.vladsch.flexmark.ast.OrderedList;
+import com.vladsch.flexmark.ast.Paragraph;
+import com.vladsch.flexmark.ast.SoftLineBreak;
+import com.vladsch.flexmark.ast.StrongEmphasis;
 import com.vladsch.flexmark.ext.definition.DefinitionExtension;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughSubscriptExtension;
 import com.vladsch.flexmark.ext.ins.InsExtension;
@@ -51,6 +67,7 @@ import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.ext.toc.SimTocExtension;
 import com.vladsch.flexmark.ext.toc.TocExtension;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 
 import lombok.SneakyThrows;
@@ -87,20 +104,18 @@ public class WordDocUtils {
             TablesExtension.create(),
             TocExtension.create(),
             SimTocExtension.create()
-    ))
-            .set(DocxRenderer.SUPPRESS_HTML, true)
-            // the following two are needed to allow doc relative and site relative address resolution
-            .set(DocxRenderer.DOC_RELATIVE_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like 'images/...' or './' or '../'
-            .set(DocxRenderer.DOC_ROOT_URL, "file:///Users/vlad/src/pdf") // this will be used for URLs like: '/...'
-            ;
+    ));
 
-    private final DocxRenderer docxRenderer = DocxRenderer.builder(options).build();
+    private static final String TEMPLATE = "/export/word-template.docx";
+    private static final long BULLET_NUM_ID = 2;
+    private static final long ORDERED_NUM_ID = 3;
+
     private final Parser markdownParser = Parser.builder(options).build();
 
     @SneakyThrows
     public WordDocUtils(ObjectFactory fac) {
         this.fac = fac;
-        pack = DocxRenderer.getDefaultTemplate();
+        pack = WordprocessingMLPackage.load(WordDocUtils.class.getResourceAsStream(TEMPLATE));
         main = pack.getMainDocumentPart();
 
         Styles styles = main.getStyleDefinitionsPart().getJaxbElement();
@@ -289,9 +304,183 @@ public class WordDocUtils {
     }
 
     public void addMarkdownText(String text) {
-        var markdownText = markdownParser.parse(text);
-        docxRenderer.render(markdownText, pack);
+        if (text == null) {
+            return;
+        }
+        Node document = markdownParser.parse(text);
+        for (Node block = document.getFirstChild(); block != null; block = block.getNext()) {
+            renderBlock(block);
+        }
+    }
 
+    private void renderBlock(Node node) {
+        if (node instanceof Heading heading) {
+            P p = fac.createP();
+            setPStyle(p, "Heading" + Math.min(Math.max(heading.getLevel(), 1), 6));
+            renderInlines(p, heading, false, false);
+            main.getContent().add(p);
+        } else if (node instanceof BulletList || node instanceof OrderedList) {
+            boolean ordered = node instanceof OrderedList;
+            for (Node item = node.getFirstChild(); item != null; item = item.getNext()) {
+                renderListItem(item, ordered);
+            }
+        } else if (node instanceof FencedCodeBlock || node instanceof IndentedCodeBlock) {
+            P p = fac.createP();
+            addRun(p, node.getChars().toString(), false, false);
+            main.getContent().add(p);
+        } else if (node instanceof Paragraph) {
+            P p = fac.createP();
+            renderInlines(p, node, false, false);
+            main.getContent().add(p);
+        } else if (node.hasChildren()) {
+            for (Node child = node.getFirstChild(); child != null; child = child.getNext()) {
+                renderBlock(child);
+            }
+        } else {
+            P p = fac.createP();
+            addRun(p, node.getChars().toString(), false, false);
+            main.getContent().add(p);
+        }
+    }
+
+    private void renderListItem(Node item, boolean ordered) {
+        P p = fac.createP();
+        PPr pPr = fac.createPPr();
+        setPStyleOn(pPr, ordered ? "ListNumber" : "ListBullet");
+        PPrBase.NumPr numPr = fac.createPPrBaseNumPr();
+        PPrBase.NumPr.NumId numId = fac.createPPrBaseNumPrNumId();
+        numId.setVal(BigInteger.valueOf(ordered ? ORDERED_NUM_ID : BULLET_NUM_ID));
+        PPrBase.NumPr.Ilvl ilvl = fac.createPPrBaseNumPrIlvl();
+        ilvl.setVal(BigInteger.ZERO);
+        numPr.setNumId(numId);
+        numPr.setIlvl(ilvl);
+        pPr.setNumPr(numPr);
+        p.setPPr(pPr);
+
+        for (Node child = item.getFirstChild(); child != null; child = child.getNext()) {
+            if (child instanceof BulletList || child instanceof OrderedList) {
+                main.getContent().add(p);
+                renderBlock(child);
+                p = null;
+            } else if (child instanceof Paragraph) {
+                renderInlines(p, child, false, false);
+            } else {
+                renderInlines(p, child, false, false);
+            }
+        }
+        if (p != null) {
+            main.getContent().add(p);
+        }
+    }
+
+    private void renderInlines(P p, Node parent, boolean bold, boolean italic) {
+        for (Node node = parent.getFirstChild(); node != null; node = node.getNext()) {
+            if (node instanceof StrongEmphasis) {
+                renderInlines(p, node, true, italic);
+            } else if (node instanceof Emphasis) {
+                renderInlines(p, node, bold, true);
+            } else if (node instanceof Link link) {
+                addHyperlink(p, link.getUrl().toString(), collectText(link));
+            } else if (node instanceof AutoLink autoLink) {
+                addHyperlink(p, autoLink.getUrl().toString(), autoLink.getUrl().toString());
+            } else if (node instanceof Code) {
+                addRun(p, node.getFirstChild() != null ? node.getFirstChild().getChars().toString() : "", bold, italic);
+            } else if (node instanceof SoftLineBreak) {
+                addRun(p, " ", bold, italic);
+            } else if (node instanceof HardLineBreak) {
+                addBreak(p);
+            } else if (node instanceof HtmlInline) {
+                if (node.getChars().toString().replaceAll("\\s", "").matches("(?i)<br/?>")) {
+                    addBreak(p);
+                }
+            } else if (node instanceof com.vladsch.flexmark.ast.Text) {
+                if (node.hasChildren()) {
+                    renderInlines(p, node, bold, italic);
+                } else {
+                    addRun(p, node.getChars().unescape(), bold, italic);
+                }
+            } else if (node.hasChildren()) {
+                renderInlines(p, node, bold, italic);
+            } else {
+                addRun(p, node.getChars().unescape(), bold, italic);
+            }
+        }
+    }
+
+    private String collectText(Node parent) {
+        StringBuilder sb = new StringBuilder();
+        for (Node node = parent.getFirstChild(); node != null; node = node.getNext()) {
+            if (node.hasChildren()) {
+                sb.append(collectText(node));
+            } else {
+                sb.append(node.getChars().unescape());
+            }
+        }
+        return sb.toString();
+    }
+
+    private void addRun(P p, String value, boolean bold, boolean italic) {
+        if (value == null || value.isEmpty()) {
+            return;
+        }
+        R r = fac.createR();
+        RPr rpr = createRpr();
+        if (bold) {
+            setRprFontBold(rpr, true);
+        }
+        if (italic) {
+            BooleanDefaultTrue i = new BooleanDefaultTrue();
+            i.setVal(true);
+            rpr.setI(i);
+        }
+        r.setRPr(rpr);
+        Text t = fac.createText();
+        t.setValue(value);
+        t.setSpace("preserve");
+        r.getContent().add(t);
+        p.getContent().add(r);
+    }
+
+    private void addBreak(P p) {
+        R r = fac.createR();
+        r.getContent().add(fac.createBr());
+        p.getContent().add(r);
+    }
+
+    @SneakyThrows
+    private void addHyperlink(P p, String url, String linkText) {
+        Relationship rel = new org.docx4j.relationships.ObjectFactory().createRelationship();
+        rel.setType(Namespaces.HYPERLINK);
+        rel.setTarget(url.trim());
+        rel.setTargetMode("External");
+        main.getRelationshipsPart().addRelationship(rel);
+
+        P.Hyperlink hyperlink = fac.createPHyperlink();
+        hyperlink.setId(rel.getId());
+        R r = fac.createR();
+        RPr rpr = createRpr();
+        RStyle rStyle = fac.createRStyle();
+        rStyle.setVal("Hyperlink");
+        rpr.setRStyle(rStyle);
+        r.setRPr(rpr);
+        Text t = fac.createText();
+        t.setValue(linkText == null || linkText.isEmpty() ? url : linkText);
+        t.setSpace("preserve");
+        r.getContent().add(t);
+        hyperlink.getContent().add(r);
+        p.getContent().add(hyperlink);
+    }
+
+    private void setPStyle(P p, String styleId) {
+        PPr pPr = p.getPPr() != null ? p.getPPr() : fac.createPPr();
+        setPStyleOn(pPr, styleId);
+        p.setPPr(pPr);
+    }
+
+    private void setPStyleOn(PPr pPr, String styleId) {
+        PPrBase.PStyle pStyle = fac.createPPrBasePStyle();
+        pStyle.setVal(styleId);
+        pPr.setPStyle(pStyle);
     }
 
     public void addTexts(Text... values) {
