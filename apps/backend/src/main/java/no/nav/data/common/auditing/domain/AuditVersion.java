@@ -86,16 +86,16 @@ public class AuditVersion {
     }
 
     public AuditResponse toResponse() {
-        AuditResponse response = new AuditResponse();
-        response.setId(id.toString());
-        response.setAction(action);
-        response.setTable(table);
-        response.setTableId(tableId);
-        response.setTime(time);
-        response.setUser(user);
-        response.setDeleteMessage(deleteMessage);
-        response.setData(JsonUtils.toJsonNode(this.data));
-        return response;
+        return AuditResponse.builder()
+                .id(id.toString())
+                .action(action)
+                .table(table)
+                .tableId(tableId)
+                .time(time)
+                .user(user)
+                .deleteMessage(deleteMessage)
+                .data(JsonUtils.toJsonNode(this.data))
+                .build();
     }
 
     public static String tableNameFor(Object entity) {
