@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test'
+import { oppretteEtterlevelsesdokument } from '@/tests/utils/etterlevelsesdokument'
 import {
   mockAdmin,
   mockIdent,
@@ -7,25 +8,6 @@ import {
   mockRead,
   mockWrite,
 } from '@/tests/utils/roller'
-
-const createdDocument = {
-  id: 'created-document-id',
-  title: 'Test av nytt etterlevelsesdokument',
-  description: 'Dokumentasjon opprettet fra Playwright-testen',
-  departmentId: 'avdeling-1',
-  departmentName: 'Testavdelingen',
-  email: 'bat.man@nav.no',
-  sectionName: 'Testseksjonen',
-  unitName: 'Testenheten',
-  riskOwnerName: 'Test Risikoeier',
-  teamName: 'Testteamet',
-  treatmentName: 'B101 Testformål: Testbehandling',
-  dataProcessorTreatmentName: 'D202: Databehandlerbehandling',
-  systemName: 'Testsystemet',
-  riskAssessment: 'ROS-analyse for testdokumentet',
-  p360CaseNumber: 'SAK-12345',
-  reuseDescription: 'Veiledning for gjenbruk av testdokumentet',
-}
 
 const roleScenarios = [
   { name: 'admin', mockUser: mockAdmin, canEditWithoutDocumentAccess: true },
@@ -137,12 +119,17 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
     await context.route('**/nom/avdelinger', async (route) => {
       await route.fulfill({
-        json: [{ id: createdDocument.departmentId, navn: createdDocument.departmentName }],
+        json: [
+          {
+            id: oppretteEtterlevelsesdokument.departmentId,
+            navn: oppretteEtterlevelsesdokument.departmentName,
+          },
+        ],
       })
     })
 
     await context.route(
-      `**/nom/seksjon/avdeling/${createdDocument.departmentId}`,
+      `**/nom/seksjon/avdeling/${oppretteEtterlevelsesdokument.departmentId}`,
       async (route) => {
         await route.fulfill({ json: [] })
       }
@@ -150,15 +137,15 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await context.route('**/etterlevelsedokumentasjon', async (route) => {
       expect(route.request().method()).toBe('POST')
       expect(route.request().postDataJSON()).toMatchObject({
-        title: createdDocument.title,
-        beskrivelse: createdDocument.description,
-        nomAvdelingId: createdDocument.departmentId,
-        avdelingNavn: createdDocument.departmentName,
+        title: oppretteEtterlevelsesdokument.title,
+        beskrivelse: oppretteEtterlevelsesdokument.description,
+        nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
+        avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
         resources: [mockIdent],
-        varslingsadresser: [{ type: 'EPOST', adresse: createdDocument.email }],
+        varslingsadresser: [{ type: 'EPOST', adresse: oppretteEtterlevelsesdokument.email }],
       })
 
-      await route.fulfill({ json: { id: createdDocument.id } })
+      await route.fulfill({ json: { id: oppretteEtterlevelsesdokument.id } })
     })
 
     await page.goto('http://localhost:3000/dokumentasjon/create')
@@ -170,8 +157,11 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
     await expect(relevanceCheckbox).toBeVisible()
     await relevanceCheckbox.check()
-    await titleField.fill(createdDocument.title)
-    await page.locator('#beskrivelse').getByRole('textbox').fill(createdDocument.description)
+    await titleField.fill(oppretteEtterlevelsesdokument.title)
+    await page
+      .locator('#beskrivelse')
+      .getByRole('textbox')
+      .fill(oppretteEtterlevelsesdokument.description)
     await page.waitForTimeout(750)
 
     await page.getByRole('button', { name: 'Hva hvis jeg ikke finner person' }).click()
@@ -180,12 +170,14 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
     await page.getByRole('button', { name: 'Legg til epost' }).click()
     await page.getByRole('button', { name: 'Legg til Epost', exact: true }).click()
-    await page.getByLabel('Avdeling').selectOption(createdDocument.departmentId)
+    await page.getByLabel('Avdeling').selectOption(oppretteEtterlevelsesdokument.departmentId)
 
-    await expect(titleField).toHaveValue(createdDocument.title)
+    await expect(titleField).toHaveValue(oppretteEtterlevelsesdokument.title)
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()
 
-    await expect(page).toHaveURL(`http://localhost:3000/dokumentasjon/${createdDocument.id}`)
+    await expect(page).toHaveURL(
+      `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
+    )
   })
 })
 
@@ -219,13 +211,13 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       })
 
       await context.route(
-        `**/api/etterlevelsedokumentasjon/${createdDocument.id}`,
+        `**/api/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
           await route.fulfill({
             json: {
-              id: createdDocument.id,
-              title: createdDocument.title,
-              beskrivelse: createdDocument.description,
+              id: oppretteEtterlevelsesdokument.id,
+              title: oppretteEtterlevelsesdokument.title,
+              beskrivelse: oppretteEtterlevelsesdokument.description,
               status: 'UNDER_ARBEID',
               etterlevelseNummer: 1,
               etterlevelseDokumentVersjon: 1,
@@ -236,32 +228,32 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
               risikoeiere: [],
               risikoeiereData: [],
               irrelevansFor: [],
-              varslingsadresser: [{ type: 'EPOST', adresse: createdDocument.email }],
+              varslingsadresser: [{ type: 'EPOST', adresse: oppretteEtterlevelsesdokument.email }],
               hasCurrentUserAccess: false,
             },
           })
         }
       )
       await context.route(
-        `**/documentrelation/todocument/${createdDocument.id}**`,
+        `**/documentrelation/todocument/${oppretteEtterlevelsesdokument.id}**`,
         async (route) => {
           await route.fulfill({ json: [] })
         }
       )
       await context.route(
-        `**/pvkdokument/etterlevelsedokument/${createdDocument.id}`,
+        `**/pvkdokument/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
           await route.fulfill({ status: 404 })
         }
       )
       await context.route(
-        `**/behandlingenslivslop/etterlevelsedokument/${createdDocument.id}`,
+        `**/behandlingenslivslop/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
           await route.fulfill({ status: 404 })
         }
       )
       await context.route(
-        `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${createdDocument.id}`,
+        `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
           await route.fulfill({ status: 404 })
         }
@@ -303,9 +295,9 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
         page.getByRole('heading', { name: 'Opprett nytt etterlevelsesdokument' })
       ).toBeVisible()
 
-      await page.goto(`http://localhost:3000/dokumentasjon/${createdDocument.id}`)
+      await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
       await expect(
-        page.getByRole('heading', { name: `E1.1 ${createdDocument.title}` })
+        page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
       ).toBeVisible()
 
       await page.getByRole('button', { name: 'Etterlevelse' }).click()
@@ -324,12 +316,16 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       await page.getByRole('button', { name: 'Les mer om dette dokumentet' }).click()
 
       if (role.canEditWithoutDocumentAccess) {
-        await expect(page.getByRole('link', { name: createdDocument.email })).toBeVisible()
+        await expect(
+          page.getByRole('link', { name: oppretteEtterlevelsesdokument.email })
+        ).toBeVisible()
       } else {
         await expect(
           page.getByText(/Trenger du tilgang til å redigere dette dokumentet/)
         ).toBeVisible()
-        await expect(page.getByRole('link', { name: createdDocument.email })).toHaveCount(0)
+        await expect(
+          page.getByRole('link', { name: oppretteEtterlevelsesdokument.email })
+        ).toHaveCount(0)
       }
     })
   }
