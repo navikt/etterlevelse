@@ -236,6 +236,9 @@ public class PvkDokumentToDoc {
             } else if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.LEGGE_OVER_EKSISTERENDE) {
                 doc.addText("Vi skal legge over en eksisterende, godkjent PVK fra Word");
                 doc.newLine();
+                doc.addHeading4("Begrunnelse av vurderingen");
+                doc.addText(pvkDokument.getPvkDokumentData().getPvkVurderingsBegrunnelse());
+                doc.newLine();
             } else {
                 doc.addText("Vi skal gjennomføre en PVK.");
                 doc.newLine();
