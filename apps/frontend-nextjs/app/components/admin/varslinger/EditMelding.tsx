@@ -3,12 +3,7 @@
 import { Button, Heading, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik'
 import { Dispatch, FunctionComponent, SetStateAction, useEffect, useState } from 'react'
-import {
-  createMelding,
-  deleteMelding,
-  mapMeldingToFormValue,
-  updateMelding,
-} from '@/api/melding/meldingApi'
+import { createMelding, mapMeldingToFormValue, updateMelding } from '@/api/melding/meldingApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, EMeldingType, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
@@ -116,19 +111,8 @@ export const EditMelding: FunctionComponent<TProps> = ({
                 noPlaceholder
                 name='melding'
               />
+
               <div className='flex w-full mt-2.5'>
-                <Button
-                  type='button'
-                  variant='secondary'
-                  disabled={disableEdit}
-                  onClick={() => {
-                    deleteMelding(melding.id).then(() => {
-                      setMelding(undefined)
-                    })
-                  }}
-                >
-                  Slett
-                </Button>
                 <div className='flex justify-end w-full'>
                   {melding.meldingStatus === EMeldingStatus.ACTIVE && (
                     <Button

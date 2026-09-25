@@ -37,8 +37,10 @@ export const getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber = async (
   ).data
 }
 
-export const deleteEtterlevelse = async (id: string) => {
-  return (await axios.delete<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}`)).data
+export const deleteEtterlevelse = async (id: string, reason: string) => {
+  return (
+    await axios.delete<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}?comment=${reason}`)
+  ).data
 }
 
 export const createEtterlevelse = async (etterlevelse: IEtterlevelse) => {

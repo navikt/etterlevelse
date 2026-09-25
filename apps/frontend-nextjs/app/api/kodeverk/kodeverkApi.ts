@@ -36,6 +36,6 @@ export const updateCodelist = async (code: ICode) => {
   return axios.put<ICode[]>(`${env.backendBaseUrl}/codelist`, [code])
 }
 
-export const deleteCodelist = async (list: string, code: string) => {
-  return axios.delete(`${env.backendBaseUrl}/codelist/${list}/${code}`)
+export const deleteCodelist = async (list: string, code: string, reason: string) => {
+  return axios.delete(`${env.backendBaseUrl}/codelist/${list}/${code}?comment=${reason}`)
 }

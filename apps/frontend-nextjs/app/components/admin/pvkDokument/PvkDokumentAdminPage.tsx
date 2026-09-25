@@ -11,6 +11,7 @@ import {
   Spacer,
   Table,
   TextField,
+  Textarea,
 } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
 import {
@@ -36,6 +37,7 @@ const PvkDokumentAdminPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
   const [isError, setIsError] = useState<boolean>(false)
+  const [deleteComment, setDeleteComment] = useState<string>('')
 
   const loadData = async () => {
     const allPvkDokument = await getAllPvkDokument()
@@ -73,17 +75,27 @@ const PvkDokumentAdminPage = () => {
         </Heading>
       </div>
 
-      <div className='flex items-end mt-8'>
-        <TextField
-          label='Slett pvk dokument'
-          placeholder='Pvk Dokument UID'
-          onChange={(e) => setDeletePvkDokumentId(e.target.value)}
-          className='w-full mr-3'
-        />
+      <div className='flex items-start mt-8'>
+        <div className='w-full mr-3'>
+          <TextField
+            label='Slett pvk dokument'
+            placeholder='Pvk Dokument UID'
+            onChange={(e) => setDeletePvkDokumentId(e.target.value)}
+            className='w-full mr-3'
+          />
+
+          <Textarea
+            label='Begrunnelse for sletting (påkrevd)'
+            onChange={(e) => setDeleteComment(e.target.value)}
+            className='w-full mt-3'
+          />
+        </div>
+
         <Button
-          disabled={!deletePvkDokumentId}
+          className='mt-8'
+          disabled={!deletePvkDokumentId || deleteComment === ''}
           onClick={async () => {
-            deletePvkDokument(deletePvkDokumentId)
+            deletePvkDokument(deletePvkDokumentId, deleteComment)
               .then(() => {
                 setIsError(false)
                 setDeletePvkDokumentId('')

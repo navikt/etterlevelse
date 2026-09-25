@@ -11,6 +11,7 @@ import {
   Spacer,
   Table,
   TextField,
+  Textarea,
 } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
@@ -38,6 +39,7 @@ const EtterlevelseDokumentRelasjonAdminPage = () => {
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
+  const [deleteComment, setDeleteComment] = useState<string>('')
 
   let sortedData = tableContent
 
@@ -100,17 +102,27 @@ const EtterlevelseDokumentRelasjonAdminPage = () => {
         </Heading>
       </div>
 
-      <div className='flex items-end mt-8'>
-        <TextField
-          label='Slett dokument relasjon'
-          placeholder='Dokument relasjon UID'
-          onChange={(e) => setDeleteDokumentRelasjonId(e.target.value)}
-          className='w-full mr-3'
-        />
+      <div className='flex items-start mt-8'>
+        <div className='w-full mr-3'>
+          <TextField
+            label='Slett dokument relasjon'
+            placeholder='Dokument relasjon UID'
+            onChange={(e) => setDeleteDokumentRelasjonId(e.target.value)}
+            className='w-full'
+          />
+
+          <Textarea
+            label='Begrunnelse for sletting  (påkrevd)'
+            onChange={(e) => setDeleteComment(e.target.value)}
+            className='w-full mt-3'
+          />
+        </div>
+
         <Button
-          disabled={!deleleDokumentRelasjonId}
+          className='mt-8'
+          disabled={!deleleDokumentRelasjonId || deleteComment === ''}
           onClick={() => {
-            deleteDocumentRelation(deleleDokumentRelasjonId)
+            deleteDocumentRelation(deleleDokumentRelasjonId, deleteComment)
               .then(() => {
                 setDeleteDokumentRelasjonId('')
                 setIsError(false)

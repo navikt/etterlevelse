@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Heading, InfoCard, List, TextField } from '@navikt/ds-react'
+import { Button, Heading, InfoCard, List, TextField, Textarea } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { deleteEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
@@ -11,6 +11,7 @@ const EtterlevelseDokumentasjonAdminPage = () => {
   const [etterlevelseDokumentasjonId, setEtterlevelseDokumentasjonId] = useState('')
   const [updateMessage, setUpdateMessage] = useState('')
   const [isError, setIsError] = useState<boolean>(false)
+  const [deleteComment, setDeleteComment] = useState<string>('')
 
   return (
     <PageLayout
@@ -42,19 +43,29 @@ const EtterlevelseDokumentasjonAdminPage = () => {
           </InfoCard.Content>
         </InfoCard>
 
-        <div className='flex items-end'>
-          <TextField
-            label='Slett etterlevelse dokumentasjon med uid'
-            placeholder='Etterlevelse dokumentasjon UID'
-            onChange={(e) => setEtterlevelseDokumentasjonId(e.target.value)}
-            className='w-full mr-3'
-          />
+        <div className='flex items-start'>
+          <div className='w-full mr-3'>
+            <TextField
+              label='Slett etterlevelse dokumentasjon med uid'
+              placeholder='Etterlevelse dokumentasjon UID'
+              onChange={(e) => setEtterlevelseDokumentasjonId(e.target.value)}
+              className='w-full'
+            />
+
+            <Textarea
+              label='Begrunnelse for sletting  (påkrevd)'
+              onChange={(e) => setDeleteComment(e.target.value)}
+              className='w-full mt-3'
+            />
+          </div>
+
           <Button
-            disabled={!etterlevelseDokumentasjonId}
+            className='mt-8'
+            disabled={!etterlevelseDokumentasjonId || deleteComment === ''}
             variant='secondary'
             onClick={() => {
               setUpdateMessage('')
-              deleteEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
+              deleteEtterlevelseDokumentasjon(etterlevelseDokumentasjonId, deleteComment)
                 .then(() => {
                   setIsError(false)
                   setUpdateMessage(

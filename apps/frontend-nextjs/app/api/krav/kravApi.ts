@@ -31,8 +31,8 @@ const getKravPage = async (pageNumber: number, pageSize: number) => {
   ).data
 }
 
-export const deleteKrav = async (id: string) => {
-  return (await axios.delete<IKrav>(`${env.backendBaseUrl}/krav/${id}`)).data
+export const deleteKrav = async (id: string, reason: string) => {
+  return (await axios.delete<IKrav>(`${env.backendBaseUrl}/krav/${id}?comment=${reason}`)).data
 }
 
 const searchKrav = async (name: string): Promise<IKrav[]> => {
