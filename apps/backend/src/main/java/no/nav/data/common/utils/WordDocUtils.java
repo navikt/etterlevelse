@@ -1094,7 +1094,9 @@ public class WordDocUtils {
         List<DataBehandler> databehandlerList = new ArrayList<>();
 
         behandlingList.forEach(behandling -> {
-            databehandlerList.addAll(behandling.getDataBehandlerList());
+            if (behandling.getDataBehandlerList() != null) {
+                databehandlerList.addAll(behandling.getDataBehandlerList());
+            }
         });
         List<String> databehandlerNavnList = new ArrayList<>(databehandlerList.stream().map(DataBehandler::getNavn).toList());
         Set<String> set = new HashSet<>(databehandlerNavnList);
@@ -1111,8 +1113,13 @@ public class WordDocUtils {
         List<ExternalCode> personkategorier = new ArrayList<>();
 
         behandlingList.forEach(behandling -> {
+            if (behandling.getPolicies() == null) {
+                return;
+            }
             behandling.getPolicies().forEach(policy -> {
-                personkategorier.addAll(policy.getPersonKategorier());
+                if (policy.getPersonKategorier() != null) {
+                    personkategorier.addAll(policy.getPersonKategorier());
+                }
             });
         });
 
