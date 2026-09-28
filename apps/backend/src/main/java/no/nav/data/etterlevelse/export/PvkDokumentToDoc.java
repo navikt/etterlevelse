@@ -339,7 +339,8 @@ public class PvkDokumentToDoc {
         doc.addListItem("Bør vi gjøre en PVK?", currListId, "pvk_behov");
         doc.addListItem("Behandlingens art og omfang", currListId, "pvk_art_og_omfang");
 
-        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_UTFORE) {
+        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_UTFORE
+                || pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.LEGGE_OVER_EKSISTERENDE) {
             doc.addListItem("Tilhørende dokumentasjon", currListId, "pvk_tilhorende_dokumentasjon");
             doc.addListItem("Innvolvering av eksterne", currListId, "pvk_innvolvering_av_ekstern");
             doc.addListItem("Risikoscenario og tiltak", currListId, "pvk_risikoscenario_og_tiltak");
@@ -388,7 +389,8 @@ public class PvkDokumentToDoc {
         doc.newLine();
 
         generateBehovForPvkSection(doc, pvkDokument, etterlevelseDokumentasjonResponse);
-        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_UTFORE) {
+        if (pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.SKAL_UTFORE
+                || pvkDokument.getPvkDokumentData().getPvkVurdering() == PvkVurdering.LEGGE_OVER_EKSISTERENDE) {
             doc.generateTilhorendeDokumentasjon(etterlevelseDokumentasjonResponse, pvkKrav.size(), antallFerdigPvkKrav.size(), pvoTilbakemelding, pvoVurdering);
             doc.newLine();
             doc.generateInnvolveringAvEksterne(pvkDokument, etterlevelseDokumentasjonResponse.getBehandlinger(), pvoTilbakemelding, pvoVurdering);
