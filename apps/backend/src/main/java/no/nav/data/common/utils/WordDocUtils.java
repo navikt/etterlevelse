@@ -680,7 +680,11 @@ public class WordDocUtils {
             addMarkdownText("- Ingen behandlinger");
         } else {
             etterlevelseDokumentasjon.getBehandlinger().forEach(behandling -> {
-                addMarkdownText("- B" +  behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
+                if (behandling.getOverordnetFormaal() == null) {
+                    addMarkdownText("- " + behandling.getNavn());
+                } else {
+                    addMarkdownText("- B" +  behandling.getNummer() + " " + behandling.getOverordnetFormaal().getShortName() + ": " + behandling.getNavn());
+                }
             });
         }
         newLine();
@@ -1094,9 +1098,7 @@ public class WordDocUtils {
         List<DataBehandler> databehandlerList = new ArrayList<>();
 
         behandlingList.forEach(behandling -> {
-            if (behandling.getDataBehandlerList() != null) {
-                databehandlerList.addAll(behandling.getDataBehandlerList());
-            }
+            databehandlerList.addAll(behandling.getDataBehandlerList());
         });
         List<String> databehandlerNavnList = new ArrayList<>(databehandlerList.stream().map(DataBehandler::getNavn).toList());
         Set<String> set = new HashSet<>(databehandlerNavnList);
@@ -1113,13 +1115,8 @@ public class WordDocUtils {
         List<ExternalCode> personkategorier = new ArrayList<>();
 
         behandlingList.forEach(behandling -> {
-            if (behandling.getPolicies() == null) {
-                return;
-            }
             behandling.getPolicies().forEach(policy -> {
-                if (policy.getPersonKategorier() != null) {
-                    personkategorier.addAll(policy.getPersonKategorier());
-                }
+                personkategorier.addAll(policy.getPersonKategorier());
             });
         });
 
