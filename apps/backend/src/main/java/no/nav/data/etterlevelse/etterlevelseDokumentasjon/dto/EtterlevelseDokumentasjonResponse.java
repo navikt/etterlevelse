@@ -8,7 +8,12 @@ import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.common.rest.ChangeStampResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -78,7 +83,7 @@ public class EtterlevelseDokumentasjonResponse {
     private String P360CaseNumber;
 
     //versjonering
-    private Integer etterlevelseDokumentVersjon;
+    private int etterlevelseDokumentVersjon;
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {
@@ -109,7 +114,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .seksjoner(nullsafeCopyOf(eDokData.getSeksjoner()))
                 .enheter(nullsafeCopyOf(eDokData.getEnheter()))
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
-                .risikovurderinger(eDokData.getRisikovurderinger())
+                .risikovurderinger(nullsafeCopyOf(eDokData.getRisikovurderinger()))
                 .P360Recno(eDokData.getP360Recno())
                 .P360CaseNumber(eDokData.getP360CaseNumber())
                 .ardoqSystemIds(eDokData.getArdoqSystemIds())

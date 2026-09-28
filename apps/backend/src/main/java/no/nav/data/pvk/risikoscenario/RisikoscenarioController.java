@@ -1,6 +1,8 @@
 package no.nav.data.pvk.risikoscenario;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -180,7 +182,7 @@ public class RisikoscenarioController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Delete Risikoscenario")
+    @Operation(summary = "Delete Risikoscenario", parameters = {@Parameter(name = "comment", description = "Reason for deleting the risikoscenario", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Risikoscenario deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id) {

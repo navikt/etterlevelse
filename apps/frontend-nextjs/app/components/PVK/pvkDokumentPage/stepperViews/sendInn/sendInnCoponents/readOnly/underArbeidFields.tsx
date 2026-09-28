@@ -1,15 +1,17 @@
 import { InformationSquareFillIcon } from '@navikt/aksel-icons'
-import { Button, InfoCard, Loader } from '@navikt/ds-react'
+import { Button, InfoCard, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, RefObject } from 'react'
 import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
+import SendTilRisikoeier from '../vurdertAvPvoComponents.tsx/SendTilRisikoeier'
 
 type TProps = {
   pvkDokument: IPvkDokument
@@ -48,78 +50,122 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
       melding.etterlevelseDokumentVersjon === pvkDokument.currentEtterlevelseDokumentVersjon
   )
 
+  const isLeggeOver = pvkDokument.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE
+
   return (
     <Field>
-      {(fieldProps: FieldProps) => (
-        <div className='w-full max-w-[75ch]'>
-          <div className='mt-5 mb-3'>
-            <TextAreaField
-              height='150px'
-              noPlaceholder
-              label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
-              name={`meldingerTilPvo[${index}].merknadTilPvo`}
-              markdown
-            />
+      {(fieldProps: FieldProps) => {
+        const sendTilRisikoeier =
+          isLeggeOver && (fieldProps.form.values.berOmNyVurderingFraPvo ?? false) === false
 
-            <InfoCard data-color='info' className='my-5'>
-              <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
-                Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
-                etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne redigeres.
-                Dette innholdet forbli låst enn så lenge saken ligger hos Personvernombudet.
-              </InfoCard.Message>
-            </InfoCard>
-
-            {relevantMeldingTilPvo.length !== 0 &&
-              !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
-                <InfoCard data-color='info' className='my-5'>
-                  <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
-                    Innsending trukket <br />
-                    Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
-                    deretter behandlet som en ny innsending
-                  </InfoCard.Message>
-                </InfoCard>
-              )}
-
-            {errorSummaryComponent}
-
-            {isLoading && (
-              <div className='flex justify-center items-center w-full'>
-                <Loader size='2xlarge' title='lagrer endringer' />
-              </div>
+        return (
+          <div className='w-full max-w-[75ch]'>
+            {isLeggeOver && (
+              <RadioGroup
+                legend='Hvem skal dere sende PVK-en til?'
+                onChange={async (value: boolean) => {
+                  await setFieldValue('berOmNyVurderingFraPvo', value)
+                }}
+                value={fieldProps.form.values.berOmNyVurderingFraPvo ?? false}
+                description='I utgangspunktet har dere registrert at dere skulle legge PVK over fra Word, uten endring i risikobildet. Men dersom risikobildet er endret siden dere sist fikk PVK godkjent av risikoeier, burde dere sende til PVO for ny vurdering.'
+              >
+                <Radio value={false}>Risikoeier, til godkjenning</Radio>
+                <Radio value={true}>PVO, til ny vurdering</Radio>
+              </RadioGroup>
             )}
 
-            <div>{!fieldProps.form.dirty && savedAlert}</div>
-          </div>
+            {sendTilRisikoeier && (
+              <>
+                {isLoading && (
+                  <div className='flex justify-center items-center w-full'>
+                    <Loader size='2xlarge' title='lagrer endringer' />
+                  </div>
+                )}
 
-          <div className='mt-5 flex gap-2 items-center'>
-            <LagreOgFortsettSenereButton
-              setFieldValue={setFieldValue}
-              submitForm={submitForm}
-              initialStatus={initialStatus}
-              resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
-            />
+                <div>{!fieldProps.form.dirty && savedAlert}</div>
 
-            <Button
-              type='button'
-              onClick={async () => {
-                await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
-                await setFieldValue(
-                  'antallInnsendingTilPvo',
-                  pvkDokument.antallInnsendingTilPvo + 1
-                )
-                errorSummaryRef.current?.focus()
-                await submitForm()
-              }}
-            >
-              Lagre og send til Personvernombudet
-            </Button>
-          </div>
+                <SendTilRisikoeier
+                  fieldProps={fieldProps}
+                  errorComponent={errorSummaryComponent}
+                  label='Oppsummer for risikoeieren eventuelle endringer gjort siden siste godkjenning'
+                />
+              </>
+            )}
 
-          <div className='mt-5 flex gap-2 items-center'>
-            <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
+            {!sendTilRisikoeier && (
+              <>
+                <div className='mt-5 mb-3'>
+                  <TextAreaField
+                    height='150px'
+                    noPlaceholder
+                    label='Er det noe annet dere ønsker å formidle til Personvernombudet? (valgfritt)'
+                    name={`meldingerTilPvo[${index}].merknadTilPvo`}
+                    markdown
+                  />
+
+                  <InfoCard data-color='info' className='my-5'>
+                    <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                      Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
+                      etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne
+                      redigeres. Dette innholdet forbli låst enn så lenge saken ligger hos
+                      Personvernombudet.
+                    </InfoCard.Message>
+                  </InfoCard>
+
+                  {relevantMeldingTilPvo.length !== 0 &&
+                    !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
+                      <InfoCard data-color='info' className='my-5'>
+                        <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                          Innsending trukket <br />
+                          Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en
+                          blir deretter behandlet som en ny innsending
+                        </InfoCard.Message>
+                      </InfoCard>
+                    )}
+
+                  {errorSummaryComponent}
+
+                  {isLoading && (
+                    <div className='flex justify-center items-center w-full'>
+                      <Loader size='2xlarge' title='lagrer endringer' />
+                    </div>
+                  )}
+
+                  <div>{!fieldProps.form.dirty && savedAlert}</div>
+                </div>
+
+                <div className='mt-5 flex gap-2 items-center'>
+                  <LagreOgFortsettSenereButton
+                    setFieldValue={setFieldValue}
+                    submitForm={submitForm}
+                    initialStatus={initialStatus}
+                    resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
+                  />
+
+                  <Button
+                    type='button'
+                    onClick={async () => {
+                      await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
+                      await setFieldValue(
+                        'antallInnsendingTilPvo',
+                        pvkDokument.antallInnsendingTilPvo + 1
+                      )
+                      errorSummaryRef.current?.focus()
+                      await submitForm()
+                    }}
+                  >
+                    Lagre og send til Personvernombudet
+                  </Button>
+                </div>
+              </>
+            )}
+
+            <div className='mt-5 flex gap-2 items-center'>
+              <ExportPvkModal etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }}
     </Field>
   )
 }

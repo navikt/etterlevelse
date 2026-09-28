@@ -1,6 +1,29 @@
 package no.nav.data.pvk.pvkdokument;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,26 +49,6 @@ import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingStatus;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -223,7 +226,7 @@ public class PvkDokumentController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Delete Pvk Document")
+    @Operation(summary = "Delete Pvk Document", parameters = {@Parameter(name = "comment", description = "Reason for deleting the PVK document", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Pvk Document deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {
@@ -310,7 +313,7 @@ public class PvkDokumentController {
                 pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.FERDIG);
                 pvoTilbakemeldingService.save(pvoTilbakmelding, true);
             }
-        } else {
+        } else if (pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo() > 0) {
             throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
         }
     }

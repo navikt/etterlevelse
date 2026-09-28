@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyLong, Button, Dialog, LocalAlert, Select, TextField } from '@navikt/ds-react'
+import { Button, Dialog, List, LocalAlert, Select, TextField } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { searchAuditsByTableAndSearchTerm } from '@/api/audit/auditApi'
@@ -86,11 +86,11 @@ const SearchAuditModal = () => {
           )}
 
           {auditItems && auditItems.length !== 0 && (
-            <div>
+            <List as='ul'>
               {auditItems.map((item) => (
-                <BodyLong key={item.tableId}>{item.tableId}</BodyLong>
+                <List.Item key={item.tableId}>{item.tableId}</List.Item>
               ))}
-            </div>
+            </List>
           )}
         </Dialog.Body>
         <Dialog.Footer>

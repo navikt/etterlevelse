@@ -76,9 +76,12 @@ export const getAllDocumentRelation = async () => {
   }
 }
 
-export const deleteDocumentRelation = async (id: string) => {
-  return (await axios.delete<IDocumentRelation>(`${env.backendBaseUrl}/documentrelation/${id}`))
-    .data
+export const deleteDocumentRelation = async (id: string, reason: string) => {
+  return (
+    await axios.delete<IDocumentRelation>(
+      `${env.backendBaseUrl}/documentrelation/${id}?comment=${reason}`
+    )
+  ).data
 }
 
 export const documentRelationMapToFormVal = (

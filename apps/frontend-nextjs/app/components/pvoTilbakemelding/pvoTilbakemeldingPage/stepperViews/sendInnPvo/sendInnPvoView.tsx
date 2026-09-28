@@ -160,6 +160,7 @@ const SendInnPvoView: FunctionComponent<TProps> = ({
               await updatePvoTilbakemelding(updatedValues).then((response: IPvoTilbakemelding) => {
                 setPvoTilbakemelding(response)
                 setSuccessSubmit(true)
+                formRef.current?.resetForm({ values: submittedValues })
               })
             }
           }
@@ -201,6 +202,7 @@ const SendInnPvoView: FunctionComponent<TProps> = ({
             await createPvoTilbakemelding(createValue).then((response: IPvoTilbakemelding) => {
               setPvoTilbakemelding(response)
               setSuccessSubmit(true)
+              formRef.current?.resetForm({ values: submittedValues })
             })
           } else {
             console.debug(error)

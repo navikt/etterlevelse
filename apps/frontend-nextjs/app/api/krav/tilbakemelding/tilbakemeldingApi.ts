@@ -34,7 +34,7 @@ export const tilbakemeldingSlettMelding = async (request: {
 }) => {
   return (
     await axios.delete<ITilbakemelding>(
-      `${env.backendBaseUrl}/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`
+      `${env.backendBaseUrl}/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}?comment=slettet av bruker`
     )
   ).data
 }
@@ -71,17 +71,6 @@ export const createNewTilbakemelding = async (request: ICreateTilbakemeldingRequ
 export const tilbakemeldingNewMelding = async (request: ITilbakemeldingNewMeldingRequest) => {
   return (
     await axios.post<ITilbakemelding>(`${env.backendBaseUrl}/tilbakemelding/melding`, request)
-  ).data
-}
-
-export const tilbakemeldingslettMelding = async (request: {
-  tilbakemeldingId: string
-  meldingNr: number
-}) => {
-  return (
-    await axios.delete<ITilbakemelding>(
-      `${env.backendBaseUrl}/tilbakemelding/${request.tilbakemeldingId}/${request.meldingNr}`
-    )
   ).data
 }
 

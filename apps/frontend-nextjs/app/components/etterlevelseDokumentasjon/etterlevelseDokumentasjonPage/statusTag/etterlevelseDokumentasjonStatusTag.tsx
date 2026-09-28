@@ -72,6 +72,10 @@ const pvkStatusToVariant = (pvkDokument?: IPvkDokument) => {
     return 'success'
   }
 
+  if (!pvkDokument.hasPvkDocumentationStarted) {
+    return 'neutral'
+  }
+
   if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
     return 'success'
   }
@@ -98,6 +102,10 @@ const pvkStatusToText = (pvkDokument?: IPvkDokument) => {
 
   if (pvkDokument.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) {
     return 'PVK: Utført i Word'
+  }
+
+  if (!pvkDokument.hasPvkDocumentationStarted) {
+    return 'PVK: Ikke påbegynt'
   }
 
   if (

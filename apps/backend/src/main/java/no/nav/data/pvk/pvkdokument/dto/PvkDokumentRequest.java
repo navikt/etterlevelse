@@ -16,7 +16,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import static no.nav.data.common.utils.StreamUtils.*;
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.common.utils.StreamUtils.copyOf;
+import static no.nav.data.common.utils.StreamUtils.duplicates;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Data
@@ -51,7 +53,7 @@ public class PvkDokumentRequest implements RequestElement {
 
     private LocalDateTime godkjentAvRisikoeierDato;
     private String godkjentAvRisikoeier;
-    private Integer antallInnsendingTilPvo;
+    private int antallInnsendingTilPvo;
 
     private Boolean update;
 

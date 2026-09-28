@@ -10,7 +10,10 @@ import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { IExternalCode } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkTypeStepUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
@@ -28,6 +31,7 @@ import {
 } from '../others/layout/content/content'
 import { PageLayout } from '../others/scaffold/scaffold'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import BehandlingensArtOgOmfangReadOnlyPage from './behandlingensArtOgOmfangReadOnlyPage'
 import BehandlingensArtOgOmfangForm from './form/behandlingensArtOgOmfangForm'
 
 const BehandlingensArtOgOmfangPage = () => {
@@ -136,6 +140,10 @@ const BehandlingensArtOgOmfangPage = () => {
       pvkDokument ? pvkDokument.id : 'ny',
       ''
     )
+  }
+
+  if (pvkDokument && pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+    return <BehandlingensArtOgOmfangReadOnlyPage editorMode={true} pvkDokumentId={pvkDokument.id} />
   }
 
   return (

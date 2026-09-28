@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { FunctionComponent } from 'react'
 import { JsonView } from 'react-json-view-lite'
-import { IAuditLog } from '@/constants/admin/audit/auditConstants'
+import { EAuditAction, IAuditLog } from '@/constants/admin/audit/auditConstants'
 import { TRefs } from '@/util/hooks/customHooks/customHooks'
 import { AuditActionIcon } from '../common/AuditActionIcon'
 import { AuditLabel } from '../common/AuditLabel'
@@ -26,6 +26,9 @@ const AuditItemList: FunctionComponent<TProps> = ({ auditLog, openAll, refs }) =
                 <AuditLabel label='Action'>
                   <AuditActionIcon action={audit.action} withText={true} />
                 </AuditLabel>
+                {audit.action === EAuditAction.DELETE && (
+                  <AuditLabel label='Kommentar ved sletting'>{audit.deleteMessage}</AuditLabel>
+                )}
                 <AuditLabel label='Tid'>
                   {time.format('LL')} {time.format('HH:mm:ss.SSS Z')}
                 </AuditLabel>

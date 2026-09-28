@@ -566,19 +566,20 @@ Only documents that are **relevant for personopplysninger** are included (docume
 `irrelevansFor` contains `PERSONOPPLYSNINGER` are excluded entirely from this figure). For each
 remaining document, the first `PvkDokument` linked to it (if any) is inspected:
 
-| Status shown              | Condition                                                                                 |
-| ------------------------- | ----------------------------------------------------------------------------------------- |
-| Ikke vurdert behov        | No `PvkDokument` exists yet, or its `pvkVurdering` is `null`/`UNDEFINED`                  |
-| Skal ikke gjennomføre PVK | `pvkVurdering == SKAL_IKKE_UTFORE`                                                        |
-| Skal gjennomføre PVK      | `pvkVurdering == SKAL_UTFORE` (the "not yet started" bucket that feeds into figure 4)     |
-| PVK i Word                | `pvkVurdering == ALLEREDE_UTFORT` (PVK already done outside the tool, in a Word document) |
+| Status shown              | Condition                                                                                                                                                  |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ikke vurdert behov        | No `PvkDokument` exists yet, or its `pvkVurdering` is `null`/`UNDEFINED`                                                                                   |
+| Skal ikke gjennomføre PVK | `pvkVurdering == SKAL_IKKE_UTFORE`                                                                                                                         |
+| Skal gjennomføre PVK      | `pvkVurdering == SKAL_UTFORE`, or a `LEGGE_OVER_EKSISTERENDE` document once it is `GODKJENT_AV_RISIKOEIER` (counted here "fra og med godkjenning")         |
+| Overfører godkjent PVK    | `pvkVurdering == LEGGE_OVER_EKSISTERENDE` and not yet godkjent — an existing, approved Word PVK being transferred as-is for digital risikoeier-godkjenning |
+| PVK i Word                | `pvkVurdering == ALLEREDE_UTFORT` (PVK already done outside the tool, in a Word document)                                                                  |
 
 ### 4. Digital PVK status
 
-Only counts documents from figure 3 where the PVK vurdering resulted in `SKAL_UTFORE` (i.e. a
-digital PVK is actually required) — this excludes "PVK i Word" and "Skal ikke gjennomføre PVK". For
-those documents, the backend first decides **whether the PVK documentation has actually been
-started** (`hasPvkStarted`), then maps the `PvkDokumentStatus`:
+Only counts documents from figure 3 where the PVK vurdering resulted in `SKAL_UTFORE` or
+`LEGGE_OVER_EKSISTERENDE` (i.e. a digital PVK is actually required) — this excludes "PVK i Word" and
+"Skal ikke gjennomføre PVK". For those documents, the backend first decides **whether the PVK
+documentation has actually been started** (`hasPvkStarted`), then maps the `PvkDokumentStatus`:
 
 **Step 1 – has the PVK been started?** `hasPvkStarted` is `true` if any of the following is true:
 
@@ -599,6 +600,13 @@ If none of these are true, the document is counted as **Ikke påbegynt**, regard
 | Sendt til godkjenning  | `TRENGER_GODKJENNING`                                               |
 | Godkjent av risikoeier | `GODKJENT_AV_RISIKOEIER`                                            |
 | Under arbeid           | Everything else (`UNDERARBEID`, ...) — the fallback bucket          |
+
+**`LEGGE_OVER_EKSISTERENDE` ("Overfører godkjent PVK") exception:** these documents skip the PVO
+review and go straight to risikoeier for digital godkjenning. On this risikoeier track (i.e. not on
+a PVO status) they are always counted as **Under arbeid** until they become `GODKJENT_AV_RISIKOEIER`
+(then **Godkjent av risikoeier**) — they never populate the "Ikke påbegynt" or "Sendt til
+godkjenning" buckets. If the etterlever instead switches such a document to the PVO path, it follows
+the normal `PvkDokumentStatus` mapping above.
 
 ### Tema dashboards (`/dashboard/tema`, `/dashboard/tema/:temaCode`)
 

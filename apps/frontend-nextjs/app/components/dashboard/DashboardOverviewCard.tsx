@@ -134,12 +134,14 @@ const aggregateAvdelingStats = (stats: IAvdelingDashboardStats[]) => {
       ikkeVurdertBehov: acc.ikkeVurdertBehov + s.behovForPvk.ikkeVurdertBehov,
       vurdertIkkeBehov: acc.vurdertIkkeBehov + s.behovForPvk.vurdertIkkeBehov,
       behovIkkePaabegynt: acc.behovIkkePaabegynt + s.behovForPvk.behovIkkePaabegynt,
+      overforerGodkjentPvk: acc.overforerGodkjentPvk + s.behovForPvk.overforerGodkjentPvk,
     }),
     {
       totalMedPersonopplysninger: 0,
       ikkeVurdertBehov: 0,
       vurdertIkkeBehov: 0,
       behovIkkePaabegynt: 0,
+      overforerGodkjentPvk: 0,
     }
   )
 
@@ -241,7 +243,12 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
       value: agg.behov.behovIkkePaabegynt,
       color: BEHOV_COLORS[2],
     },
-    { name: 'PVK i Word', value: agg.pvk.pvkIWord, color: BEHOV_COLORS[3] },
+    {
+      name: 'Overfører godkjent PVK',
+      value: agg.behov.overforerGodkjentPvk,
+      color: BEHOV_COLORS[3],
+    },
+    { name: 'PVK i Word', value: agg.pvk.pvkIWord, color: BEHOV_COLORS[4] },
   ]
 
   const pvkData: IBarSegment[] = [

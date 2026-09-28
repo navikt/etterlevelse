@@ -17,7 +17,6 @@ import {
 } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IBreadCrumbPath } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
-import { EPvkVurdering } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { EListName, ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
 import { UserContext } from '@/provider/user/userProvider'
@@ -27,6 +26,7 @@ import {
   harBehandlinger,
   harKunDpBehandlinger,
   isReadOnlyPvkStatus,
+  skalHaPvkDokument,
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import PvkBehovForm from '../form/pvkBehovForm'
 import PvkBehovInfoContent from './pvkBehovInfoContent'
@@ -150,7 +150,7 @@ const PvkBehovPage = () => {
 
   const isPvkBehovLock =
     pvkDokument &&
-    pvkDokument.pvkVurdering === EPvkVurdering.SKAL_UTFORE &&
+    skalHaPvkDokument(pvkDokument.pvkVurdering) &&
     pvkDokument.hasPvkDocumentationStarted === true
 
   return (

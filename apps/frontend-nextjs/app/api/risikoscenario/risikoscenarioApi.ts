@@ -134,7 +134,11 @@ export const updateKravForRisikoscenarioer = async (
   ).data
 
 export const deleteRisikoscenario = async (id: string): Promise<IRisikoscenario> =>
-  (await axios.delete<IRisikoscenario>(`${env.backendBaseUrl}/risikoscenario/${id}`)).data
+  (
+    await axios.delete<IRisikoscenario>(
+      `${env.backendBaseUrl}/risikoscenario/${id}?comment=slettet av bruker`
+    )
+  ).data
 
 export const fjernKravFraRisikoscenario = async (
   id: string,

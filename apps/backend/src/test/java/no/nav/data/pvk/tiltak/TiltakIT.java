@@ -115,13 +115,13 @@ public class TiltakIT extends IntegrationTestBase {
         // Delete should fail if tiltak has a relation to one or more risikoscenarioer...
         Risikoscenario risikoscenario = risikoscenarioService.save(generateRisikoscenario(pvkDokument.getId()), false);
         risikoscenarioService.addTiltak(risikoscenario.getId(), List.of(tiltak.getId()));
-        ResponseEntity<TiltakResponse> resp = restTemplate.exchange("/tiltak/{id}", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());
+        ResponseEntity<TiltakResponse> resp = restTemplate.exchange("/tiltak/{id}?comment=test-cleanup", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(tiltakRepo.count()).isEqualTo(1);
         risikoscenarioService.removeTiltak(risikoscenario.getId(), tiltak.getId());
 
         // Test delete...
-        resp = restTemplate.exchange("/tiltak/{id}", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());
+        resp = restTemplate.exchange("/tiltak/{id}?comment=test-cleanup", HttpMethod.DELETE, null, TiltakResponse.class, tiltak.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(tiltakRepo.count()).isEqualTo(0);
     }

@@ -66,7 +66,11 @@ import {
   pvkDokumentasjonPvkBehovUrl,
   pvkDokumentasjonStepUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
-import { isReadOnlyPvkStatus } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
+import { env } from '@/util/env/env'
+import {
+  isReadOnlyPvkStatus,
+  skalHaPvkDokument,
+} from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import pvkBehovSchema from './pvkBehovSchema'
 
 type TProps = {
@@ -274,12 +278,25 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                         fieldProps.form.setFieldValue('pvkVurdering', value)
                       }}
                     >
-                      <Radio value={EPvkVurdering.SKAL_UTFORE}>Vi skal gjennomføre en PVK</Radio>
+                      <Radio
+                        value={EPvkVurdering.SKAL_UTFORE}
+                        description='Dette valget innebærer innsending av PVK-en til personvernombudets vurdering.'
+                      >
+                        Vi skal gjennomføre en PVK
+                      </Radio>
+                      {env.isDev && (
+                        <Radio
+                          value={EPvkVurdering.LEGGE_OVER_EKSISTERENDE}
+                          description='Dette valget forutsetter at PVK-materien legges inn as-is, og at det dermed ikke er behov for en ny vurdering hos personvernombudet. Det blir imidlertid mulig for risikoeier å godkjenne PVK-en digitalt.'
+                        >
+                          Vi skal legge over en eksisterende, godkjent PVK fra Word
+                        </Radio>
+                      )}
+                      <Radio value={EPvkVurdering.ALLEREDE_UTFORT}>
+                        Vi beholder vår eksisterende, godkjente PVK i Word
+                      </Radio>
                       <Radio value={EPvkVurdering.SKAL_IKKE_UTFORE}>
                         Vi skal ikke gjennomføre PVK
-                      </Radio>
-                      <Radio value={EPvkVurdering.ALLEREDE_UTFORT}>
-                        Vi har en PVK i Word som ikke trenger en ny vurdering
                       </Radio>
                     </RadioGroup>
                   )}
@@ -418,30 +435,28 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                 >
                   Gå til Temaoversikt
                 </Button>
-                {pvkDokument &&
-                  pvkDokument.id &&
-                  values.pvkVurdering === EPvkVurdering.SKAL_UTFORE && (
-                    <Button
-                      icon={<ChevronRightIcon aria-hidden />}
-                      iconPosition='right'
-                      type='button'
-                      variant={'tertiary'}
-                      onClick={() => {
-                        if (dirty) {
-                          setIsUnsavedModalOpen(true)
-                          setUrlToNavigate(
-                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                          )
-                        } else {
-                          router.push(
-                            pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
-                          )
-                        }
-                      }}
-                    >
-                      Gå til PVK
-                    </Button>
-                  )}
+                {pvkDokument && pvkDokument.id && skalHaPvkDokument(pvkDokument.pvkVurdering) && (
+                  <Button
+                    icon={<ChevronRightIcon aria-hidden />}
+                    iconPosition='right'
+                    type='button'
+                    variant={'tertiary'}
+                    onClick={() => {
+                      if (dirty) {
+                        setIsUnsavedModalOpen(true)
+                        setUrlToNavigate(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      } else {
+                        router.push(
+                          pvkDokumentasjonStepUrl(etterlevelseDokumentasjon.id, pvkDokument.id, 1)
+                        )
+                      }
+                    }}
+                  >
+                    Gå til PVK
+                  </Button>
+                )}
               </StickyFooterButtonLayout>
             </Form>
           )

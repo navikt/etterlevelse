@@ -4,7 +4,6 @@ import { Button, Spacer } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, useContext } from 'react'
-import { deleteKrav } from '@/api/krav/kravApi'
 import { EKravStatus, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
@@ -63,9 +62,9 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
             {(slettKravButtonShouldOnlyBeVisibleOnUtkast || user.isAdmin()) && (
               <div className='mt-2.5 flex'>
                 <KravSlettKnapp
+                  kravId={krav.id}
                   buttonLabel='Slett krav'
                   buttonSize='small'
-                  fun={() => deleteKrav(krav.id)}
                   redirect={kravlisteQueryUrl()}
                 />
               </div>

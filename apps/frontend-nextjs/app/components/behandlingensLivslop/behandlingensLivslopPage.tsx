@@ -54,6 +54,7 @@ import {
 } from '../others/layout/content/content'
 import { PageLayout } from '../others/scaffold/scaffold'
 import AlertPvoUnderArbeidModal from '../pvoTilbakemelding/common/alertPvoUnderArbeidModal'
+import BehandlingensLivslopReadOnlyPage from './behandlingensLivslopReadOnlyPage'
 import BehandlingensLivslopReadOnlyContent from './content/behandlingensLivslopReadOnlyContent'
 import BehandlingensLivslopTextContent from './content/behandlingensLivslopTextContent'
 import CustomFileUpload from './fileUpload/customFileUpload'
@@ -175,6 +176,10 @@ const BehandlingensLivslopPage = () => {
         }
       }
     }
+  }
+
+  if (pvkDokument && pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
+    return <BehandlingensLivslopReadOnlyPage editorMode={true} />
   }
 
   return (

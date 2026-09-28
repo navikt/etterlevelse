@@ -93,8 +93,9 @@ public class AuditVersionListener {
             String id = getIdForObject(entity);
             String data = wr.writeValueAsString(entity);
             String user = Optional.ofNullable(MdcUtils.getUser()).orElse("no user set");
+            String deleteMessage = action == Action.DELETE ? MdcUtils.getDeleteComment() : "";
             return AuditVersion.builder()
-                    .action(action).table(tableName).tableId(id).data(data).user(user).version(version)
+                    .action(action).table(tableName).tableId(id).data(data).user(user).deleteMessage(deleteMessage).version(version)
                     .build();
         } catch (JacksonException e) {
             log.error("failed to serialize object", e);

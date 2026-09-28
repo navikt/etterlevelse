@@ -57,9 +57,15 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
     }
   }
 
-  const handleDeleteCodelist = async (values: { list: string; code: string }) => {
+  const handleDeleteCodelist = async (
+    values: {
+      list: string
+      code: string
+    },
+    deleteComment: string
+  ) => {
     try {
-      await deleteCodelist(values.list, values.code)
+      await deleteCodelist(values.list, values.code, deleteComment)
       refresh()
       setShowDeleteModal(false)
     } catch (error: any) {

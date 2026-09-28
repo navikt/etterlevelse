@@ -4,7 +4,7 @@ import { DocPencilIcon, TrashIcon } from '@navikt/aksel-icons'
 import { BodyShort, Button, Modal } from '@navikt/ds-react'
 import moment from 'moment'
 import { useContext, useState } from 'react'
-import { tilbakemeldingslettMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
+import { tilbakemeldingSlettMelding } from '@/api/krav/tilbakemelding/tilbakemeldingApi'
 import { PersonName } from '@/components/common/personName/PersonName'
 import {
   ITilbakemelding,
@@ -72,7 +72,7 @@ const MeldingKnapper = (props: {
             <Button
               className='ml-2.5'
               onClick={() =>
-                tilbakemeldingslettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
+                tilbakemeldingSlettMelding({ tilbakemeldingId, meldingNr }).then((t) => {
                   if (meldingNr === 1) {
                     remove({ ...t, meldinger: [] })
                   } else {

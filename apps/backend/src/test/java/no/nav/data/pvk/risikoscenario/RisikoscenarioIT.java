@@ -169,19 +169,19 @@ public class RisikoscenarioIT extends IntegrationTestBase {
                 .tiltakData(new TiltakData())
                 .build(), null, false);
         risikoscenarioService.addTiltak(risikoscenario.getId(), List.of(tiltak.getId()));
-        ResponseEntity<RisikoscenarioResponse> resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, risikoscenario.getId());
+        ResponseEntity<RisikoscenarioResponse> resp = restTemplate.exchange("/risikoscenario/{id}?comment=test-cleanup", HttpMethod.DELETE, null, RisikoscenarioResponse.class, risikoscenario.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(risikoscenarioRepo.count()).isEqualTo(1);
         risikoscenarioService.removeTiltak(risikoscenario.getId(), tiltak.getId());
 
         // Delete should return OK and null if requested to delete non-existing Risikoscenario
-        resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, UUID.randomUUID());
+        resp = restTemplate.exchange("/risikoscenario/{id}?comment=test-cleanup", HttpMethod.DELETE, null, RisikoscenarioResponse.class, UUID.randomUUID());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(resp.getBody()).isNull();
         assertThat(risikoscenarioRepo.count()).isEqualTo(1);
         
         // Test delete...
-        resp = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.DELETE, null, RisikoscenarioResponse.class, risikoscenario.getId());
+        resp = restTemplate.exchange("/risikoscenario/{id}?comment=test-cleanup", HttpMethod.DELETE, null, RisikoscenarioResponse.class, risikoscenario.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(risikoscenarioRepo.count()).isEqualTo(0);
     }

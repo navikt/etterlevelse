@@ -1,6 +1,8 @@
 package no.nav.data.pvk.pvotilbakemelding;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -163,7 +165,7 @@ public class PvoTilbakemeldingController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Delete PVO tilbakemelding")
+    @Operation(summary = "Delete PVO tilbakemelding", parameters = {@Parameter(name = "comment", description = "Reason for deleting the PVO tilbakemelding", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "PVO tilbakemelding deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<PvoTilbakemeldingResponse> deletePvoTilbakemeldingById(@PathVariable UUID id) {

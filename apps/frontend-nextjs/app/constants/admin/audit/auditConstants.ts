@@ -42,6 +42,7 @@ export interface IAuditItem {
   tableId: string
   time: string
   user: string
+  deleteMessage: string
   data: object
 }
 export interface IMailLog {

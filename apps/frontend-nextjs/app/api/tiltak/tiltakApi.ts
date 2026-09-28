@@ -37,7 +37,7 @@ export const updateTiltak = async (tiltak: ITiltak): Promise<ITiltak> => {
 }
 
 export const deleteTiltak = async (id: string): Promise<ITiltak> =>
-  (await axios.delete<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}`)).data
+  (await axios.delete<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}?comment=slettet av bruker`)).data
 
 const tiltakTotiltakDto = (tiltak: ITiltak) => {
   const dto = {

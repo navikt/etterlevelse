@@ -1,12 +1,6 @@
 #!/usr/bin/env sh
 set -e
 
-# Check if any staged files are inside the frontend directory
-if git diff --cached --name-only | grep -q "^apps/frontend-nextjs/"; then
-  echo "🎨 Frontend changes detected. Running linters and tests..."
-  cd apps/frontend-nextjs
-  yarn lint-staged
-  yarn run pre-commit:deps-check
-else
-  echo "⚡ Only backend/other changes detected. Skipping frontend checks."
-fi
+cd apps/frontend-nextjs
+yarn lint-staged
+yarn run pre-commit:deps-check

@@ -89,7 +89,7 @@ public class PvoTilbakemeldingIT  extends IntegrationTestBase {
     void deletePvoTilbakemelding() {
         PvoTilbakemelding pvoTilbakemelding = createPvoTilbakemelding();
 
-        restTemplate.delete("/pvotilbakemelding/{id}", pvoTilbakemelding.getId());
+        restTemplate.delete("/pvotilbakemelding/{id}?comment=test cleanup", pvoTilbakemelding.getId());
 
         assertThat(pvoTilbakemeldingRepo.count()).isEqualTo(0);
     }

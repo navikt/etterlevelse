@@ -12,7 +12,10 @@ import AlertPvoUnderArbeidModal from '@/components/pvoTilbakemelding/common/aler
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
@@ -71,6 +74,7 @@ const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
         {!loading &&
           artOgOmfang &&
           !isReadOnlyPvkStatus(pvkDokument.status) &&
+          pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
           (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
             <div
               className={`pt-6 pr-4 flex flex-col gap-4 col-span-8 ${hasPvoComment ? 'w-1/2' : 'flex-1'}`}
@@ -99,7 +103,8 @@ const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
         {!loading &&
           artOgOmfang &&
           (isReadOnlyPvkStatus(pvkDokument.status) ||
-            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess)) && (
+            !(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) ||
+            pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) && (
             <ArtOgOmfangReadOnlyContent
               artOgOmfang={artOgOmfang}
               personkategorier={personkategorier}

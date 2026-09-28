@@ -22,7 +22,7 @@ import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 type TProps = {
   pvkDokument: IPvkDokument
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
-  pvoTilbakemelding: IPvoTilbakemelding
+  pvoTilbakemelding?: IPvoTilbakemelding
   isLoading: boolean
   setFieldValue: (
     field: string,
@@ -57,14 +57,16 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
     <Field>
       {(fieldProps: FieldProps) => (
         <div className='w-full max-w-[75ch]'>
-          <TilbakemeldingsHistorikk
-            antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
-            meldingerTilPvo={pvkDokument.meldingerTilPvo}
-            vurderinger={pvoTilbakemelding.vurderinger}
-            pvoVurderingList={pvoVurderingList}
-            etterlevelseDokumentVersjon={etterlevelseDokumentasjon.etterlevelseDokumentVersjon}
-            defaultFirstOpen={!isRisikoeierCheck ? true : false}
-          />
+          {pvoTilbakemelding && (
+            <TilbakemeldingsHistorikk
+              antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
+              meldingerTilPvo={pvkDokument.meldingerTilPvo}
+              vurderinger={pvoTilbakemelding.vurderinger}
+              pvoVurderingList={pvoVurderingList}
+              etterlevelseDokumentVersjon={etterlevelseDokumentasjon.etterlevelseDokumentVersjon}
+              defaultFirstOpen={!isRisikoeierCheck ? true : false}
+            />
+          )}
 
           <Heading size='medium' level='2' className='mb-5 mt-8'>
             Sendt oppdatert PVK
@@ -108,7 +110,12 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
                   variant='secondary'
                   type='button'
                   onClick={async () => {
-                    await setFieldValue('status', EPvkDokumentStatus.VURDERT_AV_PVO)
+                    await setFieldValue(
+                      'status',
+                      pvkDokument.antallInnsendingTilPvo === 0
+                        ? EPvkDokumentStatus.UNDERARBEID
+                        : EPvkDokumentStatus.VURDERT_AV_PVO
+                    )
                     await submitForm()
                   }}
                 >

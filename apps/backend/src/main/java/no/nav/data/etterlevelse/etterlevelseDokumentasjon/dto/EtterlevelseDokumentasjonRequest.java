@@ -9,7 +9,12 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.domain.ListName;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.List;
@@ -65,7 +70,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     private List<Varslingsadresse> varslingsadresser;
 
     //versjonering
-    private Integer etterlevelseDokumentVersjon;
+    private int etterlevelseDokumentVersjon;
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
 
     @Override

@@ -41,10 +41,13 @@ export const updateKravPriorityEtterlevelseDokumentasjon = async (
   ).data
 }
 
-export const deleteEtterlevelseDokumentasjon = async (etterlevelseDokumentasjonId: string) => {
+export const deleteEtterlevelseDokumentasjon = async (
+  etterlevelseDokumentasjonId: string,
+  reason: string
+) => {
   return (
     await axios.delete<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}`
+      `${env.backendBaseUrl}/etterlevelsedokumentasjon/${etterlevelseDokumentasjonId}?comment=${reason}`
     )
   ).data
 }

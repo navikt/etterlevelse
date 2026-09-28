@@ -2,7 +2,11 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
 import java.util.ArrayList;
@@ -60,7 +64,7 @@ public class EtterlevelseDokumentasjonData {
 
     //versjonering
     @Builder.Default
-    private Integer etterlevelseDokumentVersjon = 1;
+    private int etterlevelseDokumentVersjon = 1;
     @Builder.Default
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk = List.of(new EtterlevelseVersjonHistorikk());
 }

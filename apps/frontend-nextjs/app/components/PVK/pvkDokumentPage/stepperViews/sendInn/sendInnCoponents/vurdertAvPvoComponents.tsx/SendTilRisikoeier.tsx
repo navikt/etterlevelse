@@ -8,9 +8,10 @@ import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 type TProps = {
   fieldProps: FieldProps<any, any>
   errorComponent: ReactNode
+  label?: string
 }
 
-const SendTilRisikoeier: FunctionComponent<TProps> = ({ fieldProps, errorComponent }) => (
+const SendTilRisikoeier: FunctionComponent<TProps> = ({ fieldProps, errorComponent, label }) => (
   <div>
     <Heading size='small' level='3' className='mb-5 mt-8'>
       Send til risikoeier for godkjenning
@@ -19,7 +20,10 @@ const SendTilRisikoeier: FunctionComponent<TProps> = ({ fieldProps, errorCompone
     <TextAreaField
       height='150px'
       noPlaceholder
-      label='Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
+      label={
+        label ??
+        'Oppsummer for risikoeieren eventuelle endringer gjort som følge av PVOs tilbakemelding'
+      }
       name='merknadTilRisikoeier'
       markdown
     />

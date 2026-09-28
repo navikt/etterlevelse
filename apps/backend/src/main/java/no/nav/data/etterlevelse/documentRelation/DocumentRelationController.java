@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.documentRelation;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -164,7 +166,7 @@ public class DocumentRelationController {
         }
     }
 
-    @Operation(summary = "Delete Document relation")
+    @Operation(summary = "Delete Document relation", parameters = {@Parameter(name = "comment", description = "Reason for deleting the document relation", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Document relation deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<DocumentRelationResponse> deleteDocumentRelationById(@PathVariable UUID id) {

@@ -1,4 +1,4 @@
-import { Heading, Label, List } from '@navikt/ds-react'
+import { Heading, InlineMessage, Label, Link, List } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
@@ -10,6 +10,8 @@ type TProps = {
   personkategorier: string[]
   isChangesMadeSinceLastSubmission?: boolean
   brukerAlleOpplysningstyper?: boolean
+  editorMode?: boolean
+  pvkDokumentId?: string
 }
 
 const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
@@ -17,6 +19,8 @@ const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
   personkategorier,
   isChangesMadeSinceLastSubmission,
   brukerAlleOpplysningstyper,
+  editorMode,
+  pvkDokumentId,
 }) => {
   return (
     <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
@@ -27,6 +31,17 @@ const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
           </Heading>
 
           {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+
+          {editorMode && pvkDokumentId && (
+            <InlineMessage status='info' className='mb-5 mt-9'>
+              For å kunne redigere denne siden, må du først{' '}
+              <Link
+                href={`/dokumentasjon/${artOgOmfang.etterlevelseDokumentasjonId}/pvkdokument/${pvkDokumentId}?steg=1`}
+              >
+                låse opp PVK.
+              </Link>
+            </InlineMessage>
+          )}
 
           <List>
             <Label>{EPVK.behandlingAvPersonopplysninger}</Label>

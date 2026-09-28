@@ -82,7 +82,7 @@ const VarselAdminPage = () => {
             />
             <Tabs.Tab
               value={EMeldingType.OM_ETTERLEVELSE}
-              label='Om etterlevelse'
+              label='Om etterlevelse (depricated)'
               onClick={() => {
                 setTab(EMeldingType.OM_ETTERLEVELSE)
               }}

@@ -87,6 +87,7 @@ export enum EPvkVurdering {
   SKAL_IKKE_UTFORE = 'SKAL_IKKE_UTFORE',
   SKAL_UTFORE = 'SKAL_UTFORE',
   ALLEREDE_UTFORT = 'ALLEREDE_UTFORT',
+  LEGGE_OVER_EKSISTERENDE = 'LEGGE_OVER_EKSISTERENDE',
 
   //Brukes for å nullstille feltet på frontend
   UNDEFINED = 'UNDEFINED',

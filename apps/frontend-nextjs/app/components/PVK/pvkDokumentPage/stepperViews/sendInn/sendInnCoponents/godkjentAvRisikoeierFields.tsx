@@ -23,7 +23,7 @@ import BeskjedTilRisikoeierReadOnly from './readOnly/beskjedTilRisikoeierReadOnl
 
 type TProps = {
   pvkDokument: IPvkDokument
-  pvoTilbakemelding: IPvoTilbakemelding
+  pvoTilbakemelding?: IPvoTilbakemelding
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
   isLoading: boolean
   setFieldValue: (
@@ -56,14 +56,16 @@ const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
 
   return (
     <div className='w-full max-w-[75ch]'>
-      <TilbakemeldingsHistorikk
-        antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
-        meldingerTilPvo={pvkDokument.meldingerTilPvo}
-        vurderinger={pvoTilbakemelding.vurderinger}
-        pvoVurderingList={pvoVurderingList}
-        etterlevelseDokumentVersjon={etterlevelseDokumentasjon.etterlevelseDokumentVersjon}
-        defaultFirstOpen={!isRisikoeierCheck ? true : false}
-      />
+      {pvoTilbakemelding && (
+        <TilbakemeldingsHistorikk
+          antallInnsendingTilPvo={pvkDokument.antallInnsendingTilPvo}
+          meldingerTilPvo={pvkDokument.meldingerTilPvo}
+          vurderinger={pvoTilbakemelding.vurderinger}
+          pvoVurderingList={pvoVurderingList}
+          etterlevelseDokumentVersjon={etterlevelseDokumentasjon.etterlevelseDokumentVersjon}
+          defaultFirstOpen={!isRisikoeierCheck ? true : false}
+        />
+      )}
 
       <Heading size='medium' level='2' className='mb-5 mt-8'>
         Sendt PVK til godkjenning av risikoeier

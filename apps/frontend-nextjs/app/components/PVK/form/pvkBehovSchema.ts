@@ -11,7 +11,8 @@ const pvkBehovSchema = () => {
         // Require non-empty validation for both "SKAL_IKKE_UTFORE" and "ALLEREDE_UTFORT"
         if (
           vurdering === EPvkVurdering.SKAL_IKKE_UTFORE ||
-          vurdering === EPvkVurdering.ALLEREDE_UTFORT
+          vurdering === EPvkVurdering.ALLEREDE_UTFORT ||
+          vurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE
         ) {
           return typeof value === 'string' && value.trim().length > 0
         }

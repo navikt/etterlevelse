@@ -9,10 +9,6 @@ export const getMeldingByType = async (meldingType: EMeldingType) => {
   ).data
 }
 
-export const deleteMelding = async (id: string) => {
-  return (await axios.delete<IMelding>(`${env.backendBaseUrl}/melding/${id}`)).data
-}
-
 export const createMelding = async (melding: IMelding) => {
   const dto = MeldingToMeldingDto(melding)
   return (await axios.post<IMelding>(`${env.backendBaseUrl}/melding`, dto)).data

@@ -1,6 +1,8 @@
 package no.nav.data.pvk.tiltak;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -150,7 +152,7 @@ public class TiltakController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Delete tiltak")
+    @Operation(summary = "Delete tiltak", parameters = {@Parameter(name = "comment", description = "Reason for deleting the tiltak", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "tiltak deleted")
     @DeleteMapping("/{id}")
     public ResponseEntity<TiltakResponse> deleteTiltakById(@PathVariable UUID id) {

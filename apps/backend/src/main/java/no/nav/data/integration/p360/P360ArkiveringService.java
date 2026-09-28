@@ -18,7 +18,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -65,7 +70,7 @@ public class P360ArkiveringService {
 
         String documentTitle = "";
         if (pvoTilbakemelding && pvkDokument.isPresent()) {
-            if (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() != null && pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() > 1) {
+            if (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() > 1) {
                 documentTitle += (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". ");
             }
             documentTitle += pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". Tilbakemelding fra Personvernombudet for ";

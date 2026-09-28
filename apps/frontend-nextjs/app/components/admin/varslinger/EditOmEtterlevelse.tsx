@@ -3,12 +3,7 @@
 import { Button, Heading, Loader } from '@navikt/ds-react'
 import { Form, Formik, FormikProps } from 'formik'
 import React, { FunctionComponent, useState } from 'react'
-import {
-  createMelding,
-  deleteMelding,
-  mapMeldingToFormValue,
-  updateMelding,
-} from '@/api/melding/meldingApi'
+import { createMelding, mapMeldingToFormValue, updateMelding } from '@/api/melding/meldingApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { EMeldingStatus, IMelding } from '@/constants/admin/message/messageConstants'
 import { EAlertType } from '@/constants/commonConstants'
@@ -91,18 +86,6 @@ const EditOmEtterlevelse: FunctionComponent<TProps> = ({
               />
 
               <div className='flex w-full mt-2.5'>
-                <Button
-                  type='button'
-                  variant='secondary'
-                  disabled={disableEdit}
-                  onClick={() => {
-                    deleteMelding(melding.id).then(() => {
-                      setMelding(undefined)
-                    })
-                  }}
-                >
-                  Slett
-                </Button>
                 <div className='flex justify-end w-full'>
                   <Button
                     type='button'

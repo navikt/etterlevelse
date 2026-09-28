@@ -202,6 +202,13 @@ const SendInnErrorSummary: FunctionComponent<TProps> = ({
           {Object.entries(updateErrors)
             .filter(([, error]) => error)
             .map(([key, error]) => {
+              if (key === 'merknadTilRisikoeier') {
+                return (
+                  <ErrorSummary.Item href={`#${key}`} key={key} className='max-w-[75ch]'>
+                    {error as string}
+                  </ErrorSummary.Item>
+                )
+              }
               return (
                 <ErrorSummary.Item
                   target='_blank'

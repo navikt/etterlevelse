@@ -56,12 +56,17 @@ interface IProps {
 
 const getBehovForPvkText = (
   pvkVurdering: EPvkVurdering,
-  behandlerPersonopplysninger: boolean
+  behandlerPersonopplysninger: boolean,
+  pvkStatus: EPvkDokumentStatus
 ): string => {
   if (!behandlerPersonopplysninger) return 'Behandler ikke personopplysninger'
   if (!pvkVurdering || pvkVurdering === EPvkVurdering.UNDEFINED) return 'Ikke vurdert behov'
   if (pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE) return 'Skal ikke gjennomføre PVK'
   if (pvkVurdering === EPvkVurdering.SKAL_UTFORE) return 'Skal gjennomføre PVK'
+  if (pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE)
+    return pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+      ? 'Skal gjennomføre PVK'
+      : 'Overfører godkjent PVK'
   if (pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT) return 'PVK i Word'
   return 'Ikke vurdert behov'
 }
@@ -145,7 +150,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       dok.ikkePaabegynt
         ? 'Ikke påbegynt'
         : getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus),
-      getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger),
+      getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger, dok.pvkStatus),
       getPvkOnlyStatusText(dok.pvkVurdering, dok.pvkStatus, dok.hasPvkDocumentationStarted),
     ]
       .filter(Boolean)
@@ -228,7 +233,11 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               ? 'Ikke påbegynt'
               : getEtterlevelseDokumentStatusText(dok.etterlevelseDokumentasjonStatus)
           case 'behovForPvk':
-            return getBehovForPvkText(dok.pvkVurdering, dok.behandlerPersonopplysninger)
+            return getBehovForPvkText(
+              dok.pvkVurdering,
+              dok.behandlerPersonopplysninger,
+              dok.pvkStatus
+            )
           case 'pvkStatus':
             return getPvkOnlyStatusText(
               dok.pvkVurdering,
@@ -345,37 +354,49 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
     const vurdertIkkeBehov = medPersonopplysninger.filter(
       (d) => d.pvkVurdering === EPvkVurdering.SKAL_IKKE_UTFORE
     ).length
-    const behovIkkePaabegynt = medPersonopplysninger.filter(
-      (d) => d.pvkVurdering === EPvkVurdering.SKAL_UTFORE
+    const leggeOver = medPersonopplysninger.filter(
+      (d) => d.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE
+    )
+    const leggeOverGodkjent = leggeOver.filter(
+      (d) => d.pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
     ).length
+    const behovIkkePaabegynt =
+      medPersonopplysninger.filter((d) => d.pvkVurdering === EPvkVurdering.SKAL_UTFORE).length +
+      leggeOverGodkjent
+    const overforerGodkjentPvk = leggeOver.length - leggeOverGodkjent
     const pvkIWord = medPersonopplysninger.filter(
       (d) => d.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT
     ).length
 
-    const skalUtfore = doks.filter((d) => d.pvkVurdering === EPvkVurdering.SKAL_UTFORE)
-    const pvkIkkePaabegynt = skalUtfore.filter((d) => !d.hasPvkDocumentationStarted).length
-    const pvkGodkjent = skalUtfore.filter(
+    const digitalePvk = doks.filter(
       (d) =>
-        d.hasPvkDocumentationStarted && d.pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
+        d.pvkVurdering === EPvkVurdering.SKAL_UTFORE ||
+        d.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE
+    )
+
+    const pvkIkkePaabegynt = digitalePvk.filter((d) => !d.hasPvkDocumentationStarted).length
+    const pvkGodkjent = digitalePvk.filter(
+      (d) => d.pvkStatus === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER
     ).length
-    const pvkTilBehandling = skalUtfore.filter(
+    const pvkTilBehandling = digitalePvk.filter(
       (d) =>
         d.hasPvkDocumentationStarted &&
         (d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO ||
           d.pvkStatus === EPvkDokumentStatus.PVO_UNDERARBEID ||
           d.pvkStatus === EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
     ).length
-    const pvkTilbakemelding = skalUtfore.filter(
+    const pvkTilbakemelding = digitalePvk.filter(
       (d) =>
         d.hasPvkDocumentationStarted &&
         (d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO ||
           d.pvkStatus === EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)
     ).length
-    const pvkSendtTilGodkjenning = skalUtfore.filter(
+    const pvkSendtTilGodkjenning = digitalePvk.filter(
       (d) => d.hasPvkDocumentationStarted && d.pvkStatus === EPvkDokumentStatus.TRENGER_GODKJENNING
     ).length
     const pvkUnderArbeid =
-      skalUtfore.filter((d) => d.hasPvkDocumentationStarted).length -
+      digitalePvk.length -
+      pvkIkkePaabegynt -
       pvkGodkjent -
       pvkTilBehandling -
       pvkTilbakemelding -
@@ -410,9 +431,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         ikkeVurdertBehov,
         vurdertIkkeBehov,
         behovIkkePaabegynt,
+        overforerGodkjentPvk,
       },
       pvk: {
-        total: skalUtfore.length + pvkIWord,
+        total: digitalePvk.length + pvkIWord,
         ikkePaabegynt: pvkIkkePaabegynt,
         underArbeid: pvkUnderArbeid,
         tilBehandlingHosPvo: pvkTilBehandling,
@@ -599,6 +621,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 'Ikke vurdert behov',
                 'Skal ikke gjennomføre PVK',
                 'Skal gjennomføre PVK',
+                'Overfører godkjent PVK',
                 'PVK i Word',
                 'Digital PVK totalt',
                 'Digital PVK - ikke påbegynt',
@@ -623,6 +646,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 stats.behovForPvk.ikkeVurdertBehov,
                 stats.behovForPvk.vurdertIkkeBehov,
                 stats.behovForPvk.behovIkkePaabegynt,
+                stats.behovForPvk.overforerGodkjentPvk,
                 stats.pvk.pvkIWord,
                 stats.pvk.total - stats.pvk.pvkIWord,
                 stats.pvk.ikkePaabegynt,
@@ -849,7 +873,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {getBehovForPvkText(
                                 dok.pvkVurdering,
-                                dok.behandlerPersonopplysninger
+                                dok.behandlerPersonopplysninger,
+                                dok.pvkStatus
                               )}
                             </Table.DataCell>
                             <Table.DataCell>
@@ -1286,7 +1311,8 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                             <Table.DataCell>
                               {getBehovForPvkText(
                                 dok.pvkVurdering,
-                                dok.behandlerPersonopplysninger
+                                dok.behandlerPersonopplysninger,
+                                dok.pvkStatus
                               )}
                             </Table.DataCell>
                             <Table.DataCell>

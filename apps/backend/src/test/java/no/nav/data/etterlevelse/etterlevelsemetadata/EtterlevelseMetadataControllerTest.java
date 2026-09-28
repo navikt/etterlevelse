@@ -235,7 +235,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
     @Test
     void deleteEtterlevelseMetadata() {
         var em = createEtterlevelseMetadata(50, 1);
-        restTemplate.delete("/etterlevelsemetadata/{id}", em.getId());
+        restTemplate.delete("/etterlevelsemetadata/{id}?comment=test-cleanup", em.getId());
 
         assertThat(etterlevelseMetadataRepo.findAll()).isEmpty();
     }

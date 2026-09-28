@@ -3,7 +3,7 @@
 import { Loader } from '@navikt/ds-react'
 import { uniqBy } from 'lodash'
 import { useParams } from 'next/navigation'
-import { useMemo } from 'react'
+import { FunctionComponent, useMemo } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { IExternalCode } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
@@ -15,7 +15,15 @@ import BehandlingensLivsLopSidePanel from '../behandlingensLivslop/sidePanel/Beh
 import { ContentLayout, MainPanelLayout, SidePanelLayout } from '../others/layout/content/content'
 import { PageLayout } from '../others/scaffold/scaffold'
 
-const BehandlingensArtOgOmfangReadOnlyPage = () => {
+interface IProps {
+  editorMode?: boolean
+  pvkDokumentId?: string
+}
+
+const BehandlingensArtOgOmfangReadOnlyPage: FunctionComponent<IProps> = ({
+  editorMode,
+  pvkDokumentId,
+}) => {
   const params: Readonly<
     Partial<{
       etterlevelseDokumentasjonId?: string
@@ -109,6 +117,8 @@ const BehandlingensArtOgOmfangReadOnlyPage = () => {
                 artOgOmfang={artOgOmfang}
                 personkategorier={readOnlyData.personkategorier}
                 brukerAlleOpplysningstyper={readOnlyData.brukerAlleOpplysningstyper}
+                editorMode={editorMode}
+                pvkDokumentId={pvkDokumentId}
               />
             </MainPanelLayout>
 

@@ -83,7 +83,7 @@ public class BehandlingensArtOgOmfangIT extends IntegrationTestBase {
     void deleteBehandlingensArtOgOmfang() {
         BehandlingensArtOgOmfang artOgOmfang = createBehandlingensArtOgOmfang();
 
-        restTemplate.delete("/behandlingens-art-og-omfang/{id}", artOgOmfang.getId());
+        restTemplate.delete("/behandlingens-art-og-omfang/{id}?comment=test cleanup", artOgOmfang.getId());
 
         assertThat(behandlingensArtOgOmfangRepo.count()).isEqualTo(0);
     }

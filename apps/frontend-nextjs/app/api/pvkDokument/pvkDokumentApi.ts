@@ -109,8 +109,9 @@ export const godkjenOgArkiverPvkDokument = async (
   ).data
 }
 
-export const deletePvkDokument = async (id: string): Promise<IPvkDokument> =>
-  (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}`)).data
+export const deletePvkDokument = async (id: string, reason: string): Promise<IPvkDokument> =>
+  (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}?comment=${reason}`))
+    .data
 
 export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjonId?: string) => {
   const isCreateNew = pvkDokumentId === 'ny'

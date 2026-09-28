@@ -105,14 +105,14 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         behandlingensLivslop={behandlingsLivslop}
       >
-        Tegn Behandlingens livsløp
+        Se Behandlingens livsløp
       </BehandlingensLivslopActionMenuItem>
 
       <ArtOgOmfangActionMenuItem
         etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         behandlingensArtOgOmfang={behandlingensArtOgOmfang}
       >
-        Beskriv behandlingens art og omfang
+        Se behandlingens art og omfang
       </ArtOgOmfangActionMenuItem>
 
       <PvkDokumentActionMenuItem
@@ -161,7 +161,7 @@ export const PvkGodkjentReadOnlyActionMenuVariant: FunctionComponent<TProps> = (
         pvkDokument={pvkDokument}
         readOnlyUrl={true}
       >
-        Les PVK
+        Les sist godkjent PVK
       </PvkDokumentActionMenuItem>
 
       <PvkBehovActionMenuItem

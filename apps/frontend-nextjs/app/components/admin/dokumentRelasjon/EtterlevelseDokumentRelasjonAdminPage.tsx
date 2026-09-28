@@ -11,7 +11,9 @@ import {
   Spacer,
   Table,
   TextField,
+  Textarea,
 } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import {
   deleteDocumentRelation,
@@ -28,6 +30,8 @@ import { UpdateMessage } from '../common/commonComponents'
 const EtterlevelseDokumentRelasjonAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [deleleDokumentRelasjonId, setDeleteDokumentRelasjonId] = useState<string>('')
+  const [isError, setIsError] = useState<boolean>(false)
+
   const [reloadTable, setReloadTable] = useState(false)
 
   const [tableContent, setTableContent] = useState<IDocumentRelation[]>([])
@@ -35,6 +39,7 @@ const EtterlevelseDokumentRelasjonAdminPage = () => {
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
+  const [deleteComment, setDeleteComment] = useState<string>('')
 
   let sortedData = tableContent
 
@@ -97,34 +102,49 @@ const EtterlevelseDokumentRelasjonAdminPage = () => {
         </Heading>
       </div>
 
-      <div className='flex items-end mt-8'>
-        <TextField
-          label='Slett dokument relasjon'
-          placeholder='Dokument relasjon UID'
-          onChange={(e) => setDeleteDokumentRelasjonId(e.target.value)}
-          className='w-full mr-3'
-        />
+      <div className='flex items-start mt-8'>
+        <div className='w-full mr-3'>
+          <TextField
+            label='Slett dokument relasjon'
+            placeholder='Dokument relasjon UID'
+            onChange={(e) => setDeleteDokumentRelasjonId(e.target.value)}
+            className='w-full'
+          />
+
+          <Textarea
+            label='Begrunnelse for sletting  (påkrevd)'
+            onChange={(e) => setDeleteComment(e.target.value)}
+            className='w-full mt-3'
+          />
+        </div>
+
         <Button
-          disabled={!deleleDokumentRelasjonId}
+          className='mt-8'
+          disabled={!deleleDokumentRelasjonId || deleteComment === ''}
           onClick={() => {
-            deleteDocumentRelation(deleleDokumentRelasjonId)
+            deleteDocumentRelation(deleleDokumentRelasjonId, deleteComment)
               .then(() => {
                 setDeleteDokumentRelasjonId('')
+                setIsError(false)
                 setReloadTable(!reloadTable)
                 setDeleteMessage(
                   'Sletting vellykket for relasjon til etterlevelse dokumentasjon med uid: ' +
                     deleleDokumentRelasjonId
                 )
               })
-              .catch((e) => {
-                setDeleteMessage('Sletting mislykket, error: ' + e)
+              .catch((e: AxiosError<{ message?: string }>) => {
+                setIsError(true)
+                setDeleteMessage(
+                  `Sletting mislykket, error: ${e.status}, ${e.response?.data.message}`
+                )
               })
           }}
         >
           Slett
         </Button>
       </div>
-      <UpdateMessage message={deleteMessage} />
+
+      <UpdateMessage message={deleteMessage} isError={isError} />
 
       <div className='mt-8 w-full'>
         <Heading level='2' size='small'>

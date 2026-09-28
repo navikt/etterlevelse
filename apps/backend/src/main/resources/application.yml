@@ -48,6 +48,7 @@ spring:
     # Restore the Jackson 2 (lenient) behaviour so null JSON values map to primitive defaults.
     deserialization:
       fail-on-null-for-primitives: false
+    use-jackson2-defaults: true
   flyway:
     baseline-on-migrate: true
     schemas: public
@@ -85,6 +86,8 @@ springdoc:
     disable-swagger-default-url: true
   packages-to-scan: no.nav.data
   paths-to-exclude: /error, /internal/**
+
+
 
 azure:
   activedirectory:

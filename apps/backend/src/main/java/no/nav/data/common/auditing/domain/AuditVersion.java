@@ -56,6 +56,9 @@ public class AuditVersion {
     @Column(name = "USER_ID", nullable = false, updatable = false)
     private String user;
 
+    @Column(name = "DELETE_REASON", updatable = false)
+    private String deleteMessage;
+
     @Column(name = "VERSION", nullable = false, updatable = false)
     private Integer version;
 
@@ -90,6 +93,7 @@ public class AuditVersion {
                 .tableId(tableId)
                 .time(time)
                 .user(user)
+                .deleteMessage(deleteMessage)
                 .data(JsonUtils.toJsonNode(this.data))
                 .build();
     }
