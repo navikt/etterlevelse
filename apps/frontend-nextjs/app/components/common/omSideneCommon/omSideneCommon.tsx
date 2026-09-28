@@ -2,12 +2,43 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button, FormProgress, Stepper } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { FunctionComponent } from 'react'
+import {
+  EOverskrifterPersonvernerklaering,
+  EPersonvernerklaeringId,
+} from '@/components/omPersonvernerklaering/hovedinnhold/hovedinnholdPersonvernerklaering'
 
 type TOmNavigeringProps = {
   router: AppRouterInstance
   forrigeLenke: string
   nesteLenke: string
 }
+
+const stepperPersonvernerklaering = [
+  {
+    id: EPersonvernerklaeringId.STEP_ONE,
+    step: EOverskrifterPersonvernerklaering.STEPPER_HEADING,
+  },
+  {
+    id: EPersonvernerklaeringId.STEP_TWO,
+    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVORDAN,
+  },
+  {
+    id: 'behandling-personopplysninger-hvilke',
+    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVILKE,
+  },
+  {
+    id: 'behandling-personopplysninger-hvor-hentes',
+    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_HENTES,
+  },
+  {
+    id: 'behandling-personopplysninger-hvor-lagres',
+    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_LAGRES,
+  },
+  { id: 'innblikk-etterlevelse', step: EOverskrifterPersonvernerklaering.INNBLIKK_ETTERLEVELSE },
+  { id: 'samtykke-maaling', step: EOverskrifterPersonvernerklaering.SAMTYKKE_MAALING },
+  { id: 'samtykke-bruker', step: EOverskrifterPersonvernerklaering.SAMTYKKE_BRUKER },
+  { id: 'mangler', step: EOverskrifterPersonvernerklaering.MANGLER },
+]
 
 export const OmNavigering: FunctionComponent<TOmNavigeringProps> = ({
   router,
@@ -52,22 +83,25 @@ export const OmStepper = () => (
         activeStep={activeStep}
         onStepChange={setActiveStep}
       >
-        <Stepper.Step href='#formaalet-med-stotte-til-etterlevelse'>
-          Hva er formålet med Støtte til etterlevelse?
+        <Stepper.Step href='#stepper-heading'>
+          Personvernerklæring for Støtte til etterlevelse
         </Stepper.Step>
-        <Stepper.Step href='#forstesiden-i-stotte-til-etterlevelse'>
-          Førstesiden i Støtte til etterlevelse
+        <Stepper.Step href='#behandling-personopplysninger-hvordan'>
+          Hvordan behandler vi ansattes personopplysninger?
         </Stepper.Step>
-        <Stepper.Step href='#temainndeling-og-temaoversikt'>
+        <Stepper.Step href='#behandling-personopplysninger-hvilke'>
           Temainndeling og temaoversikt
         </Stepper.Step>
-        <Stepper.Step href='#dette-inneholder-et-etterlevelseskrav'>
+        <Stepper.Step href='#behandling-personopplysninger-hvor-hentes'>
           Dette inneholder et etterlevelseskrav
         </Stepper.Step>
-        <Stepper.Step href='#hvordan-dokumentere-etterlevelse'>
+        <Stepper.Step href='#behandling-personopplysninger-hvor-lagres'>
           Hvordan dokumentere etterlevelse
         </Stepper.Step>
-        <Stepper.Step href='#ta-kontakt'>Ta kontakt</Stepper.Step>
+        <Stepper.Step href='#innblikk-etterlevelse'>Ta kontakt</Stepper.Step>
+        <Stepper.Step href='#samtykke-om-maaling'>Ta kontakt</Stepper.Step>
+        <Stepper.Step href='#samtykke-av-bruker'>Ta kontakt</Stepper.Step>
+        <Stepper.Step href='#mangler'>Ta kontakt</Stepper.Step>
       </Stepper>
     </div>
   </div>
@@ -80,22 +114,25 @@ export const OmHiddenFormProgress = () => (
       totalSteps={6}
       onStepChange={(step) => setActiveStep(step - 1)}
     >
-      <FormProgress.Step href='#formaalet-med-stotte-til-etterlevelse'>
-        Hva er formålet med Støtte til etterlevelse?
+      <FormProgress.Step href='#stepper-heading'>
+        Personvernerklæring for Støtte til etterlevelse
       </FormProgress.Step>
-      <FormProgress.Step href='#forstesiden-i-stotte-til-etterlevelse'>
-        Førstesiden i Støtte til etterlevelse
+      <FormProgress.Step href='#behandling-personopplysninger-hvordan'>
+        Hvordan behandler vi ansattes personopplysninger?
       </FormProgress.Step>
-      <FormProgress.Step href='#temainndeling-og-temaoversikt'>
+      <FormProgress.Step href='#behandling-personopplysninger-hvilke'>
         Temainndeling og temaoversikt
       </FormProgress.Step>
-      <FormProgress.Step href='#dette-inneholder-et-etterlevelseskrav'>
+      <FormProgress.Step href='#behandling-personopplysninger-hvor-hentes'>
         Dette inneholder et etterlevelseskrav
       </FormProgress.Step>
-      <FormProgress.Step href='#hvordan-dokumentere-etterlevelse'>
+      <FormProgress.Step href='#behandling-personopplysninger-hvor-lagres'>
         Hvordan dokumentere etterlevelse
       </FormProgress.Step>
-      <FormProgress.Step href='#ta-kontakt'>Ta kontakt</FormProgress.Step>
+      <FormProgress.Step href='#innblikk-etterlevelse'>Ta kontakt</FormProgress.Step>
+      <FormProgress.Step href='#samtykke-om-maaling'>Ta kontakt</FormProgress.Step>
+      <FormProgress.Step href='#samtykke-av-bruker'>Ta kontakt</FormProgress.Step>
+      <FormProgress.Step href='#mangler'>Ta kontakt</FormProgress.Step>
     </FormProgress>
   </div>
 )
