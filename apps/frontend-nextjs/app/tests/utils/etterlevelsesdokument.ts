@@ -1,0 +1,18 @@
+export const oppretteEtterlevelsesdokument = {
+  id: 'created-document-id',
+  title: 'Test av nytt etterlevelsesdokument',
+  description: 'Dokumentasjon opprettet fra Playwright-testen',
+  departmentId: 'avdeling-1',
+  departmentName: 'Testavdelingen',
+  email: 'bat.man@nav.no',
+  sectionName: 'Testseksjonen',
+  unitName: 'Testenheten',
+  riskOwnerName: 'Test Risikoeier',
+  teamName: 'Testteamet',
+  treatmentName: 'B101 Testformål: Testbehandling',
+  dataProcessorTreatmentName: 'D202: Databehandlerbehandling',
+  systemName: 'Testsystemet',
+  riskAssessment: 'ROS-analyse for testdokumentet',
+  p360CaseNumber: 'SAK-12345',
+  reuseDescription: 'Veiledning for gjenbruk av testdokumentet',
+}
