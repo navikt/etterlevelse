@@ -41,6 +41,7 @@ import org.docx4j.wml.RFonts;
 import org.docx4j.wml.RPr;
 import org.docx4j.wml.RStyle;
 import org.docx4j.wml.STBrType;
+import org.docx4j.wml.SectPr;
 import org.docx4j.wml.Styles;
 import org.docx4j.wml.Tbl;
 import org.docx4j.wml.Text;
@@ -117,6 +118,7 @@ public class WordDocUtils {
         this.fac = fac;
         pack = WordprocessingMLPackage.load(WordDocUtils.class.getResourceAsStream(TEMPLATE));
         main = pack.getMainDocumentPart();
+        clearBodyContent();
 
         Styles styles = main.getStyleDefinitionsPart().getJaxbElement();
 
@@ -134,6 +136,19 @@ public class WordDocUtils {
         });
 
         addFooter();
+    }
+
+    // Template ships with instructional page content; keep only the trailing section properties.
+    private void clearBodyContent() {
+        List<Object> content = main.getContent();
+        SectPr sectPr = null;
+        if (!content.isEmpty() && content.get(content.size() - 1) instanceof SectPr last) {
+            sectPr = last;
+        }
+        content.clear();
+        if (sectPr != null) {
+            content.add(sectPr);
+        }
     }
 
 
