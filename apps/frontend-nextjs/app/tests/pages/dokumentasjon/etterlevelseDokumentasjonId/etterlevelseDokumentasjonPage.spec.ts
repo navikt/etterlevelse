@@ -689,6 +689,7 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       context,
       page,
     }) => {
+      test.setTimeout(60_000)
       await role.mockUser(page)
 
       await context.route('**/api/codelist?refresh=false', async (route) => {
@@ -740,6 +741,26 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
         await route.fulfill({ json: [] })
       })
 
+      await context.route('**/api/melding/type/SYSTEM', async (route) => {
+        await route.fulfill({ json: [] })
+      })
+
+      await context.route(
+        `**/api/etterlevelse/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
+
       await context.route(
         `**/api/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
@@ -751,6 +772,16 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
               status: 'UNDER_ARBEID',
               etterlevelseNummer: 1,
               etterlevelseDokumentVersjon: 1,
+              behandlingIds: [],
+              behandlinger: [],
+              dpBehandlingIds: [],
+              dpBehandlinger: [],
+              ardoqSystemData: [],
+              risikovurderinger: [],
+              p360CaseNumber: '',
+              seksjoner: [],
+              enheter: [],
+              prioritertKravNummer: [],
               resources: [],
               resourcesData: [],
               teams: [],
@@ -811,6 +842,21 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
           },
         })
       })
+      await context.route(
+        `**/etterlevelsemetadata/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
 
       await context.route('**/graphql', async (route) => {
         const requestBody = route.request().postDataJSON() as { operationName?: string }
@@ -843,7 +889,13 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
                                     id: `etterlevelse-${requirement.number}`,
                                     status: 'FERDIG_DOKUMENTERT',
                                     etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
+                                    fristForFerdigstillelse: '',
                                     suksesskriterieBegrunnelser: [],
+                                    changeStamp: {
+                                      createdDate: '2025-01-01T00:00:00Z',
+                                      lastModifiedDate: '2025-01-01T00:00:00Z',
+                                      lastModifiedBy: mockIdent,
+                                    },
                                   },
                                 ]
                               : [],
@@ -854,10 +906,15 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
                                   index < 2
                                     ? 'PERSONOPPLYSNINGSLOVEN'
                                     : 'INTERNKONTROLLFORSKRIFTEN',
+                                shortName:
+                                  index < 2
+                                    ? 'Personopplysningsloven'
+                                    : 'Internkontrollforskriften',
                               },
                             },
                           ],
                         })),
+                        irrelevantKrav: [],
                         utgaattKrav: [],
                       },
                     },
@@ -889,33 +946,166 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       }
 
       await page.goto(`${documentUrl}?tema=all-open`)
+      const main = page.getByRole('main')
       await expect(
-        page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
+        main.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
       ).toBeVisible()
+      await expect(main.getByRole('link', { name: 'Forsiden' })).toHaveAttribute('href', '/')
+      await expect(main.getByRole('link', { name: 'Dokumentere etterlevelse' })).toHaveAttribute(
+        'href',
+        '/dokumentasjoner'
+      )
       await expect(page.getByText('Etterlevelse: Under arbeid')).toBeVisible()
       await expect(page.getByText('PVK: Ikke vurdert behov')).toBeVisible()
-      await expect(page.getByRole('tab', { name: 'Alle Krav' })).toBeVisible()
-      await expect(page.getByRole('tab', { name: 'Prioritert kravliste' })).toBeVisible()
-      await expect(page.getByRole('textbox', { name: 'Søk etter kravet' })).toBeVisible()
+      await expect(main.getByRole('tab', { name: 'Alle Krav' })).toBeVisible()
+      await expect(main.getByRole('tab', { name: 'Prioritert kravliste' })).toBeVisible()
+      const requirementSearch = main.getByRole('textbox', { name: 'Søk etter kravet' })
+      await requirementSearch.fill('K102')
       await expect(
-        page.getByRole('button', { name: /Velg fullføringsgrad på kravnivå/ })
+        main.getByRole('link', { name: /K102\.2.*Sikre den registretes rettigheter/ })
       ).toBeVisible()
-      await expect(page.getByRole('button', { name: /Velg suksesskriterie-status/ })).toBeVisible()
-      await expect(page.getByRole('checkbox', { name: 'Ekspander alle temaer' })).toBeChecked()
-      await expect(page.getByText('Totalt 3 krav, 1 ferdig utfylt')).toBeVisible()
-      await expect(page.getByRole('button', { name: 'Arkiver i Public 360' })).toBeVisible()
+      await expect(
+        main.getByRole('link', { name: /K101\.1.*Behandle personopplysninger lovlig/ })
+      ).toHaveCount(0)
+      await requirementSearch.clear()
 
-      await page.getByRole('button', { name: 'Etterlevelse' }).click()
+      const completionFilterButton = main.getByRole('button', {
+        name: 'Velg fullføringsgrad på kravnivå (4)',
+      })
+      await completionFilterButton.click()
+      for (const filterName of [
+        'Velg alle',
+        'Ikke påbegynt',
+        'Under arbeid',
+        'Ferdig utfylt',
+        'Oppfylles senere',
+      ]) {
+        await expect(
+          page.getByRole('menuitemcheckbox', { name: filterName, exact: true })
+        ).toBeChecked()
+      }
+      const completedFilter = page.getByRole('menuitemcheckbox', { name: 'Ferdig utfylt' })
+      await completedFilter.click()
+      await expect(completedFilter).not.toBeChecked()
+      await completedFilter.click()
+      await expect(completedFilter).toBeChecked()
+      await page.keyboard.press('Escape')
+
+      const successCriteriaFilterButton = main.getByRole('button', {
+        name: 'Velg suksesskriterie-status (5)',
+      })
+      await successCriteriaFilterButton.click()
+      for (const filterName of [
+        'Velg alle',
+        'Ikke påbegynt',
+        'Under arbeid',
+        'Oppfylt',
+        'Ikke oppfylt',
+        'Ikke relevant',
+      ]) {
+        await expect(
+          page.getByRole('menuitemcheckbox', { name: filterName, exact: true })
+        ).toBeChecked()
+      }
+      const fulfilledFilter = page.getByRole('menuitemcheckbox', { name: 'Oppfylt', exact: true })
+      await fulfilledFilter.click()
+      await expect(fulfilledFilter).not.toBeChecked()
+      await fulfilledFilter.click()
+      await expect(fulfilledFilter).toBeChecked()
+      await page.keyboard.press('Escape')
+
+      const expandAllThemes = main.getByRole('checkbox', { name: 'Ekspander alle temaer' })
+      await expect(expandAllThemes).toBeChecked()
+      await expandAllThemes.click()
+      await expect(expandAllThemes).not.toBeChecked()
+      await expandAllThemes.click()
+      await expect(expandAllThemes).toBeChecked()
+      await expect(page.getByText('Totalt 3 krav, 1 ferdig utfylt')).toBeVisible()
+
+      for (const theme of [
+        { name: 'Personvern', completed: 1, total: 2 },
+        { name: 'Internkontroll', completed: 0, total: 1 },
+      ]) {
+        const themeButton = main.getByRole('button', {
+          name: `${theme.name} (${theme.completed} av ${theme.total} krav er ferdig utfylt)`,
+        })
+        await expect(themeButton).toHaveAttribute('aria-expanded', 'true')
+        await themeButton.click()
+        await expect(themeButton).toHaveAttribute('aria-expanded', 'false')
+        await themeButton.click()
+        await expect(themeButton).toHaveAttribute('aria-expanded', 'true')
+        await expect(
+          main.getByRole('link', { name: `Lær mer om ${theme.name} (åpner i en ny fane)` })
+        ).toHaveAttribute('href', `/tema/${theme.name.toUpperCase()}`)
+      }
+
+      for (const pvkLink of [
+        {
+          name: 'Vurder behandlingens livsløp (åpner i en ny fane)',
+          href: `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/behandlingens-livslop/ny`,
+        },
+        {
+          name: 'Vurder behandlingens art og omfang (åpner i en ny fane)',
+          href: `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/behandlingens-art-og-omfang/ny`,
+        },
+        {
+          name: 'Registrer om dere skal gjøre PVK (åpner i en ny fane)',
+          href: `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/pvkbehov/ny`,
+        },
+      ]) {
+        await expect(main.getByRole('link', { name: pvkLink.name })).toHaveAttribute(
+          'href',
+          pvkLink.href
+        )
+      }
+
+      for (const [index, requirement] of visibleRequirements.entries()) {
+        const theme = index < 2 ? 'PERSONVERN' : 'INTERNKONTROLL'
+        await expect(
+          main.getByRole('link', {
+            name: new RegExp(
+              `K${requirement.number}\\.${requirement.version}.*${requirement.name}`
+            ),
+          })
+        ).toHaveAttribute(
+          'href',
+          `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/${theme}/krav/${requirement.number}/${requirement.version}`
+        )
+      }
+
+      const archiveButton = main.getByRole('button', { name: 'Arkiver i Public 360' })
+      await archiveButton.click()
+      const archiveDialog = page.getByRole('dialog', { name: 'Arkiverings modal' })
+      await expect(
+        archiveDialog.getByRole('radio', { name: 'Arkiver alle krav versjoner' })
+      ).toBeChecked()
+      await expect(
+        archiveDialog.getByRole('radio', { name: 'Arkiver kun gjeldende versjon krav' })
+      ).not.toBeChecked()
+      await archiveDialog.getByRole('radio', { name: 'Arkiver kun gjeldende versjon krav' }).check()
+      await expect(
+        archiveDialog.getByRole('radio', { name: 'Arkiver kun gjeldende versjon krav' })
+      ).toBeChecked()
+      await expect(archiveDialog.getByRole('button', { name: 'Arkiver' })).toBeVisible()
+      await archiveDialog.getByRole('button', { name: 'Lukk' }).click()
+
+      await main.getByRole('button', { name: 'Etterlevelse' }).click()
       await expect(page.getByRole('menuitem', { name: 'Eksporter til Word' })).toBeVisible()
 
       const editDocumentLink = page.getByRole('menuitem', {
         name: 'Rediger dokumentegenskaper',
       })
       if (role.canEditWithoutDocumentAccess) {
-        await expect(editDocumentLink).toBeVisible()
+        await expect(editDocumentLink).toHaveAttribute(
+          'href',
+          `/dokumentasjon/edit/${oppretteEtterlevelsesdokument.id}`
+        )
         await expect(
           page.getByRole('menuitem', { name: 'Få etterlevelsen godkjent av risikoeier' })
-        ).toBeVisible()
+        ).toHaveAttribute(
+          'href',
+          `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/send-til-godkjenning-risikoeier`
+        )
       } else {
         await expect(editDocumentLink).toHaveCount(0)
         await expect(
@@ -923,16 +1113,48 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
         ).toHaveCount(0)
       }
 
-      await page.keyboard.press('Escape')
-      await page.getByRole('button', { name: 'Les mer om dette dokumentet' }).click()
+      await page.getByRole('menuitem', { name: 'Eksporter til Word' }).click()
+      const exportDialog = page.getByRole('dialog', { name: 'Eksporter etterlevelse' })
+      const themeSelect = exportDialog.getByRole('combobox', {
+        name: 'Velg et tema for eksportering',
+      })
+      await expect(themeSelect).toBeVisible()
+      for (const option of ['Alle tema', 'Personvern', 'Internkontroll']) {
+        await expect(themeSelect.getByRole('option', { name: option })).toBeAttached()
+      }
+      await themeSelect.selectOption('PERSONVERN')
+      await expect(themeSelect).toHaveValue('PERSONVERN')
+      await expect(
+        exportDialog.getByRole('radio', { name: 'Eksporter alle krav versjoner' })
+      ).toBeChecked()
+      await expect(
+        exportDialog.getByRole('radio', { name: 'Eksporter kun gjeldende versjon krav' })
+      ).not.toBeChecked()
+      await exportDialog
+        .getByRole('radio', { name: 'Eksporter kun gjeldende versjon krav' })
+        .check()
+      await expect(
+        exportDialog.getByRole('radio', { name: 'Eksporter kun gjeldende versjon krav' })
+      ).toBeChecked()
+      await expect(exportDialog.getByRole('button', { name: 'Eksporter' })).toBeVisible()
+      await exportDialog.getByRole('button', { name: 'Avbryt' }).click()
+
+      await main.getByRole('button', { name: 'Les mer om dette dokumentet' }).click()
       await expect(page.getByRole('heading', { name: 'Dokumentbeskrivelse' })).toBeVisible()
       await expect(page.getByRole('heading', { name: 'Dokumentegenskaper' })).toBeVisible()
       await expect(page.getByText(oppretteEtterlevelsesdokument.description)).toBeVisible()
+      await expect(main.getByRole('link', { name: 'Rediger dokumentegenskaper' })).toHaveAttribute(
+        'href',
+        `/dokumentasjon/edit/${oppretteEtterlevelsesdokument.id}`
+      )
 
       if (role.canEditWithoutDocumentAccess) {
         await expect(
           page.getByRole('link', { name: oppretteEtterlevelsesdokument.email })
         ).toBeVisible()
+        await expect(
+          page.getByRole('link', { name: oppretteEtterlevelsesdokument.email })
+        ).toHaveAttribute('href', `mailto:${oppretteEtterlevelsesdokument.email}`)
         await expect(
           page.getByText(/Trenger du tilgang til å redigere dette dokumentet/)
         ).toHaveCount(0)
@@ -951,8 +1173,16 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       if (role.pvkMenuItems.length > 0) {
         await expect(pvkButton).toBeVisible()
         await pvkButton.click()
-        for (const menuItem of role.pvkMenuItems) {
-          await expect(page.getByRole('menuitem', { name: menuItem })).toBeVisible()
+        for (const [index, menuItem] of role.pvkMenuItems.entries()) {
+          const path = [
+            'behandlingens-livslop/ny',
+            'behandlingens-art-og-omfang/ny',
+            'pvkbehov/ny',
+          ][index]
+          await expect(page.getByRole('menuitem', { name: menuItem })).toHaveAttribute(
+            'href',
+            `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/${path}`
+          )
         }
         await page.keyboard.press('Escape')
       } else {
@@ -963,24 +1193,51 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       if (role.canEditWithoutDocumentAccess) {
         await expect(reuseButton).toBeVisible()
         await reuseButton.click()
+        await page.getByRole('menuitem', { name: 'Tilrettelegg for gjenbruk' }).click()
+        const reuseDialog = page.getByRole('dialog', { name: 'Tilrettelegg for gjenbruk' })
         await expect(
-          page.getByRole('menuitem', { name: 'Tilrettelegg for gjenbruk' })
+          reuseDialog.getByRole('button', { name: 'Tilrettelegg for gjenbruk' })
         ).toBeVisible()
-        await page.keyboard.press('Escape')
+        await reuseDialog.getByRole('button', { name: 'Avbryt' }).click()
       } else {
         await expect(reuseButton).toHaveCount(0)
       }
 
-      await page.getByRole('tab', { name: 'Prioritert kravliste' }).click()
+      await main.getByRole('tab', { name: 'Prioritert kravliste' }).click()
       await expect(page.getByText('Ingen prioriterte krav i listen')).toBeVisible()
       const editPrioritizedRequirementsButton = page.getByRole('button', {
         name: 'Rediger prioriterte krav',
       })
       if (role.canEditWithoutDocumentAccess) {
         await expect(editPrioritizedRequirementsButton).toBeVisible()
+        await editPrioritizedRequirementsButton.click()
+        await expect(main.getByRole('button', { name: 'Lagre prioriterte krav' })).toBeVisible()
+        for (const theme of [
+          { name: 'Personvern', completed: 1, total: 2 },
+          { name: 'Internkontroll', completed: 0, total: 1 },
+        ]) {
+          const themeButton = main.getByRole('button', {
+            name: `${theme.name} (${theme.completed} av ${theme.total} krav er ferdig utfylt)`,
+          })
+          await themeButton.click()
+          await expect(themeButton).toHaveAttribute('aria-expanded', 'true')
+        }
+        const prioritizedRequirement = main.locator('input[type="checkbox"][value="101"]')
+        await expect(prioritizedRequirement).toBeVisible()
+        await prioritizedRequirement.check()
+        await expect(prioritizedRequirement).toBeChecked()
+        await expect(main.locator('input[type="checkbox"][value="102"]')).toBeVisible()
+        await expect(main.locator('input[type="checkbox"][value="201"]')).toBeVisible()
+        await main.getByRole('button', { name: 'Avbryt' }).click()
       } else {
         await expect(editPrioritizedRequirementsButton).toHaveCount(0)
       }
+
+      await main.getByRole('tab', { name: 'Alle Krav' }).click()
+      await expect(main.getByRole('tab', { name: 'Alle Krav' })).toHaveAttribute(
+        'aria-selected',
+        'true'
+      )
     })
   }
 })
