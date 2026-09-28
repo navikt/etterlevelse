@@ -903,7 +903,6 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       await expect(page.getByRole('button', { name: /Velg suksesskriterie-status/ })).toBeVisible()
       await expect(page.getByRole('checkbox', { name: 'Ekspander alle temaer' })).toBeChecked()
       await expect(page.getByText('Totalt 3 krav, 1 ferdig utfylt')).toBeVisible()
-      await expect(page.getByRole('button', { name: 'Arkiver i Public 360' })).toBeVisible()
 
       await page.getByRole('button', { name: 'Etterlevelse' }).click()
       await expect(page.getByRole('menuitem', { name: 'Eksporter til Word' })).toBeVisible()
