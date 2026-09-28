@@ -348,10 +348,10 @@ public class PvkDokumentController {
         if (!risikoscenario.isEmpty()) {
             pvkDokument.setHasPvkDocumentationStarted(true);
         }
-        if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
+        else if (!relevantMeldingTilPvo.isEmpty() && relevantMeldingTilPvo.getFirst().getMerknadTilPvo() != null && !Objects.equals(relevantMeldingTilPvo.getFirst().getMerknadTilPvo(), "")) {
             pvkDokument.setHasPvkDocumentationStarted(true);
         }
-        if (pvkDokument.getHarInvolvertRepresentant() != null || pvkDokument.getHarDatabehandlerRepresentantInvolvering() != null ||
+        else if (pvkDokument.getHarInvolvertRepresentant() != null || pvkDokument.getHarDatabehandlerRepresentantInvolvering() != null ||
                 (pvkDokument.getRepresentantInvolveringsBeskrivelse() != null &&
                         !Objects.equals(pvkDokument.getRepresentantInvolveringsBeskrivelse(), "")) ||
                 (pvkDokument.getDataBehandlerRepresentantInvolveringBeskrivelse() != null &&
