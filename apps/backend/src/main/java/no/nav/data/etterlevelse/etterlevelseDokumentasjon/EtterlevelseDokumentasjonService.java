@@ -175,24 +175,33 @@ public class EtterlevelseDokumentasjonService {
             varslingsadresser.add(Varslingsadresse.builder().adresse(risikoeier.getEmail()).type(no.nav.data.etterlevelse.varsel.domain.AdresseType.EPOST).build());
         });
 
-        String etterlevelseDokumentasjonTittel = "E%s.%s %s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon(), etterlevelseDokumentasjon.getTitle());
+        String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+        String etterlevelseDokumentasjonKortTittel = "E%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+        if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+            etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+        }
 
         varselService.varsle(varslingsadresser, Varsel.builder()
-                        .title("Etterlevelsesdokument for %s er klar til godkjenning av risikoeier".formatted(etterlevelseDokumentasjonTittel))
+                        .title("Etterlevelsesdokument for %s, er klar til godkjenning av risikoeier".formatted(etterlevelseDokumentasjonNummer))
                         .paragraph(
-                                new Varsel.Paragraph("Etterlevelsesdokument for %s er klar til godkjenning. Følg lenken og velg  “Godkjenn etterlevelsen” fra menyen på dokumentets temaside.",
-                                        url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonTittel)))
+                                new Varsel.Paragraph("Etterlevelsesdokument for %s, er klar til godkjenning. Følg lenken og velg  “Godkjenn etterlevelsen” fra menyen på dokumentets temaside.",
+                                        url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonKortTittel)))
                 .build(), etterlevelseDokumentasjon.getId().toString());
     }
 
     private void varsleEtterleverOmGodkjentDokument(EtterlevelseDokumentasjonRequest etterlevelseDokumentasjon) {
-        String etterlevelseDokumentasjonTittel = "E%s.%s %s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon(), etterlevelseDokumentasjon.getTitle());
+        String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+        String etterlevelseDokumentasjonKortTittel = "E%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+
+        if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+            etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+        }
 
         varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
-                .title("Etterlevelsesdokument for %s er godkjent av risikoeier".formatted(etterlevelseDokumentasjonTittel))
+                .title("Etterlevelsesdokument for %s, er godkjent av risikoeier".formatted(etterlevelseDokumentasjonNummer))
                 .paragraph(
-                        new Varsel.Paragraph("Etterlevelsesdokument for %s er godkjent av risikoeier. Dokumentasjonen er nå låst fram til at dere velger å oppdatere den.",
-                                url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonTittel)))
+                        new Varsel.Paragraph("Etterlevelsesdokument for %s, er godkjent av risikoeier. Dokumentasjonen er nå låst fram til at dere velger å oppdatere den.",
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonKortTittel)))
                 .build(), etterlevelseDokumentasjon.getId().toString());
     }
 
@@ -459,7 +468,7 @@ public class EtterlevelseDokumentasjonService {
         return Behandling.builder()
                 .id(behandlingId)
                 .navn(navn)
-                .behandlingensgrunnlag(new ArrayList<>())
+                .behandlingsgrunnlag(new ArrayList<>())
                 .linjer(new ArrayList<>())
                 .systemer(new ArrayList<>())
                 .teams(new ArrayList<>())
