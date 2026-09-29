@@ -1,22 +1,5 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 
-import static no.nav.data.common.utils.StreamUtils.convert;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
@@ -39,6 +22,10 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokume
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonWithRelationRequest;
 import no.nav.data.etterlevelse.etterlevelsemetadata.EtterlevelseMetadataService;
+import no.nav.data.etterlevelse.varsel.UrlGenerator;
+import no.nav.data.etterlevelse.varsel.VarselService;
+import no.nav.data.etterlevelse.varsel.domain.Varsel;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.behandling.BehandlingService;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.dpBehandling.DpBehandlingService;
@@ -58,6 +45,23 @@ import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static no.nav.data.common.utils.StreamUtils.convert;
+import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Slf4j
 @Service
@@ -80,6 +84,8 @@ public class EtterlevelseDokumentasjonService {
     private final BehandlingensArtOgOmfangService behandlingensArtOgOmfangService;
     private final PvkDokumentService pvkDokumentService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
+    private final VarselService varselService;
+    private final UrlGenerator urlGenerator;
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
@@ -144,6 +150,7 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? etterlevelseDokumentasjonRepo.getReferenceById(request.getId()) : new EtterlevelseDokumentasjon();
+
         request.mergeInto(etterlevelseDokumentasjon);
 
         if (!request.isUpdate()) {
@@ -158,6 +165,35 @@ public class EtterlevelseDokumentasjonService {
         }
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+    }
+
+    public void varsleRisikoEier(EtterlevelseDokumentasjonRequest etterlevelseDokumentasjon) {
+        List<Resource> risikoeiere = getResourcesData(etterlevelseDokumentasjon.getRisikoeiere());
+        List<Varslingsadresse> varslingsadresser = new ArrayList<>();
+
+        risikoeiere.forEach(risikoeier -> {
+            varslingsadresser.add(Varslingsadresse.builder().adresse(risikoeier.getEmail()).type(no.nav.data.etterlevelse.varsel.domain.AdresseType.EPOST).build());
+        });
+
+        String etterlevelseDokumentasjonTittel = "E%s.%s %s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon(), etterlevelseDokumentasjon.getTitle());
+
+        varselService.varsle(varslingsadresser, Varsel.builder()
+                        .title("Etterlevelsesdokument for %s er klar til godkjenning av risikoeier".formatted(etterlevelseDokumentasjonTittel))
+                        .paragraph(
+                                new Varsel.Paragraph("Etterlevelsesdokument for %s er klar til godkjenning. Følg lenken og velg  “Godkjenn etterlevelsen” fra menyen på dokumentets temaside.",
+                                        url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonTittel)))
+                .build(), etterlevelseDokumentasjon.getId().toString());
+    }
+
+    private void varsleEtterleverOmGodkjentDokument(EtterlevelseDokumentasjonRequest etterlevelseDokumentasjon) {
+        String etterlevelseDokumentasjonTittel = "E%s.%s %s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon(), etterlevelseDokumentasjon.getTitle());
+
+        varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
+                .title("Etterlevelsesdokument for %s er godkjent av risikoeier".formatted(etterlevelseDokumentasjonTittel))
+                .paragraph(
+                        new Varsel.Paragraph("Etterlevelsesdokument for %s er godkjent av risikoeier. Dokumentasjonen er nå låst fram til at dere velger å oppdatere den.",
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonTittel)))
+                .build(), etterlevelseDokumentasjon.getId().toString());
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -202,6 +238,7 @@ public class EtterlevelseDokumentasjonService {
             historikk.setKravTilstandHistorikk(request.getKravTilstandHistorikk());
         }
 
+        varsleEtterleverOmGodkjentDokument(request.getEtterlevelseDokumentasjonRequest());
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
 

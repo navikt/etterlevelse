@@ -156,6 +156,10 @@ public class EtterlevelseDokumentasjonController {
             throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
+        if (edok.getEtterlevelseDokumentasjonData().getStatus() == EtterlevelseDokumentasjonStatus.UNDER_ARBEID && request.getStatus() == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) {
+            etterlevelseDokumentasjonService.varsleRisikoEier(request);
+        }
+
 
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
