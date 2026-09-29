@@ -20,7 +20,9 @@ import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -44,7 +46,10 @@ public class PvkDokumentService {
     private final TiltakService tiltakService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final AuditVersionService auditVersionService;
-    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+
+    @Lazy
+    @Autowired
+    private EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final VarselService varselService;
     private final UrlGenerator urlGenerator;
 
@@ -71,19 +76,24 @@ public class PvkDokumentService {
             if (existingPvkDokument.isPresent()) {
                 log.warn("Found existing pvk document when trying to create for etterlevelse dokumentation id: {}", pvkDokument.getEtterlevelseDokumentId());
                 pvkDokument.setId(existingPvkDokument.get().getId());
+
+                if (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)) {
+                    sendVarselToPvo(pvkDokument);
+                }
+                //viktig at vi sjekker at eksisterende pvk dokument har status sendt til pvo eller sendt til pvo for revurdering,
+                // ellers vil vi sende varsel til etterlever når vi oppretter ny versjon av etterlevelsesdokumentasjon
+                else if (
+                        (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING))  &&
+                        (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID))) {
+                    sendPvoVarselToEtterlever(pvkDokument);
+                } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.TRENGER_GODKJENNING)) {
+                    sendVarselToRisikoeier(pvkDokument);
+                } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+                    sendVarselToEtterlever(pvkDokument);
+                }
             } else {
                 pvkDokument.setId(UUID.randomUUID());
             }
-        }
-
-        if (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)) {
-            sendVarselToPvo(pvkDokument);
-        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)) {
-            sendPvoVarselToEtterlever(pvkDokument);
-        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.TRENGER_GODKJENNING)) {
-            sendVarselToRisikoeier(pvkDokument);
-        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
-            sendVarselToEtterlever(pvkDokument);
         }
 
         return pvkDokumentRepo.save(pvkDokument);
