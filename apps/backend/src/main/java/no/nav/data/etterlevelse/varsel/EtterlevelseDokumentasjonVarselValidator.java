@@ -1,27 +1,26 @@
 package no.nav.data.etterlevelse.varsel;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.varsel.QueuedVarselValidator;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class EtterlevelseDokumentasjonVarselValidator implements QueuedVarselValidator {
 
-    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
 
     @Override
     public boolean shouldStillSend(String etterlevelseDokumentasjonId, String recipient) {
-        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(UUID.fromString(etterlevelseDokumentasjonId));
+        EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(UUID.fromString(etterlevelseDokumentasjonId)).orElse(null);
         if (etterlevelseDokumentasjon == null) {
             log.info("Dropping queued varsel: etterlevelse dokumentasjon id={} no longer exists", etterlevelseDokumentasjonId);
             return false;
