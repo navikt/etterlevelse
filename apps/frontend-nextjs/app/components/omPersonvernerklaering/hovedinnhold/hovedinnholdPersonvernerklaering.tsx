@@ -1,55 +1,8 @@
 import { BodyLong, Heading, Link, List, Radio, RadioGroup } from '@navikt/ds-react'
-
-enum EOverskrifterPersonvernerklaering {
-  STEPPER_HEADING = 'Personvernerklæring for Støtte til etterlevelse',
-  BEHANDLING_PERSONOPPLYSNINGER_HVORDAN = 'Hvordan behandler vi ansattes personopplysninger?',
-  BEHANDLING_PERSONOPPLYSNINGER_HVILKE = 'Hvilke personopplysninger behandler vi?',
-  BEHANDLING_PERSONOPPLYSNINGER_HVOR_HENTES = 'Hvor henter vi dine personopplysninger?',
-  BEHANDLING_PERSONOPPLYSNINGER_HVOR_LAGRES = 'Hvor behandler og lagrer vi personopplysningene?',
-  INNBLIKK_ETTERLEVELSE = 'Innblikk i Støtte til etterlevelse',
-  SAMTYKKE_MAALING = 'Samtykke om måling',
-  SAMTYKKE_BRUKER = 'Samtykke til Innblikk',
-  MANGLER = 'Feil, mangler og tilbakemeldinger',
-}
-
-enum EPersonvernerklaeringId {
-  STEP_ONE = 'stepper-heading',
-  STEP_TWO = 'behandling-personopplysninger-hvordan',
-  STEP_THREE = 'behandling-personopplysninger-hvilke',
-  STEP_FOUR = 'behandling-personopplysninger-hvor-hentes',
-  STEP_FIVE = 'behandling-personopplysninger-hvor-lagres',
-  STEP_SIX = 'innblikk-etterlevelse',
-  STEP_SEVEN = 'samtykke-maaling',
-  STEP_EIGHT = 'samtykke-bruker',
-  STEP_NINE = 'mangler',
-}
-
-export const stepperPersonvernerklaering = [
-  {
-    id: EPersonvernerklaeringId.STEP_ONE,
-    step: EOverskrifterPersonvernerklaering.STEPPER_HEADING,
-  },
-  {
-    id: EPersonvernerklaeringId.STEP_TWO,
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVORDAN,
-  },
-  {
-    id: 'behandling-personopplysninger-hvilke',
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVILKE,
-  },
-  {
-    id: 'behandling-personopplysninger-hvor-hentes',
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_HENTES,
-  },
-  {
-    id: 'behandling-personopplysninger-hvor-lagres',
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_LAGRES,
-  },
-  { id: 'innblikk-etterlevelse', step: EOverskrifterPersonvernerklaering.INNBLIKK_ETTERLEVELSE },
-  { id: 'samtykke-maaling', step: EOverskrifterPersonvernerklaering.SAMTYKKE_MAALING },
-  { id: 'samtykke-bruker', step: EOverskrifterPersonvernerklaering.SAMTYKKE_BRUKER },
-  { id: 'mangler', step: EOverskrifterPersonvernerklaering.MANGLER },
-]
+import {
+  EOverskrifterPersonvernerklaering,
+  EPersonvernerklaeringId,
+} from '@/constants/omPersonvernerklaering/omPersonvernerklaeringConstants'
 
 const HovedinnholdPersonerklaering = () => (
   <div>
@@ -64,9 +17,9 @@ const HovedinnholdPersonerklaering = () => (
       </BodyLong>
     </div>
 
-    <div id={stepperId[1].id}>
+    <div id={EPersonvernerklaeringId.STEP_TWO}>
       <Heading size='medium' level='2' spacing>
-        {stepperId[1].step}
+        {EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVORDAN}
       </Heading>
       <BodyLong spacing>
         Nav er pålagt å dokumentere etterlevelse av generelt regelverk. Ansatte i Nav skal
@@ -82,9 +35,9 @@ const HovedinnholdPersonerklaering = () => (
       </BodyLong>
     </div>
 
-    <div id={stepperId[2].id}>
+    <div id={EPersonvernerklaeringId.STEP_THREE}>
       <Heading size='medium' level='2' spacing>
-        {stepperId[2].step}
+        {EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVILKE}
       </Heading>
       <BodyLong className='mb-3'>
         Opplysninger som behandles er navn, Nav-ident og e-postadresse til deg som:
@@ -112,18 +65,18 @@ const HovedinnholdPersonerklaering = () => (
       </List>
     </div>
 
-    <div id={stepperId[3].id}>
+    <div id={EPersonvernerklaeringId.STEP_FOUR}>
       <Heading size='medium' level='2' spacing>
-        {stepperId[3].step}
+        {EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_HENTES}
       </Heading>
       <BodyLong className='mb-6'>
         Vi henter opplysninger om deg som ansatt fra Navs organisasjonsmaster (NOM).
       </BodyLong>
     </div>
 
-    <div id={stepperId[4].id}>
+    <div id={EPersonvernerklaeringId.STEP_FIVE}>
       <Heading size='medium' level='2' spacing>
-        {stepperId[4].step}
+        {EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_LAGRES}
       </Heading>
       <BodyLong spacing>
         Vi behandler og lagrer personopplysninger om deg i Støtte til etterlevelse, Google Cloud
@@ -143,9 +96,9 @@ const HovedinnholdPersonerklaering = () => (
       </BodyLong>
     </div>
 
-    <div id={stepperId[5].id}>
+    <div id={EPersonvernerklaeringId.STEP_SIX}>
       <Heading size='medium' level='2' spacing>
-        {stepperId[5].step}
+        {EOverskrifterPersonvernerklaering.INNBLIKK_ETTERLEVELSE}
       </Heading>
       <BodyLong spacing>
         Vi bruker statistikk- og analyseverktøyet Innblikk i for å forstå hvordan du bruker Støtte
@@ -178,9 +131,9 @@ const HovedinnholdPersonerklaering = () => (
       </BodyLong>
     </div>
 
-    <div id={stepperId[6].id}>
+    <div id={EPersonvernerklaeringId.STEP_SEVEN}>
       <Heading size='medium' level='2' spacing>
-        {stepperId[6].step}
+        {EOverskrifterPersonvernerklaering.SAMTYKKE_MAALING}
       </Heading>
       <BodyLong spacing>
         Vi bruker statistikk- og analyseverktøyet Innblikk i for å forstå hvordan du bruker Støtte
@@ -213,7 +166,7 @@ const HovedinnholdPersonerklaering = () => (
       </BodyLong>
     </div>
 
-    <div id={stepperId[7].id}>
+    <div id={EPersonvernerklaeringId.STEP_EIGHT}>
       <Heading size='medium' level='2' spacing>
         {EOverskrifterPersonvernerklaering.SAMTYKKE_BRUKER}
       </Heading>
@@ -230,7 +183,7 @@ const HovedinnholdPersonerklaering = () => (
       </RadioGroup>
     </div>
 
-    <div id={stepperId[8].id}>
+    <div id={EPersonvernerklaeringId.STEP_NINE}>
       <Heading size='medium' level='2' spacing>
         {EOverskrifterPersonvernerklaering.MANGLER}
       </Heading>

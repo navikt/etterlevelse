@@ -23,7 +23,9 @@ const OmPersonvernerklaeringPage = () => {
       {/* <OmNavigering
         router={router}
         forrigeLenke={omPVKUrl}
+        forrigeLenkeTekst={}
         nesteLenke={oversiktOverLosningeneUrl}
+        nesteLenkeTekst={}
       /> */}
     </PageLayout>
   )

@@ -3,47 +3,24 @@ import { Button, FormProgress, Stepper } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { FunctionComponent } from 'react'
 import {
-  EOverskrifterPersonvernerklaering,
-  EPersonvernerklaeringId,
-} from '@/components/omPersonvernerklaering/hovedinnhold/hovedinnholdPersonvernerklaering'
+  TStepperPersonvernerklaering,
+  stepperPersonvernerklaering,
+} from '@/constants/omPersonvernerklaering/omPersonvernerklaeringConstants'
 
 type TOmNavigeringProps = {
   router: AppRouterInstance
   forrigeLenke: string
+  forrigeLenkeTekst: string
   nesteLenke: string
+  nesteLenkeTekst: string
 }
-
-const stepperPersonvernerklaering = [
-  {
-    id: EPersonvernerklaeringId.STEP_ONE,
-    step: EOverskrifterPersonvernerklaering.STEPPER_HEADING,
-  },
-  {
-    id: EPersonvernerklaeringId.STEP_TWO,
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVORDAN,
-  },
-  {
-    id: 'behandling-personopplysninger-hvilke',
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVILKE,
-  },
-  {
-    id: 'behandling-personopplysninger-hvor-hentes',
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_HENTES,
-  },
-  {
-    id: 'behandling-personopplysninger-hvor-lagres',
-    step: EOverskrifterPersonvernerklaering.BEHANDLING_PERSONOPPLYSNINGER_HVOR_LAGRES,
-  },
-  { id: 'innblikk-etterlevelse', step: EOverskrifterPersonvernerklaering.INNBLIKK_ETTERLEVELSE },
-  { id: 'samtykke-maaling', step: EOverskrifterPersonvernerklaering.SAMTYKKE_MAALING },
-  { id: 'samtykke-bruker', step: EOverskrifterPersonvernerklaering.SAMTYKKE_BRUKER },
-  { id: 'mangler', step: EOverskrifterPersonvernerklaering.MANGLER },
-]
 
 export const OmNavigering: FunctionComponent<TOmNavigeringProps> = ({
   router,
   forrigeLenke,
+  forrigeLenkeTekst,
   nesteLenke,
+  nesteLenkeTekst,
 }) => (
   <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
     <div className='w-full max-w-7xl py-4 px-4 border-t-2 z-2'>
@@ -57,7 +34,7 @@ export const OmNavigering: FunctionComponent<TOmNavigeringProps> = ({
             router.push(forrigeLenke)
           }}
         >
-          Fortsett til Om Digital PVK
+          Fortsett til {forrigeLenkeTekst}
         </Button>
 
         <Button
@@ -68,7 +45,7 @@ export const OmNavigering: FunctionComponent<TOmNavigeringProps> = ({
             router.push(nesteLenke)
           }}
         >
-          Tilbake til Oversikt over løsningene
+          Tilbake til {nesteLenkeTekst}
         </Button>
       </div>
     </div>
@@ -83,6 +60,9 @@ export const OmStepper = () => (
         activeStep={activeStep}
         onStepChange={setActiveStep}
       >
+        {stepperPersonvernerklaering.map((stepper: TStepperPersonvernerklaering) => (
+          <Stepper.Step href={`#${stepper.id}`}>{stepper.step}</Stepper.Step>
+        ))}
         <Stepper.Step href='#stepper-heading'>
           Personvernerklæring for Støtte til etterlevelse
         </Stepper.Step>
