@@ -6,6 +6,13 @@ import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.utils.UtcDateTimeUtil;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.varsel.UrlGenerator;
+import no.nav.data.etterlevelse.varsel.VarselService;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.etterlevelse.varsel.domain.Varsel;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
@@ -13,15 +20,19 @@ import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
 
 @Service
 @Slf4j
@@ -33,6 +44,12 @@ public class PvkDokumentService {
     private final TiltakService tiltakService;
     private final PvoTilbakemeldingService pvoTilbakemeldingService;
     private final AuditVersionService auditVersionService;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
+    private final VarselService varselService;
+    private final UrlGenerator urlGenerator;
+
+    @Value("${client.pvo.address}")
+    private String pvoEmail;
 
     public PvkDokument get(UUID uuid) {
         return pvkDokumentRepo.findById(uuid).orElse(null);
@@ -48,14 +65,25 @@ public class PvkDokumentService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public PvkDokument save(PvkDokument pvkDokument, boolean isUpdate) {
+        var existingPvkDokument = getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
+
         if (!isUpdate) {
-            var existingPvkDokument = getByEtterlevelseDokumentasjon(pvkDokument.getEtterlevelseDokumentId());
             if (existingPvkDokument.isPresent()) {
                 log.warn("Found existing pvk document when trying to create for etterlevelse dokumentation id: {}", pvkDokument.getEtterlevelseDokumentId());
                 pvkDokument.setId(existingPvkDokument.get().getId());
             } else {
                 pvkDokument.setId(UUID.randomUUID());
             }
+        }
+
+        if (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)) {
+            sendVarselToPvo(pvkDokument);
+        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)) {
+            sendPvoVarselToEtterlever(pvkDokument);
+        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.TRENGER_GODKJENNING)) {
+            sendVarselToRisikoeier(pvkDokument);
+        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+            sendVarselToEtterlever(pvkDokument);
         }
 
         return pvkDokumentRepo.save(pvkDokument);
@@ -92,6 +120,85 @@ public class PvkDokumentService {
         pvoTilbakemeldingService.deleteByPvkDokumentId(id);
 
         return delete(id);
+    }
+
+    private void sendVarselToPvo(PvkDokument pvkDokument) {
+        var etterlevelseDokumentasjon =  etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+        List<Varslingsadresse> pvoVarslingsadresser = List.of(Varslingsadresse.builder()
+                .adresse(pvoEmail)
+                .type(AdresseType.EPOST)
+                .build());
+
+        String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+        String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+        if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+            etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+        }
+
+        varselService.varsle(pvoVarslingsadresser, Varsel.builder()
+                .title("Innsending av Digital PVK til PVO for %s".formatted(etterlevelseDokumentasjonNummer))
+                .paragraph(
+                        new Varsel.Paragraph("Digital PVK for %s, er sendt til PVO for vurdering.",
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonKortTittel)))
+                .build(), etterlevelseDokumentasjon.getId().toString());
+    }
+
+    private void sendPvoVarselToEtterlever(PvkDokument pvkDokument) {
+        var etterlevelseDokumentasjon =  etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+
+        String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+        String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+        if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+            etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+        }
+
+        varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
+                .title("Digital PVK for %s, er vurdert av PVO".formatted(etterlevelseDokumentasjonNummer))
+                .paragraph(
+                        new Varsel.Paragraph("Digital PVK for %s, er vurdert av PVO.",
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonKortTittel)))
+                .build(), etterlevelseDokumentasjon.getId().toString());
+    }
+
+    private void sendVarselToRisikoeier(PvkDokument pvkDokument) {
+        var etterlevelseDokumentasjon =  etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+
+        List<Resource> risikoeiere = etterlevelseDokumentasjonService.getResourcesData(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere());
+        List<Varslingsadresse > varslingsadresser = new ArrayList<>();
+
+        risikoeiere.forEach(risikoeier -> {
+            varslingsadresser.add(Varslingsadresse.builder().adresse(risikoeier.getEmail()).type(AdresseType.EPOST).build());
+        });
+
+        String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+        String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+        if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+            etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+        }
+
+        varselService.varsle(varslingsadresser, Varsel.builder()
+                .title("Digital PVK for %s, er klar til godkjenning av risikoeier".formatted(etterlevelseDokumentasjonNummer))
+                .paragraph(
+                        new Varsel.Paragraph("Digital PVK for %s, er klar til godkjenning. Følg lenken og velg  “Godkjenn PVK” fra menyen på dokumentets temaside.",
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonKortTittel)))
+                .build(), etterlevelseDokumentasjon.getId().toString());
+    }
+
+    private void sendVarselToEtterlever(PvkDokument pvkDokument) {
+        var etterlevelseDokumentasjon =  etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+
+        String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+        String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+        if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+            etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+        }
+
+        varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
+                .title("Digital PVK for %s, er godkjent av risikoeier".formatted(etterlevelseDokumentasjonNummer))
+                .paragraph(
+                        new Varsel.Paragraph("Digital PVK for %s, er godkjent av risikoeier. Dokumentasjonen er nå låst fram til at dere velger å oppdatere den.",
+                                url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()),etterlevelseDokumentasjonKortTittel)))
+                .build(), etterlevelseDokumentasjon.getId().toString());
     }
 
 

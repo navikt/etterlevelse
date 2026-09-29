@@ -437,7 +437,7 @@ public class EtterlevelseDokumentasjonService {
         etterlevelseDokumentasjonResponse.setDpBehandlinger(getDpBehandlingData(etterlevelseDokumentasjonResponse.getDpBehandlingIds()));
         etterlevelseDokumentasjonResponse.setTeamsData(getTeamsData(etterlevelseDokumentasjonResponse.getTeams()));
         etterlevelseDokumentasjonResponse.setResourcesData(getResourcesData(etterlevelseDokumentasjonResponse.getResources()));
-        etterlevelseDokumentasjonResponse.setRisikoeiereData(getRisikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiere()));
+        etterlevelseDokumentasjonResponse.setRisikoeiereData(getResourcesData(etterlevelseDokumentasjonResponse.getRisikoeiere()));
     }
 
     public List<Behandling> getBehandlingData(List<String> behandlinger) {
@@ -556,7 +556,7 @@ public class EtterlevelseDokumentasjonService {
         return teamsData;
     }
 
-    private List<Resource> getResourcesData(List<String> resourceIds) {
+    public List<Resource> getResourcesData(List<String> resourceIds) {
         if (resourceIds == null || resourceIds.isEmpty()) {
             return null;
         }
@@ -578,30 +578,6 @@ public class EtterlevelseDokumentasjonService {
             }
         });
         return resourcessData;
-    }
-
-    private List<Resource> getRisikoeiereData(List<String> risikoeiere) {
-        if (risikoeiere == null || risikoeiere.isEmpty()) {
-            return null;
-        }
-
-        List<Resource> risikoeiereData = new ArrayList<>();
-        risikoeiere.forEach((ident) -> {
-            var risikoeiereMetaData = teamcatResourceClient.getResource(ident);
-            if (risikoeiereMetaData.isPresent()) {
-                risikoeiereData.add(risikoeiereMetaData.get());
-            } else {
-                var emptyResourceData = new Resource();
-                emptyResourceData.setNavIdent(ident);
-                emptyResourceData.setGivenName("Fant ikke person med NAV ident: " + ident);
-                emptyResourceData.setFamilyName("Fant ikke person med NAV ident: " + ident);
-                emptyResourceData.setFullName("Fant ikke person med NAV ident: " + ident);
-                emptyResourceData.setEmail("Fant ikke person med NAV ident: " + ident);
-                emptyResourceData.setResourceType(ResourceType.INTERNAL);
-                risikoeiereData.add(emptyResourceData);
-            }
-        });
-        return risikoeiereData;
     }
 
 }
