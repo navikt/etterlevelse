@@ -13,6 +13,8 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.KravTilstandHis
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonGodkjenningsRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonRequest;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentData;
@@ -134,6 +136,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                                         .status(EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER)
                                         .etterlevelseDokumentVersjon(1)
                                         .risikoeiere(List.of("A123456"))
+                                        .varslingsadresser(List.of(Varslingsadresse.builder().adresse("test@test.com").type(AdresseType.EPOST).build()))
                                         .build()
                         )
                         .build()
@@ -146,6 +149,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 .etterlevelseNummer(101)
                 .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
                 .meldingRisikoeierTilEtterleveler("test")
+                .varslingsadresser(List.of(Varslingsadresse.builder().adresse("test@test.com").type(AdresseType.EPOST).build()))
                 .build();
 
         EtterlevelseDokumentasjonGodkjenningsRequest request = EtterlevelseDokumentasjonGodkjenningsRequest.builder()
