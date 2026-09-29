@@ -176,7 +176,7 @@ public class EtterlevelseDokumentasjonService {
         });
 
         String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
-        String etterlevelseDokumentasjonKortTittel = "E%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+        String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
         if (etterlevelseDokumentasjonKortTittel.length() > 50) {
             etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
         }
@@ -191,7 +191,7 @@ public class EtterlevelseDokumentasjonService {
 
     private void varsleEtterleverOmGodkjentDokument(EtterlevelseDokumentasjonRequest etterlevelseDokumentasjon) {
         String etterlevelseDokumentasjonNummer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
-        String etterlevelseDokumentasjonKortTittel = "E%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
+        String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseDokumentasjonNummer, etterlevelseDokumentasjon.getTitle());
 
         if (etterlevelseDokumentasjonKortTittel.length() > 50) {
             etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
