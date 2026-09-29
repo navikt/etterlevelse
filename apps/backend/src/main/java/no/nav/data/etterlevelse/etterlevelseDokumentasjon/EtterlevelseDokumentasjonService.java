@@ -468,7 +468,7 @@ public class EtterlevelseDokumentasjonService {
         return Behandling.builder()
                 .id(behandlingId)
                 .navn(navn)
-                .behandlingsgrunnlag(new ArrayList<>())
+                .behandlingensgrunnlag(new ArrayList<>())
                 .linjer(new ArrayList<>())
                 .systemer(new ArrayList<>())
                 .teams(new ArrayList<>())
