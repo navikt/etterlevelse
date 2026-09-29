@@ -2,6 +2,7 @@ package no.nav.data.etterlevelse.varsel;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.varsel.QueuedVarselValidator;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class EtterlevelseDokumentasjonVarselValidator implements QueuedVarselValidator {
 
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
+    private final SecurityProperties securityProperties;
 
     @Override
     public boolean shouldStillSend(String etterlevelseDokumentasjonId, String recipient) {
@@ -25,12 +27,17 @@ public class EtterlevelseDokumentasjonVarselValidator implements QueuedVarselVal
             log.info("Dropping queued varsel: etterlevelse dokumentasjon id={} no longer exists", etterlevelseDokumentasjonId);
             return false;
         }
-        List<Varslingsadresse> varslingsadresser = etterlevelseDokumentasjon.getVarslingsadresser();
-        boolean stillValid = varslingsadresser != null && varslingsadresser.stream()
-                .anyMatch(varslingsadresse -> recipient != null && recipient.equals(varslingsadresse.getAdresse()));
-        if (!stillValid) {
-            log.info("Dropping queued varsel: recipient={} no longer a varslingsadresse on etterlevelse dokumentasjon id={}", recipient, etterlevelseDokumentasjonId);
+
+        if (!securityProperties.isDev()) {
+            List<Varslingsadresse> varslingsadresser = etterlevelseDokumentasjon.getVarslingsadresser();
+            boolean stillValid = varslingsadresser != null && varslingsadresser.stream()
+                    .anyMatch(varslingsadresse -> recipient != null && recipient.equals(varslingsadresse.getAdresse()));
+            if (!stillValid) {
+                log.info("Dropping queued varsel: recipient={} no longer a varslingsadresse on etterlevelse dokumentasjon id={}", recipient, etterlevelseDokumentasjonId);
+            }
+            return stillValid;
+        } else {
+            return true;
         }
-        return stillValid;
     }
 }
