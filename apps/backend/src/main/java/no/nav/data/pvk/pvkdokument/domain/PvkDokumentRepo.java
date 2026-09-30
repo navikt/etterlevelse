@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,4 +20,7 @@ public interface PvkDokumentRepo extends JpaRepository<PvkDokument, UUID> {
 
     @Query(value = "select * from pvk_dokument where etterlevelse_dokumentasjon_id = ?1", nativeQuery = true)
     Optional<PvkDokument> findByEtterlevelseDokumensjon(UUID etterlevelseDokumentasjonId);
+
+    @Query(value = "select * from pvk_dokument where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months')", nativeQuery = true)
+    List<PvkDokument> findPvkDokumentMedLastModifiedEldreEnn6mnd();
 }

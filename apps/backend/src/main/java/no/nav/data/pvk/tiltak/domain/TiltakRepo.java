@@ -57,6 +57,12 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
 
     @Query(value = "select * from tiltak where (data->>'frist')::date + interval '1 days' = ?1  and data ->> 'iverksatt' = 'false'", nativeQuery = true)
     List<Tiltak> findTiltakMedFristPassert1Dag(LocalDate timestamp);
+
+    @Query(value = "select * from (" +
+            "select distinct on (PVK_DOKUMENT_ID) * from tiltak " +
+            "order by PVK_DOKUMENT_ID, last_modified_date desc" +
+            ") latest where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months')", nativeQuery = true)
+    List<Tiltak> findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
 }
 
 

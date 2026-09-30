@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,4 +36,12 @@ public interface EtterlevelseRepo extends JpaRepository<Etterlevelse, UUID> {
     @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1 and krav_nummer = ?2 and krav_versjon = ?3", nativeQuery = true)
     Optional<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(UUID etterlevelseDokumentasjonId, int nummer, int versjon);
 
+    @Query(value = "select * from etterlevelse where sist_oppdatert < ?1", nativeQuery = true)
+    List<Etterlevelse> findEtterlevelseMedSistOppdatertEldreEnn6mnd(LocalDateTime timestamp);
+
+    @Query(value = "select * from (" +
+            "select distinct on (etterlevelse_dokumentasjon_id) * from etterlevelse " +
+            "order by etterlevelse_dokumentasjon_id, last_modified_date desc" +
+            ") latest where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months')", nativeQuery = true)
+    List<Etterlevelse> findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
 }
