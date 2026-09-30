@@ -299,11 +299,13 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                         .etterlevelseDokumentasjonData(
                                 EtterlevelseDokumentasjonData.builder()
                                         .title("test")
+                                        .etterlevelseNummer(101)
                                         .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
                                         .etterlevelseDokumentVersjon(1)
                                         .teams(List.of())
                                         .resources(List.of("A123456"))
                                         .risikoeiere(List.of("A123456"))
+                                        .varslingsadresser(List.of(Varslingsadresse.builder().adresse("test@test.com").type(AdresseType.EPOST).build()))
                                         .versjonHistorikk(List.of(EtterlevelseVersjonHistorikk.builder().versjon(1).build()))
                                         .build()
                         )

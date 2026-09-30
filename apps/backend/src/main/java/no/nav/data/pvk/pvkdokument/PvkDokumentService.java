@@ -88,6 +88,7 @@ public class PvkDokumentService {
         // ellers vil vi sende varsel hver gang vi oppdaterer pvk dokumentet etter vurdering fra pvo
         // eller når vi oppretter ny versjon av etterlevelsesdokumentasjon
         else if (
+                existingPvkDokument.isPresent() &&
                 (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING))  &&
                         (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID))) {
             sendPvoVarselToEtterlever(pvkDokument);
