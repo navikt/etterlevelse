@@ -76,24 +76,25 @@ public class PvkDokumentService {
             if (existingPvkDokument.isPresent()) {
                 log.warn("Found existing pvk document when trying to create for etterlevelse dokumentation id: {}", pvkDokument.getEtterlevelseDokumentId());
                 pvkDokument.setId(existingPvkDokument.get().getId());
-
-                if (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)) {
-                    sendVarselToPvo(pvkDokument);
-                }
-                //viktig at vi sjekker at eksisterende pvk dokument har status sendt til pvo eller sendt til pvo for revurdering,
-                // ellers vil vi sende varsel til etterlever når vi oppretter ny versjon av etterlevelsesdokumentasjon
-                else if (
-                        (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING))  &&
-                        (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID))) {
-                    sendPvoVarselToEtterlever(pvkDokument);
-                } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.TRENGER_GODKJENNING)) {
-                    sendVarselToRisikoeier(pvkDokument);
-                } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
-                    sendVarselToEtterlever(pvkDokument);
-                }
             } else {
                 pvkDokument.setId(UUID.randomUUID());
             }
+        }
+
+        if (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)) {
+            sendVarselToPvo(pvkDokument);
+        }
+        //viktig at vi sjekker at eksisterende pvk dokument har status sendt til pvo eller sendt til pvo for revurdering,
+        // ellers vil vi sende varsel hver gang vi oppdaterer pvk dokumentet etter vurdering fra pvo
+        // eller når vi oppretter ny versjon av etterlevelsesdokumentasjon
+        else if (
+                (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING))  &&
+                        (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID))) {
+            sendPvoVarselToEtterlever(pvkDokument);
+        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.TRENGER_GODKJENNING)) {
+            sendVarselToRisikoeier(pvkDokument);
+        } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+            sendVarselToEtterlever(pvkDokument);
         }
 
         return pvkDokumentRepo.save(pvkDokument);
