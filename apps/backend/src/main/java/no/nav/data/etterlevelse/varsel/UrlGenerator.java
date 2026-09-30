@@ -26,6 +26,10 @@ public class UrlGenerator {
         return "%s/dokumentasjon/%s".formatted(baseUrl, etterlevelseDokumentasjonId);
     }
 
+    public String pvkDokumentTiltakListUrl(String etterlevelseDokumentasjonId, String pvkDokumentId) {
+        return "%s/dokumentasjon/%s/pvkdokument/%s?steg=7&tab=tiltak".formatted(baseUrl, etterlevelseDokumentasjonId, pvkDokumentId);
+    }
+
     public String kravUrl(String kravnummer, String kravVersjon) {
         return "%s/krav/%s/%s".formatted(baseUrl, kravnummer, kravVersjon);
     }

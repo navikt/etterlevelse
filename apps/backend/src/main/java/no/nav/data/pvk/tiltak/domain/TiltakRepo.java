@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -50,4 +51,12 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
     @Query(value="delete from risikoscenario_tiltak_relation", nativeQuery = true)
     int deleteAllTiltakRisikoscenarioRelations();
 
+    @Query(value = "select * from tiltak where (data->>'frist')::date = ?1 + interval '3 days' and data ->> 'iverksatt' = 'false'", nativeQuery = true)
+    List<Tiltak> findTiltakMedFristOm3Dager(LocalDate timestamp);
+
+
+    @Query(value = "select * from tiltak where (data->>'frist')::date + interval '1 days' = ?1  and data ->> 'iverksatt' = 'false'", nativeQuery = true)
+    List<Tiltak> findTiltakMedFristPassert1Dag(LocalDate timestamp);
 }
+
+
