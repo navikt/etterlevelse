@@ -1,6 +1,7 @@
 'use client'
 
 import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
@@ -38,8 +39,8 @@ export const AddSlackUserModal = (props: IProps) => {
         setError('')
         close()
       })
-      .catch((e) => {
-        setError('Fant ikke slack for bruker, error: ' + e.toString())
+      .catch((e: AxiosError<{ message?: string }>) => {
+        setError(`Fant ikke slack for bruker, error: ${e.status}, ${e.response?.data.message}`)
         setLoadingSlackId(false)
       })
   }

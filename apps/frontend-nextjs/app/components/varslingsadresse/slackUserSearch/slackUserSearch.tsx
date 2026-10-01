@@ -1,6 +1,7 @@
 'use client'
 
 import { Alert, Button, Loader } from '@navikt/ds-react'
+import { AxiosError } from 'axios'
 import { FunctionComponent, useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
@@ -36,8 +37,10 @@ export const SlackUserSearch: FunctionComponent<TProps> = ({ add, close }) => {
           close()
         }
       })
-      .catch((error: any) => {
-        setError(`Fant ikke slack for bruker, error: ${error.toString()}`)
+      .catch((error: AxiosError<{ message?: string }>) => {
+        setError(
+          `Fant ikke slack for bruker, error: ${error.status}, ${error.response?.data.message}`
+        )
         setLoadingSlackId(false)
       })
   }
