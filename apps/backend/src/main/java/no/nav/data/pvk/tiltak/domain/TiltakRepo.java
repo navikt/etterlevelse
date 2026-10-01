@@ -51,11 +51,10 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
     @Query(value="delete from risikoscenario_tiltak_relation", nativeQuery = true)
     int deleteAllTiltakRisikoscenarioRelations();
 
-    @Query(value = "select * from tiltak where (data->>'frist')::date = ?1 + interval '3 days' and data ->> 'iverksatt' = 'false'", nativeQuery = true)
+    @Query(value = "select * from tiltak where (data ->> 'frist')::date = ?1 + interval '3 days' and data ->> 'iverksatt' = 'false'", nativeQuery = true)
     List<Tiltak> findTiltakMedFristOm3Dager(LocalDate timestamp);
 
-
-    @Query(value = "select * from tiltak where (data->>'frist')::date + interval '1 days' = ?1  and data ->> 'iverksatt' = 'false'", nativeQuery = true)
+    @Query(value = "select * from tiltak where (data ->> 'frist')::date + interval '1 days' = ?1  and data ->> 'iverksatt' = 'false'", nativeQuery = true)
     List<Tiltak> findTiltakMedFristPassert1Dag(LocalDate timestamp);
 
     @Query(value = "select * from (" +

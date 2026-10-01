@@ -151,6 +151,10 @@ public class EtterlevelseDokumentasjonService {
     public EtterlevelseDokumentasjon save(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = request.isUpdate() ? etterlevelseDokumentasjonRepo.getReferenceById(request.getId()) : new EtterlevelseDokumentasjon();
 
+        if (etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getStatus() == EtterlevelseDokumentasjonStatus.UNDER_ARBEID && request.getStatus() == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) {
+            varsleRisikoEier(request);
+        }
+
         request.mergeInto(etterlevelseDokumentasjon);
 
         if (!request.isUpdate()) {
@@ -246,9 +250,9 @@ public class EtterlevelseDokumentasjonService {
             historikk.setGodkjentAvRisikoierDato(LocalDateTime.now());
             historikk.setKravTilstandHistorikk(request.getKravTilstandHistorikk());
         }
-
+        var savedEtterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
         varsleEtterleverOmGodkjentDokument(request.getEtterlevelseDokumentasjonRequest());
-        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+        return savedEtterlevelseDokumentasjon;
     }
 
 

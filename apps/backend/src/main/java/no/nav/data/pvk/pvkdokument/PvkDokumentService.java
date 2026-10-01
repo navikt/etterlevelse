@@ -89,7 +89,9 @@ public class PvkDokumentService {
         // eller når vi oppretter ny versjon av etterlevelsesdokumentasjon
         else if (
                 existingPvkDokument.isPresent() &&
-                (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING))  &&
+                (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+                || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.PVO_UNDERARBEID)
+                )  &&
                         (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID))) {
             sendPvoVarselToEtterlever(pvkDokument);
         } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.TRENGER_GODKJENNING)) {
