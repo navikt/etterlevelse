@@ -39,9 +39,9 @@ public class TiltakVarslingService {
         return repo.findTiltakMedFristPassert1Dag(dateStamp);
     }
 
-    //runs daily at 08:25
+    //runs daily at 09:00
     @SchedulerLock(name = "sendVarselForTiltak")
-    @Scheduled(cron = "0 45 8 * * *")
+    @Scheduled(cron = "0 0 9 * * *")
     public void createVarselForTiltak() {
         LocalDate now = LocalDate.now();
 
@@ -49,8 +49,8 @@ public class TiltakVarslingService {
         List<Tiltak> tiltakMedFristPassert1Dag = getTiltakMedFristPassert1Dag(now);
 
         tiltakMedFristOm3Dager.forEach(tiltak -> {
-            PvkDokument pvkDokument = pkDokumentRepo.getReferenceById(tiltak.getPvkDokumentId());
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(pvkDokument.getEtterlevelseDokumentId());
+            PvkDokument pvkDokument = pkDokumentRepo.findById(tiltak.getPvkDokumentId()).orElseThrow();
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(pvkDokument.getEtterlevelseDokumentId()).orElseThrow();
 
             String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
             String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
@@ -66,8 +66,8 @@ public class TiltakVarslingService {
         });
 
         tiltakMedFristPassert1Dag.forEach(tiltak -> {
-            PvkDokument pvkDokument = pkDokumentRepo.getReferenceById(tiltak.getPvkDokumentId());
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(pvkDokument.getEtterlevelseDokumentId());
+            PvkDokument pvkDokument = pkDokumentRepo.findById(tiltak.getPvkDokumentId()).orElseThrow();
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(pvkDokument.getEtterlevelseDokumentId()).orElseThrow();
 
             String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
             String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
