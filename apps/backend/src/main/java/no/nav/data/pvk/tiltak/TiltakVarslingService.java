@@ -41,7 +41,7 @@ public class TiltakVarslingService {
 
     //runs daily at 09:00
     @SchedulerLock(name = "sendVarselForTiltak")
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 0 7 * * *")
     public void createVarselForTiltak() {
         LocalDate now = LocalDate.now();
 
