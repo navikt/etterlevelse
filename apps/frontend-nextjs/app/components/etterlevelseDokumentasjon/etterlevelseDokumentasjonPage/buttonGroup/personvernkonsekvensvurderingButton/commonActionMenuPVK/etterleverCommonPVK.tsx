@@ -2,7 +2,10 @@ import { ActionMenu } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
-import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  IEtterlevelseDokumentasjon,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
   ArtOgOmfangActionMenuItem,
@@ -97,40 +100,46 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
   pvkDokument,
   behandlingensArtOgOmfang,
   behandlingsLivslop,
-}) => (
-  <ActionMenu>
-    <PvkActionMenuTrigger />
-    <ActionMenu.Content>
-      <BehandlingensLivslopActionMenuItem
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        behandlingensLivslop={behandlingsLivslop}
-      >
-        Se Behandlingens livsløp
-      </BehandlingensLivslopActionMenuItem>
+}) => {
+  const erEtterlevelseLast: boolean =
+    etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
 
-      <ArtOgOmfangActionMenuItem
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        behandlingensArtOgOmfang={behandlingensArtOgOmfang}
-      >
-        Se behandlingens art og omfang
-      </ArtOgOmfangActionMenuItem>
+  return (
+    <ActionMenu>
+      <PvkActionMenuTrigger />
+      <ActionMenu.Content>
+        <BehandlingensLivslopActionMenuItem
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          behandlingensLivslop={behandlingsLivslop}
+        >
+          Se Behandlingens livsløp
+        </BehandlingensLivslopActionMenuItem>
 
-      <PvkDokumentActionMenuItem
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        pvkDokument={pvkDokument}
-      >
-        Les og oppdater PVK
-      </PvkDokumentActionMenuItem>
+        <ArtOgOmfangActionMenuItem
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          behandlingensArtOgOmfang={behandlingensArtOgOmfang}
+        >
+          Se behandlingens art og omfang
+        </ArtOgOmfangActionMenuItem>
 
-      <PvkBehovActionMenuItem
-        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-        pvkDokument={pvkDokument}
-      >
-        Les om behov for PVK
-      </PvkBehovActionMenuItem>
-    </ActionMenu.Content>
-  </ActionMenu>
-)
+        <PvkDokumentActionMenuItem
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+          readOnlyUrl={erEtterlevelseLast}
+        >
+          {erEtterlevelseLast ? 'Les PVK' : 'Les og oppdater PVK'}
+        </PvkDokumentActionMenuItem>
+
+        <PvkBehovActionMenuItem
+          etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+          pvkDokument={pvkDokument}
+        >
+          Les om behov for PVK
+        </PvkBehovActionMenuItem>
+      </ActionMenu.Content>
+    </ActionMenu>
+  )
+}
 
 export const PvkGodkjentReadOnlyActionMenuVariant: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
