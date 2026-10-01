@@ -39,8 +39,9 @@ public class TiltakVarslingService {
         return repo.findTiltakMedFristPassert1Dag(dateStamp);
     }
 
+    //runs daily at 07:00
     @SchedulerLock(name = "sendVarselForTiltak")
-    @Scheduled(cron = "0 0 8 * * *")
+    @Scheduled(cron = "0 0 7 * * *")
     public void createVarselForTiltak() {
         LocalDate now = LocalDate.now();
 

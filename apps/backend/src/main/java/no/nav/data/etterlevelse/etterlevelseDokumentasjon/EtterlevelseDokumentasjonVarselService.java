@@ -42,9 +42,9 @@ public class EtterlevelseDokumentasjonVarselService {
     private final TiltakRepo tiltakRepo;
     private final RisikoscenarioRepo risikoscenarioRepo;
 
-    // Run at 08:00 on the first day of every month
-    @SchedulerLock(name = "sendVarselForEtterlevelseDokumentasjonThatHasNotBeenUpatedfor6months")
-    @Scheduled(cron = "0 0 8 1 * *")
+    // Run at 07:00 on the first day of every month
+    @SchedulerLock(name = "sendVarselForEtterlevelseDokNotUpdated6months")
+    @Scheduled(cron = "0 0 7 1 * *")
     public void sendVarselForEtterlevelseDokumentasjonThatHasNotBeenUpatedfor6months() {
         YearMonth now = YearMonth.now();
 
