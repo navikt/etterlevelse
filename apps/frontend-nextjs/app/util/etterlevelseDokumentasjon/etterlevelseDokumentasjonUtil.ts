@@ -294,6 +294,70 @@ export const getKravForTema = ({
   return filterKrav(kravPriority, krav)
 }
 
+export type TKravNavigationEntry = {
+  kravNummer: number
+  kravVersjon: number
+  temaCode: string
+}
+
+const sortUtgaattKravToBottom = (a: TFilterKravProps, b: TFilterKravProps): number => {
+  if (a.status === EKravStatus.UTGAATT && b.status !== EKravStatus.UTGAATT) return 1
+  if (b.status === EKravStatus.UTGAATT && a.status !== EKravStatus.UTGAATT) return -1
+  return 0
+}
+
+export const getOrderedKravForDokumentasjon = ({
+  temaListe,
+  relevanteStats,
+  utgaattStats,
+  etterlevelseDokumentasjon,
+  allKravPriority,
+  codelist,
+}: {
+  temaListe: TTemaCode[]
+  relevanteStats: TKravQL[]
+  utgaattStats: TKravQL[]
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
+  allKravPriority: IKravPriorityList[]
+  codelist: {
+    utils: ICodelistProps
+    lists: IAllCodelists
+  }
+}): TKravNavigationEntry[] => {
+  const relevantKravnummer: number[] = relevanteStats.map((krav: TKravQL) => krav.kravNummer)
+
+  const filteredUtgaattKrav: TKravQL[] = utgaattStats
+    .filter(({ kravNummer }) => !relevantKravnummer.includes(kravNummer))
+    .filter((krav: TKravQL) => {
+      if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1) {
+        const currentVersjon = etterlevelseDokumentasjon.versjonHistorikk.filter(
+          (historikk) =>
+            historikk.versjon === etterlevelseDokumentasjon.etterlevelseDokumentVersjon - 1
+        )[0]
+        return (
+          !!currentVersjon &&
+          moment(krav.changeStamp.lastModifiedDate).isAfter(currentVersjon.nyVersjonOpprettetDato)
+        )
+      }
+      return true
+    })
+
+  return temaListe.flatMap((tema: TTemaCode) =>
+    getKravForTema({
+      tema,
+      kravliste: [...relevanteStats, ...filteredUtgaattKrav],
+      allKravPriority,
+      codelist,
+    })
+      .sort(sortUtgaattKravToBottom)
+      .map((krav: TFilterKravProps): TKravNavigationEntry => ({
+        kravNummer: krav.kravNummer,
+        kravVersjon: krav.kravVersjon,
+        temaCode: tema.code,
+      }))
+  )
+}
+
 export type TFilterKravProps = {
   etterlevelseId: string | undefined
   etterleves: boolean

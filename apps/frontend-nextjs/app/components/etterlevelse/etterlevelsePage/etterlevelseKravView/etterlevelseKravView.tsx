@@ -47,6 +47,8 @@ type TProps = {
   varsleMelding?: string
   tidligereEtterlevelser: IEtterlevelse[] | undefined
   nextKravToDocument: string
+  forrigeKravUrl: string
+  nesteKravUrl: string
 }
 
 export const EtterlevelseKravView: FunctionComponent<TProps> = ({
@@ -57,6 +59,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   tidligereEtterlevelser,
   nextKravToDocument,
+  forrigeKravUrl,
+  nesteKravUrl,
 }) => {
   const { data, loading: kravLoading } = useQuery<{ kravById: TKravQL }, TKravId>(
     getKravWithEtterlevelseQuery,
@@ -293,6 +297,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 tidligereEtterlevelser={tidligereEtterlevelser}
                 disableEdit={disableEdit}
                 nextKravToDocument={nextKravToDocument}
+                forrigeKravUrl={forrigeKravUrl}
+                nesteKravUrl={nesteKravUrl}
                 isTabAlertActive={isTabAlertActive}
                 setIsTabAlertActive={setIsTabAlertActive}
                 isPvkTabActive={isPvkTabActive}

@@ -1,9 +1,10 @@
 'use client'
 
-import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
+import { Alert, Button, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import {
   Dispatch,
   FunctionComponent,
@@ -56,6 +57,8 @@ type TProps = {
   tidligereEtterlevelser: IEtterlevelse[] | undefined
   disableEdit: boolean
   nextKravToDocument: string
+  forrigeKravUrl: string
+  nesteKravUrl: string
   isTabAlertActive: boolean
   setIsTabAlertActive: (state: boolean) => void
   isPvkTabActive: boolean
@@ -80,6 +83,8 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   tidligereEtterlevelser,
   disableEdit,
   nextKravToDocument,
+  forrigeKravUrl,
+  nesteKravUrl,
   isTabAlertActive,
   setIsTabAlertActive,
   isPvkTabActive,
@@ -99,6 +104,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     }>
   > = useParams<{ tema?: string }>()
   const user = useContext(UserContext)
+  const router = useRouter()
   const [currentTab, setCurrentTab] = useState<string>('dokumentasjon')
   const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
   const [statusText, setStatustext] = useState<string>('')
@@ -349,6 +355,8 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   etterlevelseDokStatusAlert={etterlevelseDokStatusAlert}
                   setEtterlevelseDokStatusAlert={setEtterlevelseDokStatusAlert}
+                  forrigeKravUrl={forrigeKravUrl}
+                  nesteKravUrl={nesteKravUrl}
                 />
               </div>
             )}
@@ -356,12 +364,40 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
             isPvoUnderarbeidWarningActive ||
             etterlevelseDokumentasjon?.status !==
               EEtterlevelseDokumentasjonStatus.UNDER_ARBEID) && (
-            <EtterlevelseViewFields
-              etterlevelse={etterlevelse}
-              suksesskriterier={krav.suksesskriterier}
-              tidligereEtterlevelser={tidligereEtterlevelser}
-              previousVurdering={previousVurdering}
-            />
+            <>
+              <EtterlevelseViewFields
+                etterlevelse={etterlevelse}
+                suksesskriterier={krav.suksesskriterier}
+                tidligereEtterlevelser={tidligereEtterlevelser}
+                previousVurdering={previousVurdering}
+              />
+              {(forrigeKravUrl || nesteKravUrl) && (
+                <div className='w-full flex justify-end gap-4 py-6'>
+                  {forrigeKravUrl && (
+                    <Button
+                      type='button'
+                      variant='tertiary'
+                      icon={<ChevronLeftIcon aria-hidden />}
+                      iconPosition='left'
+                      onClick={() => router.push(forrigeKravUrl)}
+                    >
+                      Gå til forrige krav
+                    </Button>
+                  )}
+                  {nesteKravUrl && (
+                    <Button
+                      type='button'
+                      variant='tertiary'
+                      icon={<ChevronRightIcon aria-hidden />}
+                      iconPosition='right'
+                      onClick={() => router.push(nesteKravUrl)}
+                    >
+                      Gå til neste krav
+                    </Button>
+                  )}
+                </div>
+              )}
+            </>
           )}
         </Tabs.Panel>
         <Tabs.Panel value='etterlevelser'>

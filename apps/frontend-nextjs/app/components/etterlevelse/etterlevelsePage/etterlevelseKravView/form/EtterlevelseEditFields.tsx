@@ -1,5 +1,6 @@
 'use client'
 
+import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '@navikt/ds-react'
 import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -46,6 +47,8 @@ type TEditProps = {
   isPreview: boolean
   etterlevelseDokStatusAlert: boolean
   setEtterlevelseDokStatusAlert: (state: boolean) => void
+  forrigeKravUrl: string
+  nesteKravUrl: string
 }
 
 const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
@@ -60,6 +63,8 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   isPreview,
   etterlevelseDokStatusAlert,
   setEtterlevelseDokStatusAlert,
+  forrigeKravUrl,
+  nesteKravUrl,
 }) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
@@ -70,6 +75,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
     etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE
   )
   const [isAvbrytModalOpen, setIsAvbryModalOpen] = useState<boolean>(false)
+  const [pendingNavUrl, setPendingNavUrl] = useState<string | undefined>(undefined)
 
   const [morDokumentRelasjon, setMorDokumentRelasjon] = useState<IDocumentRelation>()
   const [morEtterlevelse, setMorEtterlevelse] = useState<IEtterlevelse>()
@@ -362,6 +368,45 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         )}
                       </div>
 
+                      {(forrigeKravUrl || nesteKravUrl) && (
+                        <div className='w-full flex justify-end gap-4 py-6'>
+                          {forrigeKravUrl && (
+                            <Button
+                              type='button'
+                              variant='tertiary'
+                              icon={<ChevronLeftIcon aria-hidden />}
+                              iconPosition='left'
+                              onClick={() => {
+                                if (dirty) {
+                                  setPendingNavUrl(forrigeKravUrl)
+                                } else {
+                                  router.push(forrigeKravUrl)
+                                }
+                              }}
+                            >
+                              Gå til forrige krav
+                            </Button>
+                          )}
+                          {nesteKravUrl && (
+                            <Button
+                              type='button'
+                              variant='tertiary'
+                              icon={<ChevronRightIcon aria-hidden />}
+                              iconPosition='right'
+                              onClick={() => {
+                                if (dirty) {
+                                  setPendingNavUrl(nesteKravUrl)
+                                } else {
+                                  router.push(nesteKravUrl)
+                                }
+                              }}
+                            >
+                              Gå til neste krav
+                            </Button>
+                          )}
+                        </div>
+                      )}
+
                       {etterlevelse.changeStamp.lastModifiedDate &&
                         etterlevelse.changeStamp.lastModifiedBy && (
                           <div className='pb-6 flex justify-end w-full'>
@@ -372,6 +417,42 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                             </BodyShort>
                           </div>
                         )}
+
+                      <Modal
+                        onClose={() => setPendingNavUrl(undefined)}
+                        header={{
+                          heading: 'Vil du gå videre uten å lagre endringene dine?',
+                          closeButton: false,
+                        }}
+                        open={!!pendingNavUrl}
+                      >
+                        <Modal.Body>
+                          Du har endringer som ikke er lagret. Hvis du går videre nå, blir de ikke
+                          lagret.
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => {
+                              const url = pendingNavUrl
+                              setPendingNavUrl(undefined)
+                              if (url) {
+                                router.push(url)
+                              }
+                            }}
+                          >
+                            Fortsett uten å lagre
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='tertiary'
+                            onClick={() => setPendingNavUrl(undefined)}
+                          >
+                            Avbryt
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
 
                       <Modal
                         onClose={() => setIsAvbryModalOpen(false)}
