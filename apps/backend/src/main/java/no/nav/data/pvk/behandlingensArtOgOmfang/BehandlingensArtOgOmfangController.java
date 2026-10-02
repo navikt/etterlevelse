@@ -11,10 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangRequest;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -125,5 +129,17 @@ public class BehandlingensArtOgOmfangController {
         } else {
             return ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang));
         }
+    }
+
+    @Operation(summary = "Get Behandlingens art og omfang by timestamp and etterlevelsedokument id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}/timestamp/{timestamp}")
+    public ResponseEntity<BehandlingensArtOgOmfangResponse> getBehandlingensArtOgOmfangByIdAndTimestamp(@PathVariable String etterlevelseDokumentId, @PathVariable String timestamp) {
+        log.info("Get Behandlingens art og omfang by etterlevelse dokumentasjon id {} and timestamp={}", etterlevelseDokumentId, timestamp);
+        BehandlingensArtOgOmfang artOgOmfang = service.getArtOgOmfangByEtterlevelseDokumentasjonIdAndTimestamp(etterlevelseDokumentId, LocalDateTime.parse(UtcDateTimeUtil.stripTrailingZ(timestamp)));
+        if (artOgOmfang != null) {
+            return ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(artOgOmfang));
+        }
+        return ResponseEntity.notFound().build();
     }
 }

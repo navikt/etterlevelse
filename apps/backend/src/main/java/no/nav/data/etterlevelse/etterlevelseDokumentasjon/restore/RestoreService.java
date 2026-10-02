@@ -44,7 +44,6 @@ public class RestoreService {
     private static final String TABLE_ETTERLEVELSE_DOKUMENTASJON = "ETTERLEVELSE_DOKUMENTASJON";
     private static final String TABLE_ETTERLEVELSE = "ETTERLEVELSE";
     private static final String TABLE_ETTERLEVELSE_METADATA = "ETTERLEVELSE_METADATA";
-    private static final String TABLE_BEHANDLINGENS_LIVSLOP = "BEHANDLINGENS_LIVSLOP";
 
     private static final String FK_ETTERLEVELSE_DOKUMENTASJON_ID = "etterlevelseDokumentasjonId";
     private static final String FK_ETTERLEVELSE_DOKUMENT_ID = "etterlevelseDokumentId";
@@ -117,7 +116,7 @@ public class RestoreService {
         result.setRestoredEtterlevelseMetadata(restoreChildren(
                 TABLE_ETTERLEVELSE_METADATA, FK_ETTERLEVELSE_DOKUMENTASJON_ID, id.toString(), EtterlevelseMetadata.class, etterlevelseMetadataRepo).size());
         result.setRestoredBehandlingensLivslop(restoreChildren(
-                TABLE_BEHANDLINGENS_LIVSLOP, FK_ETTERLEVELSE_DOKUMENTASJON_ID, id.toString(), BehandlingensLivslop.class, behandlingensLivslopRepo).size());
+                BehandlingensLivslop.TABLENAME, FK_ETTERLEVELSE_DOKUMENTASJON_ID, id.toString(), BehandlingensLivslop.class, behandlingensLivslopRepo).size());
         result.setRestoredBehandlingensArtOgOmfang(restoreChildren(
                 BehandlingensArtOgOmfang.TABLENAME, FK_ETTERLEVELSE_DOKUMENTASJON_ID, id.toString(), BehandlingensArtOgOmfang.class, behandlingensArtOgOmfangRepo).size());
 

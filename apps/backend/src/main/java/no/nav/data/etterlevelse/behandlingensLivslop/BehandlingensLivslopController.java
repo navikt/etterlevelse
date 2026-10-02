@@ -11,10 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopRequest;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
+import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -139,4 +143,15 @@ public class BehandlingensLivslopController {
          return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
      }
 
+    @Operation(summary = "Get Behandlingenslivsløp by timestamp and etterlevelsedokument id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}/timestamp/{timestamp}")
+    public ResponseEntity<BehandlingensLivslopResponse> getBehandlingensLivslopByIdAndTimestamp(@PathVariable String etterlevelseDokumentId, @PathVariable String timestamp) {
+        log.info("Get Behandlingens livsløp by etterlevelse dokumentasjon id {} and timestamp={}", etterlevelseDokumentId, timestamp);
+        BehandlingensLivslop livslop = service.getBehandlingensLivslopByEtterlevelseDokumentasjonIdAndTimestamp(etterlevelseDokumentId, LocalDateTime.parse(UtcDateTimeUtil.stripTrailingZ(timestamp)));
+        if (livslop != null) {
+            return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(livslop));
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

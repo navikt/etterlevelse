@@ -21,7 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "BEHANDLINGENS_LIVSLOP")
+@Table(name = BehandlingensLivslop.TABLENAME)
 public class BehandlingensLivslop extends Auditable {
     
     @Id
@@ -36,5 +36,7 @@ public class BehandlingensLivslop extends Auditable {
     @Column(name = "DATA", nullable = false)
     @Builder.Default
     private BehandlingensLivslopData behandlingensLivslopData = new BehandlingensLivslopData();
-    
+
+
+    public static final String TABLENAME = "BEHANDLINGENS_LIVSLOP";
 }

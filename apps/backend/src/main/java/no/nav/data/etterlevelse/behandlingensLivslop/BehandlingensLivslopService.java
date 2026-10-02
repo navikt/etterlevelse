@@ -2,15 +2,21 @@ package no.nav.data.etterlevelse.behandlingensLivslop;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.auditing.AuditVersionService;
+import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopRepo;
+import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,6 +26,7 @@ import java.util.UUID;
 public class BehandlingensLivslopService {
 
     private final BehandlingensLivslopRepo repo;
+    private final AuditVersionService auditVersionService;
 
     public BehandlingensLivslop get(UUID uuid) {
         if (uuid == null || !repo.existsById(uuid)) return null;
@@ -81,5 +88,13 @@ public class BehandlingensLivslopService {
             newBll.setBehandlingensLivslopData(bllToCopy.getBehandlingensLivslopData());
             save(newBll, false);
         }
+    }
+
+    public BehandlingensLivslop getBehandlingensLivslopByEtterlevelseDokumentasjonIdAndTimestamp(String etterlevelseDokumentasjonId, LocalDateTime timestamp) {
+        List<AuditVersion> auditArtOgOmfang = auditVersionService.findByTableNameAndFieldNameAndFieldValueAndTimestamp(BehandlingensLivslop.TABLENAME,"etterlevelseDokumentasjonId", etterlevelseDokumentasjonId, UtcDateTimeUtil.roundUpToSecond(timestamp));
+        if (!auditArtOgOmfang.isEmpty()) {
+            return auditArtOgOmfang.getFirst().getObjectDataByDomain(BehandlingensLivslop.class);
+        }
+        return null;
     }
 }
