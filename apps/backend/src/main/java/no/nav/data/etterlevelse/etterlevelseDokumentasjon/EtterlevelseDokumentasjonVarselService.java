@@ -44,29 +44,25 @@ public class EtterlevelseDokumentasjonVarselService {
 
     // Run at 07:00 on the first day of every month
     @SchedulerLock(name = "sendVarselForEtterlevelseDokNotUpdated6months")
-    @Scheduled(cron = "0 25 8 * * *")
+    @Scheduled(cron = "0 0 7 1 * *")
     public void sendVarselForEtterlevelseDokumentasjonThatHasNotBeenUpatedfor6months() {
         log.info("Running check for etterlevelseDokumentasjon that has not been updated for 6 months");
         YearMonth now = YearMonth.now();
 
         //henter alle etterlevelse, pvkDokument, risikoscenario og tiltak som har lastModified eldre enn 6 måneder
         // og deretter filtrerer jeg ut de som er multiplum av 6 måneder (er med dersom de har går 6, 12, 18, 24, 30, 36, osv.. måneder siden sist endret)
-        List<Etterlevelse> recentEtterlevelseOlderThan6monthsPerEtterlevelseDoc = etterlevelseRepo.findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
-                //.stream()
-                //.filter(etterlevelse -> isMultipleOf6Months(now, etterlevelse.getLastModifiedDate()))
-                //.toList();
-        List<PvkDokument> recentPvkDokumentOlderThan6months = pvkDokumentRepo.findPvkDokumentMedLastModifiedEldreEnn6mnd();
-                //.stream()
-                //.filter(pvkDokument -> isMultipleOf6Months(now, pvkDokument.getLastModifiedDate()))
-                //.toList();
-        List<Risikoscenario> recentRisikoscenarioOlderThan6monthsPerPvkDokument = risikoscenarioRepo.findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
-                //.stream()
-                //.filter(risikoscenario -> isMultipleOf6Months(now, risikoscenario.getLastModifiedDate()))
-                //.toList();
-        List<Tiltak> recentTiltakOlderThan6monthsPerPvkDokument = tiltakRepo.findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
-                //.stream()
-                //.filter(tiltak -> isMultipleOf6Months(now, tiltak.getLastModifiedDate()))
-                //.toList();
+        List<Etterlevelse> recentEtterlevelseOlderThan6monthsPerEtterlevelseDoc = etterlevelseRepo.findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd().stream()
+                .filter(etterlevelse -> isMultipleOf6Months(now, etterlevelse.getLastModifiedDate()))
+                .toList();
+        List<PvkDokument> recentPvkDokumentOlderThan6months = pvkDokumentRepo.findPvkDokumentMedLastModifiedEldreEnn6mnd().stream()
+                .filter(pvkDokument -> isMultipleOf6Months(now, pvkDokument.getLastModifiedDate()))
+                .toList();
+        List<Risikoscenario> recentRisikoscenarioOlderThan6monthsPerPvkDokument = risikoscenarioRepo.findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd().stream()
+                .filter(risikoscenario -> isMultipleOf6Months(now, risikoscenario.getLastModifiedDate()))
+                .toList();
+        List<Tiltak> recentTiltakOlderThan6monthsPerPvkDokument = tiltakRepo.findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd().stream()
+                .filter(tiltak -> isMultipleOf6Months(now, tiltak.getLastModifiedDate()))
+                .toList();
 
         //Samler alle pvkDokumentId'er fra risikoscenario og tiltak
         List<UUID> pvkDokumentIds = Stream.concat(
