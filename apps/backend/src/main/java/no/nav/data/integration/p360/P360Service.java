@@ -10,7 +10,15 @@ import no.nav.data.etterlevelse.varsel.domain.Varsel;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.p360.domain.P360ArchiveDocument;
 import no.nav.data.integration.p360.domain.P360ArchiveDocumentRepo;
-import no.nav.data.integration.p360.dto.*;
+import no.nav.data.integration.p360.dto.P360AuthToken;
+import no.nav.data.integration.p360.dto.P360Case;
+import no.nav.data.integration.p360.dto.P360CasePageResponse;
+import no.nav.data.integration.p360.dto.P360CaseRequest;
+import no.nav.data.integration.p360.dto.P360Document;
+import no.nav.data.integration.p360.dto.P360DocumentCreateRequest;
+import no.nav.data.integration.p360.dto.P360DocumentPageResponse;
+import no.nav.data.integration.p360.dto.P360DocumentUpdateRequest;
+import no.nav.data.integration.p360.dto.P360GetRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
@@ -190,7 +198,11 @@ public class P360Service {
             body.set("grant_type", "client_credentials");
             body.set("scope", p360Properties.getClientId() + "/.default");
 
-            var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), body, P360AuthToken.class);
+            var tokenHeaders = new HttpHeaders();
+            tokenHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            var tokenRequest = new HttpEntity<>(body, tokenHeaders);
+
+            var response = restTemplate.postForEntity(p360Properties.getTokenUrl(), tokenRequest, P360AuthToken.class);
             headers.setBearerAuth(requireNonNull(response.getBody()).getAccess_token());
             headers.setContentType(MediaType.APPLICATION_JSON);
             //cleaning up key values for some wierd reason a \n is being added to the keys
