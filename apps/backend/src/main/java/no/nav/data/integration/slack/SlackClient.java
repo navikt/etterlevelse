@@ -186,6 +186,7 @@ public class SlackClient {
                 log.debug("Couldn't find user for id {}", id);
                 return null;
             }
+            log.error("Failed to get user for id " + id, e);
             throw new TechnicalException("Failed to get user for id " + id, e);
         }
     }

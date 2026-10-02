@@ -24,7 +24,11 @@ import no.nav.data.integration.team.teamcat.TeamcatResourceClient;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -220,6 +224,7 @@ public class TeamController {
         log.info("Slack user id '{}'", id);
         var user = slackClient.getUserBySlackId(id);
         if (user == null) {
+            log.error("Slack user not found for id '{}'", id);
             throw new NotFoundException("no user for id " + id);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
