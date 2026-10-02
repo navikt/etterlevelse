@@ -34,6 +34,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
+  EPvkVurdering,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -380,6 +381,28 @@ export const OversiktView: FunctionComponent<TProps> = ({
           Oversikt over PVK-prosessen
         </Heading>
         <HvordanSkalViJobbeMedPvkReadMore />
+
+        {pvkDokument.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE &&
+          [
+            EPvkDokumentStatus.UNDERARBEID,
+            EPvkDokumentStatus.SENDT_TIL_PVO,
+            EPvkDokumentStatus.PVO_UNDERARBEID,
+            EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING,
+          ].includes(pvkDokument.status) && (
+            <InfoCard data-color='warning' className='mb-7'>
+              <InfoCard.Header icon={<ExclamationmarkTriangleIcon />}>
+                <InfoCard.Title>
+                  Fordi dere overfører en eksisterende, godkjent PVK fra Word
+                </InfoCard.Title>
+              </InfoCard.Header>
+              <InfoCard.Content>
+                Det er viktig at dere overfører PVK-en i samme tilstand som den ble godkjent i.
+                Dersom dere opplever, ved overføring, at risikobildet har endret seg siden da, og at
+                det dermed er behov for oppdatering, skal PVK-en sendes til vurdering hos
+                Personvernombudet. Dere vil få dette valget på siste side, Les og send inn.
+              </InfoCard.Content>
+            </InfoCard>
+          )}
 
         {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
           etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
