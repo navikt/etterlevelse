@@ -44,7 +44,7 @@ public class EtterlevelseDokumentasjonVarselService {
 
     // Run at 07:00 on the first day of every month
     @SchedulerLock(name = "sendVarselForEtterlevelseDokNotUpdated6months")
-    @Scheduled(cron = "0 10 8 * * *")
+    @Scheduled(cron = "0 25 8 * * *")
     public void sendVarselForEtterlevelseDokumentasjonThatHasNotBeenUpatedfor6months() {
         log.info("Running check for etterlevelseDokumentasjon that has not been updated for 6 months");
         YearMonth now = YearMonth.now();
@@ -99,18 +99,19 @@ public class EtterlevelseDokumentasjonVarselService {
 
         etterlevelseDokumentasjonRepo.findAllById(etterlevelseDokumentIds)
                 .forEach(etterlevelseDokumentasjon -> {
+                    if (etterlevelseDokumentasjon.getVarslingsadresser() != null && !etterlevelseDokumentasjon.getVarslingsadresser().isEmpty()) {
+                        String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+                        String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
+                        if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+                            etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+                        }
 
-                    String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
-                    String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
-                    if (etterlevelseDokumentasjonKortTittel.length() > 50) {
-                        etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+                        varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
+                                .title("Etterlevelsesdokumentasjonen er ikke endret på 6 måneder %s".formatted(etterlevelseNummmer))
+                                .paragraph(new Varsel.Paragraph("Dere bør vurdere om det har skjedd endringer som krever oppdatering av dokumentasjonen for %s.",
+                                        url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()), etterlevelseDokumentasjonKortTittel)))
+                                .build(), String.valueOf(etterlevelseDokumentasjon.getId()));
                     }
-
-                    varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
-                            .title("Etterlevelsesdokumentasjonen er ikke endret på 6 måneder %s".formatted(etterlevelseNummmer))
-                            .paragraph(new Varsel.Paragraph("Dere bør vurdere om det har skjedd endringer som krever oppdatering av dokumentasjonen for %s.",
-                                    url(urlGenerator.etterlevelseDokumentasjonUrl(etterlevelseDokumentasjon.getId().toString()), etterlevelseDokumentasjonKortTittel)))
-                            .build(), String.valueOf(etterlevelseDokumentasjon.getId()));
         });
     }
 
