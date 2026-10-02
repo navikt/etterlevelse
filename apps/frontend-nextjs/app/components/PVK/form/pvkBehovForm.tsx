@@ -300,7 +300,8 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                 </Field>
               </FieldWrapper>
 
-              {values.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT && (
+              {(values.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT ||
+                values.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE) && (
                 <div className='my-5'>
                   <BodyLong>Følgende dokumenter er lagt inn under Dokumentegenskaper:</BodyLong>
                   <List as='ul'>
@@ -316,35 +317,36 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                     )}
                   </List>
 
-                  {etterlevelseDokumentasjon.risikovurderinger.length > 0 && (
-                    <InfoCard data-color='info' className='mt-5'>
-                      <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-                        Dersom dokumentene over ikke inkluderer deres PVK, skal dere legge den inn
-                        på{' '}
+                  {values.pvkVurdering === EPvkVurdering.ALLEREDE_UTFORT && (
+                    <InfoCard data-color='warning' className='mt-5'>
+                      <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
                         <Link
                           href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
                           target='_blank'
                           rel='noopener noreferrer'
                           aria-label='redigere etterlevelsesdokumentasjon'
                         >
-                          Rediger dokumentegenskaper (åpner i en ny fane).
+                          Legg inn lenken til deres Word-dokument under Rediger dokumentegenskaper.
+                          (åpner i en ny fane).
                         </Link>
                       </InfoCard.Message>
                     </InfoCard>
                   )}
 
-                  {etterlevelseDokumentasjon.risikovurderinger.length === 0 && (
+                  {values.pvkVurdering === EPvkVurdering.LEGGE_OVER_EKSISTERENDE && (
                     <InfoCard data-color='warning' className='mt-5'>
                       <InfoCard.Message icon={<ExclamationmarkTriangleIcon aria-hidden />}>
-                        Dere må legge inn lenke til deres PVK i Public360 under{' '}
                         <Link
                           href={etterlevelsesDokumentasjonEditUrl(etterlevelseDokumentasjon.id)}
                           target='_blank'
                           rel='noopener noreferrer'
                           aria-label='redigere etterlevelsesdokumentasjon'
                         >
-                          Rediger dokumentegenskaper (åpner i en ny fane).
+                          Legg inn lenken til deres Word-dokument under Rediger dokumentegenskaper.
+                          (åpner i en ny fane).
                         </Link>
+                        Når dere nå lagrer valget om overføring fra Word, opprettes en digital PVK
+                        hvor dere legger over innholdet.
                       </InfoCard.Message>
                     </InfoCard>
                   )}
