@@ -3,7 +3,7 @@
 import { AxiosError } from 'axios'
 import { FunctionComponent, useEffect, useState } from 'react'
 import {
-  getBehandlingensLivslopByEtterlevelseDokumentId,
+  getBehandlingensLivslopByEtterlevelseDokumentIdAndTimestamp,
   mapBehandlingensLivslopRequestToFormValue,
   mapBehandlingensLivslopToFormValue,
 } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
@@ -56,7 +56,10 @@ const BehandlingensLivslopReadOnlyView: FunctionComponent<TProps> = ({
     ;(async () => {
       if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
         setIsLoading(true)
-        await getBehandlingensLivslopByEtterlevelseDokumentId(etterlevelseDokumentasjon.id)
+        await getBehandlingensLivslopByEtterlevelseDokumentIdAndTimestamp(
+          etterlevelseDokumentasjon.id,
+          pvkDokument.changeStamp.lastModifiedDate
+        )
           .then((response: IBehandlingensLivslop) => {
             setBehandlingensLivslop(response)
           })

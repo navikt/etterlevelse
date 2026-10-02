@@ -12,6 +12,16 @@ export const getBehandlingensArtOgOmfangByEtterlevelseDokumentId = async (
     )
   ).data
 
+export const getBehandlingensArtOgOmfangByEtterlevelseDokumentIdAndTimestamp = async (
+  etterlevelseDokumentId: string,
+  timestamp: string
+) =>
+  (
+    await axios.get<IBehandlingensArtOgOmfang>(
+      `${env.backendBaseUrl}/behandlingens-art-og-omfang/etterlevelsedokument/${etterlevelseDokumentId}/timestamp/${timestamp}`
+    )
+  ).data
+
 export const createBehandlingensArtOgOmfang = async (
   artOgOmfang: IBehandlingensArtOgOmfang
 ): Promise<IBehandlingensArtOgOmfang> => {

@@ -14,6 +14,17 @@ export const getBehandlingensLivslopByEtterlevelseDokumentId = async (
   ).data
 }
 
+export const getBehandlingensLivslopByEtterlevelseDokumentIdAndTimestamp = async (
+  etterlevelseDokumentId: string,
+  timestamp: string
+) => {
+  return (
+    await axios.get<IBehandlingensLivslop>(
+      `${env.backendBaseUrl}/behandlingenslivslop/etterlevelsedokument/${etterlevelseDokumentId}/timestamp/${timestamp}`
+    )
+  ).data
+}
+
 const getBehandlingensLivslop = async (id: string) => {
   return (
     await axios.get<IBehandlingensLivslop>(`${env.backendBaseUrl}/behandlingenslivslop/${id}`)

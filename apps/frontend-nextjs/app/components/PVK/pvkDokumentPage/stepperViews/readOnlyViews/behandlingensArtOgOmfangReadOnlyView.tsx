@@ -1,7 +1,11 @@
 'use client'
 
-import { FunctionComponent } from 'react'
-import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
+import { AxiosError } from 'axios'
+import { FunctionComponent, useEffect, useState } from 'react'
+import {
+  getBehandlingensArtOgOmfangByEtterlevelseDokumentIdAndTimestamp,
+  mapBehandlingensArtOgOmfangToFormValue,
+} from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
 import ArtOgOmfangReadOnlyContent from '@/components/PVK/pvkDokumentPage/stepperViews/readOnlyViews/artOgOmfangReadOnlyContent'
@@ -9,6 +13,7 @@ import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoade
 import { ContentLayout } from '@/components/others/layout/content/content'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import {
@@ -38,7 +43,8 @@ const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = ({
   pvoTilbakemelding,
   relevantVurdering,
 }) => {
-  const [artOgOmfang, , loading] = useBehandlingensArtOgOmfang(etterlevelseDokumentasjon.id)
+  const [artOgOmfang, setArtOgOmfang] = useState<IBehandlingensArtOgOmfang>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const brukerAlleOpplysningstyper =
     etterlevelseDokumentasjon.behandlinger?.some(
@@ -51,12 +57,35 @@ const BehandlingensArtOgOmfangReadOnlyView: FunctionComponent<TProps> = ({
     relevantVurdering
   )
 
+  useEffect(() => {
+    ;(async () => {
+      if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.id) {
+        setIsLoading(true)
+        await getBehandlingensArtOgOmfangByEtterlevelseDokumentIdAndTimestamp(
+          etterlevelseDokumentasjon.id,
+          pvkDokument.changeStamp.lastModifiedDate
+        )
+          .then((response: IBehandlingensArtOgOmfang) => {
+            setArtOgOmfang(response)
+          })
+          .catch((error: AxiosError) => {
+            if (error.status === 404) {
+              setArtOgOmfang(mapBehandlingensArtOgOmfangToFormValue({}))
+            } else {
+              console.debug(error)
+            }
+          })
+          .finally(() => setIsLoading(false))
+      }
+    })()
+  }, [etterlevelseDokumentasjon])
+
   return (
     <div className='w-full'>
       <ContentLayout>
-        {loading && <CenteredLoader />}
+        {isLoading && <CenteredLoader />}
 
-        {!loading && artOgOmfang && (
+        {!isLoading && artOgOmfang && (
           <div className={hasPvoComment ? 'w-1/2' : 'w-full'}>
             <ArtOgOmfangReadOnlyContent
               artOgOmfang={artOgOmfang}
