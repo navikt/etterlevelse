@@ -41,28 +41,32 @@ const KravNavigationButtons: FunctionComponent<TProps> = ({
   return (
     <div className='w-full flex flex-col gap-4 py-6'>
       <div className='flex flex-wrap justify-between items-center gap-4'>
-        {forrigeKravUrl && (
-          <Button
-            type='button'
-            variant='tertiary'
-            icon={<ChevronLeftIcon aria-hidden />}
-            iconPosition='left'
-            onClick={() => onNavigate(forrigeKravUrl)}
-          >
-            Forrige krav
-          </Button>
-        )}
-        {nesteKravUrl && (
-          <Button
-            type='button'
-            variant='tertiary'
-            icon={<ChevronRightIcon aria-hidden />}
-            iconPosition='right'
-            onClick={() => onNavigate(nesteKravUrl)}
-          >
-            Neste krav
-          </Button>
-        )}
+        <div className='flex-1 flex justify-start'>
+          {forrigeKravUrl && (
+            <Button
+              type='button'
+              variant='tertiary'
+              icon={<ChevronLeftIcon aria-hidden />}
+              iconPosition='left'
+              onClick={() => onNavigate(forrigeKravUrl)}
+            >
+              Forrige krav
+            </Button>
+          )}
+        </div>
+        <div className='flex-1 flex justify-end'>
+          {nesteKravUrl && (
+            <Button
+              type='button'
+              variant='tertiary'
+              icon={<ChevronRightIcon aria-hidden />}
+              iconPosition='right'
+              onClick={() => onNavigate(nesteKravUrl)}
+            >
+              Neste krav
+            </Button>
+          )}
+        </div>
       </div>
       {/* <div className='flex flex-wrap justify-between items-center gap-4'>
         <div className='flex-1 flex justify-start'>
