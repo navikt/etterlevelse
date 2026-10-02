@@ -1,6 +1,5 @@
 'use client'
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '@navikt/ds-react'
 import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
@@ -28,8 +27,10 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { env } from '@/util/env/env'
+import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
+import KravNavigationButtons, { TKravNavigationTarget } from '../kravNavigationButtons'
 import { etterlevelseSchema } from './etterlevelseSchema'
 import SuksesskriterieErrorFields from './suksesskriterieErrorFields'
 import { SuksesskriterierBegrunnelseEdit } from './suksesskriterierBegrunnelseEdit'
@@ -49,6 +50,9 @@ type TEditProps = {
   setEtterlevelseDokStatusAlert: (state: boolean) => void
   forrigeKravUrl: string
   nesteKravUrl: string
+  forrigeTema?: TKravNavigationTarget
+  nesteTema?: TKravNavigationTarget
+  kravGrupper?: TKravNavigationGroup[]
 }
 
 const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
@@ -65,6 +69,9 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   setEtterlevelseDokStatusAlert,
   forrigeKravUrl,
   nesteKravUrl,
+  forrigeTema,
+  nesteTema,
+  kravGrupper,
 }) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
@@ -368,44 +375,23 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         )}
                       </div>
 
-                      {(forrigeKravUrl || nesteKravUrl) && (
-                        <div className='w-full flex justify-end gap-4 py-6'>
-                          {forrigeKravUrl && (
-                            <Button
-                              type='button'
-                              variant='tertiary'
-                              icon={<ChevronLeftIcon aria-hidden />}
-                              iconPosition='left'
-                              onClick={() => {
-                                if (dirty) {
-                                  setPendingNavUrl(forrigeKravUrl)
-                                } else {
-                                  router.push(forrigeKravUrl)
-                                }
-                              }}
-                            >
-                              Gå til forrige krav
-                            </Button>
-                          )}
-                          {nesteKravUrl && (
-                            <Button
-                              type='button'
-                              variant='tertiary'
-                              icon={<ChevronRightIcon aria-hidden />}
-                              iconPosition='right'
-                              onClick={() => {
-                                if (dirty) {
-                                  setPendingNavUrl(nesteKravUrl)
-                                } else {
-                                  router.push(nesteKravUrl)
-                                }
-                              }}
-                            >
-                              Gå til neste krav
-                            </Button>
-                          )}
-                        </div>
-                      )}
+                      <KravNavigationButtons
+                        forrigeKravUrl={forrigeKravUrl}
+                        nesteKravUrl={nesteKravUrl}
+                        forrigeTema={forrigeTema}
+                        nesteTema={nesteTema}
+                        kravGrupper={kravGrupper}
+                        currentKravNummer={krav.kravNummer}
+                        currentKravVersjon={krav.kravVersjon}
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon?.id}
+                        onNavigate={(url: string) => {
+                          if (dirty) {
+                            setPendingNavUrl(url)
+                          } else {
+                            router.push(url)
+                          }
+                        }}
+                      />
 
                       {etterlevelse.changeStamp.lastModifiedDate &&
                         etterlevelse.changeStamp.lastModifiedBy && (

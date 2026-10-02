@@ -1,7 +1,6 @@
 'use client'
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { Alert, Button, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
 import { useParams, useRouter } from 'next/navigation'
@@ -40,12 +39,14 @@ import {
 import { EKravTab, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import {
   isEtterlevelseIkkePaabegynt,
   syncEtterlevelseKriterieBegrunnelseWithKrav,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
 import EtterlevelseEditFields from '../form/EtterlevelseEditFields'
+import KravNavigationButtons, { TKravNavigationTarget } from '../kravNavigationButtons'
 import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'
 import UnsavedEtterlevelseModal from '../modal/unsavedEtterlevelseModal'
 
@@ -59,6 +60,8 @@ type TProps = {
   nextKravToDocument: string
   forrigeKravUrl: string
   nesteKravUrl: string
+  forrigeTema?: TKravNavigationTarget
+  nesteTema?: TKravNavigationTarget
   isTabAlertActive: boolean
   setIsTabAlertActive: (state: boolean) => void
   isPvkTabActive: boolean
@@ -72,6 +75,7 @@ type TProps = {
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   pvkDokument?: IPvkDokument
   previousVurdering?: IVurdering
+  kravGrupper: TKravNavigationGroup[]
 }
 
 const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
@@ -85,6 +89,8 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   nextKravToDocument,
   forrigeKravUrl,
   nesteKravUrl,
+  forrigeTema,
+  nesteTema,
   isTabAlertActive,
   setIsTabAlertActive,
   isPvkTabActive,
@@ -97,6 +103,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   etterlevelseFormRef,
   etterlevelseDokumentasjon,
   previousVurdering,
+  kravGrupper,
 }) => {
   const params: Readonly<
     Partial<{
@@ -357,6 +364,9 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   setEtterlevelseDokStatusAlert={setEtterlevelseDokStatusAlert}
                   forrigeKravUrl={forrigeKravUrl}
                   nesteKravUrl={nesteKravUrl}
+                  forrigeTema={forrigeTema}
+                  nesteTema={nesteTema}
+                  kravGrupper={kravGrupper}
                 />
               </div>
             )}
@@ -371,32 +381,17 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                 tidligereEtterlevelser={tidligereEtterlevelser}
                 previousVurdering={previousVurdering}
               />
-              {(forrigeKravUrl || nesteKravUrl) && (
-                <div className='w-full flex justify-end gap-4 py-6'>
-                  {forrigeKravUrl && (
-                    <Button
-                      type='button'
-                      variant='tertiary'
-                      icon={<ChevronLeftIcon aria-hidden />}
-                      iconPosition='left'
-                      onClick={() => router.push(forrigeKravUrl)}
-                    >
-                      Gå til forrige krav
-                    </Button>
-                  )}
-                  {nesteKravUrl && (
-                    <Button
-                      type='button'
-                      variant='tertiary'
-                      icon={<ChevronRightIcon aria-hidden />}
-                      iconPosition='right'
-                      onClick={() => router.push(nesteKravUrl)}
-                    >
-                      Gå til neste krav
-                    </Button>
-                  )}
-                </div>
-              )}
+              <KravNavigationButtons
+                forrigeKravUrl={forrigeKravUrl}
+                nesteKravUrl={nesteKravUrl}
+                forrigeTema={forrigeTema}
+                nesteTema={nesteTema}
+                kravGrupper={kravGrupper}
+                currentKravNummer={krav.kravNummer}
+                currentKravVersjon={krav.kravVersjon}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon?.id}
+                onNavigate={(url: string) => router.push(url)}
+              />
             </>
           )}
         </Tabs.Panel>

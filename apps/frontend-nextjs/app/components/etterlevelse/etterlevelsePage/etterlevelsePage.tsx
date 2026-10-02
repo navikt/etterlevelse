@@ -11,6 +11,7 @@ import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { EtterlevelseKravView } from '@/components/etterlevelse/etterlevelsePage/etterlevelseKravView/etterlevelseKravView'
+import { TKravNavigationTarget } from '@/components/etterlevelse/etterlevelsePage/etterlevelseKravView/kravNavigationButtons'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
@@ -28,7 +29,9 @@ import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasj
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
 import {
   TKravNavigationEntry,
+  TKravNavigationGroup,
   filterEtterlevelseDokumentasjonStatsData,
+  getGroupedKravForDokumentasjon,
   getOrderedKravForDokumentasjon,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { sortKravListeByPriority, toKravId } from '@/util/krav/kravUtil'
@@ -116,6 +119,66 @@ const EtterlevelsePage = () => {
     etterlevelseDokumentasjon,
     params.etterlevelseDokumentasjonId,
   ])
+
+  const kravGrupper = useMemo<TKravNavigationGroup[]>(() => {
+    const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(statsData)
+
+    if (!relevanteStats.length || !params.etterlevelseDokumentasjonId) {
+      return []
+    }
+
+    return getGroupedKravForDokumentasjon({
+      temaListe,
+      relevanteStats,
+      utgaattStats,
+      etterlevelseDokumentasjon,
+      allKravPriority,
+      codelist,
+    })
+  }, [
+    statsData,
+    allKravPriority,
+    temaListe,
+    codelist,
+    etterlevelseDokumentasjon,
+    params.etterlevelseDokumentasjonId,
+  ])
+
+  const [forrigeTema, nesteTema] = useMemo<
+    [TKravNavigationTarget | undefined, TKravNavigationTarget | undefined]
+  >(() => {
+    if (!kravGrupper.length || !params.etterlevelseDokumentasjonId) {
+      return [undefined, undefined]
+    }
+
+    const groupIndex: number = kravGrupper.findIndex((group: TKravNavigationGroup) =>
+      group.krav.some((krav: TKravNavigationEntry) => krav.kravNummer === currentKravNummer)
+    )
+
+    if (groupIndex === -1) {
+      return [undefined, undefined]
+    }
+
+    const toTarget = (
+      group: TKravNavigationGroup | undefined
+    ): TKravNavigationTarget | undefined => {
+      if (!group || !group.krav.length) {
+        return undefined
+      }
+      const firstKrav: TKravNavigationEntry = group.krav[0]
+      return {
+        temaName: group.temaName,
+        url: etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
+          params.etterlevelseDokumentasjonId as string,
+          firstKrav.temaCode,
+          firstKrav.kravNummer,
+          firstKrav.kravVersjon
+        ),
+      }
+    }
+
+    return [toTarget(kravGrupper[groupIndex - 1]), toTarget(kravGrupper[groupIndex + 1])]
+  }, [kravGrupper, currentKravNummer, params.etterlevelseDokumentasjonId])
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
     getKravMedPrioriteringOgEtterlevelseQuery,
@@ -216,6 +279,9 @@ const EtterlevelsePage = () => {
               nextKravToDocument={nextKravToDocument}
               forrigeKravUrl={forrigeKravUrl}
               nesteKravUrl={nesteKravUrl}
+              forrigeTema={forrigeTema}
+              nesteTema={nesteTema}
+              kravGrupper={kravGrupper}
               temaName={temaData?.shortName}
               tidligereEtterlevelser={tidligereEtterlevelser}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
