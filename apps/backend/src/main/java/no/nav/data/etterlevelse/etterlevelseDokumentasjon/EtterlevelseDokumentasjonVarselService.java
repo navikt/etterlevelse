@@ -44,8 +44,9 @@ public class EtterlevelseDokumentasjonVarselService {
 
     // Run at 07:00 on the first day of every month
     @SchedulerLock(name = "sendVarselForEtterlevelseDokNotUpdated6months")
-    @Scheduled(cron = "0 50 7 * * *")
+    @Scheduled(cron = "0 10 8 * * *")
     public void sendVarselForEtterlevelseDokumentasjonThatHasNotBeenUpatedfor6months() {
+        log.info("Running check for etterlevelseDokumentasjon that has not been updated for 6 months");
         YearMonth now = YearMonth.now();
 
         //henter alle etterlevelse, pvkDokument, risikoscenario og tiltak som har lastModified eldre enn 6 måneder
