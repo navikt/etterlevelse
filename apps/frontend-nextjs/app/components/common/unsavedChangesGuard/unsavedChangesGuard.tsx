@@ -74,7 +74,13 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     isDirtyRef.current = !!isDirty
-  }, [isDirty])
+    if (!formRef && isDirty && !dirtySentinelPushedRef.current) {
+      window.history.pushState(window.history.state, '', window.location.href)
+      dirtySentinelPushedRef.current = true
+    } else if (!formRef && !isDirty) {
+      dirtySentinelPushedRef.current = false
+    }
+  }, [isDirty, formRef])
 
   useEffect(() => {
     navigateUrlRef.current = navigateUrl
@@ -108,9 +114,6 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
   }
 
   useEffect(() => {
-    // Sentinel entry so a browser-back press is caught instead of leaving the page
-    window.history.pushState(window.history.state, '', window.location.href)
-
     let hashNavUntil = 0
 
     const handleHashChange = (): void => {
@@ -119,7 +122,7 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
     }
 
     const handlePopState = (): void => {
-      if (isLeavingRef.current) {
+      if (isLeavingRef.current || !getIsDirty()) {
         return
       }
 
@@ -130,12 +133,7 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
 
       // Re-hold position so the back press never actually leaves the page unguarded
       window.history.pushState(window.history.state, '', window.location.href)
-
-      if (getIsDirty()) {
-        setIsOpen(true)
-      } else {
-        leave()
-      }
+      setIsOpen(true)
     }
 
     window.addEventListener('hashchange', handleHashChange)
