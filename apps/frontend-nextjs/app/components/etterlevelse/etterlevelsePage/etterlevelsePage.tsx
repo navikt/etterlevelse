@@ -8,19 +8,32 @@ import {
   mapEtterlevelseToFormValue,
 } from '@/api/etterlevelse/etterlevelseApi'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { EtterlevelseKravView } from '@/components/etterlevelse/etterlevelsePage/etterlevelseKravView/etterlevelseKravView'
+import { TKravNavigationTarget } from '@/components/etterlevelse/etterlevelsePage/etterlevelseKravView/kravNavigationButtons'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
   IEtterlevelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import { IEtterlevelseDokumentasjonStats } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EListName, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
+import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { getKravMedPrioriteringOgEtterlevelseQuery } from '@/query/krav/kravQuery'
+import { etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
+import {
+  TKravNavigationEntry,
+  TKravNavigationGroup,
+  filterEtterlevelseDokumentasjonStatsData,
+  getGroupedKravForDokumentasjon,
+  getOrderedKravForDokumentasjon,
+} from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { sortKravListeByPriority, toKravId } from '@/util/krav/kravUtil'
 import { PageLayout } from '../../others/scaffold/scaffold'
 
@@ -37,15 +50,135 @@ const EtterlevelsePage = () => {
     EListName.TEMA,
     params.tema?.replace('i', '')
   ) as TTemaCode | undefined
+  const temaListe: TTemaCode[] = codelist.utils.getCodes(EListName.TEMA) as TTemaCode[]
   const lover: TLovCode[] = codelist.utils.getLovCodesForTema(params.tema)
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
   )
   const [etterlevelse, setEtterlevelse] = useState<IEtterlevelse>()
   const [tidligereEtterlevelser, setTidligereEtterlevelser] = useState<IEtterlevelse[]>()
+  const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
 
   const currentKravNummer = Number(params.kravNummer)
   const currentKravVersjon = Number(params.kravVersjon)
+
+  const { data: statsData } = useQuery<{
+    etterlevelseDokumentasjon: IPageResponse<{ stats: IEtterlevelseDokumentasjonStats }>
+  }>(getEtterlevelseDokumentasjonStatsQuery, {
+    variables: { etterlevelseDokumentasjonId: params.etterlevelseDokumentasjonId },
+    skip: !params.etterlevelseDokumentasjonId,
+  })
+
+  useEffect(() => {
+    ;(async () => {
+      setAllKravPriority(await getAllKravPriorityList())
+    })()
+  }, [])
+
+  const [forrigeKravUrl, nesteKravUrl] = useMemo<[string, string]>(() => {
+    const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(statsData)
+
+    if (!relevanteStats.length || !params.etterlevelseDokumentasjonId) {
+      return ['', '']
+    }
+
+    const orderedKrav: TKravNavigationEntry[] = getOrderedKravForDokumentasjon({
+      temaListe,
+      relevanteStats,
+      utgaattStats,
+      etterlevelseDokumentasjon,
+      allKravPriority,
+      codelist,
+    })
+
+    const currentIndex: number = orderedKrav.findIndex(
+      (krav: TKravNavigationEntry) => krav.kravNummer === currentKravNummer
+    )
+
+    if (currentIndex === -1) {
+      return ['', '']
+    }
+
+    const toUrl = (krav: TKravNavigationEntry | undefined): string =>
+      krav
+        ? etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
+            params.etterlevelseDokumentasjonId as string,
+            krav.temaCode,
+            krav.kravNummer,
+            krav.kravVersjon
+          )
+        : ''
+
+    return [toUrl(orderedKrav[currentIndex - 1]), toUrl(orderedKrav[currentIndex + 1])]
+  }, [
+    statsData,
+    allKravPriority,
+    temaListe,
+    codelist,
+    currentKravNummer,
+    etterlevelseDokumentasjon,
+    params.etterlevelseDokumentasjonId,
+  ])
+
+  const kravGrupper = useMemo<TKravNavigationGroup[]>(() => {
+    const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(statsData)
+
+    if (!relevanteStats.length || !params.etterlevelseDokumentasjonId) {
+      return []
+    }
+
+    return getGroupedKravForDokumentasjon({
+      temaListe,
+      relevanteStats,
+      utgaattStats,
+      etterlevelseDokumentasjon,
+      allKravPriority,
+      codelist,
+    })
+  }, [
+    statsData,
+    allKravPriority,
+    temaListe,
+    codelist,
+    etterlevelseDokumentasjon,
+    params.etterlevelseDokumentasjonId,
+  ])
+
+  const [forrigeTema, nesteTema] = useMemo<
+    [TKravNavigationTarget | undefined, TKravNavigationTarget | undefined]
+  >(() => {
+    if (!kravGrupper.length || !params.etterlevelseDokumentasjonId) {
+      return [undefined, undefined]
+    }
+
+    const groupIndex: number = kravGrupper.findIndex((group: TKravNavigationGroup) =>
+      group.krav.some((krav: TKravNavigationEntry) => krav.kravNummer === currentKravNummer)
+    )
+
+    if (groupIndex === -1) {
+      return [undefined, undefined]
+    }
+
+    const toTarget = (
+      group: TKravNavigationGroup | undefined
+    ): TKravNavigationTarget | undefined => {
+      if (!group || !group.krav.length) {
+        return undefined
+      }
+      const firstKrav: TKravNavigationEntry = group.krav[0]
+      return {
+        temaName: group.temaName,
+        url: etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
+          params.etterlevelseDokumentasjonId as string,
+          firstKrav.temaCode,
+          firstKrav.kravNummer,
+          firstKrav.kravVersjon
+        ),
+      }
+    }
+
+    return [toTarget(kravGrupper[groupIndex - 1]), toTarget(kravGrupper[groupIndex + 1])]
+  }, [kravGrupper, currentKravNummer, params.etterlevelseDokumentasjonId])
 
   const { data, loading } = useQuery<{ krav: IPageResponse<TKravQL> }>(
     getKravMedPrioriteringOgEtterlevelseQuery,
@@ -144,6 +277,11 @@ const EtterlevelsePage = () => {
           {etterlevelse && (
             <EtterlevelseKravView
               nextKravToDocument={nextKravToDocument}
+              forrigeKravUrl={forrigeKravUrl}
+              nesteKravUrl={nesteKravUrl}
+              forrigeTema={forrigeTema}
+              nesteTema={nesteTema}
+              kravGrupper={kravGrupper}
               temaName={temaData?.shortName}
               tidligereEtterlevelser={tidligereEtterlevelser}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}

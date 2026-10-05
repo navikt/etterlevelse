@@ -27,8 +27,10 @@ import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentas
 import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { env } from '@/util/env/env'
+import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
+import KravNavigationButtons, { TKravNavigationTarget } from '../kravNavigationButtons'
 import { etterlevelseSchema } from './etterlevelseSchema'
 import SuksesskriterieErrorFields from './suksesskriterieErrorFields'
 import { SuksesskriterierBegrunnelseEdit } from './suksesskriterierBegrunnelseEdit'
@@ -46,6 +48,11 @@ type TEditProps = {
   isPreview: boolean
   etterlevelseDokStatusAlert: boolean
   setEtterlevelseDokStatusAlert: (state: boolean) => void
+  forrigeKravUrl: string
+  nesteKravUrl: string
+  forrigeTema?: TKravNavigationTarget
+  nesteTema?: TKravNavigationTarget
+  kravGrupper?: TKravNavigationGroup[]
 }
 
 const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
@@ -60,6 +67,11 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   isPreview,
   etterlevelseDokStatusAlert,
   setEtterlevelseDokStatusAlert,
+  forrigeKravUrl,
+  nesteKravUrl,
+  forrigeTema,
+  nesteTema,
+  kravGrupper,
 }) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
@@ -70,6 +82,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
     etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE
   )
   const [isAvbrytModalOpen, setIsAvbryModalOpen] = useState<boolean>(false)
+  const [pendingNavUrl, setPendingNavUrl] = useState<string | undefined>(undefined)
 
   const [morDokumentRelasjon, setMorDokumentRelasjon] = useState<IDocumentRelation>()
   const [morEtterlevelse, setMorEtterlevelse] = useState<IEtterlevelse>()
@@ -362,6 +375,24 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         )}
                       </div>
 
+                      <KravNavigationButtons
+                        forrigeKravUrl={forrigeKravUrl}
+                        nesteKravUrl={nesteKravUrl}
+                        forrigeTema={forrigeTema}
+                        nesteTema={nesteTema}
+                        kravGrupper={kravGrupper}
+                        currentKravNummer={krav.kravNummer}
+                        currentKravVersjon={krav.kravVersjon}
+                        etterlevelseDokumentasjonId={etterlevelseDokumentasjon?.id}
+                        onNavigate={(url: string) => {
+                          if (dirty) {
+                            setPendingNavUrl(url)
+                          } else {
+                            router.push(url)
+                          }
+                        }}
+                      />
+
                       {etterlevelse.changeStamp.lastModifiedDate &&
                         etterlevelse.changeStamp.lastModifiedBy && (
                           <div className='pb-6 flex justify-end w-full'>
@@ -372,6 +403,42 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                             </BodyShort>
                           </div>
                         )}
+
+                      <Modal
+                        onClose={() => setPendingNavUrl(undefined)}
+                        header={{
+                          heading: 'Vil du gå videre uten å lagre endringene dine?',
+                          closeButton: false,
+                        }}
+                        open={!!pendingNavUrl}
+                      >
+                        <Modal.Body>
+                          Du har endringer som ikke er lagret. Hvis du går videre nå, blir de ikke
+                          lagret.
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button
+                            type='button'
+                            variant='secondary'
+                            onClick={() => {
+                              const url = pendingNavUrl
+                              setPendingNavUrl(undefined)
+                              if (url) {
+                                router.push(url)
+                              }
+                            }}
+                          >
+                            Fortsett uten å lagre
+                          </Button>
+                          <Button
+                            type='button'
+                            variant='tertiary'
+                            onClick={() => setPendingNavUrl(undefined)}
+                          >
+                            Avbryt
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
 
                       <Modal
                         onClose={() => setIsAvbryModalOpen(false)}

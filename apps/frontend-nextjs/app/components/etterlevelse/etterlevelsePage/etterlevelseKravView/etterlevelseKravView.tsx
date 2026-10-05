@@ -33,7 +33,9 @@ import { EKravStatus, IKrav, IKravVersjon, TKravId, TKravQL } from '@/constants/
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { getKravWithEtterlevelseQuery } from '@/query/krav/kravQuery'
+import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import TildeltTil from '../etterlevelseMetadata/tildeltTil/tildeltTil'
+import { TKravNavigationTarget } from './kravNavigationButtons'
 import EtterlevelseSidePanel from './sidepanel/etterlevelseSidePanel'
 import EtterlevelsePageTabs from './tabs/etterlevelsePageTabs'
 
@@ -47,6 +49,11 @@ type TProps = {
   varsleMelding?: string
   tidligereEtterlevelser: IEtterlevelse[] | undefined
   nextKravToDocument: string
+  forrigeKravUrl: string
+  nesteKravUrl: string
+  forrigeTema?: TKravNavigationTarget
+  nesteTema?: TKravNavigationTarget
+  kravGrupper: TKravNavigationGroup[]
 }
 
 export const EtterlevelseKravView: FunctionComponent<TProps> = ({
@@ -57,6 +64,11 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   tidligereEtterlevelser,
   nextKravToDocument,
+  forrigeKravUrl,
+  nesteKravUrl,
+  forrigeTema,
+  nesteTema,
+  kravGrupper,
 }) => {
   const { data, loading: kravLoading } = useQuery<{ kravById: TKravQL }, TKravId>(
     getKravWithEtterlevelseQuery,
@@ -293,6 +305,10 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 tidligereEtterlevelser={tidligereEtterlevelser}
                 disableEdit={disableEdit}
                 nextKravToDocument={nextKravToDocument}
+                forrigeKravUrl={forrigeKravUrl}
+                nesteKravUrl={nesteKravUrl}
+                forrigeTema={forrigeTema}
+                nesteTema={nesteTema}
                 isTabAlertActive={isTabAlertActive}
                 setIsTabAlertActive={setIsTabAlertActive}
                 isPvkTabActive={isPvkTabActive}
@@ -305,6 +321,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 etterlevelseFormRef={etterlevelseFormRef}
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 previousVurdering={previousVurdering}
+                kravGrupper={kravGrupper}
               />
             </div>
 

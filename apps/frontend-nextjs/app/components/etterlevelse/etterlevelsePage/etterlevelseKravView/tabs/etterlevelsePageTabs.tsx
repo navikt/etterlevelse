@@ -3,7 +3,7 @@
 import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import {
   Dispatch,
   FunctionComponent,
@@ -39,12 +39,14 @@ import {
 import { EKravTab, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import {
   isEtterlevelseIkkePaabegynt,
   syncEtterlevelseKriterieBegrunnelseWithKrav,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { EtterlevelseViewFields } from '../../readOnly/etterlevelseViewFields'
 import EtterlevelseEditFields from '../form/EtterlevelseEditFields'
+import KravNavigationButtons, { TKravNavigationTarget } from '../kravNavigationButtons'
 import ChangesSavedEttelevelseModal from '../modal/changesSavedEttelevelseModal'
 import UnsavedEtterlevelseModal from '../modal/unsavedEtterlevelseModal'
 
@@ -56,6 +58,10 @@ type TProps = {
   tidligereEtterlevelser: IEtterlevelse[] | undefined
   disableEdit: boolean
   nextKravToDocument: string
+  forrigeKravUrl: string
+  nesteKravUrl: string
+  forrigeTema?: TKravNavigationTarget
+  nesteTema?: TKravNavigationTarget
   isTabAlertActive: boolean
   setIsTabAlertActive: (state: boolean) => void
   isPvkTabActive: boolean
@@ -69,6 +75,7 @@ type TProps = {
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   pvkDokument?: IPvkDokument
   previousVurdering?: IVurdering
+  kravGrupper: TKravNavigationGroup[]
 }
 
 const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
@@ -80,6 +87,10 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   tidligereEtterlevelser,
   disableEdit,
   nextKravToDocument,
+  forrigeKravUrl,
+  nesteKravUrl,
+  forrigeTema,
+  nesteTema,
   isTabAlertActive,
   setIsTabAlertActive,
   isPvkTabActive,
@@ -92,6 +103,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   etterlevelseFormRef,
   etterlevelseDokumentasjon,
   previousVurdering,
+  kravGrupper,
 }) => {
   const params: Readonly<
     Partial<{
@@ -99,6 +111,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     }>
   > = useParams<{ tema?: string }>()
   const user = useContext(UserContext)
+  const router = useRouter()
   const [currentTab, setCurrentTab] = useState<string>('dokumentasjon')
   const [selectedTab, setSelectedTab] = useState<string>('dokumentasjon')
   const [statusText, setStatustext] = useState<string>('')
@@ -349,6 +362,11 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   etterlevelseDokStatusAlert={etterlevelseDokStatusAlert}
                   setEtterlevelseDokStatusAlert={setEtterlevelseDokStatusAlert}
+                  forrigeKravUrl={forrigeKravUrl}
+                  nesteKravUrl={nesteKravUrl}
+                  forrigeTema={forrigeTema}
+                  nesteTema={nesteTema}
+                  kravGrupper={kravGrupper}
                 />
               </div>
             )}
@@ -356,12 +374,25 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
             isPvoUnderarbeidWarningActive ||
             etterlevelseDokumentasjon?.status !==
               EEtterlevelseDokumentasjonStatus.UNDER_ARBEID) && (
-            <EtterlevelseViewFields
-              etterlevelse={etterlevelse}
-              suksesskriterier={krav.suksesskriterier}
-              tidligereEtterlevelser={tidligereEtterlevelser}
-              previousVurdering={previousVurdering}
-            />
+            <>
+              <EtterlevelseViewFields
+                etterlevelse={etterlevelse}
+                suksesskriterier={krav.suksesskriterier}
+                tidligereEtterlevelser={tidligereEtterlevelser}
+                previousVurdering={previousVurdering}
+              />
+              <KravNavigationButtons
+                forrigeKravUrl={forrigeKravUrl}
+                nesteKravUrl={nesteKravUrl}
+                forrigeTema={forrigeTema}
+                nesteTema={nesteTema}
+                kravGrupper={kravGrupper}
+                currentKravNummer={krav.kravNummer}
+                currentKravVersjon={krav.kravVersjon}
+                etterlevelseDokumentasjonId={etterlevelseDokumentasjon?.id}
+                onNavigate={(url: string) => router.push(url)}
+              />
+            </>
           )}
         </Tabs.Panel>
         <Tabs.Panel value='etterlevelser'>
