@@ -65,7 +65,7 @@ public class P360ArkiveringService {
                     .Status("B")
                     .AccessCode("U")
                     .AccessGroup("Alle ansatte i Nav")
-                    .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                    .ResponsiblePersonIdNumber(responsiblePerson)
                     .build());
 
             eDok.getEtterlevelseDokumentasjonData().setP360CaseNumber(sak.CaseNumber);
