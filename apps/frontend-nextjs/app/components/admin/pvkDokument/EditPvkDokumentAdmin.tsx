@@ -8,6 +8,7 @@ import {
   mapPvkDokumentToFormValue,
   updatePvkDokument,
 } from '@/api/pvkDokument/pvkDokumentApi'
+import pvkBehovSchema from '@/components/PVK/form/pvkBehovSchema'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
@@ -77,6 +78,7 @@ const EditPvkDokumentAdmin: FunctionComponent<TProps> = ({
         <Formik
           validateOnChange={false}
           validateOnBlur={false}
+          validationSchema={pvkBehovSchema}
           initialValues={mapPvkDokumentToFormValue(pvkDokument)}
           onSubmit={submit}
         >
@@ -107,9 +109,6 @@ const EditPvkDokumentAdmin: FunctionComponent<TProps> = ({
                         </Radio>
                         <Radio value={EPvkVurdering.ALLEREDE_UTFORT}>
                           Vi beholder vår eksisterende, godkjente PVK i Word
-                        </Radio>
-                        <Radio value={EPvkVurdering.SKAL_IKKE_UTFORE}>
-                          Vi skal ikke gjennomføre PVK
                         </Radio>
                       </RadioGroup>
                     )}
