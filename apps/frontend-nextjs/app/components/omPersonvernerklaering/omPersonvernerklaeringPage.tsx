@@ -4,6 +4,7 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 import { useRouter } from 'next/navigation'
 import { PageLayout } from '../others/scaffold/scaffold'
 import HovedinnholdPersonerklaering from './hovedinnhold/hovedinnholdPersonvernerklaering'
+import OmStepperPersonvernerklaering from './omStepper/omStepperPersonvernerklaering'
 
 const OmPersonvernerklaeringPage = () => {
   const router: AppRouterInstance = useRouter()
@@ -14,7 +15,7 @@ const OmPersonvernerklaeringPage = () => {
       currentPage='Personvernerklæring for Støtte til etterlevelse'
     >
       <div className='flex gap-7 mt-10'>
-        {/* <OmStepper /> */}
+        <OmStepperPersonvernerklaering />
         <div className='max-w-[75ch]'>
           {/* <OmHiddenFormProgress /> */}
           <HovedinnholdPersonerklaering />
