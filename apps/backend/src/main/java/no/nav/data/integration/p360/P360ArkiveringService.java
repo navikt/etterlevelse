@@ -12,7 +12,6 @@ import no.nav.data.integration.p360.dto.P360Case;
 import no.nav.data.integration.p360.dto.P360CaseRequest;
 import no.nav.data.integration.p360.dto.P360DocumentCreateRequest;
 import no.nav.data.integration.p360.dto.P360File;
-import no.nav.data.pvk.pvkdokument.domain.MeldingTilPvo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -46,6 +45,17 @@ public class P360ArkiveringService {
         SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
         Date date = new Date();
 
+        String responsiblePerson = SecurityUtils.getCurrentIdent();
+
+        if (pvoTilbakemelding && pvkDokument.isPresent()) {
+            responsiblePerson = pvkDokument.get().getPvkDokumentData().getMeldingerTilPvo().stream()
+                    .filter(m -> m.getInnsendingId() == pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo())
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("MeldingTilPvo not found for antallInnsendingTilPvo: " + pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo()))
+                    .getSendtTilPvoAv()
+                    .split(" - ")[0];
+        }
+
         if (eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber() == null || eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber().isEmpty()) {
             log.info("Creating new case in P360 for etterlevelseDokumentasjon with id: {}", eDok.getId());
             P360Case sak = p360Service.createCase(P360CaseRequest.builder()
@@ -71,16 +81,8 @@ public class P360ArkiveringService {
         }
 
         String documentTitle = "";
-        String responsiblePerson = SecurityUtils.getCurrentIdent();
 
         if (pvoTilbakemelding && pvkDokument.isPresent()) {
-            var antallInnsendingTilPvo = pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo();
-            MeldingTilPvo meldingTilPvo = pvkDokument.get().getPvkDokumentData().getMeldingerTilPvo().stream()
-                    .filter(m -> m.getInnsendingId() == antallInnsendingTilPvo)
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("MeldingTilPvo not found for antallInnsendingTilPvo: " + antallInnsendingTilPvo));
-            responsiblePerson = meldingTilPvo.getSendtTilPvoAv().split(" - ")[0];
-
             if (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() > 1) {
                 documentTitle += (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". ");
             }
