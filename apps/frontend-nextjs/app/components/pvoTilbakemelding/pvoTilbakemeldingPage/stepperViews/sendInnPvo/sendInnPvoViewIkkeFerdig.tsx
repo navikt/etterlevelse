@@ -40,6 +40,7 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { env } from '@/util/env/env'
 
 type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
@@ -401,9 +402,9 @@ const SendInnPvoViewIkkeFerdig: FunctionComponent<TProps> = ({
                 setSubmittedStatus(EPvoTilbakemeldingStatus.FERDIG)
                 await submitForm().then(async () => {
                   if (_.isEmpty(formRef.current.errors)) {
-                    //if (!env.isDev) {
-                    await arkiver(etterlevelseDokumentasjon.id, true, true, false, false)
-                    // }
+                    if (!env.isDev) {
+                      await arkiver(etterlevelseDokumentasjon.id, true, true, false, false)
+                    }
                   }
                 })
                 setSubmitClicked(!submitClicked)
