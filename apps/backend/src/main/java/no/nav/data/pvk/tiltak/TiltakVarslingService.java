@@ -3,11 +3,14 @@ package no.nav.data.pvk.tiltak;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
 import no.nav.data.etterlevelse.varsel.VarselService;
+import no.nav.data.etterlevelse.varsel.domain.AdresseType;
 import no.nav.data.etterlevelse.varsel.domain.Varsel;
+import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
@@ -16,6 +19,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.url;
@@ -28,7 +32,7 @@ public class TiltakVarslingService {
     private final UrlGenerator urlGenerator;
     private final TiltakRepo repo;
     private final PvkDokumentRepo pkDokumentRepo;
-    private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
+    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
 
     private List<Tiltak> getTiltakMedFristOm3Dager(LocalDate dateStamp) {
@@ -50,7 +54,7 @@ public class TiltakVarslingService {
 
         tiltakMedFristOm3Dager.forEach(tiltak -> {
             PvkDokument pvkDokument = pkDokumentRepo.findById(tiltak.getPvkDokumentId()).orElseThrow();
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(pvkDokument.getEtterlevelseDokumentId()).orElseThrow();
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
 
             String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
             String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
@@ -67,7 +71,20 @@ public class TiltakVarslingService {
 
         tiltakMedFristPassert1Dag.forEach(tiltak -> {
             PvkDokument pvkDokument = pkDokumentRepo.findById(tiltak.getPvkDokumentId()).orElseThrow();
-            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(pvkDokument.getEtterlevelseDokumentId()).orElseThrow();
+            EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
+            List<Resource> risikoeiere = etterlevelseDokumentasjonService.getResourcesData(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere());
+            List<Varslingsadresse> risikoeiereVarslingsadresser = new ArrayList<>();
+
+            if (risikoeiere != null && !risikoeiere.isEmpty()) {
+                risikoeiere.forEach(risikoeier -> {
+                    risikoeiereVarslingsadresser.add(
+                            Varslingsadresse.builder()
+                                    .adresse(risikoeier.getEmail())
+                                    .type(AdresseType.EPOST)
+                                    .build()
+                    );
+                });
+            }
 
             String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
             String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
@@ -75,7 +92,7 @@ public class TiltakVarslingService {
                 etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
             }
 
-            varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
+            varselService.varsle(risikoeiereVarslingsadresser, Varsel.builder()
                     .title("Tiltak er ikke gjennomført innen tiltaksfrist for %s".formatted(etterlevelseDokumentasjonKortTittel))
                     .paragraph(new Varsel.Paragraph("Digital PVK for %s inneholder tiltak som ikke er markert som iverksatt innen fastsatt tiltaksfrist.",
                             url(urlGenerator.pvkDokumentTiltakListUrl(etterlevelseDokumentasjon.getId().toString(), pvkDokument.getId().toString()),etterlevelseDokumentasjonKortTittel)))
