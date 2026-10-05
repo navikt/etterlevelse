@@ -43,6 +43,7 @@ public class BkatClient implements BegrepService {
         this.client = webClientBuilder
                 .baseUrl(properties.getBaseUrl())
                 .filter(new TraceHeaderFilter(true))
+                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024))
                 .build();
 
         this.processSearchCache = MetricUtils.register("bkatProcessSearchCache",
