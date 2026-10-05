@@ -105,7 +105,7 @@ public class P360ArkiveringService {
                 .CaseNumber(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber())
                 .Title(documentTitle)
                 .DocumentDate(formatter.format(date))
-                .ResponsiblePersonIdNumber(responsiblePerson)
+                .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
                 .build();
 
         filer.add(P360File.builder()
