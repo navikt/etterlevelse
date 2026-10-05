@@ -110,6 +110,7 @@ public class P360Service {
 
     public P360Case createCase(P360CaseRequest request) {
         try {
+
             var response = restTemplate.postForEntity(p360Properties.getCaseUrl() + "/CreateCase",
                     new HttpEntity<>( request, createHeadersWithAuth()),
                     P360Case.class);
@@ -118,7 +119,7 @@ public class P360Service {
             if (!response.getBody().getErrorMessage().isEmpty()) {
                 throw new RestClientException(response.getBody().getErrorMessage());
             }
-
+            log.info("Successfully created case in P360 with case number: {}", response.getBody().getCaseNumber());
             return response.getBody();
         } catch (Exception e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));

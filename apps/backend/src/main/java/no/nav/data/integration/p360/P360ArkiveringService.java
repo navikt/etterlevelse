@@ -47,6 +47,7 @@ public class P360ArkiveringService {
         Date date = new Date();
 
         if (eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber() == null || eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber().isEmpty()) {
+            log.info("Creating new case in P360 for etterlevelseDokumentasjon with id: {}", eDok.getId());
             P360Case sak = p360Service.createCase(P360CaseRequest.builder()
                     .CaseType("Sak")
                     .DefaultValueSet("Etterlevelse")
