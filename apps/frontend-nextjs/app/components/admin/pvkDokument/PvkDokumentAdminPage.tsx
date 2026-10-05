@@ -6,6 +6,7 @@ import {
   Heading,
   Link,
   Pagination,
+  Search,
   Select,
   SortState,
   Spacer,
@@ -13,57 +14,66 @@ import {
   TextField,
   Textarea,
 } from '@navikt/ds-react'
-import { useEffect, useState } from 'react'
-import {
-  deletePvkDokument,
-  getAllPvkDokument,
-  mapPvkDokumentToFormValue,
-} from '@/api/pvkDokument/pvkDokumentApi'
+import { useEffect, useMemo, useState } from 'react'
+import { deletePvkDokument, getAllPvkDokumentListItem } from '@/api/pvkDokument/pvkDokumentApi'
+import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { IPvkDokumentListItem } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { pvkDokumentasjonPvkBehovUrl } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import { handleSort } from '@/util/handleTableSort'
 import { UpdateMessage } from '../common/commonComponents'
+import EditPvkDokumentAdmin from './EditPvkDokumentAdmin'
 
 const PvkDokumentAdminPage = () => {
   const [deleteMessage, setDeleteMessage] = useState<string>('')
   const [deletePvkDokumentId, setDeletePvkDokumentId] = useState<string>('')
   const [reloadTable, setReloadTable] = useState(false)
 
-  const [tableContent, setTableContent] = useState<IPvkDokument[]>([])
+  const [tableContent, setTableContent] = useState<IPvkDokumentListItem[]>([])
+  const [isTableLoading, setIsTableLoading] = useState<boolean>(false)
 
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sort, setSort] = useState<SortState>()
   const [isError, setIsError] = useState<boolean>(false)
   const [deleteComment, setDeleteComment] = useState<string>('')
+  const [selectedPvkDokuement, setSelectedPvkDokument] = useState<string>('')
+  const [selectedEtterlevelsesDokument, setSelectedEtterlevelsesDokument] = useState<string>('')
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const [searchFilter, setSearchFilter] = useState<string>('')
+
+  const filteredTableContent = useMemo(() => {
+    const startIndex = (page - 1) * rowsPerPage
+    return tableContent
+      .filter((content) =>
+        `E${content.etterlevelseNummer}.${content.currentEtterlevelseDokumentVersjon}`.includes(
+          searchFilter
+        )
+      )
+      .slice(startIndex, startIndex + rowsPerPage)
+  }, [page, rowsPerPage, tableContent, searchFilter])
 
   const loadData = async () => {
-    const allPvkDokument = await getAllPvkDokument()
-    const mappedPvkDokument = allPvkDokument.map((pvkDokument) =>
-      mapPvkDokumentToFormValue(pvkDokument)
-    )
-    setTableContent(mappedPvkDokument)
+    setIsTableLoading(true)
+
+    await getAllPvkDokumentListItem().then((response) => {
+      setTableContent(response)
+      setIsTableLoading(false)
+    })
   }
 
   useEffect(() => {
     ;(async () => {
-      await loadData()
-      // const ampliInstance = ampli()
-      // if (ampliInstance) {
-      //   ampliInstance.logEvent('sidevisning', {
-      //     side: 'Etterlevelse Pvk dokument admin side',
-      //     sidetittel: 'Administrere Pvk dokument',
-      //     ...userRoleEventProp,
-      //   })
-      // }
+      loadData()
     })()
   }, [])
 
   useEffect(() => {
     ;(async () => {
-      await loadData()
+      if (reloadTable) {
+        loadData()
+      }
     })()
   }, [reloadTable])
 
@@ -122,7 +132,17 @@ const PvkDokumentAdminPage = () => {
         <Heading level='2' size='small'>
           Pvk Dokument tabell
         </Heading>
-        {tableContent.length !== 0 && (
+
+        <search>
+          <Search
+            label='Søk med etterlevlesesnummer'
+            variant='simple'
+            onChange={(value) => setSearchFilter(value)}
+          />
+        </search>
+
+        {isTableLoading && <CenteredLoader />}
+        {filteredTableContent.length !== 0 && !isTableLoading && (
           <div>
             <Table
               size='large'
@@ -134,10 +154,12 @@ const PvkDokumentAdminPage = () => {
                 <Table.Row>
                   <Table.ColumnHeader>Pvk dokument ID</Table.ColumnHeader>
                   <Table.ColumnHeader>Etterlevelse dokumentasjon ID</Table.ColumnHeader>
+                  <Table.ColumnHeader>Etterlevelse nummer</Table.ColumnHeader>
+                  <Table.ColumnHeader>Action</Table.ColumnHeader>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {tableContent.map((pvkDokument: IPvkDokument) => (
+                {filteredTableContent.map((pvkDokument: IPvkDokumentListItem) => (
                   <Table.Row key={pvkDokument.id}>
                     <Table.HeaderCell scope='row'>
                       <Link
@@ -155,6 +177,25 @@ const PvkDokumentAdminPage = () => {
                       >
                         {pvkDokument.etterlevelseDokumentId}
                       </Link>
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      {' '}
+                      E{pvkDokument.etterlevelseNummer}.
+                      {pvkDokument.currentEtterlevelseDokumentVersjon}
+                    </Table.DataCell>
+                    <Table.DataCell>
+                      <Button
+                        as='button'
+                        onClick={() => {
+                          setSelectedPvkDokument(pvkDokument.id)
+                          setSelectedEtterlevelsesDokument(
+                            `E${pvkDokument.etterlevelseNummer}.${pvkDokument.currentEtterlevelseDokumentVersjon}`
+                          )
+                          setIsEditModalOpen(true)
+                        }}
+                      >
+                        Rediger
+                      </Button>
                     </Table.DataCell>
                   </Table.Row>
                 ))}
@@ -187,6 +228,17 @@ const PvkDokumentAdminPage = () => {
               <BodyShort>Totalt antall rader: {tableContent.length}</BodyShort>
             </div>
           </div>
+        )}
+
+        {isEditModalOpen && selectedPvkDokuement !== '' && (
+          <EditPvkDokumentAdmin
+            isOpen={isEditModalOpen}
+            setIsOpen={setIsEditModalOpen}
+            selectedPvkDokument={selectedPvkDokuement}
+            setSelectedPvkDokument={setSelectedPvkDokument}
+            selectedEtterlevelsesDokument={selectedEtterlevelsesDokument}
+            setSelectedEtterlevelsesDokument={setSelectedEtterlevelsesDokument}
+          />
         )}
       </div>
     </PageLayout>
