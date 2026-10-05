@@ -121,6 +121,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   const [antallTiltakIkkeAktuelt, setAntallTiltakIkkeAktuelt] = useState<number>(0)
   const [antallUtenTiltakAnsvarlig, setAntallUtenTiltakAnsvarlig] = useState<number>(0)
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
+  const [antallFristUtloperSnart, setAntallFristUtloperSnart] = useState<number>(0)
   const [antallUtgaatteFrister, setAntallUtgaatteFrister] = useState<number>(0)
 
   useEffect(() => {
@@ -223,6 +224,17 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
         setAntallUtenFrist(
           tiltakList.filter((tiltak: ITiltak) => !tiltak.iverksatt && !tiltak.frist).length
         )
+
+        setAntallFristUtloperSnart(
+          tiltakList.filter(
+            (tiltak: ITiltak) =>
+              !tiltak.iverksatt &&
+              tiltak.frist &&
+              moment(now).isBefore(moment(tiltak.frist), 'day') &&
+              moment(now).diff(moment(tiltak.frist), 'day') <= 3
+          ).length
+        )
+
         setAntallUtgaatteFrister(
           tiltakList.filter(
             (tiltak: ITiltak) =>
@@ -388,6 +400,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                           <span className='flex items-center gap-1'>
                             {(antallUtenTiltakAnsvarlig > 0 ||
                               antallUtenFrist > 0 ||
+                              antallFristUtloperSnart > 0 ||
                               antallUtgaatteFrister > 0) && (
                               <span className='w-3 h-3 bg-red-400 rounded-full mr-1'></span>
                             )}
