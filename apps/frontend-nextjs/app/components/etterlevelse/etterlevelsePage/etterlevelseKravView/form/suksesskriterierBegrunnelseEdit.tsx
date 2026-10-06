@@ -15,7 +15,7 @@ import {
   ToggleGroup,
 } from '@navikt/ds-react'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { LabelAboveContent } from '@/components/common/labelAboveContent/labelAboveContent'
 import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
@@ -202,7 +202,29 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
     )
   }
 
+  const hasUserChanged = useRef(false)
+  const initialSyncValues = useRef({
+    begrunnelse,
+    suksessKriterieStatus,
+    veiledning,
+    veiledningTekst,
+    veiledningTekst2,
+  })
+
   useEffect(() => {
+    if (!hasUserChanged.current) {
+      const initial = initialSyncValues.current
+      const unchanged =
+        begrunnelse === initial.begrunnelse &&
+        suksessKriterieStatus === initial.suksessKriterieStatus &&
+        veiledning === initial.veiledning &&
+        veiledningTekst === initial.veiledningTekst &&
+        veiledningTekst2 === initial.veiledningTekst2
+      if (unchanged) {
+        return
+      }
+      hasUserChanged.current = true
+    }
     update({
       suksesskriterieId: suksesskriterie.id,
       begrunnelse: begrunnelse,
