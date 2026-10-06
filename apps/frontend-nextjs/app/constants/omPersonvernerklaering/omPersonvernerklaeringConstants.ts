@@ -5,7 +5,7 @@ export enum EOverskrifterPersonvernerklaering {
   BEHANDLING_PERSONOPPLYSNINGER_HVOR_HENTES = 'Hvor henter vi dine personopplysninger?',
   BEHANDLING_PERSONOPPLYSNINGER_HVOR_LAGRES = 'Hvor behandler og lagrer vi personopplysningene?',
   INNBLIKK_ETTERLEVELSE = 'Innblikk i Støtte til etterlevelse',
-  SAMTYKKE_MAALING = 'Samtykke om måling',
+  SAMTYKKE_MAALING = 'Samtykke til måling',
   SAMTYKKE_BRUKER = 'Samtykke til Innblikk',
   MANGLER = 'Feil, mangler og tilbakemeldinger',
 }

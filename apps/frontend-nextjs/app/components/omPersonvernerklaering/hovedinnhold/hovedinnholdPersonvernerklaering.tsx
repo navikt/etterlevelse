@@ -136,33 +136,16 @@ const HovedinnholdPersonerklaering = () => (
         {EOverskrifterPersonvernerklaering.SAMTYKKE_MAALING}
       </Heading>
       <BodyLong spacing>
-        Vi bruker statistikk- og analyseverktøyet Innblikk i for å forstå hvordan du bruker Støtte
-        til etterlevelse. Formålet er å forbedre brukeropplevelsen i Støtte til etterlevelse.
-        Innblikk bruker ikke informasjonskapsler, men henter inn opplysninger om nettleseren din for
-        å lage en unik ID («finger printing»). Denne ID-en brukes for å skille deg fra andre
-        brukere. For å hindre identifisering, fjernes deler av IP-adressen din før dataene sendes
-        til Innblikk.
+        Selv om det ikke behandles personopplysninger i Innblikk, har du likevel anledning til å
+        samtykke til målingen. Første gang vises det et informasjonskapsel-banner (også kalt
+        cookie-banner) i nettsiden, der det henvises til denne personvernerklæringen. I samme banner
+        er det også anledning til å godta eller avvise. Dette banneret vil dukke opp på nytt hver 6.
+        måned.
       </BodyLong>
-      <BodyLong className='mb-3'>Med Innblikk måler vi:</BodyLong>
-      <List className='mb-6'>
-        <List.Item>antall besøk på ulike sider</List.Item>
-        <List.Item>varigheten på besøkene</List.Item>
-        <List.Item>hvordan ansatte navigerer mellom de ulike sidene</List.Item>
-        <List.Item>hvilke knapper som trykkes på og når</List.Item>
-      </List>
-      <BodyLong className='mb-3'>Med Innblikk måler vi ikke:</BodyLong>
-      <List className='mb-6'>
-        <List.Item>inndata i fritekstboks og søkefelt</List.Item>
-        <List.Item>
-          andre felter som kan inneholde personopplysninger eller pseudonymiserte personopplysninger
-        </List.Item>
-      </List>
-      <BodyLong className='mb-6'>
-        For mer generell informasjon, se{' '}
-        <Link href='https://navno.sharepoint.com/sites/intranett-utvikling/SitePages/Rutine-for-bruk-av-Umami.aspx'>
-          Rutine for bruk av Innblikk
-        </Link>
-        .
+      <BodyLong spacing>I personvernerklæringen kan du alltid endre samtykket.</BodyLong>
+      <BodyLong spacing>
+        Under kan du gi samtykke til bruk av Innblikk. Du kan alltid komme tilbake og endre
+        samtykket.
       </BodyLong>
     </div>
 
