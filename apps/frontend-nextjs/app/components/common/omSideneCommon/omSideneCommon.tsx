@@ -31,10 +31,10 @@ export const OmNavigering: FunctionComponent<TOmNavigeringProps> = ({
           type='button'
           variant='tertiary'
           onClick={() => {
-            router.push(forrigeLenke)
+            router.push(nesteLenke)
           }}
         >
-          Fortsett til {forrigeLenkeTekst}
+          Fortsett til {nesteLenkeTekst}
         </Button>
 
         <Button
@@ -42,10 +42,10 @@ export const OmNavigering: FunctionComponent<TOmNavigeringProps> = ({
           type='button'
           variant='tertiary'
           onClick={() => {
-            router.push(nesteLenke)
+            router.push(forrigeLenke)
           }}
         >
-          Tilbake til {nesteLenkeTekst}
+          Tilbake til {forrigeLenkeTekst}
         </Button>
       </div>
     </div>
