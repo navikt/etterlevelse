@@ -5,9 +5,15 @@ import { BodyShort, Button, Link, Spacer } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import {
+  omBehandlingskatalogenUrl,
+  omPVKUrl,
+  omPersonvernerklaeringUrl,
+  omStotteTilEtterlevelseUrl,
+  oversiktOverLosningeneUrl,
+} from '@/routes/omSidene/omSideneUrl'
+import {
   behandlingsKatalogLink,
   datajegerSlackLink,
-  dokumentasjonLink,
   githubRepo,
   omEtterlevelsePaNavet,
   teamInfoLink,
@@ -91,17 +97,20 @@ export const Footer = () => {
           <Spacer />
           <div className='flex flex-col gap-4 px-2'>
             <BodyShort>Om nettstedet</BodyShort>
-            <Link className='text-white' href='/oversikt-over-losningene'>
+            <Link className='text-white' href={oversiktOverLosningeneUrl}>
               Oversikt over løsningene
             </Link>
-            <Link className='text-white' href={dokumentasjonLink}>
+            <Link className='text-white' href={omStotteTilEtterlevelseUrl}>
               Om Støtte til etterlevelse
             </Link>
-            <Link className='text-white' href='/om-pvk'>
+            <Link className='text-white' href={omPVKUrl}>
               Om Digital PVK
             </Link>
-            <Link className='text-white' href='/om-behandlingskatalogen'>
+            <Link className='text-white' href={omBehandlingskatalogenUrl}>
               Om Behandlingskatalogen
+            </Link>
+            <Link className='text-white' href={omPersonvernerklaeringUrl}>
+              Om Personvernerklæring
             </Link>
           </div>
           <Spacer />
