@@ -14,4 +14,6 @@ export const env = {
   lovdataRettskildeBaseUrl: process.env.NEXT_PUBLIC_LOVDATA_RETTSKILDE_BASE_URL!,
   p360BaseUrl: process.env.NEXT_PUBLIC_P360_BASE_URL!,
   ardoqSystemUrl: process.env.NEXT_PUBLIC_ARDOQ_SYSTEM_URL!,
+  umamiScriptUrl: process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL || '',
+  umamiWebsiteId: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID || '',
 }
