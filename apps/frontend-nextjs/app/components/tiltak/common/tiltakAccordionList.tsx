@@ -57,7 +57,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
   risikoscenarioList,
   formRef,
 }) => {
-  const now = new Date()
+  const now = new Date().toISOString()
 
   const router = useRouter()
   const queryParams = useSearchParams()
@@ -110,6 +110,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
       <Accordion>
         {filteredTiltakList.map((tiltak, index) => {
           const expanded: boolean = tiltakId === tiltak.id
+
           return (
             <Accordion.Item
               key={`${index}_${tiltak.navn}`}
@@ -130,7 +131,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                   )}
                   {!tiltak.iverksatt &&
                     tiltak.frist &&
-                    moment(now).diff(moment(tiltak.frist), 'day') <= 3 &&
+                    Math.abs(moment(now).diff(moment(tiltak.frist), 'day')) <= 3 &&
                     moment(now).isBefore(moment(tiltak.frist), 'day') && (
                       <Tag variant='warning'>Tiltaksfrist utløper snart</Tag>
                     )}
