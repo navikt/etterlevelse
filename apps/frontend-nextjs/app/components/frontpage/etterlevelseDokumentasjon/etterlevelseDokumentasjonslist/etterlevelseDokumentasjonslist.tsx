@@ -29,26 +29,26 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
   return (
     <section
       aria-labelledby='mine-sist-dokumenterte-heading'
-      className='bg-blue-50 rounded-lg p-6 h-full'
+      className='bg-blue-50 rounded-lg p-6 h-full flex flex-col'
     >
       <Heading id='mine-sist-dokumenterte-heading' size='medium' level='2'>
         Mine sist dokumenterte
       </Heading>
 
       {loading && (
-        <ul className='mt-6 flex flex-col gap-4 list-none p-0'>
+        <ul className='mt-6 flex flex-1 flex-col gap-4 list-none p-0'>
           {[0, 1, 2].map((index: number) => (
-            <li key={index}>
-              <Skeleton variant='rounded' height={112} width='100%' />
+            <li key={index} className='flex flex-1'>
+              <Skeleton variant='rounded' height='100%' width='100%' />
             </li>
           ))}
         </ul>
       )}
 
       {!loading && sistDokumenterte.length > 0 && (
-        <ul className='mt-6 flex flex-col gap-4 list-none p-0'>
+        <ul className='mt-6 flex flex-1 flex-col gap-4 list-none p-0'>
           {sistDokumenterte.map((etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => (
-            <li key={etterlevelseDokumentasjon.id}>
+            <li key={etterlevelseDokumentasjon.id} className='flex flex-1'>
               <SistDokumentertCard etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
             </li>
           ))}
