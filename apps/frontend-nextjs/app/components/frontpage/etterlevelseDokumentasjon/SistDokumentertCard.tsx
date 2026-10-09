@@ -22,7 +22,7 @@ export const SistDokumentertCard: FunctionComponent<TProps> = ({ etterlevelseDok
         : null
 
   return (
-    <LinkCard className='h-full w-full' arrowPosition='center'>
+    <LinkCard className='h-full w-full' arrowPosition='baseline'>
       <LinkCard.Icon>
         <FileTextIcon aria-hidden fontSize='1.5rem' />
       </LinkCard.Icon>

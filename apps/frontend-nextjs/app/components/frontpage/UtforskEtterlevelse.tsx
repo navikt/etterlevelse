@@ -47,7 +47,7 @@ const UtforskEtterlevelse = () => (
     <ul className='mt-6 flex flex-1 flex-col gap-4 list-none p-0'>
       {cards.map((card: TCard) => (
         <li key={card.title} className='flex flex-1'>
-          <LinkCard className='h-full w-full' arrowPosition='center'>
+          <LinkCard className='h-full w-full' arrowPosition='baseline'>
             <LinkCard.Icon>{card.icon}</LinkCard.Icon>
             <LinkCard.Title as='h3'>
               <LinkCard.Anchor href={card.href}>{card.title}</LinkCard.Anchor>
