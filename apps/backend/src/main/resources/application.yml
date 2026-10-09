@@ -138,7 +138,7 @@ client:
     teams-url: ${client.teamcat.url}/team
     url: https://teamcat/api
   pvo:
-    address: pvk@nav.no
+    address: personvernkonsekvensvurderinger@nav.no
   p360:
     case-url: ${client.p360.url}/CaseService
     document-url: ${client.p360.url}/DocumentService
