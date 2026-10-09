@@ -65,7 +65,7 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
             style={{ color: 'var(--ax-bg-info-strong)' }}
           />
           <BodyShort>
-            Vi fant ingen dokumenter for deg de 6 siste månedene.{' '}
+            Vi fant ingen dokumenter du har dokumentert på de siste 6 månedene.{' '}
             <Link href={etterlevelseDokumentasjonerUrl()}>Se alle etterlevelsesdokumenter</Link>.
           </BodyShort>
         </div>
