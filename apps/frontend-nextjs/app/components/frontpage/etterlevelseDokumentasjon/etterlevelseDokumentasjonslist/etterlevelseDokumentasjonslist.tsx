@@ -1,57 +1,68 @@
-import { BodyLong, Heading, List } from '@navikt/ds-react'
+'use client'
+
+import { Alert, BodyShort, Heading, Link, Skeleton } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import {
   filteredEtterlevelsesDokumentasjoner,
   sortEtterlevelseDokumentasjonerByUsersLastModifiedDate,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { EtterlevelseDokumentasjonsPanel } from '../../../etterlevelseDokumentasjon/etterlevelseDokumentasjonListPage/panels/etterlevelseDokumentasjonsPanel'
+import { SistDokumentertCard } from '../SistDokumentertCard'
 
 type TProps = {
-  etterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[]
+  etterlevelseDokumentasjoner?: TEtterlevelseDokumentasjonQL[]
+  loading?: boolean
 }
 
-export const EtterlevelseDokumentasjonList: FunctionComponent<TProps> = ({
-  etterlevelseDokumentasjoner,
+export const MineSistDokumenterte: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjoner = [],
+  loading,
 }) => {
   const sortedEtterlevelseDokumentasjoner: TEtterlevelseDokumentasjonQL[] =
     sortEtterlevelseDokumentasjonerByUsersLastModifiedDate([...etterlevelseDokumentasjoner])
 
-  const getFilteredEtterlevelsesDokumentasjoner: TEtterlevelseDokumentasjonQL[] =
-    filteredEtterlevelsesDokumentasjoner(sortedEtterlevelseDokumentasjoner)
+  const sistDokumenterte: TEtterlevelseDokumentasjonQL[] = filteredEtterlevelsesDokumentasjoner(
+    sortedEtterlevelseDokumentasjoner
+  )
 
   return (
-    <div>
-      <Heading size='medium' level='2'>
+    <section
+      aria-labelledby='mine-sist-dokumenterte-heading'
+      className='bg-blue-50 rounded-lg p-6 h-full'
+    >
+      <Heading id='mine-sist-dokumenterte-heading' size='medium' level='2'>
         Mine sist dokumenterte
       </Heading>
-      {getFilteredEtterlevelsesDokumentasjoner.length !== 0 && (
-        <List className='mt-6 flex flex-col gap-2'>
-          {getFilteredEtterlevelsesDokumentasjoner
-            .slice(0, 2)
-            .map((etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL, index: number) => (
-              <List.Item icon={<div />} key={`${etterlevelseDokumentasjon.title}_${index}`}>
-                <EtterlevelseDokumentasjonsPanel
-                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  onClick={() => {
-                    // ampli.logEvent('navigere', {
-                    //   app: 'etterlevelse',
-                    //   kilde: 'forside-panel',
-                    //   til: etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id),
-                    //   fra: '/',
-                    // })
-                  }}
-                />
-              </List.Item>
-            ))}
-        </List>
+
+      {loading && (
+        <ul className='mt-6 flex flex-col gap-4 list-none p-0'>
+          {[0, 1, 2].map((index: number) => (
+            <li key={index}>
+              <Skeleton variant='rounded' height={112} width='100%' />
+            </li>
+          ))}
+        </ul>
       )}
-      {getFilteredEtterlevelsesDokumentasjoner.length === 0 && (
-        <BodyLong id='main-page-text'>
-          Ingen etterlevelsesdokument som har blitt opprettet eller endret av deg de siste 6
-          månedene.
-        </BodyLong>
+
+      {!loading && sistDokumenterte.length > 0 && (
+        <ul className='mt-6 flex flex-col gap-4 list-none p-0'>
+          {sistDokumenterte.map((etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => (
+            <li key={etterlevelseDokumentasjon.id}>
+              <SistDokumentertCard etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+
+      {!loading && sistDokumenterte.length === 0 && (
+        <Alert variant='info' className='mt-6' id='main-page-text'>
+          <BodyShort>
+            Vi fant ingen etterlevelsesdokumenter for deg de siste måneden.{' '}
+            <Link href={etterlevelseDokumentasjonerUrl()}>Se alle etterlevelsesdokumenter</Link>.
+          </BodyShort>
+        </Alert>
+      )}
+    </section>
   )
 }

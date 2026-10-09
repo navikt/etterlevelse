@@ -76,7 +76,7 @@ export const filteredEtterlevelsesDokumentasjoner = (
       const monthAge = getNumberOfMonthsBetween(new Date(lastModifiedTime).toISOString(), today)
       return monthAge <= 6
     })
-    .slice(0, 2)
+    .slice(0, 3)
 }
 
 export const sortEtterlevelseDokumentasjonerByUsersLastModifiedDate = (

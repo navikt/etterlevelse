@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@apollo/client/react'
-import { Alert, Button, Heading, Skeleton } from '@navikt/ds-react'
+import { Alert, Button, Heading } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
@@ -14,7 +14,8 @@ import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonListQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonCreateUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { EtterlevelseDokumentasjonList } from './etterlevelseDokumentasjonslist/etterlevelseDokumentasjonslist'
+import UtforskEtterlevelse from '../UtforskEtterlevelse'
+import { MineSistDokumenterte } from './etterlevelseDokumentasjonslist/etterlevelseDokumentasjonslist'
 
 type TVariables = {
   pageNumber?: number
@@ -41,7 +42,6 @@ export const EtterlevelseDokumentasjon = () => {
   })
 
   useEffect(() => {
-    // ampli.logEvent('sidevisning', { side: 'Hovedside', ...userRoleEventProp })
     ;(async () => {
       await getMeldingByType(EMeldingType.FORSIDE).then((response: IPageResponse<IMelding>) => {
         if (response.numberOfElements > 0) {
@@ -52,87 +52,58 @@ export const EtterlevelseDokumentasjon = () => {
   }, [])
 
   return (
-    <>
-      {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
-        <div className=' my-16 w-full justify-center flex'>
-          <div className='w-fit' id='forsideVarselMelding'>
-            {forsideVarsel.alertType === EAlertType.INFO && (
-              <Alert fullWidth variant='info'>
-                <Markdown source={forsideVarsel.melding} />
-              </Alert>
-            )}
-            {forsideVarsel.alertType !== EAlertType.INFO && (
-              <Alert fullWidth variant='warning'>
-                <Markdown source={forsideVarsel.melding} />
-              </Alert>
-            )}
+    <div className='flex flex-col items-center w-full'>
+      <div className='max-w-7xl w-full px-4 py-10'>
+        {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
+          <div className='mb-10 flex justify-center' id='forsideVarselMelding'>
+            <Alert
+              fullWidth
+              variant={forsideVarsel.alertType === EAlertType.INFO ? 'info' : 'warning'}
+            >
+              <Markdown source={forsideVarsel.melding} />
+            </Alert>
           </div>
-        </div>
-      )}
-      {etterlevelseDokumentasjonLoading && (
-        <div className='bg-white mt-8 p-8 shadow-md shadow-[#00000040]'>
-          <Heading as={Skeleton} size='large'>
-            Card-title
+        )}
+
+        <div className='flex flex-wrap items-center justify-between gap-4'>
+          <Heading size='large' level='1'>
+            Støtte til etterlevelse
           </Heading>
-          <Skeleton variant='text' width='100%' />
-          <Skeleton variant='text' width='100%' />
-        </div>
-      )}
-      {!etterlevelseDokumentasjonLoading && data?.etterlevelseDokumentasjoner.content && (
-        <div className='bg-white mt-8 p-8 shadow-md shadow-[#00000040]'>
-          {data?.etterlevelseDokumentasjoner.content.length === 0 && (
-            <div>
-              <Heading size='medium' level='2'>
-                Etterlevelse i Nav
-              </Heading>
-              <span>
-                For å dokumentere etterlevelse må du opprette et etterlevelsesdokument. Du vil da se
-                hvilke krav som gjelder for din løsning og kan dokumentere hvordan løsningen
-                etterlever kravene.
-              </span>
-            </div>
-          )}
-          {data?.etterlevelseDokumentasjoner.content.length !== 0 && (
-            <EtterlevelseDokumentasjonList
-              etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
-            />
-          )}
-          <div className='mt-8 flex justify-end'>
-            <div className='mr-4'>
-              <Button
-                onClick={() => {
-                  window.scrollTo(0, 0)
-                  // ampli.logEvent('knapp klikket', {
-                  //   tekst: 'Nytt etterlevelsesdokument fra forsiden',
-                  // })
-                  router.push(etterlevelseDokumentasjonCreateUrl)
-                }}
-                size='medium'
-                variant={data?.etterlevelseDokumentasjoner.content.length ? 'secondary' : 'primary'}
-                className='whitespace-nowrap ml-5'
-              >
-                Nytt etterlevelsesdokument
-              </Button>
-            </div>
+          <div className='flex flex-wrap items-center gap-4'>
+            <Button
+              variant='secondary'
+              onClick={() => {
+                window.scrollTo(0, 0)
+                router.push(etterlevelseDokumentasjonCreateUrl)
+              }}
+            >
+              Opprett nytt etterlevelsesdokument
+            </Button>
             <Button
               variant='tertiary'
               className='underline hover:no-underline'
               onClick={() => {
                 window.scrollTo(0, 0)
-                // ampli.logEvent('navigere', {
-                //   app: 'etterlevelse',
-                //   kilde: 'forside-panel',
-                //   til: etterlevelseDokumentasjonerUrl(),
-                //   fra: '/',
-                // })
                 router.push(etterlevelseDokumentasjonerUrl())
               }}
             >
-              Alle etterlevelsesdokumenter
+              Se alle etterlevelsesdokumenter
             </Button>
           </div>
         </div>
-      )}
-    </>
+
+        <div className='mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          <div className='order-2 lg:order-1'>
+            <UtforskEtterlevelse />
+          </div>
+          <div className='order-1 lg:order-2'>
+            <MineSistDokumenterte
+              etterlevelseDokumentasjoner={data?.etterlevelseDokumentasjoner.content}
+              loading={etterlevelseDokumentasjonLoading}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
