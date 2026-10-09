@@ -131,7 +131,9 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                   )}
                   {!tiltak.iverksatt &&
                     tiltak.frist &&
-                    Math.abs(moment(now).diff(moment(tiltak.frist), 'day')) <= 3 &&
+                    Math.abs(
+                      moment(now).startOf('day').diff(moment(tiltak.frist).startOf('day'), 'day')
+                    ) <= 3 &&
                     moment(now).isBefore(moment(tiltak.frist), 'day') && (
                       <Tag variant='warning'>Tiltaksfrist utløper snart</Tag>
                     )}
