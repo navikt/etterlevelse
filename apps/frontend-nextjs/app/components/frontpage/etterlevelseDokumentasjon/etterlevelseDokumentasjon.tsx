@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@apollo/client/react'
-import { Alert, Button, Heading } from '@navikt/ds-react'
+import { Alert, Button, Heading, Link } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
@@ -79,16 +79,9 @@ export const EtterlevelseDokumentasjon = () => {
             >
               Opprett nytt etterlevelsesdokument
             </Button>
-            <Button
-              variant='tertiary'
-              className='underline hover:no-underline'
-              onClick={() => {
-                window.scrollTo(0, 0)
-                router.push(etterlevelseDokumentasjonerUrl())
-              }}
-            >
+            <Link href={etterlevelseDokumentasjonerUrl()} onClick={() => window.scrollTo(0, 0)}>
               Se alle etterlevelsesdokumenter
-            </Button>
+            </Link>
           </div>
         </div>
 

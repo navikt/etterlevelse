@@ -24,8 +24,10 @@ test.describe('etterlevelse main page tests', () => {
       page.getByRole('combobox', { name: 'Søk etter krav, dokumentasjon eller behandling' })
     ).toBeVisible()
     await expect(page.getByRole('link', { name: 'E716.1 Justice League' })).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Nytt etterlevelsesdokument' })).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Alle etterlevelsesdokumenter' })).toBeVisible()
+    await expect(
+      page.getByRole('button', { name: 'Opprett nytt etterlevelsesdokument' })
+    ).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Se alle etterlevelsesdokumenter' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Forstå kravene' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Status i organisasjonen' })).toBeVisible()
     const footer = page.getByRole('contentinfo')

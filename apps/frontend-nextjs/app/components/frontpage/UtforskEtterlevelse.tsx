@@ -44,9 +44,9 @@ const UtforskEtterlevelse = () => (
     <Heading id='utforsk-etterlevelse-heading' size='medium' level='2'>
       Utforsk etterlevelse i Nav
     </Heading>
-    <ul className='mt-6 flex flex-1 flex-col gap-4 list-none p-0'>
+    <ul className='mt-6 grid flex-1 gap-4 list-none p-0' style={{ gridAutoRows: '1fr' }}>
       {cards.map((card: TCard) => (
-        <li key={card.title} className='flex flex-1'>
+        <li key={card.title} className='flex'>
           <LinkCard className='h-full w-full' arrowPosition='baseline'>
             <LinkCard.Icon>{card.icon}</LinkCard.Icon>
             <LinkCard.Title as='h3'>

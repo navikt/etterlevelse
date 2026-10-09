@@ -1,6 +1,7 @@
 'use client'
 
-import { Alert, BodyShort, Heading, Link, Skeleton } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { BodyShort, Heading, Link, Skeleton } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
@@ -36,9 +37,9 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
       </Heading>
 
       {loading && (
-        <ul className='mt-6 flex flex-1 flex-col gap-4 list-none p-0'>
+        <ul className='mt-6 grid flex-1 gap-4 list-none p-0' style={{ gridAutoRows: '1fr' }}>
           {[0, 1, 2].map((index: number) => (
-            <li key={index} className='flex flex-1'>
+            <li key={index} className='flex'>
               <Skeleton variant='rounded' height='100%' width='100%' />
             </li>
           ))}
@@ -46,9 +47,9 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
       )}
 
       {!loading && sistDokumenterte.length > 0 && (
-        <ul className='mt-6 flex flex-1 flex-col gap-4 list-none p-0'>
+        <ul className='mt-6 grid flex-1 gap-4 list-none p-0' style={{ gridAutoRows: '1fr' }}>
           {sistDokumenterte.map((etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => (
-            <li key={etterlevelseDokumentasjon.id} className='flex flex-1'>
+            <li key={etterlevelseDokumentasjon.id} className='flex'>
               <SistDokumentertCard etterlevelseDokumentasjon={etterlevelseDokumentasjon} />
             </li>
           ))}
@@ -56,12 +57,18 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
       )}
 
       {!loading && sistDokumenterte.length === 0 && (
-        <Alert variant='info' className='mt-6' id='main-page-text'>
+        <div className='mt-6 flex items-start gap-2' id='main-page-text'>
+          <InformationSquareFillIcon
+            aria-hidden
+            fontSize='1.5rem'
+            className='shrink-0'
+            style={{ color: 'var(--ax-bg-info-strong)' }}
+          />
           <BodyShort>
-            Vi fant ingen etterlevelsesdokumenter for deg de siste måneden.{' '}
+            Vi fant ingen dokumenter for deg de 6 siste månedene.{' '}
             <Link href={etterlevelseDokumentasjonerUrl()}>Se alle etterlevelsesdokumenter</Link>.
           </BodyShort>
-        </Alert>
+        </div>
       )}
     </section>
   )
