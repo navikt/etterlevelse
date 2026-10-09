@@ -12,9 +12,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "@apollo/client@npm:4.3.2"
+"@apollo/client@npm:^4.3.3":
+  version: 4.3.3
+  resolution: "@apollo/client@npm:4.3.3"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -39,7 +39,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/c58b3ed12af0dac304c98a7f7ef132b906543ed0c17912cea6a0f1bae608600400c7920296a8eb22f8068adcd76ff662ce7d04373d675b7fae96e64223e5548b
+  checksum: 10c0/b84356a77251d17b717ec217cca44a46e54f9b89e02f927bb8f7d216551b3aae0f76c00f0c6076fe21717b001831cf634978ab8e2d07bbcff0eab7b7f9e3abf8
   languageName: node
   linkType: hard
 
@@ -1003,17 +1003,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^8.18.0":
-  version: 8.18.0
-  resolution: "@navikt/aksel-icons@npm:8.18.0"
-  checksum: 10c0/3799f55126f1c9383051c4385ccc805c7c97e6b17232629be4436236495ada0850357a699653efbc248f86ba8083a1ea7ae0a8b405ff89680bd702e4988c2a6b
+"@navikt/aksel-icons@npm:^8.19.0":
+  version: 8.19.0
+  resolution: "@navikt/aksel-icons@npm:8.19.0"
+  checksum: 10c0/3bf923dbee9abfab3aafbc8c264246e202e61c26953ebe219c557356244106dc9f6b310bd9b0a6cc504a930dbe8bc25e879f2a153ec41cb96528b2bcfbbbc7fd
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:^8.18.0":
-  version: 8.18.0
-  resolution: "@navikt/ds-css@npm:8.18.0"
-  checksum: 10c0/75cb6e264cc1f8399a6b57f5bf1050a72e9802b8f787f7abf7a7e71674ff997885590a68d319624c82695c9d2e142691b3376566d32b7acc454979c41ff08cc6
+"@navikt/ds-css@npm:^8.19.0":
+  version: 8.19.0
+  resolution: "@navikt/ds-css@npm:8.19.0"
+  checksum: 10c0/6b4bc57fee0117b7210cad30bccea987bbea2e15c71cab53f02906098a84fda13206cefeb1a079d5439571b12abe1c4a0519723328ebb606c14fe83bb3eb0781
   languageName: node
   linkType: hard
 
@@ -1059,10 +1059,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tailwind@npm:^8.18.0":
-  version: 8.18.0
-  resolution: "@navikt/ds-tailwind@npm:8.18.0"
-  checksum: 10c0/0596a4edb05fb054a92c31fbedcffeee56cc5206f0ab13b882c2513281026399f2d416e53e85d94f331e41027c63adcd8a4e7de1716cd1a54edcef710ddc149d
+"@navikt/ds-tailwind@npm:^8.19.0":
+  version: 8.19.0
+  resolution: "@navikt/ds-tailwind@npm:8.19.0"
+  checksum: 10c0/7b641e0c55104542a6b2f1aa11bbe849c8c62cbab6c0f404ef4b17d64561ede11ce63f92fd833c28bd74c611800f2cfadedebb9fd50f87383b72d2de0075366e
   languageName: node
   linkType: hard
 
@@ -3900,16 +3900,16 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend-nextjs@workspace:."
   dependencies:
-    "@apollo/client": "npm:^4.3.2"
+    "@apollo/client": "npm:^4.3.3"
     "@fontsource/source-sans-pro": "npm:^5.3.0"
     "@fortawesome/fontawesome-svg-core": "npm:^7.3.1"
     "@fortawesome/free-brands-svg-icons": "npm:^7.3.1"
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
-    "@navikt/aksel-icons": "npm:^8.18.0"
-    "@navikt/ds-css": "npm:^8.18.0"
-    "@navikt/ds-react": "npm:^8.18.0"
-    "@navikt/ds-tailwind": "npm:^8.18.0"
+    "@navikt/aksel-icons": "npm:^8.19.0"
+    "@navikt/ds-css": "npm:^8.19.0"
+    "@navikt/ds-react": "npm:^8.19.0"
+    "@navikt/ds-tailwind": "npm:^8.19.0"
     "@next/eslint-plugin-next": "npm:^16.4.0"
     "@playwright/test": "npm:^1.63.0"
     "@tailwindcss/postcss": "npm:^4.3.3"
