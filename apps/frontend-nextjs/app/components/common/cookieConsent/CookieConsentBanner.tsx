@@ -2,7 +2,6 @@
 
 import { Button, Heading, Link } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
-import { type TConsentValue } from '@/util/analytics/umami'
 import { useConsent } from '@/util/analytics/useConsent'
 
 const CookieConsentBanner: FunctionComponent = () => {
@@ -10,12 +9,10 @@ const CookieConsentBanner: FunctionComponent = () => {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
-    setIsMounted(true)
+    ;(async () => {
+      setIsMounted(true)
+    })()
   }, [])
-
-  const handleConsent = (value: TConsentValue) => {
-    setConsent(value)
-  }
 
   if (!isMounted || consent !== '') {
     return null
@@ -35,10 +32,10 @@ const CookieConsentBanner: FunctionComponent = () => {
           </div>
         </div>
         <div className='flex flex-wrap items-center gap-2'>
-          <Button variant='secondary' onClick={() => handleConsent('rejected')}>
+          <Button variant='secondary' onClick={() => setConsent('rejected')}>
             Avvis
           </Button>
-          <Button onClick={() => handleConsent('accepted')}>Godta</Button>
+          <Button onClick={() => setConsent('accepted')}>Godta</Button>
         </div>
       </div>
     </div>

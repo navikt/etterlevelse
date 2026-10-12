@@ -1,9 +1,12 @@
 'use client'
 
 import { useSyncExternalStore } from 'react'
-import { type TConsentValue, getConsentPreference, saveConsentPreference } from './umami'
-
-export const CONSENT_EVENT_NAME = 'etterlevelse-consent-changed'
+import {
+  CONSENT_EVENT_NAME,
+  type TConsentValue,
+  getConsentPreference,
+  saveConsentPreference,
+} from './umami'
 
 const subscribe = (listener: () => void) => {
   if (typeof window === 'undefined') {

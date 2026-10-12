@@ -5,16 +5,13 @@ import {
   EOverskrifterPersonvernerklaering,
   EPersonvernerklaeringId,
 } from '@/constants/omPersonvernerklaering/omPersonvernerklaeringConstants'
+import { TConsentValue } from '@/util/analytics/umami'
 import { useConsent } from '@/util/analytics/useConsent'
 
 const HovedinnholdPersonerklaering = () => {
   const { consent, setConsent } = useConsent()
 
-  const handleConsentChange = (value: string) => {
-    if (value !== 'accepted' && value !== 'rejected') {
-      return
-    }
-
+  const handleConsentChange = (value: TConsentValue) => {
     setConsent(value)
   }
 
