@@ -26,7 +26,7 @@ export const SistDokumentertCard: FunctionComponent<TProps> = ({ etterlevelseDok
       <LinkCard.Icon>
         <FileTextIcon aria-hidden fontSize='1.5rem' />
       </LinkCard.Icon>
-      <LinkCard.Title as='h3'>
+      <LinkCard.Title as='h3' className='line-clamp-2'>
         <LinkCard.Anchor href={etterlevelseDokumentasjonIdUrl(etterlevelseDokumentasjon.id)}>
           E{etterlevelseDokumentasjon.etterlevelseNummer}.
           {etterlevelseDokumentasjon.etterlevelseDokumentVersjon} {etterlevelseDokumentasjon.title}

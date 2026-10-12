@@ -85,7 +85,7 @@ export const EtterlevelseDokumentasjon = () => {
           </div>
         </div>
 
-        <div className='mt-8 grid grid-cols-1 lg:grid-cols-5 gap-6'>
+        <div className='mt-8 grid grid-cols-1 lg:grid-cols-5 lg:items-start gap-6'>
           <div className='order-2 lg:order-1 lg:col-span-2'>
             <UtforskEtterlevelse />
           </div>

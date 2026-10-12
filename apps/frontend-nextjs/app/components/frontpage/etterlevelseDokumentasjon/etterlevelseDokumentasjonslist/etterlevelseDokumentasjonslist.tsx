@@ -30,17 +30,14 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
   return (
     <section
       aria-labelledby='mine-sist-dokumenterte-heading'
-      className='bg-blue-50 rounded-lg p-6 h-full flex flex-col'
+      className='bg-blue-50 rounded-lg p-6 flex flex-col'
     >
       <Heading id='mine-sist-dokumenterte-heading' size='medium' level='2'>
         Mine sist dokumenterte
       </Heading>
 
       {loading && (
-        <ul
-          className='mt-6 grid flex-1 gap-4 list-none p-0'
-          style={{ gridTemplateRows: 'repeat(3, 1fr)' }}
-        >
+        <ul className='mt-6 grid gap-4 list-none p-0' style={{ gridAutoRows: '9rem' }}>
           {[0, 1, 2].map((index: number) => (
             <li key={index} className='flex'>
               <Skeleton variant='rounded' height='100%' width='100%' />
@@ -50,10 +47,7 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
       )}
 
       {!loading && sistDokumenterte.length > 0 && (
-        <ul
-          className='mt-6 grid flex-1 gap-4 list-none p-0'
-          style={{ gridTemplateRows: 'repeat(3, 1fr)' }}
-        >
+        <ul className='mt-6 grid gap-4 list-none p-0' style={{ gridAutoRows: '9rem' }}>
           {sistDokumenterte.map((etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL) => (
             <li key={etterlevelseDokumentasjon.id} className='flex'>
               <SistDokumentertCard etterlevelseDokumentasjon={etterlevelseDokumentasjon} />

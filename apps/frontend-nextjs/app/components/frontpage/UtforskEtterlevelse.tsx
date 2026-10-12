@@ -39,20 +39,20 @@ const cards: TCard[] = [
 const UtforskEtterlevelse = () => (
   <section
     aria-labelledby='utforsk-etterlevelse-heading'
-    className='bg-blue-50 rounded-lg p-6 h-full flex flex-col'
+    className='bg-blue-50 rounded-lg p-6 flex flex-col'
   >
     <Heading id='utforsk-etterlevelse-heading' size='medium' level='2'>
       Utforsk etterlevelse i Nav
     </Heading>
-    <ul className='mt-6 grid flex-1 gap-4 list-none p-0' style={{ gridAutoRows: '1fr' }}>
+    <ul className='mt-6 grid gap-4 list-none p-0' style={{ gridAutoRows: '9rem' }}>
       {cards.map((card: TCard) => (
         <li key={card.title} className='flex'>
           <LinkCard className='h-full w-full' arrowPosition='baseline'>
             <LinkCard.Icon>{card.icon}</LinkCard.Icon>
-            <LinkCard.Title as='h3'>
+            <LinkCard.Title as='h3' className='line-clamp-1'>
               <LinkCard.Anchor href={card.href}>{card.title}</LinkCard.Anchor>
             </LinkCard.Title>
-            <LinkCard.Description>{card.description}</LinkCard.Description>
+            <LinkCard.Description className='line-clamp-3'>{card.description}</LinkCard.Description>
           </LinkCard>
         </li>
       ))}
