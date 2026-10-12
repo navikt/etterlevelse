@@ -1,12 +1,13 @@
 'use client'
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
-import { BodyLong, Button, FormProgress, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { BodyLong, FormProgress, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import OmStotteTilEtterlevelseAccordion from '@/components/omStotteTilEtterlevelse/omStotteTilEtterlevelseAccordion'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
+import { omPVKUrl, oversiktOverLosningeneUrl } from '@/routes/omSidene/omSideneUrl'
 import ForstesideStotteTilEtterlevelse from './images/ForstesidStotteTilEtterlevelse.png'
 import TemainndelingOgTemaoversiktReadmore from './images/TemainndelingOgTemaoversiktReadmore.png'
 import VisMegHvordanEnKravsideSerUt from './images/VisMegHvordanEnKravsideSerUt.png'
@@ -267,34 +268,13 @@ const OmStotteTilEtterlevelse = () => {
           </List>
         </div>
       </div>
-      <div className='z-10 flex flex-col w-full items-center mt-5 button_container sticky bottom-0  bg-white'>
-        <div className='w-full max-w-7xl py-4 px-4 border-t-2 z-2'>
-          <div className='flex w-full flex-row-reverse justify-evenly gap-2 items-end'>
-            <Button
-              icon={<ChevronRightIcon aria-hidden />}
-              iconPosition='right'
-              type='button'
-              variant={'tertiary'}
-              onClick={() => {
-                router.push('/om-pvk')
-              }}
-            >
-              Fortsett til Om Digital PVK
-            </Button>
-
-            <Button
-              icon={<ChevronLeftIcon aria-hidden />}
-              type='button'
-              variant='tertiary'
-              onClick={() => {
-                router.push('/oversikt-over-losningene')
-              }}
-            >
-              Tilbake til Oversikt over løsningene
-            </Button>
-          </div>
-        </div>
-      </div>
+      <OmNavigering
+        router={router}
+        forrigeLenke={oversiktOverLosningeneUrl}
+        forrigeLenkeTekst={'Oversikt over løsningene'}
+        nesteLenke={omPVKUrl}
+        nesteLenkeTekst={'Om Digital PVK'}
+      />
     </PageLayout>
   )
 }
