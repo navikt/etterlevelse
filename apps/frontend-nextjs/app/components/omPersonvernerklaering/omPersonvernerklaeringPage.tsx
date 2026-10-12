@@ -18,7 +18,6 @@ const OmPersonvernerklaeringPage = () => {
       <div className='flex gap-7 mt-10'>
         <OmStepperPersonvernerklaering />
         <div className='max-w-[75ch]'>
-          {/* <OmHiddenFormProgress /> */}
           <HovedinnholdPersonerklaering />
         </div>
       </div>
