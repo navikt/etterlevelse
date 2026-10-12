@@ -22,6 +22,7 @@ const UmamiTracker: FunctionComponent = () => {
 
   return (
     <Script
+      defer
       src={env.umamiScriptUrl}
       data-website-id={env.umamiWebsiteId}
       strategy='afterInteractive'
