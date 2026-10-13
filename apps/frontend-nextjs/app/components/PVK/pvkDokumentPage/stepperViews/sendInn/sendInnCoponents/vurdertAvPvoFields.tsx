@@ -82,7 +82,7 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                     onChange={async (value: boolean) => {
                       await setFieldValue('berOmNyVurderingFraPvo', value)
                     }}
-                    value={fieldProps.form.values.berOmNyVurderingFraPvo}
+                    value={fieldProps.form.values.berOmNyVurderingFraPvo ?? false}
                     description='PVO har ikke bedt om å få deres PVK i retur, og da skal dere i utgangspunktet sende til risikoeier for godkjenning. Men dersom risikobildet er endret siden dere sendte inn til PVO sist, burde dere sende til PVO for ny vurdering.'
                   >
                     <Radio value={false}>Risikoeier, til godkjenning</Radio>
@@ -135,12 +135,13 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                   </div>
                 )}
 
-                {userHasAccess && fieldProps.form.values.berOmNyVurderingFraPvo === false && (
-                  <SendTilRisikoeier
-                    fieldProps={fieldProps}
-                    errorComponent={errorSummaryComponent}
-                  />
-                )}
+                {userHasAccess &&
+                  (fieldProps.form.values.berOmNyVurderingFraPvo ?? false) === false && (
+                    <SendTilRisikoeier
+                      fieldProps={fieldProps}
+                      errorComponent={errorSummaryComponent}
+                    />
+                  )}
                 {userHasAccess && fieldProps.form.values.berOmNyVurderingFraPvo === true && (
                   <SendTilPvo
                     relevantIndex={relevantIndex}
