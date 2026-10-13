@@ -5,8 +5,7 @@ export enum EOverskrifterPersonvernerklaering {
   BEHANDLING_PERSONOPPLYSNINGER_HVOR_HENTES = 'Hvor henter vi dine personopplysninger?',
   BEHANDLING_PERSONOPPLYSNINGER_HVOR_LAGRES = 'Hvor behandler og lagrer vi personopplysningene?',
   INNBLIKK_ETTERLEVELSE = 'Innblikk i Støtte til etterlevelse',
-  SAMTYKKE_MAALING = 'Samtykke til måling',
-  SAMTYKKE_BRUKER = 'Samtykke til Innblikk',
+  SAMTYKKE_MAALING = 'Samtykke til måling med Innblikk',
   MANGLER = 'Feil, mangler og tilbakemeldinger',
 }
 
@@ -18,8 +17,7 @@ export enum EPersonvernerklaeringId {
   STEP_FIVE = 'behandling-personopplysninger-hvor-lagres',
   STEP_SIX = 'innblikk-etterlevelse',
   STEP_SEVEN = 'samtykke-maaling',
-  STEP_EIGHT = 'samtykke-bruker',
-  STEP_NINE = 'mangler',
+  STEP_EIGHT = 'mangler',
 }
 
 export type TStepperPersonvernerklaering = {
@@ -56,9 +54,6 @@ export const stepperPersonvernerklaering: TStepperPersonvernerklaering[] = [
     id: EPersonvernerklaeringId.STEP_SEVEN,
     step: EOverskrifterPersonvernerklaering.SAMTYKKE_MAALING,
   },
-  {
-    id: EPersonvernerklaeringId.STEP_EIGHT,
-    step: EOverskrifterPersonvernerklaering.SAMTYKKE_BRUKER,
-  },
-  { id: EPersonvernerklaeringId.STEP_NINE, step: EOverskrifterPersonvernerklaering.MANGLER },
+
+  { id: EPersonvernerklaeringId.STEP_EIGHT, step: EOverskrifterPersonvernerklaering.MANGLER },
 ]

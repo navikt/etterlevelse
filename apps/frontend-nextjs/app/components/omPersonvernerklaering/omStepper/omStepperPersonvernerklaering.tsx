@@ -40,9 +40,6 @@ const OmStepperPersonvernerklaering = () => {
             {EOverskrifterPersonvernerklaering.SAMTYKKE_MAALING}
           </Stepper.Step>
           <Stepper.Step href={toAnchor(EPersonvernerklaeringId.STEP_EIGHT)}>
-            {EOverskrifterPersonvernerklaering.SAMTYKKE_BRUKER}
-          </Stepper.Step>
-          <Stepper.Step href={toAnchor(EPersonvernerklaeringId.STEP_NINE)}>
             {EOverskrifterPersonvernerklaering.MANGLER}
           </Stepper.Step>
         </Stepper>

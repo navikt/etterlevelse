@@ -1,6 +1,7 @@
 'use client'
 
-import { BodyLong, Heading, Link, List, Radio, RadioGroup } from '@navikt/ds-react'
+import { BodyLong, Heading, List, Radio, RadioGroup } from '@navikt/ds-react'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import {
   EOverskrifterPersonvernerklaering,
   EPersonvernerklaeringId,
@@ -61,11 +62,11 @@ const HovedinnholdPersonerklaering = () => {
           </List.Item>
           <List.Item>
             har lovtolkningsansvaret for de generelle regelverkene og som publiserer og forvalter
-            etterlevelseskravene, såkalte kraveier
+            etterlevelseskravene, såkalt kraveier
           </List.Item>
           <List.Item>
             har ansvaret for å akseptere eller ikke akseptere risiko ved etterlevelse og
-            personvernkonsekvensvurderinger, såkalte risikoeier
+            personvernkonsekvensvurderinger, såkalt risikoeier
           </List.Item>
           <List.Item>
             gir råd og anbefalinger knyttet til personvernkonsekvensvurderinger som personvernombud
@@ -97,13 +98,13 @@ const HovedinnholdPersonerklaering = () => {
         </BodyLong>
         <BodyLong className='mb-6'>
           For utfyllende informasjon om hvordan vi behandler personopplysninger kan du lese mer i{' '}
-          <Link href='https://behandlingskatalog.ansatt.nav.no/process/purpose/ETTERLEVELSE/608fdba9-ba47-4c86-878b-f229591ae1ba?'>
+          <ExternalLink href='https://behandlingskatalog.ansatt.nav.no/process/purpose/ETTERLEVELSE/608fdba9-ba47-4c86-878b-f229591ae1ba?'>
             Behandlingskatalogen
-          </Link>{' '}
+          </ExternalLink>{' '}
           og i{' '}
-          <Link href='https://navno.sharepoint.com/sites/intranett-hr/SitePages/Personvernerkl%C3%A6ring.aspx?web=1'>
+          <ExternalLink href='https://navno.sharepoint.com/sites/intranett-hr/SitePages/Personvernerkl%C3%A6ring.aspx?web=1'>
             Personvernerklæring for ansatte i Arbeids- og velferdsetaten
-          </Link>
+          </ExternalLink>
           .
         </BodyLong>
       </div>
@@ -137,9 +138,9 @@ const HovedinnholdPersonerklaering = () => {
         </List>
         <BodyLong className='mb-6'>
           For mer generell informasjon, se{' '}
-          <Link href='https://navno.sharepoint.com/sites/intranett-utvikling/SitePages/Rutine-for-bruk-av-Umami.aspx'>
+          <ExternalLink href='https://navno.sharepoint.com/sites/intranett-utvikling/SitePages/Rutine-for-bruk-av-Umami.aspx'>
             Rutine for bruk av Innblikk
-          </Link>
+          </ExternalLink>
           .
         </BodyLong>
       </div>
@@ -160,15 +161,10 @@ const HovedinnholdPersonerklaering = () => {
           Under kan du gi samtykke til bruk av Innblikk. Du kan alltid komme tilbake og endre
           samtykket.
         </BodyLong>
-      </div>
 
-      <div id={EPersonvernerklaeringId.STEP_EIGHT}>
-        <Heading size='medium' level='2' spacing>
-          {EOverskrifterPersonvernerklaering.SAMTYKKE_BRUKER}
-        </Heading>
         <RadioGroup
           className='mb-6'
-          legend='Oppgi status på suksesskriteriet'
+          legend='Samtykke til måling med Innblikk'
           value={consent}
           onChange={handleConsentChange}
           name='samtykkeTilInnblikk'
@@ -178,7 +174,7 @@ const HovedinnholdPersonerklaering = () => {
         </RadioGroup>
       </div>
 
-      <div id={EPersonvernerklaeringId.STEP_NINE}>
+      <div id={EPersonvernerklaeringId.STEP_EIGHT}>
         <Heading size='medium' level='2' spacing>
           {EOverskrifterPersonvernerklaering.MANGLER}
         </Heading>
