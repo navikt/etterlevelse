@@ -1,14 +1,32 @@
 'use client'
 
 import { Heading } from '@navikt/ds-react'
-import { Dispatch, FunctionComponent, SetStateAction, useContext, useEffect, useState } from 'react'
-import { getKravByKravNummer } from '@/api/krav/kravApi'
+import { useRouter } from 'next/navigation'
+import {
+  Dispatch,
+  FunctionComponent,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { getAllKrav, getKravByKravNummer } from '@/api/krav/kravApi'
+import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
 import { Markdown } from '@/components/common/markdown/markdown'
+import KravNavigationButtons from '@/components/etterlevelse/etterlevelsePage/etterlevelseKravView/kravNavigationButtons'
 import { ContentLayout, MainPanelLayout } from '@/components/others/layout/content/content'
 import { IPageResponse } from '@/constants/commonConstants'
 import { EListName, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { EKravStatus, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
+import { kravNummerVersjonUrl } from '@/routes/krav/kravRoutes'
+import {
+  TKravNavigationEntry,
+  TKravNavigationGroup,
+  getGroupedKravByTema,
+} from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { hasKravExpired } from '@/util/krav/kravUtil'
 import ExpiredAlert from '../expiredAlert/expiredAlertComponent'
 import { KravRightSidePanel } from './kravRightSidePanel/kravRightSidePanel'
@@ -30,7 +48,10 @@ export const KravMainContent: FunctionComponent<TProps> = ({
   const [alleKravVersjoner, setAlleKravVersjoner] = useState<IKravVersjon[]>([
     { kravNummer: 0, kravVersjon: 0, kravStatus: 'Utkast' },
   ])
+  const [allKrav, setAllKrav] = useState<IKrav[]>([])
+  const [allKravPriority, setAllKravPriority] = useState<IKravPriorityList[]>([])
   const codelist = useContext(CodelistContext)
+  const router = useRouter()
 
   useEffect(() => {
     if (krav) {
@@ -66,6 +87,45 @@ export const KravMainContent: FunctionComponent<TProps> = ({
       }
     }
   }, [krav])
+
+  useEffect(() => {
+    ;(async () => {
+      const [kraver, prioritylist] = await Promise.all([getAllKrav(), getAllKravPriorityList()])
+      setAllKrav(kraver.filter((aktivtKrav: IKrav) => aktivtKrav.status === EKravStatus.AKTIV))
+      setAllKravPriority(prioritylist)
+    })()
+  }, [])
+
+  const kravGrupper = useMemo<TKravNavigationGroup[]>(() => {
+    if (!allKrav.length) {
+      return []
+    }
+    return getGroupedKravByTema({
+      temaListe: codelist.utils.getCodes(EListName.TEMA) as TTemaCode[],
+      kravliste: allKrav,
+      allKravPriority,
+      codelist,
+    })
+  }, [allKrav, allKravPriority, codelist])
+
+  const [forrigeKravUrl, nesteKravUrl] = useMemo<[string, string]>(() => {
+    const orderedKrav: TKravNavigationEntry[] = kravGrupper.flatMap(
+      (group: TKravNavigationGroup) => group.krav
+    )
+    const currentIndex: number = orderedKrav.findIndex(
+      (entry: TKravNavigationEntry) =>
+        entry.kravNummer === krav.kravNummer && entry.kravVersjon === krav.kravVersjon
+    )
+
+    if (currentIndex === -1) {
+      return ['', '']
+    }
+
+    const toUrl = (entry: TKravNavigationEntry | undefined): string =>
+      entry ? kravNummerVersjonUrl(entry.kravNummer, entry.kravVersjon) : ''
+
+    return [toUrl(orderedKrav[currentIndex - 1]), toUrl(orderedKrav[currentIndex + 1])]
+  }, [kravGrupper, krav.kravNummer, krav.kravVersjon])
 
   useEffect(() => {
     if (krav && kravTema) {
@@ -112,6 +172,18 @@ export const KravMainContent: FunctionComponent<TProps> = ({
         </div>
 
         <KravTabMeny krav={krav} kravLoading={kravLoading} alleKravVersjoner={alleKravVersjoner} />
+
+        <KravNavigationButtons
+          forrigeKravUrl={forrigeKravUrl}
+          nesteKravUrl={nesteKravUrl}
+          onNavigate={(url: string) => router.push(url)}
+          kravGrupper={kravGrupper}
+          currentKravNummer={krav.kravNummer}
+          currentKravVersjon={krav.kravVersjon}
+          buildKravUrl={(entry: TKravNavigationEntry) =>
+            kravNummerVersjonUrl(entry.kravNummer, entry.kravVersjon)
+          }
+        />
       </MainPanelLayout>
       <KravRightSidePanel krav={krav} alleKravVersjoner={alleKravVersjoner} />
     </ContentLayout>

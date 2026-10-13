@@ -2,7 +2,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@navikt/aksel-icons'
 import { Button, ExpansionCard, ReadMore } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelse/etterlevelseRoutes'
-import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
+import {
+  TKravNavigationEntry,
+  TKravNavigationGroup,
+} from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 
 export type TKravNavigationTarget = {
   url: string
@@ -19,6 +22,7 @@ type TProps = {
   currentKravNummer?: number
   currentKravVersjon?: number
   etterlevelseDokumentasjonId?: string
+  buildKravUrl?: (krav: TKravNavigationEntry) => string
 }
 
 const KravNavigationButtons: FunctionComponent<TProps> = ({
@@ -31,6 +35,7 @@ const KravNavigationButtons: FunctionComponent<TProps> = ({
   currentKravNummer,
   currentKravVersjon,
   etterlevelseDokumentasjonId,
+  buildKravUrl,
 }) => {
   const hasKravliste: boolean = !!kravGrupper && kravGrupper.length > 0
 
@@ -128,12 +133,14 @@ const KravNavigationButtons: FunctionComponent<TProps> = ({
                               aria-current={isCurrent ? 'true' : undefined}
                               onClick={() =>
                                 onNavigate(
-                                  etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
-                                    etterlevelseDokumentasjonId as string,
-                                    kravItem.temaCode,
-                                    kravItem.kravNummer,
-                                    kravItem.kravVersjon
-                                  )
+                                  buildKravUrl
+                                    ? buildKravUrl(kravItem)
+                                    : etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
+                                        etterlevelseDokumentasjonId as string,
+                                        kravItem.temaCode,
+                                        kravItem.kravNummer,
+                                        kravItem.kravVersjon
+                                      )
                                 )
                               }
                               className={`w-full text-left px-2 py-1 rounded-sm text-lg hover:bg-gray-100 ${
