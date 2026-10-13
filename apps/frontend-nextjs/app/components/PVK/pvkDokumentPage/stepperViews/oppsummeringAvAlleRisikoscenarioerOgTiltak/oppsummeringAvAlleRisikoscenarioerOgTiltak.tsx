@@ -2,6 +2,7 @@
 
 import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
 import {
+  Badge,
   BodyLong,
   CopyButton,
   Heading,
@@ -386,25 +387,31 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       <Tabs.Tab
                         value={tabValues.risikoscenarioer}
                         label={
-                          <span className='flex items-center gap-1'>
+                          <span className='flex items-center gap-2'>
+                            {`${risikoscenarioList.length} Risikoscenarioer`}
                             {antallEffektIkkeVurdert > 0 && (
-                              <span className='w-3 h-3 bg-red-400 rounded-full mr-1'></span>
+                              <Badge
+                                data-color='danger'
+                                aria-label='Effekt ikke vurdert på minst ett risikoscenario'
+                              />
                             )}
-                            {`Vis risikoscenarioer (${risikoscenarioList.length})`}
                           </span>
                         }
                       />
                       <Tabs.Tab
                         value={tabValues.tiltak}
                         label={
-                          <span className='flex items-center gap-1'>
+                          <span className='flex items-center gap-2'>
+                            {`${tiltakList.length} Tiltak`}
                             {(antallUtenTiltakAnsvarlig > 0 ||
                               antallUtenFrist > 0 ||
                               antallFristUtloperSnart > 0 ||
                               antallUtgaatteFrister > 0) && (
-                              <span className='w-3 h-3 bg-red-400 rounded-full mr-1'></span>
+                              <Badge
+                                data-color='danger'
+                                aria-label='Minst ett tiltak krever oppmerksomhet'
+                              />
                             )}
-                            {`Vis tiltak (${tiltakList.length})`}
                           </span>
                         }
                       />

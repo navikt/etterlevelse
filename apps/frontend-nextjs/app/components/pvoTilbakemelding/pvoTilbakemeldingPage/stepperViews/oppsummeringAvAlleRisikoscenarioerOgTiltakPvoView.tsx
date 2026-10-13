@@ -287,11 +287,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
                         <Tabs.List>
                           <Tabs.Tab
                             value={tabValues.risikoscenarioer}
-                            label={`Vis risikoscenarioer (${risikoscenarioList.length})`}
+                            label={`${risikoscenarioList.length} Risikoscenarioer`}
                           />
                           <Tabs.Tab
                             value={tabValues.tiltak}
-                            label={`Vis tiltak (${tiltakList.length})`}
+                            label={`${tiltakList.length} Tiltak`}
                           />
                         </Tabs.List>
                         <Tabs.Panel value={tabValues.risikoscenarioer} className='w-full'>

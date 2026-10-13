@@ -996,7 +996,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^8.16.1, @navikt/aksel-icons@npm:^8.19.1":
+"@navikt/aksel-icons@npm:^8.19.1":
   version: 8.19.1
   resolution: "@navikt/aksel-icons@npm:8.19.1"
   checksum: 10c0/f1a1f7e35f181b3c02fd492e1ef4f79387284445b9f9b81ff35979527ff431c669b7b38eb502bb3e4e60677a56990ffd47bcd476eb9623188d8fe74bb35b5147
@@ -1010,14 +1010,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@npm:8.16.1":
-  version: 8.16.1
-  resolution: "@navikt/ds-react@npm:8.16.1"
+"@navikt/ds-react@npm:8.19.1":
+  version: 8.19.1
+  resolution: "@navikt/ds-react@npm:8.19.1"
   dependencies:
     "@floating-ui/react": "npm:0.27.20"
     "@floating-ui/react-dom": "npm:^2.1.9"
-    "@navikt/aksel-icons": "npm:^8.16.1"
-    "@navikt/ds-tokens": "npm:^8.16.1"
+    "@navikt/aksel-icons": "npm:^8.19.1"
+    "@navikt/ds-tokens": "npm:^8.19.1"
     date-fns: "npm:^4.0.0"
     react-day-picker: "npm:10.0.1"
   peerDependencies:
@@ -1027,18 +1027,18 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/d1fbf9cdc7ee4e29723515ce85c120ce860a835f1f23225baaef60d8f8697c20b3d52425b8e316ca216f314b9be4b93940d670f6d24a4cb128a66bfbe21052cf
+  checksum: 10c0/749153726812213b90af4247f7419f9cf9ecd74849597e8858df8841330a7f18ad213a814da640df12cf5c762613c95ac3485b7ab9493e1875eab91461ba050a
   languageName: node
   linkType: hard
 
-"@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch":
-  version: 8.16.1
-  resolution: "@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.16.1#~/.yarn/patches/@navikt-ds-react-npm-8.16.1-07df5781d1.patch::version=8.16.1&hash=e1fe3b"
+"@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.19.1#~/.yarn/patches/@navikt-ds-react-npm-8.19.1-214d066732.patch":
+  version: 8.19.1
+  resolution: "@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.19.1#~/.yarn/patches/@navikt-ds-react-npm-8.19.1-214d066732.patch::version=8.19.1&hash=e1fe3b"
   dependencies:
     "@floating-ui/react": "npm:0.27.20"
     "@floating-ui/react-dom": "npm:^2.1.9"
-    "@navikt/aksel-icons": "npm:^8.16.1"
-    "@navikt/ds-tokens": "npm:^8.16.1"
+    "@navikt/aksel-icons": "npm:^8.19.1"
+    "@navikt/ds-tokens": "npm:^8.19.1"
     date-fns: "npm:^4.0.0"
     react-day-picker: "npm:10.0.1"
   peerDependencies:
@@ -1048,7 +1048,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/63c81ad53a4f2c46ab132261eb73eaf6efc4051d67edfeacbd30958f42ad46d462886c190458eb64d9b74b73a874c55a2e79ffefefa92de4dd6932d91fe77986
+  checksum: 10c0/7789047756d30e788bdabc7494f61a97b6b2cbe1f1510d075755dacb3d1908e1e8e41f4dedbc858159adcf6a07389f6d4573a16d0f801d29d94b05f9757bfaef
   languageName: node
   linkType: hard
 
@@ -1059,7 +1059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tokens@npm:^8.16.1":
+"@navikt/ds-tokens@npm:^8.19.1":
   version: 8.19.1
   resolution: "@navikt/ds-tokens@npm:8.19.1"
   checksum: 10c0/276d747756d609632b844c0378e938afca9cf8aa0c09862c4e8bdc12c4a4c9f25516bed00b81745ffd0ca1bad5acf9aacf0d448af436c41b53d12bac982b7136
