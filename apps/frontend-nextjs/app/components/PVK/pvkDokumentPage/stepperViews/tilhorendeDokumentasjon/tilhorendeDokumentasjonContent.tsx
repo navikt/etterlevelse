@@ -39,6 +39,7 @@ type TProps = {
     | undefined
   isPvkKravLoading: boolean
   isChangesMadeSinceLastSubmission?: boolean
+  endringerTilRisikoeier?: boolean
   readOnly?: boolean
   hideEditDokumentLink?: boolean
 }
@@ -48,6 +49,7 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
   pvkKrav,
   isPvkKravLoading,
   isChangesMadeSinceLastSubmission,
+  endringerTilRisikoeier,
   readOnly,
   hideEditDokumentLink,
 }) => {
@@ -80,7 +82,9 @@ export const TilhorendeDokumentasjonContent: FunctionComponent<TProps> = ({
               Tilhørende dokumentasjon
             </Heading>
 
-            {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+            {isChangesMadeSinceLastSubmission && (
+              <EndringerGjortSidenSisteInnsending tilRisikoeier={endringerTilRisikoeier} />
+            )}
           </div>
           <div className='mb-6'>
             <Heading level='2' size='small' className='mb-1'>

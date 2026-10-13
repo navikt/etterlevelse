@@ -12,6 +12,7 @@ type TProps = {
   databehandlere: string[]
   pvkDokument: IPvkDokument
   isChangesMadeSinceLastSubmission?: boolean
+  endringerTilRisikoeier?: boolean
 }
 
 const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = ({
@@ -19,6 +20,7 @@ const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = ({
   databehandlere,
   pvkDokument,
   isChangesMadeSinceLastSubmission,
+  endringerTilRisikoeier,
 }) => (
   <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
     <div className='flex justify-center'>
@@ -27,7 +29,9 @@ const InvolveringAvEksterneReadOnlyContent: FunctionComponent<TProps> = ({
           Involvering av eksterne deltakere
         </Heading>
 
-        {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+        {isChangesMadeSinceLastSubmission && (
+          <EndringerGjortSidenSisteInnsending tilRisikoeier={endringerTilRisikoeier} />
+        )}
 
         <Heading level='2' size='small' className='mb-3'>
           Representanter for de registrerte

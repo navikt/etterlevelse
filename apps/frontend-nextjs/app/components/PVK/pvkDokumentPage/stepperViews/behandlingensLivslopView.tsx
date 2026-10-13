@@ -12,7 +12,16 @@ import {
 import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
-import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
+import moment from 'moment'
+import {
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
   createBehandlingensLivslop,
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -87,6 +96,19 @@ const BehandlingensLivslopView: FunctionComponent<TProps> = ({
     pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
     relevantVurdering
   )
+
+  const isChangesMadeSinceLastApproval = useMemo(() => {
+    if (
+      pvkDokument.status !== EPvkDokumentStatus.TRENGER_GODKJENNING ||
+      !pvkDokument.godkjentAvRisikoeierDato ||
+      !behandlingensLivslop?.changeStamp?.lastModifiedDate
+    ) {
+      return false
+    }
+    return moment(behandlingensLivslop.changeStamp.lastModifiedDate).isAfter(
+      pvkDokument.godkjentAvRisikoeierDato
+    )
+  }, [behandlingensLivslop, pvkDokument])
 
   useEffect(() => {
     ;(async () => {
@@ -318,6 +340,8 @@ const BehandlingensLivslopView: FunctionComponent<TProps> = ({
             <BehandlingensLivslopReadOnlyContent
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               behandlingensLivslop={mapBehandlingensLivslopRequestToFormValue(behandlingensLivslop)}
+              isChangesMadeSinceLastSubmission={isChangesMadeSinceLastApproval}
+              endringerTilRisikoeier
               noSidePanelContent
             />
           )}

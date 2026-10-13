@@ -23,6 +23,7 @@ type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   behandlingensLivslop: IBehandlingensLivslopRequest
   isChangesMadeSinceLastSubmission?: boolean
+  endringerTilRisikoeier?: boolean
   noSidePanelContent?: boolean
   noHeader?: boolean
   editorMode?: boolean
@@ -33,6 +34,7 @@ const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   behandlingensLivslop,
   isChangesMadeSinceLastSubmission,
+  endringerTilRisikoeier,
   noSidePanelContent,
   noHeader,
   editorMode,
@@ -56,7 +58,9 @@ const BehandlingensLivslopReadOnlyContent: FunctionComponent<TProps> = ({
             </Heading>
           )}
 
-          {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+          {isChangesMadeSinceLastSubmission && (
+            <EndringerGjortSidenSisteInnsending tilRisikoeier={endringerTilRisikoeier} />
+          )}
 
           {editorMode && pvkDokumentId && (
             <InlineMessage status='info' className='mb-5'>
