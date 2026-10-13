@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Heading, Link } from '@navikt/ds-react'
+import { BodyLong, Button, Heading, Link } from '@navikt/ds-react'
 import { FunctionComponent, useEffect, useState } from 'react'
 import { useConsent } from '@/util/analytics/useConsent'
 
@@ -25,10 +25,12 @@ const CookieConsentBanner: FunctionComponent = () => {
           <Heading level='2' size='small'>
             Informasjonskapsler og analyse
           </Heading>
-          <div className='mt-1 text-sm text-gray-700'>
-            Vi bruker informasjonskapsler for å forbedre opplevelsen og samle statistikk om hvordan
-            løsningen brukes. Du kan lese mer om dette i{' '}
-            <Link href='/om-personvernerklaering'>personvernerklæringen</Link>.
+          <div className='mt-1'>
+            <BodyLong>
+              Vi bruker informasjonskapsler for å forbedre opplevelsen og samle statistikk om
+              hvordan løsningen brukes. Du kan lese mer om dette i{' '}
+              <Link href='/om-personvernerklaering'>personvernerklæringen</Link>.
+            </BodyLong>
           </div>
         </div>
         <div className='flex flex-wrap items-center gap-2'>
