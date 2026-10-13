@@ -141,7 +141,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                     </div>
                   </Accordion.Header>
                   <Accordion.Content>
-                    <div className='flex flex-col gap-6'>
+                    <div className='flex flex-col gap-6 p-2'>
                       {tema.code === 'PERSONVERN' && (
                         <PvkBehovVarsel
                           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
