@@ -2,7 +2,7 @@
 
 import { BodyShort, Label, Textarea, ToggleGroup } from '@navikt/ds-react'
 import { Field, FieldProps } from 'formik'
-import { ChangeEvent, ReactNode, useState } from 'react'
+import { CSSProperties, ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react'
 import { FieldWrapper } from '../fieldWrapper/fieldWrapper'
 import { Markdown } from '../markdown/markdown'
 import { FormError } from '../modalSchema/formError/formError'
@@ -41,6 +41,20 @@ export const TextAreaField = ({
   withTextColor,
 }: IPropsTextAreaField) => {
   const [mode, setMode] = useState('edit')
+  const labelRef = useRef<HTMLDivElement>(null)
+  const [labelHeight, setLabelHeight] = useState(0)
+
+  useEffect(() => {
+    const element = labelRef.current
+    if (!element) {
+      return
+    }
+    const update = () => setLabelHeight(element.offsetHeight)
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <FieldWrapper marginBottom={marginBottom} id={name}>
@@ -48,8 +62,8 @@ export const TextAreaField = ({
         {(fieldProps: FieldProps) => (
           <div>
             {markdown && (
-              <div>
-                <div className='flex w-full justify-between mb-1'>
+              <div style={{ '--pvo-label-h': `${labelHeight}px` } as CSSProperties}>
+                <div ref={labelRef} className='pvo-sticky-label flex w-full justify-between mb-1'>
                   <div>
                     <Label>{label}</Label>
                     <BodyShort className='text-(--a-text-subtle)'>{caption}</BodyShort>
