@@ -105,7 +105,7 @@ const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
   return (
     <div className='w-full'>
       <ContentLayout>
-        <div className={hasPvoComment ? 'w-1/2' : 'w-full'}>
+        <div className={hasPvoComment ? 'w-1/2 pr-4' : 'w-full'}>
           <TilhorendeDokumentasjonContent
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             pvkKrav={pvkKrav}

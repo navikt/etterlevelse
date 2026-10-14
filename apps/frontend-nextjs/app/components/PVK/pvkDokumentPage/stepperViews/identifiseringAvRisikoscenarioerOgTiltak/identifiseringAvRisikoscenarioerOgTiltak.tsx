@@ -134,6 +134,11 @@ const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
                 etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                 allRisikoscenarioList={allRisikoscenarioList}
                 tiltakList={tiltakList}
+                nyttInnholdFraDato={
+                  pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING
+                    ? pvkDokument.godkjentAvRisikoeierDato
+                    : undefined
+                }
               />
             </div>
           )}

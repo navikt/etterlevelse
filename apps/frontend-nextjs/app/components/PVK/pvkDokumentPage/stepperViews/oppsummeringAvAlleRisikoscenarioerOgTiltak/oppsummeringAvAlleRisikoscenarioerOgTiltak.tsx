@@ -504,6 +504,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                   tiltakList={tiltakList}
                                   noMarkdownCopyLinkButton
+                                  nyttInnholdFraDato={
+                                    pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING
+                                      ? pvkDokument.godkjentAvRisikoeierDato
+                                      : undefined
+                                  }
                                 />
                               )}
 
@@ -612,6 +617,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             tiltakList={filteredTiltakList}
                             risikoscenarioList={risikoscenarioList}
                             etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                            nyttInnholdFraDato={
+                              pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING
+                                ? pvkDokument.godkjentAvRisikoeierDato
+                                : undefined
+                            }
                           />
                         )}
 

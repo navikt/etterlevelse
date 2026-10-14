@@ -11,17 +11,26 @@ interface IProps {
   risikoscenarioList: IRisikoscenario[]
   previousVurdering?: IVurdering
   etterlevelseDokumentasjonId?: string
+  nyttInnholdFraDato?: string
 }
 
 const TiltakAccordionListReadOnly = (props: IProps) => {
-  const { tiltakList, risikoscenarioList, previousVurdering, etterlevelseDokumentasjonId } = props
+  const {
+    tiltakList,
+    risikoscenarioList,
+    previousVurdering,
+    etterlevelseDokumentasjonId,
+    nyttInnholdFraDato,
+  } = props
+
+  const nyttInnholdBaseline = previousVurdering?.sendtDato ?? nyttInnholdFraDato
 
   return (
     <Accordion>
       {tiltakList.map((tiltak) => {
         const isChangesMade =
-          !!previousVurdering &&
-          moment(tiltak.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+          !!nyttInnholdBaseline &&
+          moment(tiltak.changeStamp.lastModifiedDate).isAfter(nyttInnholdBaseline)
         return (
           <Accordion.Item key={tiltak.id}>
             <Accordion.Header>

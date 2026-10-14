@@ -11,6 +11,7 @@ type TProps = {
   ref?: RefObject<HTMLButtonElement | null>
   previousVurdering?: IVurdering
   hasNewContent?: boolean
+  nyttInnholdFraDato?: string
 }
 
 export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
@@ -67,7 +68,10 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
   ref,
   previousVurdering,
   hasNewContent,
+  nyttInnholdFraDato,
 }) => {
+  const nyttInnholdBaseline = previousVurdering?.sendtDato ?? nyttInnholdFraDato
+
   const ikkeFerdigBeskrevet: boolean =
     risikoscenario.konsekvensNivaa === 0 ||
     risikoscenario.sannsynlighetsNivaa === 0 ||
@@ -83,10 +87,8 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
           <Tag variant='alt1'>Savner tiltak</Tag>
         )}
-        {((previousVurdering &&
-          moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(
-            previousVurdering?.sendtDato
-          )) ||
+        {((nyttInnholdBaseline &&
+          moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(nyttInnholdBaseline)) ||
           hasNewContent) && <NyttInnholdTag />}
       </div>
     </Accordion.Header>
