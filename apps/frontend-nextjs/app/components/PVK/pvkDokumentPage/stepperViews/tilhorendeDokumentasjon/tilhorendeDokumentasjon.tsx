@@ -1,4 +1,5 @@
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
+import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
 import { TilhorendeDokumentasjonContent } from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjonContent'
@@ -6,14 +7,21 @@ import { ContentLayout } from '@/components/others/layout/content/content'
 import PvoTilhorendeDokTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilhorendeDokTilbakemeldingsHistorikk'
 import TilhorendeDokumentasjonTilbakemeldingReadOnly from '@/components/pvoTilbakemelding/readOnly/tilhorendeDokumentasjonTilbakemeldingReadOnly'
 import { IPageResponse } from '@/constants/commonConstants'
-import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import {
+  IEtterlevelseDokumentasjon,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  EPvkDokumentStatus,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import {
   EPvoTilbakemeldingStatus,
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { isStringArrayEqual } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -50,6 +58,50 @@ const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
     relevantVurdering
   )
 
+  const [isChangesMadeSinceLastApproval, setIsChangesMadeSinceLastApproval] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    ;(async () => {
+      if (
+        pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
+        pvkDokument.godkjentAvRisikoeierDato
+      ) {
+        await getAuditByTableIdAndTimeStamp(
+          etterlevelseDokumentasjon.id,
+          pvkDokument.godkjentAvRisikoeierDato
+        ).then((previousEtterlevelseDokument) => {
+          if (previousEtterlevelseDokument.length !== 0) {
+            const previousData = (
+              previousEtterlevelseDokument[0].data as {
+                etterlevelseDokumentasjonData?: IEtterlevelseDokumentasjon
+              }
+            )['etterlevelseDokumentasjonData']
+            if (
+              previousData &&
+              (!isStringArrayEqual(
+                previousData.behandlingIds,
+                etterlevelseDokumentasjon.behandlingIds
+              ) ||
+                !isStringArrayEqual(
+                  previousData.risikovurderinger,
+                  etterlevelseDokumentasjon.risikovurderinger
+                ))
+            ) {
+              setIsChangesMadeSinceLastApproval(true)
+            } else {
+              setIsChangesMadeSinceLastApproval(false)
+            }
+          } else {
+            setIsChangesMadeSinceLastApproval(false)
+          }
+        })
+      } else {
+        setIsChangesMadeSinceLastApproval(false)
+      }
+    })()
+  }, [etterlevelseDokumentasjon, pvkDokument])
+
   return (
     <div className='w-full'>
       <ContentLayout>
@@ -58,6 +110,8 @@ const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
             etterlevelseDokumentasjon={etterlevelseDokumentasjon}
             pvkKrav={pvkKrav}
             isPvkKravLoading={isPvkKravLoading}
+            isChangesMadeSinceLastSubmission={isChangesMadeSinceLastApproval}
+            endringerTilRisikoeier
             readOnly={readOnly}
           />
         </div>
