@@ -21,6 +21,7 @@ import {
   IPvoTilbakemelding,
   IVurdering,
 } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { isStringArrayEqual } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 
 type TProps = {
   etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL
@@ -78,8 +79,14 @@ const TilhorendeDokumentasjon: FunctionComponent<TProps> = ({
             )['etterlevelseDokumentasjonData']
             if (
               previousData &&
-              (previousData.behandlingIds !== etterlevelseDokumentasjon.behandlingIds ||
-                previousData.risikovurderinger !== etterlevelseDokumentasjon.risikovurderinger)
+              (!isStringArrayEqual(
+                previousData.behandlingIds,
+                etterlevelseDokumentasjon.behandlingIds
+              ) ||
+                !isStringArrayEqual(
+                  previousData.risikovurderinger,
+                  etterlevelseDokumentasjon.risikovurderinger
+                ))
             ) {
               setIsChangesMadeSinceLastApproval(true)
             } else {
