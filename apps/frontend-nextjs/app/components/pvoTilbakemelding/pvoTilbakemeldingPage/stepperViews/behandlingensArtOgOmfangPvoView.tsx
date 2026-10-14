@@ -77,7 +77,7 @@ const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
     <div className='w-full'>
       <ContentLayout>
         <div className='flex gap-8 w-full'>
-          <div className='w-1/2'>
+          <div className='w-1/2 min-w-0'>
             {loading && <CenteredLoader />}
             {!loading && (
               <ArtOgOmfangReadOnlyContent
@@ -88,7 +88,7 @@ const BehandlingensArtOgOmfangPvoView: FunctionComponent<TProps> = ({
               />
             )}
           </div>
-          <div className='w-1/2'>
+          <div className='w-1/2 min-w-0'>
             <PvoSidePanelWrapper>
               {pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG && (
                 <PvoTilbakemeldingReadOnly
