@@ -2,6 +2,7 @@
 
 import { LinkIcon } from '@navikt/aksel-icons'
 import { Alert, BodyLong, CopyButton, Heading, Loader, Tabs, ToggleGroup } from '@navikt/ds-react'
+import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useMemo, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
@@ -40,6 +41,7 @@ import {
   VisTomListeBeskrivelse,
   VisTomTiltakListeBeskrivelse,
 } from '@/util/oppsummering/oppsummeringUtil'
+import EndringerGjortSidenSisteInnsending from '../../common/EndringerGjortSidenSisteInnsending'
 import PvoSidePanelWrapper from '../../common/pvoSidePanelWrapper'
 import PvoTilbakemeldingsHistorikk from '../../common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import PvoFormButtons from '../../form/pvoFormButtons'
@@ -99,6 +101,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
               etterlevelseDokumentasjon.etterlevelseDokumentVersjon
         )
       : undefined
+
+  const isChangesMadeSinceLastSubmission =
+    !!previousVurdering?.sendtDato &&
+    [...risikoscenarioList, ...tiltakList].some((item) =>
+      moment(item.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+    )
 
   useEffect(() => {
     if (pvkDokument) {
@@ -263,6 +271,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltakPvoView: FunctionComponen
               <Heading level='1' size='medium' className='mb-5'>
                 Risikobildet etter tiltak
               </Heading>
+
+              {isChangesMadeSinceLastSubmission && (
+                <div className='pr-4'>
+                  <EndringerGjortSidenSisteInnsending />
+                </div>
+              )}
 
               <BodyLong className='mt-5'>
                 Her vurderer dere det samlede risikobildet pr. scenario etter at tiltak er

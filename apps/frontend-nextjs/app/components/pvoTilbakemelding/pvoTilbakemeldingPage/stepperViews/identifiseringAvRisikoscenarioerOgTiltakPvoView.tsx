@@ -1,9 +1,11 @@
 'use client'
 
+import moment from 'moment'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import { IdentifiseringAvRisikoscenarioerOgTiltakContent } from '@/components/PVK/pvkDokumentPage/stepperViews/identifiseringAvRisikoscenarioerOgTiltak/identifiseringAvRisikoscenarioerOgTiltakContent'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import RisikoscenarioAccordianListReadOnlyView from '@/components/risikoscenario/readOnly/risikoscenarioAccordianListReadOnlyView'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -48,6 +50,16 @@ const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps>
     }
   }, [pvkDokument, pvoTilbakemelding])
 
+  const isChangesMadeSinceLastSubmission = useMemo(() => {
+    const baseline = previousVurdering?.sendtDato
+    if (!baseline) {
+      return false
+    }
+    return [...allRisikoscenarioList, ...tiltakList].some((item) =>
+      moment(item.changeStamp.lastModifiedDate).isAfter(baseline)
+    )
+  }, [allRisikoscenarioList, tiltakList, previousVurdering])
+
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
@@ -76,6 +88,9 @@ const IdentifiseringAvRisikoscenarioerOgTiltakPvoView: FunctionComponent<TProps>
           etterlevelseDokumentasjonId={etterlevelseDokumentasjonId}
           risikoscenarioList={risikoscenarioList}
           antallInnsendingerTilPvo={pvkDokument?.antallInnsendingTilPvo}
+          alertChangesMadeAfterApproval={
+            isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />
+          }
         />
 
         <div className='w-full'>

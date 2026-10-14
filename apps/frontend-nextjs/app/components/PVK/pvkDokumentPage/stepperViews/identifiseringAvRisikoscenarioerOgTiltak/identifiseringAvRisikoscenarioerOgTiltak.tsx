@@ -1,8 +1,10 @@
 'use client'
 
-import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
+import moment from 'moment'
+import { FunctionComponent, RefObject, useContext, useEffect, useMemo, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import RisikoscenarioAccordianListReadOnlyWithIverksetting from '@/components/risikoscenario/common/risikoscenarioAccordianListReadOnlyWithIverksetting'
 import CreateRisikoscenarioModal from '@/components/risikoscenario/edit/createRisikoscenarioModal'
 import RisikoscenarioAccordianList from '@/components/risikoscenario/generellScenario/risikoscenarioAccordianList'
@@ -49,6 +51,19 @@ const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
 
+  const isChangesMadeSinceLastApproval = useMemo(() => {
+    if (
+      pvkDokument.status !== EPvkDokumentStatus.TRENGER_GODKJENNING ||
+      !pvkDokument.godkjentAvRisikoeierDato
+    ) {
+      return false
+    }
+    const baseline = pvkDokument.godkjentAvRisikoeierDato
+    return [...allRisikoscenarioList, ...tiltakList].some((item) =>
+      moment(item.changeStamp.lastModifiedDate).isAfter(baseline)
+    )
+  }, [allRisikoscenarioList, tiltakList, pvkDokument])
+
   useEffect(() => {
     if (pvkDokument) {
       ;(async () => {
@@ -78,11 +93,16 @@ const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
           risikoscenarioList={risikoscenarioList}
           antallInnsendingerTilPvo={pvkDokument?.antallInnsendingTilPvo}
           alertChangesMadeAfterApproval={
-            <InfoChangesMadeAfterApproval
-              pvkDokument={pvkDokument}
-              alleRisikoscenario={allRisikoscenarioList}
-              alleTiltak={tiltakList}
-            />
+            <>
+              {isChangesMadeSinceLastApproval && (
+                <EndringerGjortSidenSisteInnsending tilRisikoeier />
+              )}
+              <InfoChangesMadeAfterApproval
+                pvkDokument={pvkDokument}
+                alleRisikoscenario={allRisikoscenarioList}
+                alleTiltak={tiltakList}
+              />
+            </>
           }
         />
 
