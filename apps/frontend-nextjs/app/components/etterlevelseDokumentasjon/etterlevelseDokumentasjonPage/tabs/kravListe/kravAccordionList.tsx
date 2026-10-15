@@ -147,7 +147,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                           etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                         />
                       )}
-                      <div>
+                      <div className='pl-8'>
                         <Link href={`${temaUrl}/${tema.code}`} target='_blank'>
                           Lær mer om {tema.shortName} (åpner i en ny fane)
                         </Link>
