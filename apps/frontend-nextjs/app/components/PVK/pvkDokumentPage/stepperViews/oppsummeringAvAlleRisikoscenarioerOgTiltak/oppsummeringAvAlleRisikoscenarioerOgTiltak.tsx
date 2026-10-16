@@ -78,7 +78,7 @@ const visTomTiltakListeBeskrivelse = (filter: string | null) => {
   let textBody = ''
   switch (filter) {
     case tiltakFilterValues.utenAnsvarlig:
-      textBody = 'Det finnes tiltak uten en ansvarlig 🎉'
+      textBody = 'Det finnes ingen tiltak uten en ansvarlig 🎉'
       break
     case tiltakFilterValues.utenFrist:
       textBody = 'Det finnes ingen tiltak uten frist 🎉'
