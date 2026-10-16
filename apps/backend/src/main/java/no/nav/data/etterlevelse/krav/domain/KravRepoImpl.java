@@ -160,10 +160,13 @@ public class KravRepoImpl implements KravRepoCustom {
             return true;
         }
 
-        // Filtrering for krav relevant for etterlevelseDokumentasjon
         if (filter.getEtterlevelseDokumentasjonId() != null) {
             var succeeded = exists(all, k2 -> k2.supersedes(krav));
             return !succeeded && krav.getStatus().kanEtterleves();
+        }
+
+        if (isCurrentVersionFilter(filter)) {
+            return !exists(all, k2 -> k2.supersedes(krav));
         }
 
         if (filter.isGjeldendeKrav()) {
@@ -171,5 +174,19 @@ public class KravRepoImpl implements KravRepoCustom {
         }
 
         return true;
+    }
+
+    private boolean isCurrentVersionFilter(KravFilter filter) {
+        if (filter.getNummer() != null || filter.getSistRedigert() != null) {
+            return false;
+        }
+
+        if (filter.getStatus().isEmpty()) {
+            return true;
+        }
+
+        return filter.getStatus().stream().noneMatch(status ->
+                KravStatus.UTGAATT.name().equals(status) || KravStatus.UTKAST.name().equals(status)
+        );
     }
 }
