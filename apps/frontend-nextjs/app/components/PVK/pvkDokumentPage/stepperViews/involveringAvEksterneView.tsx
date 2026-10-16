@@ -222,7 +222,7 @@ const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           personkategorier, kan det være til hjelp å se på behandlingens livsløp.
                         </BodyLong>
 
-                        <InfoCard data-color='info' size='small' className='mb-7 mt-5'>
+                        <InfoCard data-color='info' size='medium' className='mb-7 mt-5'>
                           <InfoCard.Message
                             icon={
                               <LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />
