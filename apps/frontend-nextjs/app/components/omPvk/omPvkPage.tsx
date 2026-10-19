@@ -1,6 +1,7 @@
 'use client'
 
-import { BodyLong, Heading, List, ReadMore, Stepper } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyLong, Heading, InfoCard, List, ReadMore, Stepper } from '@navikt/ds-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -42,7 +43,7 @@ const OmPvkPage = () => {
                 Dokumentasjon av behandlingens art og omfang
               </Stepper.Step>
               <Stepper.Step href='#bruk-av-den-nye-losningen'>
-                Når skal vi begynne å bruke den nye løsningen?
+                Det anbefales at dere bruker den nye løsningen
               </Stepper.Step>
               <Stepper.Step href='#ta-kontakt'>Ta kontakt</Stepper.Step>
             </Stepper>
@@ -101,6 +102,10 @@ const OmPvkPage = () => {
               til PVO til en ny vurdering.
             </List.Item>
           </List>
+          <BodyLong spacing>
+            Løsningen sender varslinger hver gang PVK sendes mellom etterlever, personvernombudet og
+            risikoer.
+          </BodyLong>
           <Heading size='medium' level='2' spacing id='hvordan-bruke-digital-pvk'>
             Hvordan bruker man Digital PVK?
           </Heading>
@@ -242,48 +247,53 @@ const OmPvkPage = () => {
             om det er nødvendig å gjennomføre PVK.
           </BodyLong>
           <Heading level='2' size='medium' spacing id='bruk-av-den-nye-losningen'>
-            Når skal vi begynne å bruke den nye løsningen?
+            Det anbefales at dere bruker den nye løsningen
           </Heading>
-          <Heading level='3' size='xsmall' className='mt-5'>
-            Dere skal vurdere eller revurdere behov for PVK
-          </Heading>
-          <BodyLong className='mt-3'>
+          <BodyLong spacing>
             I ny løsning får dere hjelp til å vurdere og dokumentere om dere skal gjennomføre en
             PVK. Hvis dere tidligere har vurdert at det ikke er behov for PVK, kan dere revurdere i
             ny løsning til enhver tid.
           </BodyLong>
-          <Heading level='3' size='xsmall' className='mt-5'>
-            Dere har en påbegynt PVK i Word som ikke ennå er sendt til PVO for vurdering
+          <Heading level='3' size='xsmall' spacing>
+            Hvis dere har en PVK i Word som allerede er godkjent og arkivert
           </Heading>
-          <BodyLong className='mt-3'>
-            Dere bør bruke den nye løsningen og legge over innhold fra Word.
+          <BodyLong spacing>
+            Hvis ikke risikobildet er endret, kan dere velge et av følgende svar:
           </BodyLong>
-          <Heading level='3' size='xsmall' className='mt-5'>
-            Dere har en PVK i Word som allerede er godkjent og arkivert
-          </Heading>
-          <BodyLong className='mt-3'>
-            <b>Hvis ikke risikobildet er endret </b>, skal ikke deres godkjente, arkiverte PVK inn i
-            ny løsning. Men dere skal likevel registrere denne vurderingen under «Vurder behov for
-            PVK». Her velger dere «Vi har en PVK i Word som ikke trenger en ny vurdering».
+          <List className='mb-6'>
+            <List.Item>Vi har en PVK i Word som ikke trenger en ny vurdering</List.Item>
+            <List.Item>Vi skal legge over vår eksisterende, godkjente PVK fra Word</List.Item>
+          </List>
+          <BodyLong spacing>
+            Fordelen ved å velge det siste er at man dermed har hele PVK-en i ny løsning. Senere,
+            når dere har behov for å oppdatere PVK-en og sende inn til personvernombudet på nytt, og
+            så til risikoeier for godkjenning, har man allerede det meste i løsningen. En annen
+            fordel er at man får (statistikk i dashboard) (LENKE TIL STATISTIKK-FORSIDE) om statusen
+            til PVK.
           </BodyLong>
-          <BodyLong className='mt-3'>
+          <BodyLong spacing>
             <b>Hvis risikobildet er endret siden dere fikk godkjent og arkivert deres PVK,</b> bør
-            dere bruke ny løsning til å dokumentere framover. Det er dessverre ikke mulig å
-            importere eksisterende PVK-er fra Word. Da må dere klippe og lime tidligere innhold i
-            Word over i den nye løsningen og oppdatere med det som er nytt. Dere kan også legge inn
-            lenker til tidligere PVK-er i Public360, slik at de blir lettere for Personvernombudet å
-            finne ved behov.
+            dere bruke ny løsning til å dokumentere framover.
           </BodyLong>
-          <Heading level='3' size='xsmall' className='mt-5'>
-            Dere skal gjøre endringer i en eksisterende digital PVK (ny løsning)
-          </Heading>
-          <BodyLong className='mt-3'>
+          <InfoCard className='mb-6'>
+            <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+              <InfoCard.Title>
+                Det er dessverre ikke mulig å importere eksisterende PVK-er fra Word.
+              </InfoCard.Title>
+            </InfoCard.Header>
+            <InfoCard.Content>
+              Da må dere klippe og lime tidligere innhold i Word over i den nye løsningen og
+              oppdatere med det som er nytt. Dere skal også legge inn lenker til tidligere PVK-er i
+              Public360, slik at de blir lettere for Personvernombudet å finne ved behov.
+            </InfoCard.Content>
+          </InfoCard>
+          <BodyLong spacing>
             Etter at dere har fått godkjent og arkivert digital PVK, er det mulig å oppdatere PVK-en
             i ettertid. Her velger dere «Oppdater PVK» fra menyen i deres dokumentasjon. Så vurderer
             dere om det er behov for en ny innsending til Personvernombudet, eller om risikoeier
             skal godkjenne mindre endringer i PVK.
           </BodyLong>
-          <Heading level='2' size='small' spacing className='mt-7' id='ta-kontakt'>
+          <Heading level='2' size='medium' spacing className='mt-7' id='ta-kontakt'>
             Ta kontakt
           </Heading>
           <BodyLong spacing>
