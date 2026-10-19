@@ -1822,7 +1822,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-link@npm:3.31.4, @tiptap/extension-link@npm:^3.31.4":
+"@tiptap/extension-link@npm:3.31.4":
   version: 3.31.4
   resolution: "@tiptap/extension-link@npm:3.31.4"
   dependencies:
@@ -1831,6 +1831,18 @@ __metadata:
     "@tiptap/core": 3.31.4
     "@tiptap/pm": 3.31.4
   checksum: 10c0/c5db8bd9419215c8f7066a6066dbc322769434c474c68bbc9dd28c354b62b8cc112c51e84a3e07fec9a79898b7927a832a00c65ad4a63e216aaef45238abd02d
+  languageName: node
+  linkType: hard
+
+"@tiptap/extension-link@npm:^3.32.0":
+  version: 3.32.0
+  resolution: "@tiptap/extension-link@npm:3.32.0"
+  dependencies:
+    linkifyjs: "npm:^4.3.3"
+  peerDependencies:
+    "@tiptap/core": 3.32.0
+    "@tiptap/pm": 3.32.0
+  checksum: 10c0/3062876b79b6e974ec183f4036aa161ad455ed9f558a5b11525548a637d62b1cd66e1194eeb7360b18f6c443e6fc29eb9027f823c258f5a7b6b34075a10e9d47
   languageName: node
   linkType: hard
 
@@ -3899,7 +3911,7 @@ __metadata:
     "@tailwindcss/postcss": "npm:^4.3.3"
     "@tiptap/core": "npm:^3.31.4"
     "@tiptap/extension-image": "npm:^3.31.4"
-    "@tiptap/extension-link": "npm:^3.31.4"
+    "@tiptap/extension-link": "npm:^3.32.0"
     "@tiptap/extension-list": "npm:^3.31.4"
     "@tiptap/extension-ordered-list": "npm:^3.31.4"
     "@tiptap/extension-underline": "npm:^3.31.4"
