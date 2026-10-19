@@ -5,6 +5,7 @@ import { BodyLong, Heading, InfoCard, List, ReadMore, Stepper } from '@navikt/ds
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import {
   omBehandlingskatalogenUrl,
@@ -257,10 +258,8 @@ const OmPvkPage = () => {
           <Heading level='3' size='xsmall' spacing>
             Hvis dere har en PVK i Word som allerede er godkjent og arkivert
           </Heading>
-          <BodyLong spacing>
-            Hvis ikke risikobildet er endret, kan dere velge et av følgende svar:
-          </BodyLong>
-          <List className='mb-6'>
+          <BodyLong>Hvis ikke risikobildet er endret, kan dere velge et av følgende svar:</BodyLong>
+          <List className='my-3'>
             <List.Item>Vi har en PVK i Word som ikke trenger en ny vurdering</List.Item>
             <List.Item>Vi skal legge over vår eksisterende, godkjente PVK fra Word</List.Item>
           </List>
@@ -268,12 +267,9 @@ const OmPvkPage = () => {
             Fordelen ved å velge det siste er at man dermed har hele PVK-en i ny løsning. Senere,
             når dere har behov for å oppdatere PVK-en og sende inn til personvernombudet på nytt, og
             så til risikoeier for godkjenning, har man allerede det meste i løsningen. En annen
-            fordel er at man får (statistikk i dashboard) (LENKE TIL STATISTIKK-FORSIDE) om statusen
-            til PVK.
-          </BodyLong>
-          <BodyLong spacing>
-            <b>Hvis risikobildet er endret siden dere fikk godkjent og arkivert deres PVK,</b> bør
-            dere bruke ny løsning til å dokumentere framover.
+            fordel er at man får{' '}
+            <ExternalLink href='/dashboard'>statistikk i dashboard</ExternalLink> om statusen til
+            PVK.
           </BodyLong>
           <InfoCard className='mb-6'>
             <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
@@ -287,6 +283,10 @@ const OmPvkPage = () => {
               Public360, slik at de blir lettere for Personvernombudet å finne ved behov.
             </InfoCard.Content>
           </InfoCard>
+          <BodyLong spacing>
+            <b>Hvis risikobildet er endret siden dere fikk godkjent og arkivert deres PVK,</b> bør
+            dere bruke ny løsning til å dokumentere framover.
+          </BodyLong>
           <BodyLong spacing>
             Etter at dere har fått godkjent og arkivert digital PVK, er det mulig å oppdatere PVK-en
             i ettertid. Her velger dere «Oppdater PVK» fra menyen i deres dokumentasjon. Så vurderer
