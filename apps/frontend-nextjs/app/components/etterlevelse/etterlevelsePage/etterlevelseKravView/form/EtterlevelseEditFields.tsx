@@ -212,7 +212,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                             field: 'oppfylles_senere',
                             checked: !isOppfylesSenere,
                             status: !isOppfylesSenere ? 'selected' : 'unselected',
-                            id: krav.id,
+                            id: krav.kravNummer,
                             context: 'krav-status',
                           })
                         }}
@@ -507,4 +507,3 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
 }
 
 export default EtterlevelseEditFields
-

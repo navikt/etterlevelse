@@ -52,7 +52,6 @@ type TUmamiEventDataMap = {
   [UMAMI_EVENTS.FILTER_CHANGED]: TUmamiBaseEventData & {
     filter: string
     value?: string
-    value_length?: number
   }
 }
 
@@ -135,7 +134,7 @@ export const trackUmamiPageView = (): void => {
 
 export const trackUmamiEvent = <TEventName extends TUmamiEventName>(
   eventName: TEventName,
-  data?: TUmamiEventDataMap[TEventName],
+  data?: TUmamiEventDataMap[TEventName]
 ): void => {
   if (!hasAnalyticsConsent() || typeof window === 'undefined') {
     return
@@ -147,7 +146,7 @@ export const trackUmamiEvent = <TEventName extends TUmamiEventName>(
   }
 
   const payload = Object.fromEntries(
-    Object.entries(data ?? {}).filter(([, value]) => value !== undefined),
+    Object.entries(data ?? {}).filter(([, value]) => value !== undefined)
   ) as TUmamiTrackData
 
   umami.track(eventName, Object.keys(payload).length > 0 ? payload : undefined)

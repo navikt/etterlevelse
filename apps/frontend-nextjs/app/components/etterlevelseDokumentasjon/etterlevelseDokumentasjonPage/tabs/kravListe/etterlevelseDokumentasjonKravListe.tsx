@@ -18,13 +18,13 @@ import {
   etterlevelseDokumentasjonAlleClosedUrl,
   etterlevelseDokumentasjonAlleOpenUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 import {
   filterKravEtterlevelseStatus,
   filterSuksesskriterieStatus,
   getNewestKravVersjon,
   isFerdigUtfylt,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
-import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 import {
   KravNivaaStatusFilter,
   SuksesskriterieStatusFilter,
@@ -88,10 +88,8 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
         setOpenAccordions(temaListe.map(() => false))
       } else {
         setOpenAccordions(
-          temaListe.map((t) =>
-            t.code.toLocaleLowerCase() === queryParams.get('tema')?.toLocaleLowerCase()
-              ? true
-              : false
+          temaListe.map(
+            (t) => t.code.toLocaleLowerCase() === queryParams.get('tema')?.toLocaleLowerCase()
           )
         )
       }
@@ -177,13 +175,13 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
             const value = event.target.value
             setSearchKrav(value)
 
-            trackUmamiEvent(UMAMI_EVENTS.FILTER_CHANGED, {
-              page: 'etterlevelse-dokumentasjon',
-              component: 'krav-liste',
-              filter: 'kravnummer',
-              value,
-              value_length: value.length,
-            })
+            if (value.length === 1) {
+              trackUmamiEvent(UMAMI_EVENTS.FILTER_CHANGED, {
+                page: 'etterlevelse-dokumentasjon',
+                component: 'krav-liste',
+                filter: 'kravnummer',
+              })
+            }
           }}
         />
 
