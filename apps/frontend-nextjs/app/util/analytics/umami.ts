@@ -3,8 +3,64 @@ export type TConsentValue = 'accepted' | 'rejected'
 const CONSENT_COOKIE_NAME = 'etterlevelse-cookie-consent'
 export const CONSENT_EVENT_NAME = 'etterlevelse-consent-changed'
 
+export const UMAMI_EVENTS = {
+  PAGEVIEW: 'pageview',
+  CHECKBOX_TOGGLED: 'checkbox_toggled',
+  MODAL_OPENED: 'modal_opened',
+  BUTTON_CLICKED: 'button_clicked',
+  ACTION_SELECTED: 'action_selected',
+  TAB_SELECTED: 'tab_selected',
+  FILTER_CHANGED: 'filter_changed',
+} as const
+
+export type TUmamiEventName = (typeof UMAMI_EVENTS)[keyof typeof UMAMI_EVENTS]
+
+type TUmamiBaseEventData = {
+  page?: string
+  component?: string
+  field?: string
+  action?: string
+  status?: string
+  id?: string | number
+  context?: string
+  variant?: string
+}
+
+type TUmamiEventDataMap = {
+  [UMAMI_EVENTS.PAGEVIEW]: TUmamiBaseEventData
+  [UMAMI_EVENTS.CHECKBOX_TOGGLED]: TUmamiBaseEventData & {
+    checked: boolean
+  }
+  [UMAMI_EVENTS.MODAL_OPENED]: TUmamiBaseEventData & {
+    modal: string
+    openedFrom?: string
+  }
+  [UMAMI_EVENTS.BUTTON_CLICKED]: TUmamiBaseEventData & {
+    button: string
+    label?: string
+  }
+  [UMAMI_EVENTS.ACTION_SELECTED]: TUmamiBaseEventData & {
+    action: string
+    value?: string
+  }
+  [UMAMI_EVENTS.TAB_SELECTED]: TUmamiBaseEventData & {
+    group?: string
+    tab: string
+    tab_label?: string
+    avdeling_id?: string
+  }
+  [UMAMI_EVENTS.FILTER_CHANGED]: TUmamiBaseEventData & {
+    filter: string
+    value?: string
+  }
+}
+
+type TUmamiTrackData = {
+  [key: string]: string | number | boolean | undefined
+}
+
 type TUmamiApi = {
-  track?: (eventName: string, data?: Record<string, string | number | boolean>) => void
+  track?: (eventName: string, data?: TUmamiTrackData) => void
   trackView?: () => void
 }
 
@@ -72,13 +128,13 @@ export const trackUmamiPageView = (): void => {
   }
 
   if (typeof umami.track === 'function') {
-    trackUmamiEvent('pageview')
+    trackUmamiEvent(UMAMI_EVENTS.PAGEVIEW)
   }
 }
 
-export const trackUmamiEvent = (
-  eventName: string,
-  data?: Record<string, string | number | boolean>
+export const trackUmamiEvent = <TEventName extends TUmamiEventName>(
+  eventName: TEventName,
+  data?: TUmamiEventDataMap[TEventName]
 ): void => {
   if (!hasAnalyticsConsent() || typeof window === 'undefined') {
     return
@@ -89,5 +145,9 @@ export const trackUmamiEvent = (
     return
   }
 
-  umami.track(eventName, data)
+  const payload = Object.fromEntries(
+    Object.entries(data ?? {}).filter(([, value]) => value !== undefined)
+  ) as TUmamiTrackData
+
+  umami.track(eventName, Object.keys(payload).length > 0 ? payload : undefined)
 }

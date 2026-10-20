@@ -49,6 +49,7 @@ import { handleSort } from '@/util/handleTableSort'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { AvdelingDetailReadMore } from './DashboardReadmore/AvdelingDetailReadMore'
 import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
+import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 
 interface IProps {
   avdelingId: string
@@ -755,6 +756,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               onChange={(val) => {
                 setTableTab(val)
                 setSort(undefined)
+
+                trackUmamiEvent(UMAMI_EVENTS.TAB_SELECTED, {
+                  page: 'dashboard',
+                  component: 'avdeling-detail-table-tabs',
+                  group: 'detail-table',
+                  tab: val,
+                  tab_label:
+                    val === 'dok_pvk'
+                      ? 'Dokumentasjonsoversikt'
+                      : val === 'krav'
+                        ? 'Etterlevelse'
+                        : 'Digital PVK',
+                  avdeling_id: avdelingId,
+                })
               }}
               className='mt-4'
             >

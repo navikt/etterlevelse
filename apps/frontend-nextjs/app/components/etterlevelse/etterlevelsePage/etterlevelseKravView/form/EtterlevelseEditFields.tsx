@@ -26,6 +26,7 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
+import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 import { env } from '@/util/env/env'
 import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
@@ -205,6 +206,15 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         checked={isOppfylesSenere}
                         onChange={() => {
                           setOppfylesSenere(!isOppfylesSenere)
+                          trackUmamiEvent(UMAMI_EVENTS.CHECKBOX_TOGGLED, {
+                            page: 'etterlevelse',
+                            component: 'etterlevelse-form',
+                            field: 'oppfylles_senere',
+                            checked: !isOppfylesSenere,
+                            status: !isOppfylesSenere ? 'selected' : 'unselected',
+                            id: krav.kravNummer,
+                            context: 'krav-status',
+                          })
                         }}
                         key={EEtterlevelseStatus.OPPFYLLES_SENERE}
                       >
