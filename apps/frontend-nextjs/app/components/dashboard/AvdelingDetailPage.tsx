@@ -43,13 +43,13 @@ import {
   EPvkVurdering,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { AvdelingDetailReadMore } from './DashboardReadmore/AvdelingDetailReadMore'
 import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
-import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 
 interface IProps {
   avdelingId: string
