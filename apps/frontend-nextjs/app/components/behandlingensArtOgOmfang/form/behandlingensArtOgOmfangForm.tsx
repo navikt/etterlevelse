@@ -224,7 +224,7 @@ const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                   underleverandører.
                 </ReadMore>
 
-                <InfoCard data-color='info' size='small'>
+                <InfoCard data-color='info' size='medium'>
                   <InfoCard.Message
                     icon={<LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />}
                   >

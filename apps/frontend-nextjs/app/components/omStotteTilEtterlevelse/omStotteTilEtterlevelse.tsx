@@ -8,7 +8,7 @@ import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import OmStotteTilEtterlevelseAccordion from '@/components/omStotteTilEtterlevelse/omStotteTilEtterlevelseAccordion'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { omPVKUrl, oversiktOverLosningeneUrl } from '@/routes/omSidene/omSideneUrl'
-import ForstesideStotteTilEtterlevelse from './images/ForstesidStotteTilEtterlevelse.png'
+import ForsidenIStotteTilEtterlevelse from './images/ForsidenIStotteTilEtterlevelse.png'
 import TemainndelingOgTemaoversiktReadmore from './images/TemainndelingOgTemaoversiktReadmore.png'
 import VisMegHvordanEnKravsideSerUt from './images/VisMegHvordanEnKravsideSerUt.png'
 
@@ -29,8 +29,8 @@ const OmStotteTilEtterlevelse = () => {
               <Stepper.Step href='#formaalet-med-stotte-til-etterlevelse'>
                 Hva er formålet med Støtte til etterlevelse?
               </Stepper.Step>
-              <Stepper.Step href='#forstesiden-i-stotte-til-etterlevelse'>
-                Førstesiden i Støtte til etterlevelse
+              <Stepper.Step href='#forsiden-i-stotte-til-etterlevelse'>
+                Forsiden i Støtte til etterlevelse
               </Stepper.Step>
               <Stepper.Step href='#temainndeling-og-temaoversikt'>
                 Temainndeling og temaoversikt
@@ -55,8 +55,8 @@ const OmStotteTilEtterlevelse = () => {
               <FormProgress.Step href='#formaalet-med-stotte-til-etterlevelse'>
                 Hva er formålet med Støtte til etterlevelse?
               </FormProgress.Step>
-              <FormProgress.Step href='#forstesiden-i-stotte-til-etterlevelse'>
-                Førstesiden i Støtte til etterlevelse
+              <FormProgress.Step href='#forsiden-i-stotte-til-etterlevelse'>
+                Forsiden i Støtte til etterlevelse
               </FormProgress.Step>
               <FormProgress.Step href='#temainndeling-og-temaoversikt'>
                 Temainndeling og temaoversikt
@@ -128,31 +128,32 @@ const OmStotteTilEtterlevelse = () => {
             korrekt og oppdatert innenfor sine områder.{' '}
           </BodyLong>
 
-          <Heading size='medium' level='2' spacing id='forstesiden-i-stotte-til-etterlevelse'>
-            Førstesiden i Støtte til etterlevelse
+          <Heading size='medium' level='2' spacing id='forsiden-i-stotte-til-etterlevelse'>
+            Forsiden i Støtte til etterlevelse
           </Heading>
           <Image
             className='mr-2.5 mt-6 mb-12'
-            src={ForstesideStotteTilEtterlevelse}
+            src={ForsidenIStotteTilEtterlevelse}
             alt='Skjermbilde fra forsiden til Støtte til etterlevelse'
           />
-          <BodyLong spacing>Løsningen har tre hovedinnganger på førstesiden:</BodyLong>
+          <BodyLong spacing>Løsningen har tre hovedinnganger på forsiden:</BodyLong>
           <List as='ul' className='mb-6'>
-            <List.Item title='Mine sist dokumenterte'>
-              Dette er inngangen hvis dere skal dokumentere etterlevelse. Her kan dere opprette et
-              nytt etterlevelsesdokument eller dere kan oppdatere eksisterende
-              etterlevelsesdokumenter.
-            </List.Item>
             <List.Item title='Forstå kravene'>
               Dette er inngangen hvis dere ønsker å se alle etterlevelseskravene i løsningen, uten
               at dere skal dokumentere etterlevelse. Her får dere en oversikt over alle
               etterlevelseskravene fordelt på tema.
             </List.Item>
+            <List.Item title='Slik dokumenterer du'>
+              Lær hvordan du bruker Støtte til etterlevelse, Digital PVK og Behandlingskatalogen.
+            </List.Item>
             <List.Item title='Status i organisasjonen'>
-              Dette er inngangen hvis dere ønsker oversikt over all etterlevelse i en
-              avdeling/seksjon/team. Løsningen inneholder per nå kun en veldig overordnet oversikt.
-              Team datajegerne jobber for tiden med å lage dashboard som vil gi ledere et bedre
-              grunnlag for internkontroll.
+              Dette er inngangen hvis dere ønsker oversikt over all etterlevelse og PVK i en
+              avdeling, seksjon eller team.
+            </List.Item>
+            <List.Item title='Mine sist dokumenterte'>
+              Dette er inngangen hvis dere skal dokumentere etterlevelse. Her kan dere opprette et
+              nytt etterlevelsesdokument eller dere kan oppdatere eksisterende
+              etterlevelsesdokumenter.
             </List.Item>
           </List>
           <Heading size='small' level='3' spacing>

@@ -6,7 +6,15 @@ import { AxiosError } from 'axios'
 import { Form, Formik, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
-import { FunctionComponent, RefObject, useContext, useEffect, useRef, useState } from 'react'
+import {
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import {
   getBehandlingensLivslopByEtterlevelseDokumentId,
@@ -151,6 +159,15 @@ export const SendInnView: FunctionComponent<TProps> = ({
 
   const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
   const hasAccess = user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess
+
+  // When PVO has vurdert uten å be om PVK-en i retur, default til å sende til risikoeier for godkjenning
+  const initialFormValues = useMemo(() => {
+    const mappedValues = mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)
+    if (pvkDokument.status === EPvkDokumentStatus.VURDERT_AV_PVO) {
+      return { ...mappedValues, berOmNyVurderingFraPvo: false }
+    }
+    return mappedValues
+  }, [pvkDokument])
 
   const submit = async (submitedValues: IPvkDokument): Promise<void> => {
     if (!hasBlockingErrorsRef.current) {
@@ -584,7 +601,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
         validateOnBlur={false}
         onSubmit={submit}
         innerRef={formRef}
-        initialValues={mapPvkDokumentToFormValue(pvkDokument as IPvkDokument)}
+        initialValues={initialFormValues}
         validate={async (value) => {
           try {
             if (

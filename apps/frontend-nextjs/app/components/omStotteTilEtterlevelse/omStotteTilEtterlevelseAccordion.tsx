@@ -389,6 +389,9 @@ const OmStotteTilEtterlevelseAccordion = () => {
             Etter at dere har sendt det til godkjenning, låses etterlevelsesdokumentet for
             redigering fram til at risikoeier har godkjent.
           </BodyLong>
+          <BodyLong spacing>
+            Når dere sender til risikoeier, vil risikoeier få varsel om dette på e-post.
+          </BodyLong>
           <BodyLong className='mb-3'>
             Etter at risikoeieren har godkjent etterlevelsesdokumentet, arkiveres dokumentet i
             Public360.
@@ -404,6 +407,10 @@ const OmStotteTilEtterlevelseAccordion = () => {
               kommentarer ved godkjenning blir tatt med i historikken.
             </List.Item>
           </List>
+          <BodyLong spacing>
+            Når risikoeier har godkjent, får dere varsel i den varslingskanalen som dere har valgt
+            under Dokumentegenskaper.
+          </BodyLong>
           <BodyLong spacing>
             Når dere senere vil oppdatere et godkjent etterlevelsesdokument, velger dere Oppdater
             etterlevelsen fra menyen på dokumentets temaside.

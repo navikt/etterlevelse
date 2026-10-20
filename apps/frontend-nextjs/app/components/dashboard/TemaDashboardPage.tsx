@@ -36,6 +36,7 @@ import { TemaDashboardHowToReadmore } from './DashboardReadmore/TemaDashboardHow
 import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
 import {
+  FERDIG_SUKSESS_COLORS,
   IBarSegment,
   KRAV_COLORS,
   SUKSESS_COLORS,
@@ -87,17 +88,17 @@ const TemaStatsCard = ({ stats }: { stats: ITemaDashboardStats }) => {
     {
       name: 'Oppfylt',
       value: stats.ferdigUtfyltKravSuksesskriterierOppfylt ?? 0,
-      color: SUKSESS_COLORS.oppfylt,
+      color: FERDIG_SUKSESS_COLORS.oppfylt,
     },
     {
       name: 'Ikke oppfylt',
       value: stats.ferdigUtfyltKravSuksesskriterierIkkeOppfylt ?? 0,
-      color: SUKSESS_COLORS.ikkeOppfylt,
+      color: FERDIG_SUKSESS_COLORS.ikkeOppfylt,
     },
     {
       name: 'Ikke relevant',
       value: stats.ferdigUtfyltKravSuksesskriterierIkkeRelevant ?? 0,
-      color: SUKSESS_COLORS.ikkeRelevant,
+      color: FERDIG_SUKSESS_COLORS.ikkeRelevant,
     },
   ]
 

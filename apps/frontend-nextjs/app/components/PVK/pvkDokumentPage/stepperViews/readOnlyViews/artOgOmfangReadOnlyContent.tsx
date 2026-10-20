@@ -9,6 +9,7 @@ type TProps = {
   artOgOmfang: IBehandlingensArtOgOmfang
   personkategorier: string[]
   isChangesMadeSinceLastSubmission?: boolean
+  endringerTilRisikoeier?: boolean
   brukerAlleOpplysningstyper?: boolean
   editorMode?: boolean
   pvkDokumentId?: string
@@ -18,19 +19,22 @@ const ArtOgOmfangReadOnlyContent: FunctionComponent<TProps> = ({
   artOgOmfang,
   personkategorier,
   isChangesMadeSinceLastSubmission,
+  endringerTilRisikoeier,
   brukerAlleOpplysningstyper,
   editorMode,
   pvkDokumentId,
 }) => {
   return (
-    <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8'>
+    <div className='pt-6 pr-4 flex flex-1 flex-col gap-4 col-span-8 min-w-0'>
       <div className='flex justify-center'>
-        <div>
+        <div className='min-w-0'>
           <Heading level='1' size='medium' className='mb-5'>
             Behandlingens art og omfang
           </Heading>
 
-          {isChangesMadeSinceLastSubmission && <EndringerGjortSidenSisteInnsending />}
+          {isChangesMadeSinceLastSubmission && (
+            <EndringerGjortSidenSisteInnsending tilRisikoeier={endringerTilRisikoeier} />
+          )}
 
           {editorMode && pvkDokumentId && (
             <InlineMessage status='info' className='mb-5 mt-9'>

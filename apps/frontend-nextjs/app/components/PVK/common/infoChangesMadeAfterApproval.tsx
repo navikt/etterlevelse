@@ -95,17 +95,14 @@ const InfoChangesMadeAfterApproval: FunctionComponent<TProps> = ({
       }
     }
 
-    const godkjentDatoOgTid = pvkDokument.godkjentAvRisikoeierDato.split('T')
-    const tid = godkjentDatoOgTid[1].split(':')
+    const godkjentMoment = moment(pvkDokument.godkjentAvRisikoeierDato)
 
     return {
       isChangesMade:
         pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
-        lastModifiedDate.isAfter(
-          moment(pvkDokument.godkjentAvRisikoeierDato).seconds(0).milliseconds(0)
-        ),
-      approvedDate: godkjentDatoOgTid[0],
-      approvedTime: tid[0] + ':' + tid[1],
+        lastModifiedDate.isAfter(godkjentMoment.clone().seconds(0).milliseconds(0)),
+      approvedDate: godkjentMoment.format('YYYY-MM-DD'),
+      approvedTime: godkjentMoment.format('HH:mm'),
     }
   }, [pvkDokument, behandlingensLivslop, behandlingensArtOgOmfang, alleRisikoscenario, alleTiltak])
 

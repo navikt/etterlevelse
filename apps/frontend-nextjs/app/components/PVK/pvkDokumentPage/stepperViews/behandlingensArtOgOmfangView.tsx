@@ -1,6 +1,7 @@
 'use client'
 
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
+import moment from 'moment'
+import { FunctionComponent, RefObject, useContext, useMemo, useState } from 'react'
 import { useBehandlingensArtOgOmfang } from '@/api/behandlingensArtOgOmfang/behandlingensArtOgOmfangApi'
 import { PvkSidePanelWrapper } from '@/components/PVK/common/pvkSidePanelWrapper'
 import FormButtons from '@/components/PVK/edit/formButtons'
@@ -66,6 +67,19 @@ const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
     relevantVurdering
   )
 
+  const isChangesMadeSinceLastApproval = useMemo(() => {
+    if (
+      pvkDokument.status !== EPvkDokumentStatus.TRENGER_GODKJENNING ||
+      !pvkDokument.godkjentAvRisikoeierDato ||
+      !artOgOmfang?.changeStamp?.lastModifiedDate
+    ) {
+      return false
+    }
+    return moment(artOgOmfang.changeStamp.lastModifiedDate).isAfter(
+      pvkDokument.godkjentAvRisikoeierDato
+    )
+  }, [artOgOmfang, pvkDokument])
+
   return (
     <div className='w-full'>
       <ContentLayout>
@@ -109,6 +123,8 @@ const BehandlingensArtOgOmfangView: FunctionComponent<TProps> = ({
               artOgOmfang={artOgOmfang}
               personkategorier={personkategorier}
               brukerAlleOpplysningstyper={brukerAlleOpplysningstyper}
+              isChangesMadeSinceLastSubmission={isChangesMadeSinceLastApproval}
+              endringerTilRisikoeier
             />
           )}
 

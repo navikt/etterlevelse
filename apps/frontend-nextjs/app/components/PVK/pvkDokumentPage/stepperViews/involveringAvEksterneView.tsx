@@ -13,7 +13,8 @@ import {
   ReadMore,
 } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useContext, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
+import { getAuditByTableIdAndTimeStamp } from '@/api/audit/auditApi'
 import {
   getPvkDokument,
   mapPvkDokumentToFormValue,
@@ -82,6 +83,47 @@ const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
     pvoTilbakemelding.status === EPvoTilbakemeldingStatus.FERDIG &&
     relevantVurdering
   )
+
+  const [isChangesMadeSinceLastApproval, setIsChangesMadeSinceLastApproval] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    ;(async () => {
+      if (
+        pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING &&
+        pvkDokument.godkjentAvRisikoeierDato
+      ) {
+        await getAuditByTableIdAndTimeStamp(
+          pvkDokument.id,
+          pvkDokument.godkjentAvRisikoeierDato
+        ).then((previousPvkDokument) => {
+          if (previousPvkDokument.length !== 0) {
+            const previousData = (
+              previousPvkDokument[0].data as { pvkDokumentData?: IPvkDokument }
+            )['pvkDokumentData']
+            if (
+              previousData &&
+              (previousData.harInvolvertRepresentant !== pvkDokument.harInvolvertRepresentant ||
+                previousData.representantInvolveringsBeskrivelse !==
+                  pvkDokument.representantInvolveringsBeskrivelse ||
+                previousData.harDatabehandlerRepresentantInvolvering !==
+                  pvkDokument.harDatabehandlerRepresentantInvolvering ||
+                previousData.dataBehandlerRepresentantInvolveringBeskrivelse !==
+                  pvkDokument.dataBehandlerRepresentantInvolveringBeskrivelse)
+            ) {
+              setIsChangesMadeSinceLastApproval(true)
+            } else {
+              setIsChangesMadeSinceLastApproval(false)
+            }
+          } else {
+            setIsChangesMadeSinceLastApproval(false)
+          }
+        })
+      } else {
+        setIsChangesMadeSinceLastApproval(false)
+      }
+    })()
+  }, [pvkDokument])
 
   const submit = async (pvkDokument: IPvkDokument): Promise<void> => {
     await getPvkDokument(pvkDokument.id).then(async (response: IPvkDokument) => {
@@ -180,7 +222,7 @@ const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                           personkategorier, kan det være til hjelp å se på behandlingens livsløp.
                         </BodyLong>
 
-                        <InfoCard data-color='info' size='small' className='mb-7 mt-5'>
+                        <InfoCard data-color='info' size='medium' className='mb-7 mt-5'>
                           <InfoCard.Message
                             icon={
                               <LightBulbIcon title='a11y-title' fontSize='1.5rem' aria-hidden />
@@ -429,6 +471,8 @@ const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                 personkategorier={personkategorier}
                 databehandlere={databehandlere}
                 pvkDokument={pvkDokument}
+                isChangesMadeSinceLastSubmission={isChangesMadeSinceLastApproval}
+                endringerTilRisikoeier
               />
             </div>
           )}

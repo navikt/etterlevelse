@@ -17,8 +17,13 @@ import {
   ISuksesskriterieStatusFilter,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { IAllCodelists, TLovCode, TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
-import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
+import {
+  IAllCodelists,
+  IRegelverk,
+  TLovCode,
+  TTemaCode,
+} from '@/constants/kodeverk/kodeverkConstants'
+import { EKravStatus, IKrav, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
 import { IMember, ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { ICodelistProps } from '@/provider/kodeverk/kodeverkProvider'
@@ -396,6 +401,54 @@ export const getOrderedKravForDokumentasjon = (args: {
   }
 }): TKravNavigationEntry[] =>
   getGroupedKravForDokumentasjon(args).flatMap((group: TKravNavigationGroup) => group.krav)
+
+export const getGroupedKravByTema = ({
+  temaListe,
+  kravliste,
+  allKravPriority,
+  codelist,
+}: {
+  temaListe: TTemaCode[]
+  kravliste: IKrav[]
+  allKravPriority: IKravPriorityList[]
+  codelist: {
+    utils: ICodelistProps
+    lists: IAllCodelists
+  }
+}): TKravNavigationGroup[] =>
+  temaListe
+    .map((tema: TTemaCode): TKravNavigationGroup => {
+      const lovCodes: string[] = codelist.utils
+        .getLovCodesForTema(tema.code)
+        .map((lov: TLovCode) => lov.code)
+      const kravForTema: IKrav[] = kravliste.filter((krav: IKrav) =>
+        krav.regelverk
+          .map((regelverk: IRegelverk) => regelverk.lov.code)
+          .some((lov: string) => lovCodes.includes(lov))
+      )
+      const priorityList: number[] =
+        allKravPriority.find((kravPriority: IKravPriorityList) => kravPriority.temaId === tema.code)
+          ?.priorityList ?? []
+      const prioritertKrav: IKrav[] = kravForTema.map((krav: IKrav) => ({
+        ...krav,
+        prioriteringsId: priorityList.indexOf(krav.kravNummer) + 1,
+      }))
+
+      return {
+        temaCode: tema.code,
+        temaName: tema.shortName,
+        krav: sortKravListeByPriority<IKrav>(prioritertKrav).map(
+          (krav: IKrav): TKravNavigationEntry => ({
+            kravNummer: krav.kravNummer,
+            kravVersjon: krav.kravVersjon,
+            temaCode: tema.code,
+            navn: krav.navn,
+            status: krav.status,
+          })
+        ),
+      }
+    })
+    .filter((group: TKravNavigationGroup) => group.krav.length > 0)
 
 export type TFilterKravProps = {
   etterlevelseId: string | undefined

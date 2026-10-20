@@ -6,9 +6,15 @@
   padding: 0.375rem;
   position: relative;
 }
-.pvo-sticky-toolbar .rdw-editor-toolbar {
+.pvo-sticky-toolbar .pvo-sticky-label {
   position: sticky;
   top: 3.75rem;
+  z-index: 2;
+  background-color: #e3eff7;
+}
+.pvo-sticky-toolbar .rdw-editor-toolbar {
+  position: sticky;
+  top: calc(3.75rem + var(--pvo-label-h, 0px));
   z-index: 1;
 }
 .rdw-inline-wrapper,

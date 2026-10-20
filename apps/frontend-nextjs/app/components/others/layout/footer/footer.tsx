@@ -110,7 +110,7 @@ export const Footer = () => {
               Om Behandlingskatalogen
             </Link>
             <Link className='text-white' href={omPersonvernerklaeringUrl}>
-              Om Personvernerklæring
+              Om Personvern og informasjonskapsler
             </Link>
           </div>
           <Spacer />

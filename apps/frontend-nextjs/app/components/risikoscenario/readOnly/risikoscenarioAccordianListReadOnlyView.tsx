@@ -20,6 +20,7 @@ type TProps = {
   allRisikoscenarioList: IRisikoscenario[]
   tiltakList: ITiltak[]
   previousVurdering?: IVurdering
+  nyttInnholdFraDato?: string
 }
 
 const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
@@ -28,6 +29,7 @@ const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
   tiltakList,
   etterlevelseDokumentasjonId,
   previousVurdering,
+  nyttInnholdFraDato,
 }) => {
   const router = useRouter()
   const pathName = usePathname()
@@ -60,6 +62,8 @@ const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
     }
   }, [])
 
+  const nyttInnholdBaseline = previousVurdering?.sendtDato ?? nyttInnholdFraDato
+
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
       router.push(risikoscenarioUrl(risikoscenarioId, steg), { scroll: false })
@@ -83,8 +87,8 @@ const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
             .filter((tiltak: ITiltak) => risikoscenario.tiltakIds.includes(tiltak.id))
             .some(
               (tiltak: ITiltak) =>
-                previousVurdering &&
-                moment(tiltak.changeStamp.lastModifiedDate).isAfter(previousVurdering.sendtDato)
+                !!nyttInnholdBaseline &&
+                moment(tiltak.changeStamp.lastModifiedDate).isAfter(nyttInnholdBaseline)
             )
 
           return (
@@ -101,6 +105,7 @@ const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
                 ref={expanded ? accordionRef : undefined}
                 previousVurdering={previousVurdering}
                 hasNewContent={hasNewContent}
+                nyttInnholdFraDato={nyttInnholdFraDato}
               />
               <Accordion.Content>
                 {expanded && (
@@ -122,9 +127,9 @@ const RisikoscenarioAccordianListReadOnlyView: FunctionComponent<TProps> = ({
                             )
                             .map((tiltak: ITiltak, index: number) => {
                               const isChangesMade =
-                                (previousVurdering &&
+                                (nyttInnholdBaseline &&
                                   moment(tiltak.changeStamp.lastModifiedDate).isAfter(
-                                    previousVurdering.sendtDato
+                                    nyttInnholdBaseline
                                   )) ||
                                 false
 

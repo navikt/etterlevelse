@@ -17,6 +17,9 @@ export const isReadOnlyPvkStatus = (status: string) => {
   ].includes(status)
 }
 
+export const isStringArrayEqual = (a: string[] = [], b: string[] = []): boolean =>
+  a.length === b.length && [...a].sort().join('|') === [...b].sort().join('|')
+
 // Begge vurderingene låser opp selve PVK-dokumentet (steg 1-8).
 export const skalHaPvkDokument = (pvkVurdering?: EPvkVurdering): boolean =>
   pvkVurdering === EPvkVurdering.SKAL_UTFORE ||

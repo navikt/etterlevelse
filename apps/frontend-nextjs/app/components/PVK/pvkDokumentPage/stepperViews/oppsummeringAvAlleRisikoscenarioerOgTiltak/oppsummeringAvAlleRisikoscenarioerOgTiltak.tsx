@@ -2,6 +2,7 @@
 
 import { InformationSquareFillIcon, LinkIcon } from '@navikt/aksel-icons'
 import {
+  Badge,
   BodyLong,
   CopyButton,
   Heading,
@@ -13,11 +14,12 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useContext, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useContext, useEffect, useMemo, useState } from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import EndringerGjortSidenSisteInnsending from '@/components/pvoTilbakemelding/common/EndringerGjortSidenSisteInnsending'
 import PvoTilbakemeldingsHistorikk from '@/components/pvoTilbakemelding/common/tilbakemeldingsHistorikk/pvoTilbakemeldingsHistorikk'
 import { PvoTilbakemeldingReadOnly } from '@/components/pvoTilbakemelding/readOnly/pvoTilbakemeldingReadOnly'
 import { TiltakAccordionList } from '@/components/tiltak/common/tiltakAccordionList'
@@ -76,7 +78,7 @@ const visTomTiltakListeBeskrivelse = (filter: string | null) => {
   let textBody = ''
   switch (filter) {
     case tiltakFilterValues.utenAnsvarlig:
-      textBody = 'Det finnes tiltak uten en ansvarlig 🎉'
+      textBody = 'Det finnes ingen tiltak uten en ansvarlig 🎉'
       break
     case tiltakFilterValues.utenFrist:
       textBody = 'Det finnes ingen tiltak uten frist 🎉'
@@ -123,6 +125,19 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
   const [antallFristUtloperSnart, setAntallFristUtloperSnart] = useState<number>(0)
   const [antallUtgaatteFrister, setAntallUtgaatteFrister] = useState<number>(0)
+
+  const isChangesMadeSinceLastApproval = useMemo(() => {
+    if (
+      pvkDokument.status !== EPvkDokumentStatus.TRENGER_GODKJENNING ||
+      !pvkDokument.godkjentAvRisikoeierDato
+    ) {
+      return false
+    }
+    const baseline = pvkDokument.godkjentAvRisikoeierDato
+    return [...risikoscenarioList, ...tiltakList].some((item) =>
+      moment(item.changeStamp.lastModifiedDate).isAfter(baseline)
+    )
+  }, [risikoscenarioList, tiltakList, pvkDokument])
 
   useEffect(() => {
     ;(async () => {
@@ -339,6 +354,12 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
               Risikobildet etter tiltak
             </Heading>
 
+            {isChangesMadeSinceLastApproval && (
+              <div className='max-w-204 pr-4'>
+                <EndringerGjortSidenSisteInnsending tilRisikoeier />
+              </div>
+            )}
+
             <div className='max-w-204 mt-5'>
               <InfoChangesMadeAfterApproval
                 pvkDokument={pvkDokument}
@@ -386,25 +407,31 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                       <Tabs.Tab
                         value={tabValues.risikoscenarioer}
                         label={
-                          <span className='flex items-center gap-1'>
+                          <span className='flex items-center gap-2'>
+                            {`${risikoscenarioList.length} Risikoscenarioer`}
                             {antallEffektIkkeVurdert > 0 && (
-                              <span className='w-3 h-3 bg-red-400 rounded-full mr-1'></span>
+                              <Badge
+                                data-color='danger'
+                                aria-label='Effekt ikke vurdert på minst ett risikoscenario'
+                              />
                             )}
-                            {`Vis risikoscenarioer (${risikoscenarioList.length})`}
                           </span>
                         }
                       />
                       <Tabs.Tab
                         value={tabValues.tiltak}
                         label={
-                          <span className='flex items-center gap-1'>
+                          <span className='flex items-center gap-2'>
+                            {`${tiltakList.length} Tiltak`}
                             {(antallUtenTiltakAnsvarlig > 0 ||
                               antallUtenFrist > 0 ||
                               antallFristUtloperSnart > 0 ||
                               antallUtgaatteFrister > 0) && (
-                              <span className='w-3 h-3 bg-red-400 rounded-full mr-1'></span>
+                              <Badge
+                                data-color='danger'
+                                aria-label='Minst ett tiltak krever oppmerksomhet'
+                              />
                             )}
-                            {`Vis tiltak (${tiltakList.length})`}
                           </span>
                         }
                       />
@@ -497,6 +524,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                                   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                                   tiltakList={tiltakList}
                                   noMarkdownCopyLinkButton
+                                  nyttInnholdFraDato={
+                                    pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING
+                                      ? pvkDokument.godkjentAvRisikoeierDato
+                                      : undefined
+                                  }
                                 />
                               )}
 
@@ -605,6 +637,11 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
                             tiltakList={filteredTiltakList}
                             risikoscenarioList={risikoscenarioList}
                             etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                            nyttInnholdFraDato={
+                              pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING
+                                ? pvkDokument.godkjentAvRisikoeierDato
+                                : undefined
+                            }
                           />
                         )}
 
