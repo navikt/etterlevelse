@@ -1,4 +1,5 @@
-import { Alert, Button, Heading } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Button, Heading, InfoCard } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent } from 'react'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
@@ -48,12 +49,14 @@ const SendtTilPvoFields: FunctionComponent<TProps> = ({
         }
       />
 
-      <Alert variant='info' className='ml-4 my-5' inline>
-        Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å trekke
-        PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
-        vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende plass i
-        behandlingskøen.
-      </Alert>
+      <InfoCard data-color='info' className='my-5'>
+        <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+          Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å
+          trekke PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
+          vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende plass i
+          behandlingskøen.
+        </InfoCard.Message>
+      </InfoCard>
 
       {isLoading && (
         <div className='flex justify-center items-center w-full '>
@@ -107,9 +110,11 @@ const SendtTilPvoFields: FunctionComponent<TProps> = ({
       )}
 
       <div>
-        <Alert variant='info' className='my-5'>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
+        <InfoCard data-color='info' className='my-5'>
+          <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+            Status: {pvkDokumentStatusToText(pvkDokument.status)}
+          </InfoCard.Message>
+        </InfoCard>
       </div>
 
       <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />

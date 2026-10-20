@@ -1,6 +1,7 @@
 'use client'
 
-import { Alert, Button, Heading, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Button, Heading, InfoCard, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -154,11 +155,15 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
 
               {relevantMeldingTilPvo.length !== 0 &&
                 !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
-                  <Alert variant='info' className='my-5'>
-                    Innsending til PVO trukket <br />
-                    Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
-                    deretter behandlet som en ny innsending
-                  </Alert>
+                  <InfoCard data-color='info' className='my-5'>
+                    <InfoCard.Header icon={<InformationSquareFillIcon aria-hidden />}>
+                      <InfoCard.Title>Innsending til PVO trukket</InfoCard.Title>
+                    </InfoCard.Header>
+                    <InfoCard.Content>
+                      Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en
+                      blir deretter behandlet som en ny innsending
+                    </InfoCard.Content>
+                  </InfoCard>
                 )}
 
               {isLoading && (

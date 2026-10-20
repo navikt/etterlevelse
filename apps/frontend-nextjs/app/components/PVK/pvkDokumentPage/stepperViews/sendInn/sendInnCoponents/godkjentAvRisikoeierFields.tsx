@@ -1,6 +1,7 @@
 'use client'
 
-import { Alert, Button, Heading, Loader } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Button, Heading, InfoCard, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useContext } from 'react'
 import { arkiver } from '@/api/p360/p360Api'
@@ -83,9 +84,11 @@ const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
       )}
 
       <div>
-        <Alert variant='info' className='my-5 '>
-          Status: {pvkDokumentStatusToText(pvkDokument.status)}
-        </Alert>
+        <InfoCard data-color='info' className='my-5'>
+          <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+            Status: {pvkDokumentStatusToText(pvkDokument.status)}
+          </InfoCard.Message>
+        </InfoCard>
       </div>
 
       <div>{savedAlert}</div>

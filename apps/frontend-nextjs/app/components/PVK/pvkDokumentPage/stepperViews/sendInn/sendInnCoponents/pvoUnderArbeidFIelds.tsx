@@ -1,4 +1,5 @@
-import { Alert, Loader } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InfoCard, Loader } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
 import BeskjedTilPvoReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilPvoReadOnly'
@@ -28,9 +29,11 @@ const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, isLoadin
     )}
 
     <div>
-      <Alert variant='info' className='my-5'>
-        Status: {pvkDokumentStatusToText(pvkDokument.status)}
-      </Alert>
+      <InfoCard data-color='info' className='my-5'>
+        <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+          Status: {pvkDokumentStatusToText(pvkDokument.status)}
+        </InfoCard.Message>
+      </InfoCard>
     </div>
 
     <CopyAndExportButtons etterlevelseDokumentasjonId={pvkDokument.etterlevelseDokumentId} />
