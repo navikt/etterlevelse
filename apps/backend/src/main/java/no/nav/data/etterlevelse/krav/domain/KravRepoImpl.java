@@ -11,7 +11,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -129,7 +135,7 @@ public class KravRepoImpl implements KravRepoCustom {
         }
 
         List<Krav> kravList = fetch(jdbcTemplate.queryForList(query, par));
-        List<Krav> alleVersjoner = needsSupersessionCheck(filter) ? fetchAlleVersjoner(kravList, filter) : kravList;
+        List<Krav> alleVersjoner = needsSupersessionCheck(filter) ? filterKravVersjoner(kravList, filter) : kravList;
         List<Krav> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(alleVersjoner, krav, filter, kravIdSafeList));
         sort(filter, filtered);
         return filtered;
@@ -162,7 +168,7 @@ public class KravRepoImpl implements KravRepoCustom {
      * slik at en nyere versjon som ikke matcher dem fortsatt kan erstatte en eldre.
      * Statusfilteret beholdes, ellers ville f.eks. et AKTIV-krav skjule et UNDER_ARBEID-krav ved filtrering på UNDER_ARBEID.
      */
-    private List<Krav> fetchAlleVersjoner(List<Krav> kravList, KravFilter filter) {
+    private List<Krav> filterKravVersjoner(List<Krav> kravList, KravFilter filter) {
         List<Integer> kravNummer = kravList.stream().map(Krav::getKravNummer).distinct().toList();
         if (kravNummer.isEmpty()) {
             return List.of();
