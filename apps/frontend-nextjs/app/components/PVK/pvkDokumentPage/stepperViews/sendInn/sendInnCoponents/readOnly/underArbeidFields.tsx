@@ -113,7 +113,7 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                   </InfoCard>
 
                   {relevantMeldingTilPvo.length !== 0 &&
-                    !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
+                    ['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
                       <InfoCard data-color='info' className='my-5'>
                         <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                           <InfoCard.Title>Innsending trukket</InfoCard.Title>

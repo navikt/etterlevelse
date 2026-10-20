@@ -154,7 +154,7 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               </div>
 
               {relevantMeldingTilPvo.length !== 0 &&
-                !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
+                ['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
                   <InfoCard data-color='info' className='my-5'>
                     <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                       <InfoCard.Title>Innsending til PVO trukket</InfoCard.Title>
