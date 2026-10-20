@@ -4,6 +4,7 @@ import no.nav.data.common.exceptions.TechnicalException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.ObjectReader;
 import tools.jackson.databind.cfg.CoercionAction;
 import tools.jackson.databind.cfg.CoercionInputShape;
@@ -28,7 +29,10 @@ public final class JsonUtils {
         // This mapper backs Hibernate's json format mapper, and turning stored nulls into empty values on read makes
         // Hibernate's dirty-checking see a phantom change on every load+flush (empty != null), causing spurious
         // UPDATEs, version bumps and broken round-trips. Null-defaulting is handled per-field where needed instead.
+        // DETECT_PARAMETER_NAMES is disabled so Jackson uses the no-args constructor (like Jackson 2) instead of
+        // Lombok's @AllArgsConstructor, which would skip @Builder.Default values for properties missing in stored JSON.
         return JsonMapper.builder()
+                .disable(MapperFeature.DETECT_PARAMETER_NAMES)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
                 .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
