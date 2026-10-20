@@ -109,8 +109,13 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
   }, [defaultOpen])
 
   const { relevantKravList, utgaattKravList } = useMemo(() => {
+    const relevantKravnummer: Set<number> = new Set(
+      relevanteStats.map((krav: TKravQL) => krav.kravNummer)
+    )
     let relevanteStatusListe: TKravQL[] = relevanteStats
-    let utgaattStatusListe: TKravQL[] = utgaattStats
+    let utgaattStatusListe: TKravQL[] = utgaattStats.filter(
+      (krav: TKravQL) => !relevantKravnummer.has(krav.kravNummer)
+    )
     if (Object.values(kravNivaaStatusFilter).some((value) => value !== true)) {
       relevanteStatusListe = filterKravEtterlevelseStatus(
         kravNivaaStatusFilter,
@@ -244,6 +249,7 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
           etterlevelseDokumentasjon={etterlevelseDokumentasjon}
           relevanteStats={relevantKravList}
           utgaattStats={utgaattKravList}
+          alleUtgaattStats={utgaattStats}
           temaListe={temaListe}
           openAccordions={openAccordions}
           setOpenAccordions={setOpenAccordions}

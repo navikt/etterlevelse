@@ -36,6 +36,7 @@ public class KravFilter {
     private List<String> tagger;
     private boolean gjeldendeKrav;
     private Integer sistRedigert;
+    private boolean alleVersjoner;
 
     public List<String> getRelevans() {
         return formatList(relevans);

@@ -11,7 +11,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Comparator.comparing;
 import static no.nav.data.common.utils.StreamUtils.convert;
@@ -27,12 +33,12 @@ public class KravRepoImpl implements KravRepoCustom {
 
     @Override
     public List<Krav> findByRelevans(String code) {
-        return findBy(KravFilter.builder().relevans(List.of(code)).build());
+        return findBy(KravFilter.builder().relevans(List.of(code)).alleVersjoner(true).build());
     }
 
     @Override
     public List<Krav> findByLov(String lov) {
-        return findBy(KravFilter.builder().lov(lov).build());
+        return findBy(KravFilter.builder().lov(lov).alleVersjoner(true).build());
     }
 
     @Override
@@ -129,7 +135,8 @@ public class KravRepoImpl implements KravRepoCustom {
         }
 
         List<Krav> kravList = fetch(jdbcTemplate.queryForList(query, par));
-        List<Krav> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(kravList, krav, filter, kravIdSafeList));
+        List<Krav> alleVersjoner = needsSupersessionCheck(filter) ? filterKravVersjoner(kravList, filter) : kravList;
+        List<Krav> filtered = StreamUtils.filter(kravList, krav -> filterStateAndStatus(alleVersjoner, krav, filter, kravIdSafeList));
         sort(filter, filtered);
         return filtered;
     }
@@ -152,6 +159,46 @@ public class KravRepoImpl implements KravRepoCustom {
                 .getResultList();
     }
 
+    private boolean needsSupersessionCheck(KravFilter filter) {
+        return filter.getEtterlevelseDokumentasjonId() != null || isCurrentVersionFilter(filter) || filter.isGjeldendeKrav();
+    }
+
+    /**
+     * Henter alle versjoner av kravnumrene i resultatet uten metadatafiltrene (relevans, lov, tagger osv.),
+     * slik at en nyere versjon som ikke matcher dem fortsatt kan erstatte en eldre.
+     * Statusfilteret beholdes, ellers ville f.eks. et AKTIV-krav skjule et UNDER_ARBEID-krav ved filtrering på UNDER_ARBEID.
+     */
+    private List<Krav> filterKravVersjoner(List<Krav> kravList, KravFilter filter) {
+        List<Integer> kravNummer = kravList.stream().map(Krav::getKravNummer).distinct().toList();
+        if (kravNummer.isEmpty()) {
+            return List.of();
+        }
+
+        List<Krav> alleVersjoner = entityManager.createQuery("select k from Krav k where k.kravNummer in :kravNummer", Krav.class)
+                .setParameter("kravNummer", kravNummer)
+                .getResultList();
+
+        if (filter.getEtterlevelseDokumentasjonId() != null) {
+            return alleVersjoner;
+        }
+
+        Set<String> statuser = new HashSet<>(filter.getStatus());
+        if (filter.isGjeldendeKrav()) {
+            Set<String> gjeldende = new HashSet<>(convert(KravStatus.gjeldende(), Enum::name));
+            if (statuser.isEmpty()) {
+                statuser = gjeldende;
+            } else {
+                statuser.retainAll(gjeldende);
+            }
+        }
+        if (statuser.isEmpty()) {
+            return alleVersjoner;
+        }
+
+        Set<String> tillatteStatuser = statuser;
+        return StreamUtils.filter(alleVersjoner, k -> tillatteStatuser.contains(k.getStatus().name()));
+    }
+
     /**
      * true = keep
      */
@@ -160,10 +207,13 @@ public class KravRepoImpl implements KravRepoCustom {
             return true;
         }
 
-        // Filtrering for krav relevant for etterlevelseDokumentasjon
         if (filter.getEtterlevelseDokumentasjonId() != null) {
             var succeeded = exists(all, k2 -> k2.supersedes(krav));
             return !succeeded && krav.getStatus().kanEtterleves();
+        }
+
+        if (isCurrentVersionFilter(filter)) {
+            return krav.getStatus().erUtkast() || !exists(all, k2 -> k2.supersedes(krav));
         }
 
         if (filter.isGjeldendeKrav()) {
@@ -171,5 +221,19 @@ public class KravRepoImpl implements KravRepoCustom {
         }
 
         return true;
+    }
+
+    private boolean isCurrentVersionFilter(KravFilter filter) {
+        if (filter.isAlleVersjoner() || filter.getNummer() != null || filter.getSistRedigert() != null) {
+            return false;
+        }
+
+        if (filter.getStatus().isEmpty()) {
+            return true;
+        }
+
+        return filter.getStatus().stream().noneMatch(status ->
+                KravStatus.UTGAATT.name().equals(status) || KravStatus.UTKAST.name().equals(status)
+        );
     }
 }

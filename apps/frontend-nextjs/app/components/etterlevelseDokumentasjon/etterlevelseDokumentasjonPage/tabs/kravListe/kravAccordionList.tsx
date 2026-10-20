@@ -24,6 +24,7 @@ type TProps = {
   etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   relevanteStats: TKravQL[]
   utgaattStats: TKravQL[]
+  alleUtgaattStats?: TKravQL[]
   temaListe: TTemaCode[]
   openAccordions: boolean[]
   setOpenAccordions: React.Dispatch<React.SetStateAction<boolean[]>>
@@ -44,6 +45,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   relevanteStats,
   utgaattStats,
+  alleUtgaattStats = utgaattStats,
   temaListe,
   openAccordions,
   setOpenAccordions,
@@ -133,7 +135,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                           krav.kravVersjon > 1 &&
                           (krav.etterlevelseStatus === undefined ||
                             krav.etterlevelseStatus === EEtterlevelseStatus.OPPFYLLES_SENERE) &&
-                          utgaattStats.filter(
+                          alleUtgaattStats.filter(
                             (kl) => kl.kravNummer === krav.kravNummer && kl.etterlevelser.length > 0
                           ).length > 0 &&
                           getNumberOfDaysBetween(krav.aktivertDato, new Date()) < 30
