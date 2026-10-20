@@ -1,6 +1,7 @@
 'use client'
 
-import { Alert, Button } from '@navikt/ds-react'
+import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { Button, InfoCard } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo } from 'react'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
@@ -90,13 +91,25 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
                 </div>
               )}
 
+              <div>
+                <InfoCard data-color='info' className='my-5'>
+                  <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                    Status: {pvkDokumentStatusToText(pvkDokument.status)}
+                  </InfoCard.Message>
+                </InfoCard>
+              </div>
+
               {relevantMeldingTilPvo.length !== 0 &&
                 !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
-                  <Alert variant='info' className='my-5'>
-                    Innsending trukket <br />
-                    Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
-                    deretter behandlet som en ny innsending
-                  </Alert>
+                  <InfoCard data-color='info' className='my-5'>
+                    <InfoCard.Header icon={<InformationSquareFillIcon aria-hidden />}>
+                      <InfoCard.Title>Innsending trukket</InfoCard.Title>
+                    </InfoCard.Header>
+                    <InfoCard.Content>
+                      Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en
+                      blir deretter behandlet som en ny innsending
+                    </InfoCard.Content>
+                  </InfoCard>
                 )}
 
               {errorSummaryComponent}
@@ -106,12 +119,6 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
                   <CenteredLoader />
                 </div>
               )}
-
-              <div>
-                <Alert variant='info' className='my-5 '>
-                  Status: {pvkDokumentStatusToText(pvkDokument.status)}
-                </Alert>
-              </div>
 
               <div>{!fieldProps.form.dirty && savedAlert}</div>
             </div>

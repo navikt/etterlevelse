@@ -818,6 +818,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
+                              marginTop={true}
                             />
                           }
                           savedAlert={

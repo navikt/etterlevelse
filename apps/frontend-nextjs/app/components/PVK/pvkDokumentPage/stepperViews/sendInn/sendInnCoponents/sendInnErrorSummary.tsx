@@ -40,6 +40,7 @@ type TProps = {
   pvkKravError: string
   savnerVurderingError: string
   errorSummaryRef: RefObject<HTMLDivElement | null>
+  marginTop?: boolean
 }
 
 const SendInnErrorSummary: FunctionComponent<TProps> = ({
@@ -62,11 +63,12 @@ const SendInnErrorSummary: FunctionComponent<TProps> = ({
   savnerVurderingError,
   manglerBehandlingError,
   errorSummaryRef,
+  marginTop,
 }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const { meldingerTilPvo, ...updateErrors } = errors
   return (
-    <div>
+    <div className={`${marginTop ? 'mt-6' : ''}`}>
       {(!_.isEmpty(updateErrors) ||
         pvkKravError !== '' ||
         risikoeiereDataError ||

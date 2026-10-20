@@ -1,10 +1,11 @@
 'use client'
 
+import { XMarkOctagonIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
   BodyShort,
   Button,
   Heading,
+  InfoCard,
   Loader,
   Pagination,
   Search,
@@ -108,38 +109,40 @@ const GjenopprettDokumentasjonAdminPage = () => {
       </BodyShort>
 
       {result && (
-        <Alert variant={result.warnings.length > 0 ? 'warning' : 'success'} className='mb-5'>
-          <Heading size='xsmall' level='2' spacing>
-            Gjenoppretting fullført
-          </Heading>
-          {restoredDokument && (
-            <BodyShort spacing>
-              E{restoredDokument.etterlevelseNummer}.{restoredDokument.etterlevelseDokumentVersjon}{' '}
-              {restoredDokument.title}
+        <InfoCard data-color={result.warnings.length > 0 ? 'warning' : 'success'} className='mb-5'>
+          <InfoCard.Header>
+            <InfoCard.Title>Gjenoppretting fullført</InfoCard.Title>
+          </InfoCard.Header>
+          <InfoCard.Content>
+            {restoredDokument && (
+              <BodyShort spacing>
+                E{restoredDokument.etterlevelseNummer}.
+                {restoredDokument.etterlevelseDokumentVersjon} {restoredDokument.title}
+              </BodyShort>
+            )}
+            <BodyShort>Etterlevelser: {result.restoredEtterlevelser}</BodyShort>
+            <BodyShort>Etterlevelse metadata: {result.restoredEtterlevelseMetadata}</BodyShort>
+            <BodyShort>Behandlingens livsløp: {result.restoredBehandlingensLivslop}</BodyShort>
+            <BodyShort>
+              Behandlingens art og omfang: {result.restoredBehandlingensArtOgOmfang}
             </BodyShort>
-          )}
-          <BodyShort>Etterlevelser: {result.restoredEtterlevelser}</BodyShort>
-          <BodyShort>Etterlevelse metadata: {result.restoredEtterlevelseMetadata}</BodyShort>
-          <BodyShort>Behandlingens livsløp: {result.restoredBehandlingensLivslop}</BodyShort>
-          <BodyShort>
-            Behandlingens art og omfang: {result.restoredBehandlingensArtOgOmfang}
-          </BodyShort>
-          <BodyShort>PVK-dokument: {result.restoredPvkDokument}</BodyShort>
-          <BodyShort>Risikoscenario: {result.restoredRisikoscenario}</BodyShort>
-          <BodyShort>Tiltak: {result.restoredTiltak}</BodyShort>
-          <BodyShort>PVO-tilbakemelding: {result.restoredPvoTilbakemelding}</BodyShort>
-          {result.warnings.map((warning, index) => (
-            <BodyShort key={index} className='mt-2'>
-              {warning}
-            </BodyShort>
-          ))}
-        </Alert>
+            <BodyShort>PVK-dokument: {result.restoredPvkDokument}</BodyShort>
+            <BodyShort>Risikoscenario: {result.restoredRisikoscenario}</BodyShort>
+            <BodyShort>Tiltak: {result.restoredTiltak}</BodyShort>
+            <BodyShort>PVO-tilbakemelding: {result.restoredPvoTilbakemelding}</BodyShort>
+            {result.warnings.map((warning, index) => (
+              <BodyShort key={index} className='mt-2'>
+                {warning}
+              </BodyShort>
+            ))}
+          </InfoCard.Content>
+        </InfoCard>
       )}
 
       {error && (
-        <Alert variant='error' className='mb-5'>
-          {error}
-        </Alert>
+        <InfoCard data-color='danger' className='mb-5'>
+          <InfoCard.Message icon={<XMarkOctagonIcon aria-hidden />}>{error}</InfoCard.Message>
+        </InfoCard>
       )}
 
       {loading && <Loader size='large' />}
