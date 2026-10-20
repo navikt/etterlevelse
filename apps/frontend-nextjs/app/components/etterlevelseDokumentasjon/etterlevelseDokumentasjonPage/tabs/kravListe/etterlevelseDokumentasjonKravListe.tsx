@@ -24,6 +24,7 @@ import {
   getNewestKravVersjon,
   isFerdigUtfylt,
 } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
+import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 import {
   KravNivaaStatusFilter,
   SuksesskriterieStatusFilter,
@@ -172,7 +173,18 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
         <Label className='pb-3'>Filter:</Label>
         <TextField
           label='Søk etter kravet'
-          onChange={(event) => setSearchKrav(event.target.value)}
+          onChange={(event) => {
+            const value = event.target.value
+            setSearchKrav(value)
+
+            trackUmamiEvent(UMAMI_EVENTS.FILTER_CHANGED, {
+              page: 'etterlevelse-dokumentasjon',
+              component: 'krav-liste',
+              filter: 'kravnummer',
+              value,
+              value_length: value.length,
+            })
+          }}
         />
 
         <KravNivaaStatusFilter
