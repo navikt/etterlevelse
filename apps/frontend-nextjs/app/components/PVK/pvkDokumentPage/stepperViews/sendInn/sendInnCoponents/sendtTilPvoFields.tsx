@@ -1,4 +1,4 @@
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { Button, Heading, InfoCard } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent } from 'react'
@@ -50,7 +50,7 @@ const SendtTilPvoFields: FunctionComponent<TProps> = ({
       />
 
       <InfoCard data-color='info' className='my-5'>
-        <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
           Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig å
           trekke PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har påbegynt
           vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende plass i
@@ -111,7 +111,7 @@ const SendtTilPvoFields: FunctionComponent<TProps> = ({
 
       <div>
         <InfoCard data-color='info' className='my-5'>
-          <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
             Status: {pvkDokumentStatusToText(pvkDokument.status)}
           </InfoCard.Message>
         </InfoCard>

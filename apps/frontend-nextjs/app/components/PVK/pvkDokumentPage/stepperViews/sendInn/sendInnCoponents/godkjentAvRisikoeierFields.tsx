@@ -1,6 +1,6 @@
 'use client'
 
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { Button, Heading, InfoCard, Loader } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useContext } from 'react'
@@ -85,7 +85,7 @@ const GodkjentAvRisikoeierFields: FunctionComponent<TProps> = ({
 
       <div>
         <InfoCard data-color='info' className='my-5'>
-          <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
             Status: {pvkDokumentStatusToText(pvkDokument.status)}
           </InfoCard.Message>
         </InfoCard>

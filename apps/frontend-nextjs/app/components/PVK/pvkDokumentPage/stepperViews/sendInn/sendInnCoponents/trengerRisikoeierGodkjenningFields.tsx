@@ -1,6 +1,6 @@
 'use client'
 
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { Alert, Button, Heading, InfoCard } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useContext, useState } from 'react'
@@ -100,7 +100,7 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
           {!isRisikoeierCheck && (
             <div>
               <InfoCard data-color='info' className='my-5'>
-                <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
                   Hvis dere har oppdaget betydelige feil eller mangel etter innsending, er det mulig
                   å trekke PVK-en deres tilbake. Dette vil kun være mulig enn så lenge PVO ikke har
                   påbegynt vurderingen sin. Obs: ved å trekke tilbake PVK, vil dere miste nåværende

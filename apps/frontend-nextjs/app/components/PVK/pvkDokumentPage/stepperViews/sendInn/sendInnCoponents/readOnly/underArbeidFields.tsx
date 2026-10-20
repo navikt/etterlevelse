@@ -1,4 +1,4 @@
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { Button, InfoCard, Loader, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, RefObject } from 'react'
@@ -104,7 +104,7 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                   />
 
                   <InfoCard data-color='info' className='my-5'>
-                    <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
                       Når dere sender inn PVK, vil hele dokumentasjonen, inkludert
                       etterlevelsesdokumentasjon ved PVK-relaterte krav, låses og ikke kunne
                       redigeres. Dette innholdet forbli låst enn så lenge saken ligger hos
@@ -115,7 +115,7 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                   {relevantMeldingTilPvo.length !== 0 &&
                     !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
                       <InfoCard data-color='info' className='my-5'>
-                        <InfoCard.Header icon={<InformationSquareFillIcon aria-hidden />}>
+                        <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                           <InfoCard.Title>Innsending trukket</InfoCard.Title>
                         </InfoCard.Header>
                         <InfoCard.Content>

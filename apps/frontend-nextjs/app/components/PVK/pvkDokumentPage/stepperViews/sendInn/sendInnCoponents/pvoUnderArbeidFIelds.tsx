@@ -1,4 +1,4 @@
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { InfoCard, Loader } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/copyAndExportButtons'
@@ -30,7 +30,7 @@ const PVOUnderArbeidFIelds: FunctionComponent<TProps> = ({ pvkDokument, isLoadin
 
     <div>
       <InfoCard data-color='info' className='my-5'>
-        <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+        <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
           Status: {pvkDokumentStatusToText(pvkDokument.status)}
         </InfoCard.Message>
       </InfoCard>

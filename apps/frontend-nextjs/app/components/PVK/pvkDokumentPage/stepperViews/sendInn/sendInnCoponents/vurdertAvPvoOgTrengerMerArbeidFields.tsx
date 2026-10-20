@@ -1,6 +1,6 @@
 'use client'
 
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { Button, InfoCard } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo } from 'react'
@@ -93,7 +93,7 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
 
               <div>
                 <InfoCard data-color='info' className='my-5'>
-                  <InfoCard.Message icon={<InformationSquareFillIcon aria-hidden />}>
+                  <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
                     Status: {pvkDokumentStatusToText(pvkDokument.status)}
                   </InfoCard.Message>
                 </InfoCard>
@@ -102,7 +102,7 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
               {relevantMeldingTilPvo.length !== 0 &&
                 !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
                   <InfoCard data-color='info' className='my-5'>
-                    <InfoCard.Header icon={<InformationSquareFillIcon aria-hidden />}>
+                    <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                       <InfoCard.Title>Innsending trukket</InfoCard.Title>
                     </InfoCard.Header>
                     <InfoCard.Content>

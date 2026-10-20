@@ -1,6 +1,6 @@
 'use client'
 
-import { InformationSquareFillIcon } from '@navikt/aksel-icons'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import { Button, Heading, InfoCard, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, useMemo, useState } from 'react'
@@ -156,7 +156,7 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               {relevantMeldingTilPvo.length !== 0 &&
                 !['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
                   <InfoCard data-color='info' className='my-5'>
-                    <InfoCard.Header icon={<InformationSquareFillIcon aria-hidden />}>
+                    <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                       <InfoCard.Title>Innsending til PVO trukket</InfoCard.Title>
                     </InfoCard.Header>
                     <InfoCard.Content>
