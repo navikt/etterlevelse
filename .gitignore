@@ -39,3 +39,5 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+# Databasedumper (inneholder persondata)
+*.dump
