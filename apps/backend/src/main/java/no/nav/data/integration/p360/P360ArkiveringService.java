@@ -37,7 +37,7 @@ public class P360ArkiveringService {
     private final PvkDokumentRepo pvkDokumentRepo;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void archive(UUID eDokId, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean risikoeier, boolean godkjenning, String responsiblePersonIdent) {
+    public void archive(UUID eDokId, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean personvernkonsekvensvurdering, boolean godkjenning, String responsiblePersonIdent) {
         var eDok = etterlevelseDokumentasjonRepo.getReferenceById(eDokId);
         var pvkDokument = pvkDokumentRepo.findByEtterlevelseDokumensjon(eDok.getId());
 
@@ -87,7 +87,7 @@ public class P360ArkiveringService {
                 documentTitle += (pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". ");
             }
             documentTitle += pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo() + ". Tilbakemelding fra Personvernombudet for ";
-        } else if (risikoeier) {
+        } else if (personvernkonsekvensvurdering) {
             documentTitle += "Personvernkonsekvensvurdering for ";
         } else if (godkjenning) {
             documentTitle += "Godkjent etterlevelsesdokument ";
@@ -95,7 +95,7 @@ public class P360ArkiveringService {
 
         documentTitle += "E" + eDok.getEtterlevelseNummer() + " versjon " + eDok.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon() + ", " + eDok.getTitle().replace(":", " -").trim();
 
-        byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, (pvoTilbakemelding || risikoeier || godkjenning));
+        byte[] wordFile = etterlevelseDokumentasjonToDoc.generateDocFor(eDok.getId(), Collections.emptyList(), Collections.emptyList(), onlyActiveKrav, (pvoTilbakemelding || personvernkonsekvensvurdering || godkjenning));
 
         var behandlingenslivslop = behandlingensLivslopRepo.findByEtterlevelseDokumentasjonId(eDok.getId()).orElse(new BehandlingensLivslop());
         List<BehandlingensLivslopFil> BLLFiler = behandlingenslivslop.getBehandlingensLivslopData().getFiler();
@@ -114,7 +114,7 @@ public class P360ArkiveringService {
                 .Base64Data(Base64.getEncoder().encodeToString(wordFile))
                 .build());
 
-        if (pvoTilbakemelding || risikoeier || godkjenning) {
+        if (pvoTilbakemelding || personvernkonsekvensvurdering || godkjenning) {
             BLLFiler.forEach(behandlingensLivslopFil -> {
                 String[] bllFileName = behandlingensLivslopFil.getFilnavn().split("\\.");
                 filer.add(

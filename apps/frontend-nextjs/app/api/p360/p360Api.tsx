@@ -7,11 +7,12 @@ export const arkiver = async (
   onlyActiveKrav: boolean,
   forPvoNaarDeSenderTilbakemeldingTilPvo: boolean,
   forGodkjenningAvPvkDokument: boolean,
-  forGodkjenningAvEtterlevelsesDokument: boolean
+  forGodkjenningAvEtterlevelsesDokument: boolean,
+  responsiblePerson?: string
 ) => {
   return (
     await axios.post<IEtterlevelseDokumentasjon>(
-      `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}&pvoTilbakemelding=${forPvoNaarDeSenderTilbakemeldingTilPvo}&risikoeier=${forGodkjenningAvPvkDokument}&godkjenning=${forGodkjenningAvEtterlevelsesDokument}`
+      `${env.backendBaseUrl}/p360/arkiver?etterlevelseDokumentasjonId=${etterlevelseDokumentasjonId}&onlyActiveKrav=${onlyActiveKrav}&pvoTilbakemelding=${forPvoNaarDeSenderTilbakemeldingTilPvo}&risikoeier=${forGodkjenningAvPvkDokument}&godkjenning=${forGodkjenningAvEtterlevelsesDokument}${responsiblePerson ? '&responsiblePerson=' + responsiblePerson : ''}`
     )
   ).data
 }

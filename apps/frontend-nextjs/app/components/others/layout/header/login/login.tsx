@@ -81,6 +81,7 @@ export const LoggedInHeader = () => {
         { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
         { label: 'Administrere pvk dokument', href: adminPvkUrl },
         { label: 'Gjenopprett slettede dokumenter', href: adminGjenopprettUrl },
+        { label: 'Administrere arkivering', href: adminPvkUrl },
         { label: 'Versjonering', href: adminAuditUrl() },
         { label: 'Kodeverk', href: adminCodelistUrl },
         { label: 'Spørsmål og svar', href: adminMessagesLogUrl },
