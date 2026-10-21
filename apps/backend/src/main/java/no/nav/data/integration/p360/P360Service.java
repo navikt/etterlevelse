@@ -19,6 +19,7 @@ import no.nav.data.integration.p360.dto.P360DocumentCreateRequest;
 import no.nav.data.integration.p360.dto.P360DocumentPageResponse;
 import no.nav.data.integration.p360.dto.P360DocumentUpdateRequest;
 import no.nav.data.integration.p360.dto.P360GetRequest;
+import no.nav.data.integration.p360.dto.P360UserPageResponse;
 import no.nav.data.integration.p360.dto.P360UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -91,20 +92,23 @@ public class P360Service {
         return cases;
     }
 
-    public void getUsers (String userIdent) {
+    public P360UserPageResponse getUsers (String userIdent) {
         try {
             log.info("Forwarding request to P360");
             var response = restTemplate.postForEntity(p360Properties.getUserUrl() + "/GetUsers",
                     new HttpEntity<>( P360UserRequest.builder().ContactExternalId(userIdent).build(), createHeadersWithAuth()),
-                    Object.class);
+                    P360UserPageResponse.class);
 
             if(response.getBody() != null) {
                 log.info("Succesfully sent request to P360");
                 log.info("Response from P360: {}", response.getBody());
+                return response.getBody();
             }
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
+            return P360UserPageResponse.builder().Users(new ArrayList<>()).TotalPageCount(0).TotalCount(0).Successful(false).ErrorMessage("Unable to connect to P360").ErrorDetails(String.valueOf(e)).build();
         }
+        return null;
     }
 
     public List<P360Case> getCasesByCaseNumber(String caseNumber) {

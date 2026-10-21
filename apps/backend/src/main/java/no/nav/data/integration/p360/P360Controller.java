@@ -20,6 +20,7 @@ import no.nav.data.integration.p360.dto.P360DocumentRequest;
 import no.nav.data.integration.p360.dto.P360DocumentUpdateRequest;
 import no.nav.data.integration.p360.dto.P360File;
 import no.nav.data.integration.p360.dto.P360GetRequest;
+import no.nav.data.integration.p360.dto.P360UserPageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,9 +62,9 @@ public class P360Controller {
     @Operation(summary = "Get p360 user")
     @ApiResponses(value = {@ApiResponse(description = "User fetched")})
     @GetMapping("/user/{userId}")
-    public void getP360User(@PathVariable String userId) {
+    public ResponseEntity<P360UserPageResponse> getP360User(@PathVariable String userId) {
         log.info("Get p360 user with id {}", userId);
-        p360Service.getUsers(userId);
+        return ResponseEntity.ok(p360Service.getUsers(userId));
     }
 
     @Operation(summary = "Arkiver dokumeter")
