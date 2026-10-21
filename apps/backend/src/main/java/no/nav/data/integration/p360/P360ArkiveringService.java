@@ -37,7 +37,7 @@ public class P360ArkiveringService {
     private final PvkDokumentRepo pvkDokumentRepo;
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void archive(UUID eDokId, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean risikoeier, boolean godkjenning) {
+    public void archive(UUID eDokId, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean risikoeier, boolean godkjenning, String responsiblePersonIdent) {
         var eDok = etterlevelseDokumentasjonRepo.getReferenceById(eDokId);
         var pvkDokument = pvkDokumentRepo.findByEtterlevelseDokumensjon(eDok.getId());
 
@@ -45,7 +45,7 @@ public class P360ArkiveringService {
         SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");
         Date date = new Date();
 
-        String responsiblePerson = SecurityUtils.getCurrentIdent();
+        String responsiblePerson = responsiblePersonIdent != null ? responsiblePersonIdent : SecurityUtils.getCurrentIdent();
 
         if (pvoTilbakemelding && pvkDokument.isPresent()) {
             responsiblePerson = pvkDokument.get().getPvkDokumentData().getMeldingerTilPvo().stream()
@@ -105,7 +105,7 @@ public class P360ArkiveringService {
                 .CaseNumber(eDok.getEtterlevelseDokumentasjonData().getP360CaseNumber())
                 .Title(documentTitle)
                 .DocumentDate(formatter.format(date))
-                .ResponsiblePersonIdNumber(SecurityUtils.getCurrentIdent())
+                .ResponsiblePersonIdNumber(responsiblePerson)
                 .build();
 
         filer.add(P360File.builder()
