@@ -106,7 +106,7 @@ public class P360Service {
             }
         } catch (RestClientException e) {
             log.error("Unable to connect to P360, error: {}", String.valueOf(e));
-            return P360UserPageResponse.builder().Users(new ArrayList<>()).TotalPageCount(0).TotalCount(0).Successful(false).ErrorMessage("Unable to connect to P360").ErrorDetails(String.valueOf(e)).build();
+            return P360UserPageResponse.builder().users(new ArrayList<>()).totalPageCount(0).totalCount(0).successful(false).errorMessage("Unable to connect to P360").errorDetails(String.valueOf(e)).build();
         }
         return null;
     }

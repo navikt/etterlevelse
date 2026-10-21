@@ -1,6 +1,6 @@
 package no.nav.data.integration.p360.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +12,9 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class P360UserResponse {
-    private String Login;
-    private String ContactExternalId;
-    private Boolean IsActive;
+    @JsonProperty("ContactExternalId")
+    private String contactExternalId;
+    @JsonProperty("IsActive")
+    private Boolean isActive;
 }

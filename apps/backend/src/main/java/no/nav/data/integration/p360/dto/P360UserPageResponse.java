@@ -1,6 +1,6 @@
 package no.nav.data.integration.p360.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,12 +14,17 @@ import java.util.List;
 @FieldNameConstants
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class P360UserPageResponse {
-    private List<P360UserResponse> Users;
-    private int TotalPageCount;
-    private int TotalCount;
-    private boolean Successful;
-    private String ErrorMessage;
-    private String ErrorDetails;
+    @JsonProperty("Users")
+    private List<P360UserResponse> users;
+    @JsonProperty("TotalPageCount")
+    private int totalPageCount;
+    @JsonProperty("TotalCount")
+    private int totalCount;
+    @JsonProperty("Successful")
+    private boolean successful;
+    @JsonProperty("ErrorMessage")
+    private String errorMessage;
+    @JsonProperty("ErrorDetails")
+    private String errorDetails;
 }
