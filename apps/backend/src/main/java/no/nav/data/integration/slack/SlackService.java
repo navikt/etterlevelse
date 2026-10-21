@@ -18,7 +18,7 @@ public class SlackService {
     private final SlackClient slackClient;
     private final QueuedVarselValidator queuedVarselValidator;
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void scheduleSlack(SlackMeldingData melding) {
         SlackMelding sm =  SlackMelding.builder().data(melding).build();
         repo.save(sm);
@@ -73,5 +73,4 @@ public class SlackService {
             throw new RuntimeException("Exception caught while trying to send slack message (may cause hickup/re-sending of message parts)" , e);
         }
     }
-    
 }

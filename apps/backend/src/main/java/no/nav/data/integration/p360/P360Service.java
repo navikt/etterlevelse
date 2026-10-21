@@ -164,6 +164,7 @@ public class P360Service {
 
     private void errorVarsling (String title, String melding) {
         String channelToRecieve = securityProperties.isDev() ? env.getProperty("client.devmail.slack-channel-id") : env.getProperty("client.prodmail.slack-channel-id");
+        String epostToRecieve = env.getProperty("client.devmail.address");
 
         var varselBuilder = Varsel.builder()
                 .title(title)
@@ -173,6 +174,11 @@ public class P360Service {
         varselService.varsleWithNoEtterlevelseDokumentasjonId(List.of(Varslingsadresse.builder()
                 .type(AdresseType.SLACK)
                 .adresse(channelToRecieve)
+                .build()), varselBuilder);
+
+        varselService.varsleWithNoEtterlevelseDokumentasjonId(List.of(Varslingsadresse.builder()
+                .type(AdresseType.EPOST)
+                .adresse(epostToRecieve)
                 .build()), varselBuilder);
     }
 
