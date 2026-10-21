@@ -101,7 +101,6 @@ public class P360Service {
 
             if(response.getBody() != null) {
                 log.info("Succesfully sent request to P360");
-                log.info("Response from P360: {}", response.getBody());
                 return response.getBody();
             }
         } catch (RestClientException e) {
