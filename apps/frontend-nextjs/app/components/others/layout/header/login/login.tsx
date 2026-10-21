@@ -15,6 +15,7 @@ import { useContext } from 'react'
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
+  adminArkiveringUrl,
   adminAuditUrl,
   adminCodelistUrl,
   adminDokumentasjonUrl,
@@ -81,7 +82,7 @@ export const LoggedInHeader = () => {
         { label: 'Administrere etterlevelse', href: adminEtterlevelseUrl },
         { label: 'Administrere pvk dokument', href: adminPvkUrl },
         { label: 'Gjenopprett slettede dokumenter', href: adminGjenopprettUrl },
-        { label: 'Administrere arkivering', href: adminPvkUrl },
+        { label: 'Administrere arkivering', href: adminArkiveringUrl },
         { label: 'Versjonering', href: adminAuditUrl() },
         { label: 'Kodeverk', href: adminCodelistUrl },
         { label: 'Spørsmål og svar', href: adminMessagesLogUrl },
