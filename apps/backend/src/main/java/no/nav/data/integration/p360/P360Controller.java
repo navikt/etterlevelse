@@ -58,6 +58,14 @@ public class P360Controller {
         return ResponseEntity.ok(new RestResponsePage<>(p360ArchiveDocuments));
     }
 
+    @Operation(summary = "Get p360 user")
+    @ApiResponses(value = {@ApiResponse(description = "User fetched")})
+    @GetMapping("/user/{userId}")
+    public void getP360User(@PathVariable String userId) {
+        log.info("Get p360 user with id {}", userId);
+        p360Service.getUsers(userId);
+    }
+
     @Operation(summary = "Arkiver dokumeter")
     @ApiResponses(value = {@ApiResponse(description = "Cases fetched")})
     @PostMapping("/arkiver")
