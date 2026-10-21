@@ -1,5 +1,6 @@
 package no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -54,12 +55,15 @@ public class EtterlevelseDokumentasjonData {
     private List<NomEnhet> enheter;
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
+    @JsonProperty("Risikovurderinger")
     private List<String> Risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
     private List<Varslingsadresse> varslingsadresser;
     private List<String> ardoqSystemIds;
 
     //Url id for p360
+    @JsonProperty("P360Recno")
     private Integer P360Recno;
+    @JsonProperty("P360CaseNumber")
     private String P360CaseNumber;
 
     //versjonering
