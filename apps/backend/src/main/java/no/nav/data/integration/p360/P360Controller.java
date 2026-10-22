@@ -61,10 +61,10 @@ public class P360Controller {
 
     @Operation(summary = "Get p360 user")
     @ApiResponses(value = {@ApiResponse(description = "User fetched")})
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<P360UserPageResponse> getP360User(@PathVariable String userId) {
-        log.info("Get p360 user with id {}", userId);
-        return ResponseEntity.ok(p360Service.getUsers(userId));
+    @GetMapping("/user")
+    public ResponseEntity<P360UserPageResponse> getP360User() {
+        log.info("Get p360 user");
+        return ResponseEntity.ok(p360Service.getUsers(SecurityUtils.getCurrentIdent()));
     }
 
     @Operation(summary = "Arkiver dokumeter")
