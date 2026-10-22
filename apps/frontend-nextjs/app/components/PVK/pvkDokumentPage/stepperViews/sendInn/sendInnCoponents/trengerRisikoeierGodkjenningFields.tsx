@@ -9,6 +9,7 @@ import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/steppe
 import BeskjedTilRisikoeierReadOnly from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/readOnly/beskjedTilRisikoeierReadOnly'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
@@ -36,6 +37,7 @@ type TProps = {
   pvoVurderingList: ICode[]
   errors: FormikErrors<IPvkDokument>
   savedAlert: ReactNode
+  hasP360User: boolean
 }
 
 const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
@@ -49,6 +51,7 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
   errorSummaryComponent,
   pvoVurderingList,
   savedAlert,
+  hasP360User,
 }) => {
   const user = useContext(UserContext)
   const isRisikoeierCheck: boolean = etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
@@ -133,6 +136,8 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
             </div>
           )}
 
+          {!hasP360User && <P360IngenBrukerAlert />}
+
           {isRisikoeierCheck && (
             <div className='mt-5 flex gap-2 items-center'>
               <LagreOgFortsettSenereButton
@@ -142,22 +147,24 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
                 resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
               />
 
-              <Button
-                type='button'
-                loading={isAksepterLoading}
-                onClick={async () => {
-                  setIsAksepterLoading(true)
-                  await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
-                  await setFieldValue('godkjentAvRisikoeierDato', new Date().toISOString())
-                  await setFieldValue(
-                    'godkjentAvRisikoeier',
-                    user.getIdent() + ' - ' + user.getName()
-                  )
-                  await submitForm().finally(() => setIsAksepterLoading(false))
-                }}
-              >
-                Aksepter restrisiko og arkiver i Public 360
-              </Button>
+              {!hasP360User && (
+                <Button
+                  type='button'
+                  loading={isAksepterLoading}
+                  onClick={async () => {
+                    setIsAksepterLoading(true)
+                    await setFieldValue('status', EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER)
+                    await setFieldValue('godkjentAvRisikoeierDato', new Date().toISOString())
+                    await setFieldValue(
+                      'godkjentAvRisikoeier',
+                      user.getIdent() + ' - ' + user.getName()
+                    )
+                    await submitForm().finally(() => setIsAksepterLoading(false))
+                  }}
+                >
+                  Aksepter restrisiko og arkiver i Public 360
+                </Button>
+              )}
             </div>
           )}
 

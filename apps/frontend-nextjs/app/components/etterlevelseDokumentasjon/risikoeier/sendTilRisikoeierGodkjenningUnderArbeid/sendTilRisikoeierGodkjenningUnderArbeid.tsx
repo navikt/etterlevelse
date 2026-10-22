@@ -1,9 +1,19 @@
-import { Alert, Button, ErrorSummary } from '@navikt/ds-react'
+import { Alert, Button, ErrorSummary, LocalAlert } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import _ from 'lodash'
-import { Dispatch, FunctionComponent, RefObject, SetStateAction, useRef } from 'react'
+import {
+  Dispatch,
+  FunctionComponent,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { etterlevelseDokumentasjonMapToFormVal } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { getMyP360User } from '@/api/p360/p360Api'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
@@ -36,6 +46,19 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
 }) => {
   const formRef: RefObject<any> = useRef(undefined)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const [hasP360User, setHasP360User] = useState<boolean>(false)
+
+  useEffect(() => {
+    ;(async () => {
+      await getMyP360User().then((response) => {
+        if (response.Successful && response.Users.length !== 0 && response.Users[0].IsActive) {
+          setHasP360User(true)
+        } else {
+          setHasP360User(false)
+        }
+      })
+    })()
+  }, [])
 
   return (
     <Formik
@@ -84,40 +107,36 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
 
             {saveSuccessful && (
               <div className='my-5 max-w-[75ch]'>
-                <Alert
-                  size='small'
-                  variant='success'
-                  closeButton
-                  onClose={() => setSaveSuccessful(false)}
-                >
-                  Lagring vellykket
-                </Alert>
+                <LocalAlert status='success' size='small'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
+                    <LocalAlert.CloseButton onClick={() => setSaveSuccessful(false)} />
+                  </LocalAlert.Header>
+                </LocalAlert>
               </div>
             )}
 
             {trekkInnsendingSuccessful && (
               <div className='my-5 max-w-[75ch]'>
-                <Alert
-                  size='small'
-                  variant='success'
-                  closeButton
-                  onClose={() => setTrekkInnsendingSuccessful(false)}
-                >
-                  Innsending er trukket
-                </Alert>
+                <LocalAlert status='success' size='small'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>Innsending er trukket</LocalAlert.Title>
+                    <LocalAlert.CloseButton onClick={() => setTrekkInnsendingSuccessful(false)} />
+                  </LocalAlert.Header>
+                </LocalAlert>
               </div>
             )}
 
             {submitAlert !== '' && (
-              <Alert
-                variant='error'
-                className='my-5 max-w-[75ch]'
-                closeButton={true}
-                onClose={() => setSubmitAlert('')}
-              >
-                {submitAlert}
-              </Alert>
+              <LocalAlert status='error' size='small' className='my-5 max-w-[75ch]'>
+                <LocalAlert.Header>
+                  <LocalAlert.Title> {submitAlert}</LocalAlert.Title>
+                  <LocalAlert.CloseButton onClick={() => setSubmitAlert('')} />
+                </LocalAlert.Header>
+              </LocalAlert>
             )}
+
+            {!hasP360User && <P360IngenBrukerAlert />}
 
             <div className='flex items-center mt-5 gap-2'>
               <Button
@@ -132,22 +151,24 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
                 Lagre og fortsett senere
               </Button>
 
-              {etterlevelseDokumentasjon.risikoeiere.length > 0 && !pvkBlocksSending && (
-                <Button
-                  type='button'
-                  variant='primary'
-                  onClick={async () => {
-                    await setFieldValue(
-                      'status',
-                      EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
-                    )
+              {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
+                !pvkBlocksSending &&
+                !hasP360User && (
+                  <Button
+                    type='button'
+                    variant='primary'
+                    onClick={async () => {
+                      await setFieldValue(
+                        'status',
+                        EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
+                      )
 
-                    await submitForm()
-                  }}
-                >
-                  Lagre og send til godkjenning
-                </Button>
-              )}
+                      await submitForm()
+                    }}
+                  >
+                    Lagre og send til godkjenning
+                  </Button>
+                )}
             </div>
           </div>
         </Form>

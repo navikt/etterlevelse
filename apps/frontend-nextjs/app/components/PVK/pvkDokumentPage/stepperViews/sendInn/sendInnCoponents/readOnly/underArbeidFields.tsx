@@ -4,6 +4,7 @@ import { Field, FieldProps, FormikErrors } from 'formik'
 import { FunctionComponent, ReactNode, RefObject } from 'react'
 import ExportPvkModal from '@/components/PVK/export/exportPvkModal'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import {
   EPvkDokumentStatus,
   EPvkVurdering,
@@ -17,6 +18,7 @@ type TProps = {
   pvkDokument: IPvkDokument
   errorSummaryComponent: ReactNode
   isLoading: boolean
+  hasP360User: boolean
   setFieldValue: (
     field: string,
     value: any,
@@ -32,6 +34,7 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
   pvkDokument,
   errorSummaryComponent,
   isLoading,
+  hasP360User,
   setFieldValue,
   submitForm,
   initialStatus,
@@ -87,6 +90,7 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                 <SendTilRisikoeier
                   fieldProps={fieldProps}
                   errorComponent={errorSummaryComponent}
+                  hasP360User={hasP360User}
                   label='Oppsummer for risikoeieren eventuelle endringer gjort siden siste godkjenning'
                 />
               </>
@@ -136,6 +140,8 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                   <div>{!fieldProps.form.dirty && savedAlert}</div>
                 </div>
 
+                {!hasP360User && <P360IngenBrukerAlert />}
+
                 <div className='mt-5 flex gap-2 items-center'>
                   <LagreOgFortsettSenereButton
                     setFieldValue={setFieldValue}
@@ -144,20 +150,22 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                     resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
                   />
 
-                  <Button
-                    type='button'
-                    onClick={async () => {
-                      await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
-                      await setFieldValue(
-                        'antallInnsendingTilPvo',
-                        pvkDokument.antallInnsendingTilPvo + 1
-                      )
-                      errorSummaryRef.current?.focus()
-                      await submitForm()
-                    }}
-                  >
-                    Lagre og send til Personvernombudet
-                  </Button>
+                  {!hasP360User && (
+                    <Button
+                      type='button'
+                      onClick={async () => {
+                        await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO)
+                        await setFieldValue(
+                          'antallInnsendingTilPvo',
+                          pvkDokument.antallInnsendingTilPvo + 1
+                        )
+                        errorSummaryRef.current?.focus()
+                        await submitForm()
+                      }}
+                    >
+                      Lagre og send til Personvernombudet
+                    </Button>
+                  )}
                 </div>
               </>
             )}

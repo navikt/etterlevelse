@@ -25,6 +25,7 @@ type TProps = {
   savedAlert: ReactNode
   pvoVurderingList: ICode[]
   userHasAccess: boolean
+  hasP360User: boolean
 }
 
 const VurdertAvPvoFields: FunctionComponent<TProps> = ({
@@ -36,6 +37,7 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
   savedAlert,
   pvoVurderingList,
   userHasAccess,
+  hasP360User,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) =>
@@ -140,6 +142,7 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                   (fieldProps.form.values.berOmNyVurderingFraPvo ?? false) === false && (
                     <SendTilRisikoeier
                       fieldProps={fieldProps}
+                      hasP360User={hasP360User}
                       errorComponent={errorSummaryComponent}
                     />
                   )}
@@ -148,6 +151,7 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
                     relevantIndex={relevantIndex}
                     pvkDokument={pvkDokument}
                     fieldProps={fieldProps}
+                    hasP360User={hasP360User}
                     errorComponent={errorSummaryComponent}
                   />
                 )}

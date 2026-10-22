@@ -2,16 +2,23 @@ import { Alert, Button, Heading } from '@navikt/ds-react'
 import { FieldProps } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {
   fieldProps: FieldProps<any, any>
   errorComponent: ReactNode
+  hasP360User: boolean
   label?: string
 }
 
-const SendTilRisikoeier: FunctionComponent<TProps> = ({ fieldProps, errorComponent, label }) => (
+const SendTilRisikoeier: FunctionComponent<TProps> = ({
+  fieldProps,
+  errorComponent,
+  label,
+  hasP360User,
+}) => (
   <div>
     <Heading size='small' level='3' className='mb-5 mt-8'>
       Send til risikoeier for godkjenning
@@ -36,6 +43,8 @@ const SendTilRisikoeier: FunctionComponent<TProps> = ({ fieldProps, errorCompone
 
     {errorComponent}
 
+    {!hasP360User && <P360IngenBrukerAlert />}
+
     <div className='mt-5 flex justify-end gap-2 items-center'>
       <LagreOgFortsettSenereButton
         setFieldValue={fieldProps.form.setFieldValue}
@@ -44,15 +53,17 @@ const SendTilRisikoeier: FunctionComponent<TProps> = ({ fieldProps, errorCompone
         resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
       />
 
-      <Button
-        type='button'
-        onClick={async () => {
-          await fieldProps.form.setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
-          await fieldProps.form.submitForm()
-        }}
-      >
-        Lagre og send til risikoeier
-      </Button>
+      {!hasP360User && (
+        <Button
+          type='button'
+          onClick={async () => {
+            await fieldProps.form.setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+            await fieldProps.form.submitForm()
+          }}
+        >
+          Lagre og send til risikoeier
+        </Button>
+      )}
     </div>
   </div>
 )

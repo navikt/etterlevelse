@@ -2,6 +2,7 @@ import { Alert, Button, ErrorSummary, Heading } from '@navikt/ds-react'
 import { FieldProps } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -13,6 +14,7 @@ type TProps = {
   pvkDokument: IPvkDokument
   fieldProps: FieldProps<any, any>
   errorComponent: ReactNode
+  hasP360User: boolean
 }
 
 const SendTilPvo: FunctionComponent<TProps> = ({
@@ -20,6 +22,7 @@ const SendTilPvo: FunctionComponent<TProps> = ({
   pvkDokument,
   fieldProps,
   errorComponent,
+  hasP360User,
 }) => {
   const merknadTilPvoError = fieldProps.form.getFieldMeta(
     `meldingerTilPvo[${relevantIndex}].merknadTilPvo`
@@ -76,6 +79,8 @@ const SendTilPvo: FunctionComponent<TProps> = ({
 
         {errorComponent}
 
+        {!hasP360User && <P360IngenBrukerAlert />}
+
         <div className='mt-5 flex justify-end gap-2 items-center'>
           <LagreOgFortsettSenereButton
             setFieldValue={fieldProps.form.setFieldValue}
@@ -83,40 +88,42 @@ const SendTilPvo: FunctionComponent<TProps> = ({
             initialStatus={fieldProps.form.initialValues.status}
             resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
           />
-          <Button
-            type='button'
-            variant='primary'
-            onClick={async () => {
-              if (fieldProps.form.values.meldingerTilPvo[relevantIndex].merknadTilPvo === '') {
-                fieldProps.form.setFieldError(
-                  `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
-                  'Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.'
-                )
-              }
+          {!hasP360User && (
+            <Button
+              type='button'
+              variant='primary'
+              onClick={async () => {
+                if (fieldProps.form.values.meldingerTilPvo[relevantIndex].merknadTilPvo === '') {
+                  fieldProps.form.setFieldError(
+                    `meldingerTilPvo[${relevantIndex}].merknadTilPvo`,
+                    'Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.'
+                  )
+                }
 
-              if (fieldProps.form.values.meldingerTilPvo[relevantIndex].endringsNotat === '') {
-                fieldProps.form.setFieldError(
-                  `meldingerTilPvo[${relevantIndex}].endringsNotat`,
-                  'Beskriv hvilke endringer som er gjort.'
-                )
-              } else if (
-                fieldProps.form.values.meldingerTilPvo[relevantIndex].merknadTilPvo !== '' &&
-                fieldProps.form.values.meldingerTilPvo[relevantIndex].endringsNotat !== ''
-              ) {
-                await fieldProps.form.setFieldValue(
-                  'status',
-                  EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
-                )
-                await fieldProps.form.setFieldValue(
-                  'antallInnsendingTilPvo',
-                  pvkDokument.antallInnsendingTilPvo + 1
-                )
-                await fieldProps.form.submitForm()
-              }
-            }}
-          >
-            Lagre og send til PVO
-          </Button>
+                if (fieldProps.form.values.meldingerTilPvo[relevantIndex].endringsNotat === '') {
+                  fieldProps.form.setFieldError(
+                    `meldingerTilPvo[${relevantIndex}].endringsNotat`,
+                    'Beskriv hvilke endringer som er gjort.'
+                  )
+                } else if (
+                  fieldProps.form.values.meldingerTilPvo[relevantIndex].merknadTilPvo !== '' &&
+                  fieldProps.form.values.meldingerTilPvo[relevantIndex].endringsNotat !== ''
+                ) {
+                  await fieldProps.form.setFieldValue(
+                    'status',
+                    EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING
+                  )
+                  await fieldProps.form.setFieldValue(
+                    'antallInnsendingTilPvo',
+                    pvkDokument.antallInnsendingTilPvo + 1
+                  )
+                  await fieldProps.form.submitForm()
+                }
+              }}
+            >
+              Lagre og send til PVO
+            </Button>
+          )}
         </div>
       </div>
     </div>

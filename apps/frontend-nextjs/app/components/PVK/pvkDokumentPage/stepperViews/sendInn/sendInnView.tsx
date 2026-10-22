@@ -21,6 +21,7 @@ import {
   mapBehandlingensLivslopToFormValue,
 } from '@/api/behandlingensLivslop/behandlingensLivslopApi'
 import { getEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
+import { getMyP360User } from '@/api/p360/p360Api'
 import {
   getPvkDokument,
   godkjenOgArkiverPvkDokument,
@@ -156,6 +157,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
     lagringsBeskrivelsePersonopplysningene: false,
   })
   const user = useContext(UserContext)
+  const [hasP360User, setHasP360User] = useState<boolean>(false)
 
   const underarbeidCheck: boolean = pvkDokument.status === EPvkDokumentStatus.UNDERARBEID
   const hasAccess = user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess
@@ -570,6 +572,18 @@ export const SendInnView: FunctionComponent<TProps> = ({
     }
   }, [savedSuccess])
 
+  useEffect(() => {
+    ;(async () => {
+      await getMyP360User().then((response) => {
+        if (response.Successful && response.Users.length !== 0 && response.Users[0].IsActive) {
+          setHasP360User(true)
+        } else {
+          setHasP360User(false)
+        }
+      })
+    })()
+  }, [])
+
   return (
     <div>
       {isPvoAlertModalOpen && (
@@ -737,6 +751,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                         submitForm={submitForm}
                         initialStatus={initialValues.status}
                         errorSummaryRef={errorSummaryRef}
+                        hasP360User={hasP360User}
                         errorSummaryComponent={
                           <SendInnErrorSummary
                             errors={errors}
@@ -797,6 +812,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           isLoading={isLoading}
                           pvoVurderingList={pvoVurderingList}
                           userHasAccess={hasAccess}
+                          hasP360User={hasP360User}
                           errorSummaryComponent={
                             <SendInnErrorSummary
                               errors={errors}
@@ -842,6 +858,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           isLoading={isLoading}
                           pvoVurderingList={pvoVurderingList}
                           userHasAccess={hasAccess}
+                          hasP360User={hasP360User}
                           errorSummaryComponent={
                             <SendInnErrorSummary
                               errors={errors}
@@ -889,6 +906,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                           initialStatus={initialValues.status}
                           pvoVurderingList={pvoVurderingList}
                           errors={errors}
+                          hasP360User={hasP360User}
                           errorSummaryComponent={
                             <SendInnErrorSummary
                               errors={errors}

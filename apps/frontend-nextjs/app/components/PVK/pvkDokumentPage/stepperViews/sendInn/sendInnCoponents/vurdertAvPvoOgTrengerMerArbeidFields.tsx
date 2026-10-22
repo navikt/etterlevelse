@@ -8,6 +8,7 @@ import CopyAndExportButtons from '@/components/PVK/pvkDokumentPage/stepperViews/
 import LagreOgFortsettSenereButton from '@/components/PVK/pvkDokumentPage/stepperViews/sendInn/sendInnCoponents/lagreOgFortsettSenereButton'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -32,6 +33,7 @@ type TProps = {
   savedAlert: ReactNode
   pvoVurderingList: ICode[]
   userHasAccess: boolean
+  hasP360User: boolean
 }
 
 const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
@@ -45,6 +47,7 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
   pvoVurderingList,
   savedAlert,
   userHasAccess,
+  hasP360User,
 }) => {
   const relevantMeldingTilPvo = pvkDokument.meldingerTilPvo.filter(
     (melding) =>
@@ -124,6 +127,8 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
             </div>
           </div>
 
+          {!hasP360User && <P360IngenBrukerAlert />}
+
           {userHasAccess && (
             <div className='mt-5 flex gap-2 items-center'>
               <LagreOgFortsettSenereButton
@@ -133,20 +138,22 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
                 resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
               />
 
-              <Button
-                type='button'
-                variant='primary'
-                onClick={async () => {
-                  await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
-                  await setFieldValue(
-                    'antallInnsendingTilPvo',
-                    pvkDokument.antallInnsendingTilPvo + 1
-                  )
-                  await submitForm()
-                }}
-              >
-                Lagre og send tilbake til PVO
-              </Button>
+              {!hasP360User && (
+                <Button
+                  type='button'
+                  variant='primary'
+                  onClick={async () => {
+                    await setFieldValue('status', EPvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
+                    await setFieldValue(
+                      'antallInnsendingTilPvo',
+                      pvkDokument.antallInnsendingTilPvo + 1
+                    )
+                    await submitForm()
+                  }}
+                >
+                  Lagre og send tilbake til PVO
+                </Button>
+              )}
             </div>
           )}
 

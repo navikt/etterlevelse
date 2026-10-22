@@ -1,16 +1,7 @@
 'use client'
 
 import { useQuery } from '@apollo/client/react'
-import {
-  Alert,
-  BodyLong,
-  Button,
-  FormSummary,
-  Heading,
-  Label,
-  List,
-  LocalAlert,
-} from '@navikt/ds-react'
+import { BodyLong, Button, FormSummary, Heading, Label, List, LocalAlert } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { useParams } from 'next/navigation'
 import { RefObject, useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -22,6 +13,7 @@ import {
   useEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { getAllKravPriorityList } from '@/api/kravPriorityList/kravPriorityListApi'
+import { getMyP360User } from '@/api/p360/p360Api'
 import {
   getPvkDokumentByEtterlevelseDokumentId,
   mapPvkDokumentToFormValue,
@@ -32,6 +24,7 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
+import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import { IBreadCrumbPath, IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,
@@ -102,6 +95,7 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
   const formRef: RefObject<any> = useRef(undefined)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [hasP360User, setHasP360User] = useState<boolean>(false)
 
   const hasAccess =
     etterlevelseDokumentasjon && etterlevelseDokumentasjon.risikoeiere.includes(user.getIdent())
@@ -246,6 +240,13 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
   useEffect(() => {
     ;(async () => {
       await getAllKravPriorityList().then((priority) => setAllKravPriority(priority))
+      await getMyP360User().then((response) => {
+        if (response.Successful && response.Users.length !== 0 && response.Users[0].IsActive) {
+          setHasP360User(true)
+        } else {
+          setHasP360User(false)
+        }
+      })
     })()
   }, [])
 
@@ -374,16 +375,16 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
                           {errorMessage !== '' && (
                             <div className='my-5'>
-                              <Alert
-                                size='small'
-                                variant='error'
-                                closeButton
-                                onClose={() => setErrorMessage('')}
-                              >
-                                {errorMessage}
-                              </Alert>
+                              <LocalAlert size='small' status='error'>
+                                <LocalAlert.Header>
+                                  <LocalAlert.Title>{errorMessage}</LocalAlert.Title>
+                                  <LocalAlert.CloseButton onClick={() => setErrorMessage('')} />
+                                </LocalAlert.Header>
+                              </LocalAlert>
                             </div>
                           )}
+
+                          {!hasP360User && <P360IngenBrukerAlert />}
 
                           <div className='flex items-center mt-5 gap-2'>
                             <Button
@@ -400,20 +401,22 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
                               Lagre og fortsett senere
                             </Button>
 
-                            <Button
-                              type='button'
-                              variant='primary'
-                              loading={isSubmitting}
-                              onClick={async () => {
-                                await setFieldValue(
-                                  'status',
-                                  EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
-                                )
-                                await submitForm()
-                              }}
-                            >
-                              Godkjenn og arkiver i Public360
-                            </Button>
+                            {!hasP360User && (
+                              <Button
+                                type='button'
+                                variant='primary'
+                                loading={isSubmitting}
+                                onClick={async () => {
+                                  await setFieldValue(
+                                    'status',
+                                    EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
+                                  )
+                                  await submitForm()
+                                }}
+                              >
+                                Godkjenn og arkiver i Public360
+                              </Button>
+                            )}
                           </div>
                         </div>
                       )}
