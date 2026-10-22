@@ -19,6 +19,7 @@ public class WiremockExtension implements Extension, BeforeAllCallback, BeforeEa
     private static final WireMockServer WIREMOCK = new WireMockServer(
             WireMockConfiguration.wireMockConfig()
                     .dynamicPort()
+                    .bindAddress("127.0.0.1")
     );
 
     @Override
