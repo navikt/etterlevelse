@@ -17,6 +17,7 @@ import no.nav.data.common.security.azure.AzureUserInfo;
 import no.nav.data.common.security.dto.AppRole;
 import no.nav.data.integration.ardoq.dto.ArdoqSystem;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemData;
+import no.nav.data.integration.p360.dto.P360Document;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static no.nav.data.common.utils.JsonUtils.toJson;
@@ -69,6 +71,7 @@ public class LocalConfig {
                 stubTeamcatResource(ident, name, email);
                 stubArdoqSystems();
                 stubSlackUserLookup();
+                stubP360Documents();
                 registry.registerBeanDefinition(AAD_FILTER_BEAN,
                         new RootBeanDefinition(LocalUserFilter.class, () -> new LocalUserFilter(ident, name, email)));
             }
@@ -123,6 +126,13 @@ public class LocalConfig {
                 {"ok": true, "user": {"id": "LOCALSLACKUSER", "real_name": "Lokal Slack-bruker"}}""";
         WireMock.stubFor(get(urlPathEqualTo("/slack/users.info")).willReturn(okJson(userResponse)));
         WireMock.stubFor(get(urlPathEqualTo("/slack/users.lookupByEmail")).willReturn(okJson(userResponse)));
+    }
+
+    // P360 token and CreateCase are stubbed by P360Mocks; archived documents are accepted here instead of reaching Public 360.
+    private static void stubP360Documents() {
+        var document = P360Document.builder().Recno(1).DocumentNumber("LOCAL-DOC").Successful(true).ErrorMessage("").ErrorDetails("").build();
+        WireMock.stubFor(post("/p360/DocumentService/CreateDocument").willReturn(okJson(toJson(document))));
+        WireMock.stubFor(post("/p360/DocumentService/UpdateDocument").willReturn(okJson(toJson(document))));
     }
 
     static class LocalUserFilter extends AADStatelessAuthenticationFilter {

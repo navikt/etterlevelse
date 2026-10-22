@@ -98,6 +98,7 @@ Med `local`-profilen:
   Søk etter behandlinger i den mockede Behandlingskatalogen gir ingen treff.
 - svarer den mockede Slacken på oppslag av brukere med «Lokal Slack-bruker», slik at krav og dokumenter med Slack-brukere
   som varslingsadresse kan vises. Det sendes ingen meldinger til Slack.
+- er Public 360 mocket. «Godkjenn og arkiver» for PVK og etterlevelsesdokumenter fungerer, men ingenting arkiveres i P360.
 - er Ardoq (systemer) mocket med fem fiktive systemer. Søk f.eks. på «lokal». Ardoq krever et hemmelig token, så det finnes
   ikke noe alternativ for å bruke Ardoq i dev lokalt. Dokumenter fra dev som allerede har systemer knyttet til seg, viser ikke navnet på dem.
 - kjører backend som miljøet `dev-gcp` (`etterlev.security.env` i `application-local.yml`). Da brukes de samme faste
