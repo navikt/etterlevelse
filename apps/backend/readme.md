@@ -87,9 +87,10 @@ Backend kjører på `localhost:8080`.
 Med `local`-profilen:
 
 - er Azure-innlogging slått av. [LocalConfig](src/test/java/no/nav/data/LocalConfig.java) logger alle requests inn som brukeren
-  `FullStackLocal` med alle roller. Vil du være en annen bruker (f.eks. for å se dine egne dokumenter under «Mine dokumentasjoner»),
+  `FullStackLocal` med alle roller. Vil du være en annen bruker (f.eks. for å se dokumenter du selv har redigert under «Siste dokumentasjoner»),
   legg til `-Dlocal.user.ident=<NAV-ident> -Dlocal.user.name="Navn Navnesen"` (VM options i IntelliJ, VM arguments under **Run Configurations** i Eclipse, eller på slutten av mvn-kommandoen).
 - er Teamkatalogen, Behandlingskatalogen og Slack mocket med WireMock, så team- og personoppslag viser testdata.
+  «Mine dokumentasjoner» bygger på teamene dine fra Teamkatalogen, og viser derfor ikke dine ekte dokumenter lokalt.
 
 ### 4. Start frontend
 
