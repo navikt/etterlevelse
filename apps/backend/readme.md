@@ -95,6 +95,8 @@ Med `local`-profilen:
 - er Teamkatalogen, Behandlingskatalogen og Slack mocket med WireMock, så team- og personoppslag viser testdata.
   «Mine dokumentasjoner» bygger på teamene dine fra Teamkatalogen, og viser derfor ikke dine ekte dokumenter lokalt.
   Personsøket i den mockede Teamkatalogen svarer bare på søkeordet `fam`, så du kan ikke legge til ekte personer på dokumenter.
+- kjører backend som miljøet `dev-gcp` (`etterlev.security.env` i `application-local.yml`). Da brukes de samme faste
+  avdelingene og seksjonene som i dev, i stedet for NOM, og e-post går til dev-adressen i stedet for ekte mottakere.
 
 #### Bruke Teamkatalogen i dev (for å teste f.eks. kraveier- og PVK-flyt)
 

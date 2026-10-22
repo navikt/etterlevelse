@@ -12,6 +12,7 @@ client:
 etterlev:
     security:
         enabled: false
+        env: dev-gcp
         redirectUris: http://localhost:3000,http://localhost:8080
 
 server:
