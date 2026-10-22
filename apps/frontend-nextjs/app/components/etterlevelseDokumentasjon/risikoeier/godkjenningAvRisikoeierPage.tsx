@@ -401,7 +401,7 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
                               Lagre og fortsett senere
                             </Button>
 
-                            {!hasP360User && (
+                            {hasP360User && (
                               <Button
                                 type='button'
                                 variant='primary'

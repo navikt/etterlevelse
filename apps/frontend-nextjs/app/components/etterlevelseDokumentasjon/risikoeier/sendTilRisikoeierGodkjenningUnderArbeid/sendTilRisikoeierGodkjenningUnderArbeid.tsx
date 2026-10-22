@@ -153,7 +153,7 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
 
               {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
                 !pvkBlocksSending &&
-                !hasP360User && (
+                hasP360User && (
                   <Button
                     type='button'
                     variant='primary'

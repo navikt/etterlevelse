@@ -88,7 +88,7 @@ const SendTilPvo: FunctionComponent<TProps> = ({
             initialStatus={fieldProps.form.initialValues.status}
             resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
           />
-          {!hasP360User && (
+          {hasP360User && (
             <Button
               type='button'
               variant='primary'

@@ -147,7 +147,7 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
                 resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
               />
 
-              {!hasP360User && (
+              {hasP360User && (
                 <Button
                   type='button'
                   loading={isAksepterLoading}
