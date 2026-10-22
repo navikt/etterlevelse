@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static no.nav.data.common.utils.JsonUtils.toJson;
 
@@ -67,6 +68,7 @@ public class LocalConfig {
                 String email = environment.getProperty("local.user.email", ident.toLowerCase() + "@nav.no");
                 stubTeamcatResource(ident, name, email);
                 stubArdoqSystems();
+                stubSlackUserLookup();
                 registry.registerBeanDefinition(AAD_FILTER_BEAN,
                         new RootBeanDefinition(LocalUserFilter.class, () -> new LocalUserFilter(ident, name, email)));
             }
@@ -113,6 +115,14 @@ public class LocalConfig {
                 .lifecyclePhase("Production")
                 .description("Fiktivt system for lokal utvikling")
                 .build();
+    }
+
+    // Slack is mocked; without these, krav and dokumenter with a Slack user as varslingsadresse fail to load.
+    private static void stubSlackUserLookup() {
+        var userResponse = """
+                {"ok": true, "user": {"id": "LOCALSLACKUSER", "real_name": "Lokal Slack-bruker"}}""";
+        WireMock.stubFor(get(urlPathEqualTo("/slack/users.info")).willReturn(okJson(userResponse)));
+        WireMock.stubFor(get(urlPathEqualTo("/slack/users.lookupByEmail")).willReturn(okJson(userResponse)));
     }
 
     static class LocalUserFilter extends AADStatelessAuthenticationFilter {

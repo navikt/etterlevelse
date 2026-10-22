@@ -96,6 +96,8 @@ Med `local`-profilen:
   «Mine dokumentasjoner» bygger på teamene dine fra Teamkatalogen, og viser derfor ikke dine ekte dokumenter lokalt.
   Personsøket i den mockede Teamkatalogen svarer bare på søkeordet `fam`, så du kan ikke legge til ekte personer på dokumenter.
   Søk etter behandlinger i den mockede Behandlingskatalogen gir ingen treff.
+- svarer den mockede Slacken på oppslag av brukere med «Lokal Slack-bruker», slik at krav og dokumenter med Slack-brukere
+  som varslingsadresse kan vises. Det sendes ingen meldinger til Slack.
 - er Ardoq (systemer) mocket med fem fiktive systemer. Søk f.eks. på «lokal». Ardoq krever et hemmelig token, så det finnes
   ikke noe alternativ for å bruke Ardoq i dev lokalt. Dokumenter fra dev som allerede har systemer knyttet til seg, viser ikke navnet på dem.
 - kjører backend som miljøet `dev-gcp` (`etterlev.security.env` i `application-local.yml`). Da brukes de samme faste
