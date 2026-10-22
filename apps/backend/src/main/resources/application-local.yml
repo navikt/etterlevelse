@@ -5,6 +5,8 @@ client:
       url: http://localhost:${wiremock.server.port:8080}/teamcat
     slack:
       base-url: http://localhost:${wiremock.server.port:8080}/slack
+    ardoq:
+      base-url: http://localhost:${wiremock.server.port:8080}/ardoq
     devmail:
       address: teamdatajegerne@nav.no
       slack-channel-id: C07B5KX3R0X

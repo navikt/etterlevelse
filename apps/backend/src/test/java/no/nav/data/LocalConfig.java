@@ -15,6 +15,8 @@ import no.nav.data.common.security.azure.AADStatelessAuthenticationFilter;
 import no.nav.data.common.security.azure.AzureConstants;
 import no.nav.data.common.security.azure.AzureUserInfo;
 import no.nav.data.common.security.dto.AppRole;
+import no.nav.data.integration.ardoq.dto.ArdoqSystem;
+import no.nav.data.integration.ardoq.dto.ArdoqSystemData;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.ResourceType;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -39,6 +41,7 @@ import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static no.nav.data.common.utils.JsonUtils.toJson;
 
 /**
@@ -63,6 +66,7 @@ public class LocalConfig {
                 String name = environment.getProperty("local.user.name", "Lokal Utvikler");
                 String email = environment.getProperty("local.user.email", ident.toLowerCase() + "@nav.no");
                 stubTeamcatResource(ident, name, email);
+                stubArdoqSystems();
                 registry.registerBeanDefinition(AAD_FILTER_BEAN,
                         new RootBeanDefinition(LocalUserFilter.class, () -> new LocalUserFilter(ident, name, email)));
             }
@@ -85,6 +89,30 @@ public class LocalConfig {
                 .resourceType(ResourceType.INTERNAL)
                 .build();
         WireMock.stubFor(get("/teamcat/resource/" + ident).willReturn(okJson(toJson(resource))));
+    }
+
+    // Ardoq requires a secret bearer token, so local runs get a few fake systems from WireMock instead.
+    private static void stubArdoqSystems() {
+        var systems = List.of(
+                ardoqSystem("LOCAL-1", "Lokalt testsystem A", "TSA"),
+                ardoqSystem("LOCAL-2", "Lokalt testsystem B", "TSB"),
+                ardoqSystem("LOCAL-3", "Lokalt saksbehandlingssystem", "SAK"),
+                ardoqSystem("LOCAL-4", "Lokalt arkivsystem", "ARKIV"),
+                ardoqSystem("LOCAL-5", "Lokal selvbetjeningsløsning", "SELV")
+        );
+        WireMock.stubFor(get(urlPathMatching("/ardoq/api/v2/reports/.*/run/objects"))
+                .willReturn(okJson(toJson(ArdoqSystemData.builder().values(systems).build()))));
+    }
+
+    private static ArdoqSystem ardoqSystem(String id, String name, String alias) {
+        return ArdoqSystem.builder()
+                .ardoqID(id)
+                .ardoqOID(id.toLowerCase())
+                .name(name)
+                .alias(alias)
+                .lifecyclePhase("Production")
+                .description("Fiktivt system for lokal utvikling")
+                .build();
     }
 
     static class LocalUserFilter extends AADStatelessAuthenticationFilter {

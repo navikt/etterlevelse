@@ -88,32 +88,37 @@ slik at ingen andre på nettverket når den lokale admin-brukeren eller kopien a
 Med `local`-profilen:
 
 - er Azure-innlogging slått av. [LocalConfig](src/test/java/no/nav/data/LocalConfig.java) logger alle requests inn som brukeren
-  `FullStackLocal` (e-post `fullstacklocal@nav.no`) med alle roller. Vil du være en annen bruker (f.eks. for å se dokumenter du selv har redigert under «Siste dokumentasjoner»),
+  `FullStackLocal` (e-post `fullstacklocal@nav.no`) med alle roller. Vil du være en annen bruker (f.eks. for å se dokumenter der du selv har dokumentert krav under «Siste dokumentasjoner»),
   legg til `-Dlocal.user.ident=<NAV-ident> -Dlocal.user.name="Navn Navnesen"` (VM options i IntelliJ, VM arguments under **Run Configurations** i Eclipse, eller på slutten av mvn-kommandoen).
   E-post blir `<ident>@nav.no`, og kan overstyres med `-Dlocal.user.email=...`. Brukeren legges også inn i den mockede Teamkatalogen,
   slik at f.eks. tilbakemeldinger fungerer.
 - er Teamkatalogen, Behandlingskatalogen og Slack mocket med WireMock, så team- og personoppslag viser testdata.
   «Mine dokumentasjoner» bygger på teamene dine fra Teamkatalogen, og viser derfor ikke dine ekte dokumenter lokalt.
   Personsøket i den mockede Teamkatalogen svarer bare på søkeordet `fam`, så du kan ikke legge til ekte personer på dokumenter.
+  Søk etter behandlinger i den mockede Behandlingskatalogen gir ingen treff.
+- er Ardoq (systemer) mocket med fem fiktive systemer. Søk f.eks. på «lokal». Ardoq krever et hemmelig token, så det finnes
+  ikke noe alternativ for å bruke Ardoq i dev lokalt. Dokumenter fra dev som allerede har systemer knyttet til seg, viser ikke navnet på dem.
 - kjører backend som miljøet `dev-gcp` (`etterlev.security.env` i `application-local.yml`). Da brukes de samme faste
   avdelingene og seksjonene som i dev, i stedet for NOM, og e-post går til dev-adressen i stedet for ekte mottakere.
 
-#### Bruke Teamkatalogen i dev (for å teste f.eks. kraveier- og PVK-flyt)
+#### Bruke Teamkatalogen og Behandlingskatalogen i dev (for å teste f.eks. kraveier- og PVK-flyt)
 
-Trenger du å legge til personer på dokumenter, eller se dine egne team, kan backend bruke Teamkatalogen i dev i stedet for mocken.
-Det krever naisdevice. Legg til disse VM options (eller på slutten av mvn-kommandoen):
+Trenger du å legge til personer eller behandlinger på dokumenter, eller se dine egne team, kan backend bruke
+Teamkatalogen og Behandlingskatalogen i dev i stedet for mockene. Det krever naisdevice.
+Legg til disse VM options (eller på slutten av mvn-kommandoen):
 
 ```
--Dclient.teamcat.url=https://teamkatalog-api.intern.dev.nav.no -Dlocal.user.ident=<NAV-ident> "-Dlocal.user.name=Fornavn Etternavn"
+-Dclient.teamcat.url=https://teamkatalog-api.intern.dev.nav.no -Dclient.behandlingskatalog.base-url=https://behandlingskatalog-backend.intern.dev.nav.no -Dlocal.user.ident=<NAV-ident> "-Dlocal.user.name=Fornavn Etternavn"
 ```
 
 - Bytt ut `<NAV-ident>` med din egen ident (én bokstav og seks siffer), uten `<` `>`. Identen må finnes i Teamkatalogen i dev,
   ellers feiler oppslag på innlogget bruker (f.eks. tilbakemeldinger). Sjekk med
   `curl https://teamkatalog-api.intern.dev.nav.no/resource/<NAV-ident>`.
 - Ha anførselstegn rundt hele `-Dlocal.user.name=...` når navnet inneholder mellomrom.
-- Personsøk, team og «Mine dokumentasjoner» bruker da ekte data fra dev. Behandlingskatalogen og Slack er fortsatt mocket.
+- Personsøk, team, «Mine dokumentasjoner» og søk etter behandlinger bruker da ekte data fra dev. Slack og Ardoq er fortsatt mocket.
   Finner du ikke en person på navn i søket, søk på NAV-identen i stedet.
-- Fjern VM options og start på nytt for å gå tilbake til `FullStackLocal` og mocken.
+- Du kan bruke bare én av dem: ta med `-Dclient.teamcat.url=...` og/eller `-Dclient.behandlingskatalog.base-url=...`.
+- Fjern VM options og start på nytt for å gå tilbake til `FullStackLocal` og mockene.
 
 ### 4. Start frontend
 
