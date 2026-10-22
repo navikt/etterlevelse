@@ -14,6 +14,9 @@ etterlev:
         enabled: false
         redirectUris: http://localhost:3000,http://localhost:8080
 
+server:
+    address: 127.0.0.1
+
 spring:
     main:
         allow-bean-definition-overriding: true

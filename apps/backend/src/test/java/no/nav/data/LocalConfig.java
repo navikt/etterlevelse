@@ -1,5 +1,6 @@
 package no.nav.data;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.oauth2.sdk.id.Issuer;
 import com.nimbusds.openid.connect.sdk.SubjectType;
@@ -14,6 +15,8 @@ import no.nav.data.common.security.azure.AADStatelessAuthenticationFilter;
 import no.nav.data.common.security.azure.AzureConstants;
 import no.nav.data.common.security.azure.AzureUserInfo;
 import no.nav.data.common.security.dto.AppRole;
+import no.nav.data.integration.team.dto.Resource;
+import no.nav.data.integration.team.dto.ResourceType;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -34,9 +37,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
+import static no.nav.data.common.utils.JsonUtils.toJson;
+
 /**
  * Replaces the Azure auth filter so every request is logged in as a local user with all roles when running LocalAppStarter.
- * Override with -Dlocal.user.ident=... and -Dlocal.user.name=...
+ * Override with -Dlocal.user.ident=..., -Dlocal.user.name=... and -Dlocal.user.email=...
  */
 @Profile("local")
 @Configuration
@@ -54,8 +61,10 @@ public class LocalConfig {
                 }
                 String ident = environment.getProperty("local.user.ident", "FullStackLocal");
                 String name = environment.getProperty("local.user.name", "Lokal Utvikler");
+                String email = environment.getProperty("local.user.email", ident.toLowerCase() + "@nav.no");
+                stubTeamcatResource(ident, name, email);
                 registry.registerBeanDefinition(AAD_FILTER_BEAN,
-                        new RootBeanDefinition(LocalUserFilter.class, () -> new LocalUserFilter(ident, name)));
+                        new RootBeanDefinition(LocalUserFilter.class, () -> new LocalUserFilter(ident, name, email)));
             }
 
             @Override
@@ -64,18 +73,33 @@ public class LocalConfig {
         };
     }
 
+    // Teamkatalogen is mocked by WireMock (started in LocalAppStarter); the local user must exist there for flows like tilbakemelding.
+    private static void stubTeamcatResource(String ident, String name, String email) {
+        int split = name.lastIndexOf(' ');
+        var resource = Resource.builder()
+                .navIdent(ident)
+                .givenName(split > 0 ? name.substring(0, split) : name)
+                .familyName(split > 0 ? name.substring(split + 1) : "")
+                .fullName(name)
+                .email(email)
+                .resourceType(ResourceType.INTERNAL)
+                .build();
+        WireMock.stubFor(get("/teamcat/resource/" + ident).willReturn(okJson(toJson(resource))));
+    }
+
     static class LocalUserFilter extends AADStatelessAuthenticationFilter {
 
         private final AzureUserInfo user;
         private final Set<GrantedAuthority> authorities;
 
-        LocalUserFilter(String ident, String name) {
+        LocalUserFilter(String ident, String name, String email) {
             super(null, null, new AppIdMapping("[]", ""), new AADAuthenticationProperties(),
                     null, new OIDCProviderMetadata(new Issuer("issuer"), List.of(SubjectType.PUBLIC), URI.create("http://localhost")));
             this.authorities = Arrays.stream(AppRole.values()).map(AppRole::toAuthority).collect(Collectors.toSet());
             this.user = new AzureUserInfo(new Builder()
                     .claim(StandardClaimNames.NAME, name)
                     .claim(AzureConstants.IDENT_CLAIM, ident)
+                    .claim(StandardClaimNames.PREFERRED_USERNAME, email)
                     .build(), authorities);
         }
 

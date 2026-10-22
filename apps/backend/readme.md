@@ -30,7 +30,7 @@ cd apps/backend
 docker compose up -d
 ```
 
-Databasen kjører på `localhost:5433` (bruker `postgres`, passord `password`, database `etterlevelsedb`).
+Databasen kjører på `localhost:5433` (bruker `postgres`, passord `password`, database `etterlevelsedb`), og er kun tilgjengelig fra din egen maskin.
 
 ### 2. Kopier dev-databasen til lokal database
 
@@ -82,23 +82,47 @@ Alternativ C – fra Eclipse:
    Sjekk at prosjektet bruker den under **Properties → Java Compiler** (compliance level 25).
 5. Høyreklikk `LocalAppStarter` (`src/test/java/no/nav/data`) → **Run As → Java Application**.
 
-Backend kjører på `localhost:8080`.
+Backend kjører på `localhost:8080`, og lytter kun på `127.0.0.1` (se `server.address` i `application-local.yml`),
+slik at ingen andre på nettverket når den lokale admin-brukeren eller kopien av dev-dataene.
 
 Med `local`-profilen:
 
 - er Azure-innlogging slått av. [LocalConfig](src/test/java/no/nav/data/LocalConfig.java) logger alle requests inn som brukeren
-  `FullStackLocal` med alle roller. Vil du være en annen bruker (f.eks. for å se dokumenter du selv har redigert under «Siste dokumentasjoner»),
+  `FullStackLocal` (e-post `fullstacklocal@nav.no`) med alle roller. Vil du være en annen bruker (f.eks. for å se dokumenter du selv har redigert under «Siste dokumentasjoner»),
   legg til `-Dlocal.user.ident=<NAV-ident> -Dlocal.user.name="Navn Navnesen"` (VM options i IntelliJ, VM arguments under **Run Configurations** i Eclipse, eller på slutten av mvn-kommandoen).
+  E-post blir `<ident>@nav.no`, og kan overstyres med `-Dlocal.user.email=...`. Brukeren legges også inn i den mockede Teamkatalogen,
+  slik at f.eks. tilbakemeldinger fungerer.
 - er Teamkatalogen, Behandlingskatalogen og Slack mocket med WireMock, så team- og personoppslag viser testdata.
   «Mine dokumentasjoner» bygger på teamene dine fra Teamkatalogen, og viser derfor ikke dine ekte dokumenter lokalt.
+  Personsøket i den mockede Teamkatalogen svarer bare på søkeordet `fam`, så du kan ikke legge til ekte personer på dokumenter.
+
+#### Bruke Teamkatalogen i dev (for å teste f.eks. kraveier- og PVK-flyt)
+
+Trenger du å legge til personer på dokumenter, eller se dine egne team, kan backend bruke Teamkatalogen i dev i stedet for mocken.
+Det krever naisdevice. Legg til disse VM options (eller på slutten av mvn-kommandoen):
+
+```
+-Dclient.teamcat.url=https://teamkatalog-api.intern.dev.nav.no -Dlocal.user.ident=<NAV-ident> "-Dlocal.user.name=Fornavn Etternavn"
+```
+
+- Bytt ut `<NAV-ident>` med din egen ident (én bokstav og seks siffer), uten `<` `>`. Identen må finnes i Teamkatalogen i dev,
+  ellers feiler oppslag på innlogget bruker (f.eks. tilbakemeldinger). Sjekk med
+  `curl https://teamkatalog-api.intern.dev.nav.no/resource/<NAV-ident>`.
+- Ha anførselstegn rundt hele `-Dlocal.user.name=...` når navnet inneholder mellomrom.
+- Personsøk, team og «Mine dokumentasjoner» bruker da ekte data fra dev. Behandlingskatalogen og Slack er fortsatt mocket.
+  Finner du ikke en person på navn i søket, søk på NAV-identen i stedet.
+- Fjern VM options og start på nytt for å gå tilbake til `FullStackLocal` og mocken.
 
 ### 4. Start frontend
 
 ```bash
 cd apps/frontend-nextjs
 yarn install
-yarn dev
+yarn dev --hostname 127.0.0.1
 ```
+
+`--hostname 127.0.0.1` gjør at frontend kun er tilgjengelig fra din egen maskin. Uten den lytter Next.js på alle nettverksgrensesnitt,
+og andre på nettverket kan nå backend (og dev-dataene) via `/api`-proxyen.
 
 Åpne [http://localhost:3000](http://localhost:3000). Frontend sender `/api`-kall til `localhost:8080` i dev-modus.
 Ikke kjør `kubectl port-forward` mot dev-backend samtidig, siden den også bruker port 8080.
@@ -109,7 +133,8 @@ Ikke kjør `kubectl port-forward` mot dev-backend samtidig, siden den også bruk
 | --- | --- |
 | `bind: address already in use` når du starter proxyen | Bruk en annen port med `--port`, og samme port i `pg_dump`. |
 | `Cannot compile module ... JVM target 25 ... SDK version 21` i IntelliJ | Sett Project SDK til JDK 25 (se steg 3). |
-| `ClassNotFoundException`/`NoClassDefFoundError` når du kjører `LocalAppStarter` fra IntelliJ | **Build → Rebuild Project**. Skjer når Maven og IntelliJ har bygget til samme `target`-mappe. |
+| `ClassNotFoundException`/`NoClassDefFoundError` når du kjører `LocalAppStarter`, eller 500-feil med et klassenavn (f.eks. `...$KravDataBuilder`) | Noe annet har overskrevet `target/classes`, typisk Java-utvidelsen i VS Code som bygger `apps/backend` automatisk. Lukk VS Code-vinduet med repoet, åpne bare `apps/frontend-nextjs` i VS Code, eller slå av **Language Support for Java** for workspacet. Kjør så **Build → Rebuild Project** og start på nytt. |
+| `Could not find or load main class ...` | Mellomrom i VM options uten anførselstegn, f.eks. en plassholder som `<NAV-ident>` som ikke er byttet ut. |
 | Samme feil i Eclipse | **Project → Clean...** og høyreklikk prosjektet → **Maven → Update Project**. |
 | Kompileringsfeil på getters/builders (`cannot find symbol`) i Eclipse | Lombok er ikke installert i Eclipse (se steg 3, alternativ C). |
 | Microsoft-innlogging med `AADSTS700016` | Backend kjører ikke, eller kjører uten `local`-profilen. Start via `LocalAppStarter`. |

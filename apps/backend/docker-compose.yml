@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres:/var/lib/postgresql_16/data
     ports:
-      - 5433:5432
+      - 127.0.0.1:5433:5432
 
 volumes:
   postgres:
