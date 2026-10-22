@@ -1,19 +1,24 @@
 'use client'
 
-import { LocalAlert } from '@navikt/ds-react'
+import { Link, LocalAlert } from '@navikt/ds-react'
 
 const P360IngenBrukerAlert = () => (
   <LocalAlert status='warning' className='max-w-[75ch] my-5'>
     <LocalAlert.Header>
-      <LocalAlert.Title>Mangler bruker i public 360</LocalAlert.Title>
+      <LocalAlert.Title>Du må ha tilgang til Public 360 for å kunne sende inn PVK</LocalAlert.Title>
     </LocalAlert.Header>
     <LocalAlert.Content>
-      For å kunne gå videre i prosessen krever vi at dere har bruker i public 360. Årsaken til dette
-      er at vi arkiverer automatisk for dere i bakgrunn, dette vil da kreve et aktiv bruker i public
-      360
-      <br />
-      <br />
-      Vennligst kontakt din leder for å få tilgang til public 360
+      For å kunne sende inn, må du ha en gyldig bruker i Public 360. Det er din nærmeste leder som
+      må bestille tilgang for deg. Dette kan de gjøre på{' '}
+      <Link
+        className='inline whitespace-normal'
+        rel='noopener noreferrer'
+        target='_blank'
+        href='https://jira.adeo.no/plugins/servlet/desk/portal/581/create/5794'
+      >
+        denne siden i Porten (åpner i en ny fane)
+      </Link>
+      . Etter hvert som du har fått tilgang, vil du kunne sende inn PVK-en.
     </LocalAlert.Content>
   </LocalAlert>
 )

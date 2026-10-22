@@ -1,4 +1,4 @@
-import { Alert, Button, Heading } from '@navikt/ds-react'
+import { Button, Heading, InlineMessage } from '@navikt/ds-react'
 import { FieldProps } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
@@ -35,11 +35,11 @@ const SendTilRisikoeier: FunctionComponent<TProps> = ({
       markdown
     />
 
-    <Alert variant='info' inline className='my-8'>
+    <InlineMessage status='info' className='my-8'>
       Når dere sender inn PVK, vil hele dokumentasjonen, inkludert etterlevelsesdokumentasjon ved
       PVK-relaterte krav, låses og ikke kunne redigeres. Dette innholdet forbli låst enn så lenge
       saken ligger hos Personvernombudet.
-    </Alert>
+    </InlineMessage>
 
     {errorComponent}
 
