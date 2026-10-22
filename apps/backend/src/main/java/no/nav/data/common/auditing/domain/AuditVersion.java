@@ -10,6 +10,7 @@ import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.auditing.dto.AuditResponse;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true) // Basert kun på id
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,6 +37,7 @@ public class AuditVersion {
 
     @Id
     @Column(name = "AUDIT_ID")
+    @EqualsAndHashCode.Include
     @Builder.Default
     private UUID id = UUID.randomUUID();
 

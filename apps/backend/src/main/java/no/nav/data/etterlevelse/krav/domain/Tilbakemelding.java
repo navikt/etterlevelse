@@ -32,7 +32,7 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 import static no.nav.data.common.utils.StreamUtils.tryFind;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert kun på id
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,7 +42,9 @@ public class Tilbakemelding extends ChangeStamped implements KravId {
 
     @Id
     @Column(name = "ID")
-    private UUID id;
+    @EqualsAndHashCode.Include
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "KRAV_NUMMER", nullable = false)
     private Integer kravNummer;

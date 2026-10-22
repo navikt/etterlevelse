@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 import static no.nav.data.common.utils.StreamUtils.convert;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert kun på id
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -36,8 +36,9 @@ import static no.nav.data.common.utils.StreamUtils.convert;
 public class GenericStorage<T extends DomainObject> extends Auditable {
 
     @Id
+    @EqualsAndHashCode.Include
     @Column(name = "ID")
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     @NotNull
     @Column(name = "TYPE", nullable = false, updatable = false)
@@ -53,15 +54,6 @@ public class GenericStorage<T extends DomainObject> extends Auditable {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private transient T domainObjectCache;
-
-    public GenericStorage<T> generateId() {
-        Assert.isTrue(id == null, "id already set");
-        id = UUID.randomUUID();
-        if (domainObjectCache != null) {
-            domainObjectCache.setId(id);
-        }
-        return this;
-    }
 
     /**
      * Merk: Endrer også input domainObject ved å sette id
