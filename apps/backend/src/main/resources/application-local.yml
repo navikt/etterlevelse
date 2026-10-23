@@ -5,6 +5,12 @@ client:
       url: http://localhost:${wiremock.server.port:8080}/teamcat
     slack:
       base-url: http://localhost:${wiremock.server.port:8080}/slack
+    ardoq:
+      base-url: http://localhost:${wiremock.server.port:8080}/ardoq
+    p360:
+      case-url: http://localhost:${wiremock.server.port:8080}/p360/CaseService
+      document-url: http://localhost:${wiremock.server.port:8080}/p360/DocumentService
+      token-url: http://localhost:${wiremock.server.port:8080}/oauth2/token
     devmail:
       address: teamdatajegerne@nav.no
       slack-channel-id: C07B5KX3R0X
@@ -12,7 +18,11 @@ client:
 etterlev:
     security:
         enabled: false
+        env: dev-gcp
         redirectUris: http://localhost:3000,http://localhost:8080
+
+server:
+    address: 127.0.0.1
 
 spring:
     main:
