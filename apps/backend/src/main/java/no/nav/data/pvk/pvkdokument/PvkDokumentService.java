@@ -180,6 +180,11 @@ public class PvkDokumentService {
         List<Resource> risikoeiere = etterlevelseDokumentasjonService.getResourcesData(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere());
         List<Varslingsadresse > varslingsadresser = new ArrayList<>();
 
+        if (risikoeiere == null || risikoeiere.isEmpty()) {
+            log.warn("No risikoeiere found for etterlevelse dokumentasjon id={}, skipping varsel to risikoeier", etterlevelseDokumentasjon.getId());
+            return;
+        }
+
         risikoeiere.forEach(risikoeier -> {
             varslingsadresser.add(Varslingsadresse.builder().adresse(risikoeier.getEmail()).type(AdresseType.EPOST).build());
         });
