@@ -124,7 +124,9 @@ public class LocalConfig {
     private static void stubSlackUserLookup() {
         var userResponse = """
                 {"ok": true, "user": {"id": "LOCALSLACKUSER", "real_name": "Lokal Slack-bruker"}}""";
-        WireMock.stubFor(get(urlPathEqualTo("/slack/users.info")).willReturn(okJson(userResponse)));
+        WireMock.stubFor(get(urlPathEqualTo("/slack/users.info")).willReturn(okJson("""
+                {"ok": true, "user": {"id": "{{request.query.user}}", "real_name": "Lokal Slack-bruker"}}""")
+                .withTransformers("response-template")));
         WireMock.stubFor(get(urlPathEqualTo("/slack/users.lookupByEmail")).willReturn(okJson(userResponse)));
     }
 
