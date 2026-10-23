@@ -27,7 +27,7 @@ import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert kun på id
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -36,7 +36,9 @@ public class Krav extends Auditable implements KravId {
 
     @Id
     @Column(name = "ID")
-    private UUID id;
+    @EqualsAndHashCode.Include
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "KRAV_NUMMER", nullable = false)
     private Integer kravNummer;

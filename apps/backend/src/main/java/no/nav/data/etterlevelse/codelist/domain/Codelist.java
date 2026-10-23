@@ -24,7 +24,7 @@ import java.io.Serializable;
 @Table(name = "CODELIST")
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert på list og code
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(Codelist.IdClass.class)
@@ -33,10 +33,12 @@ public class Codelist extends Auditable {
     @Id
     @Column(name = "LIST_NAME")
     @Enumerated(EnumType.STRING)
+    @EqualsAndHashCode.Include
     private ListName list;
 
     @Id
     @Column(name = "CODE")
+    @EqualsAndHashCode.Include
     private String code;
 
     @Column(name = "SHORT_NAME")

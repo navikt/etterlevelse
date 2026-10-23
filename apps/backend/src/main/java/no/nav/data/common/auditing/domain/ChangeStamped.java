@@ -7,7 +7,6 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
@@ -27,7 +26,6 @@ import java.time.LocalDateTime;
 @JsonFilter("relationFilter")
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @FieldNameConstants
 @EntityListeners({AuditingEntityListener.class})
 public abstract class ChangeStamped {

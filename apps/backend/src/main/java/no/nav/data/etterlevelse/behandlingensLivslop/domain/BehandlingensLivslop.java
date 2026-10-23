@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert kun på id
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,6 +26,7 @@ public class BehandlingensLivslop extends Auditable {
     
     @Id
     @Builder.Default
+    @EqualsAndHashCode.Include
     @Column(name = "ID")
     private UUID id = UUID.randomUUID();
 
