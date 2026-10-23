@@ -1010,17 +1010,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^8.19.2":
-  version: 8.19.2
-  resolution: "@navikt/aksel-icons@npm:8.19.2"
-  checksum: 10c0/11a011d0a92596e0022fd827d68958d8e10f2554fd2e555c38567b266f45999a354340d296a8a7eb42fb189846fe4681ff0173b511b0167dc3aef44e073ccc09
+"@navikt/aksel-icons@npm:^8.20.0":
+  version: 8.20.0
+  resolution: "@navikt/aksel-icons@npm:8.20.0"
+  checksum: 10c0/0cf9ca2c9cf8ee241f47ca103fb18ac70560252127412889971ea45cb19cf3aa6522a366e94c8596fb07ba806d6ffa8294050fa8ec14fd0c802670a3c8299c12
   languageName: node
   linkType: hard
 
-"@navikt/ds-css@npm:^8.19.2":
-  version: 8.19.2
-  resolution: "@navikt/ds-css@npm:8.19.2"
-  checksum: 10c0/6a4d4f7fe941471132999d7cedc29edb31de89c6c5455036b13a7f3dfdab1a5df397f56affb4d178133706215dd4771e5b4c33d159a330b6d6df0a592b5f7010
+"@navikt/ds-css@npm:^8.20.0":
+  version: 8.20.0
+  resolution: "@navikt/ds-css@npm:8.20.0"
+  checksum: 10c0/f4663ad22ef08dda0dea87ae86e31d1190fd387aaa7eef2ec2c69a1629b2bcec8d45f8ff99fe48f9eea98f6c831edd52364c2655f58dd7af00b35707b652bfb1
   languageName: node
   linkType: hard
 
@@ -1066,10 +1066,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/ds-tailwind@npm:^8.19.2":
-  version: 8.19.2
-  resolution: "@navikt/ds-tailwind@npm:8.19.2"
-  checksum: 10c0/0d468622e4f856a608db772e19a578d663d84c5bd62ce0b8f4f92bc30664419a6c45547dbfd43737e9a894795c268a3f427aa875f517747cc3b7a9e8e6b7d9bc
+"@navikt/ds-tailwind@npm:^8.20.0":
+  version: 8.20.0
+  resolution: "@navikt/ds-tailwind@npm:8.20.0"
+  checksum: 10c0/fd299971ab8868c7720f86e8056c6f05c1503a7483c90b172f79aba2795719f58cb43fbf1148428de1cce87c7707af0524238879ffd59995b96fff35ad188f75
   languageName: node
   linkType: hard
 
@@ -2177,10 +2177,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.17.26":
-  version: 4.17.26
-  resolution: "@types/lodash@npm:4.17.26"
-  checksum: 10c0/7f8a95db94698f009e59c612deaba1ee98ac738156926f4c1c062853b9e46fe5fb3a7a34a15ad2f2c846f7c24b0e61e0109dfac2d9e4fa8eaa71330fd0862ea3
+"@types/lodash@npm:^4.17.27":
+  version: 4.17.27
+  resolution: "@types/lodash@npm:4.17.27"
+  checksum: 10c0/3769c022437664352a78234b8d9f6ba24693893552ef4192e507bbc7412dc621098afad0bc36f9d03855f629b143c01f3574afb2f818abcb447ebba066ad16bf
   languageName: node
   linkType: hard
 
@@ -3904,10 +3904,10 @@ __metadata:
     "@fortawesome/free-brands-svg-icons": "npm:^7.3.1"
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
-    "@navikt/aksel-icons": "npm:^8.19.2"
-    "@navikt/ds-css": "npm:^8.19.2"
-    "@navikt/ds-react": "npm:^8.19.2"
-    "@navikt/ds-tailwind": "npm:^8.19.2"
+    "@navikt/aksel-icons": "npm:^8.20.0"
+    "@navikt/ds-css": "npm:^8.20.0"
+    "@navikt/ds-react": "npm:^8.20.0"
+    "@navikt/ds-tailwind": "npm:^8.20.0"
     "@next/eslint-plugin-next": "npm:^16.4.2"
     "@playwright/test": "npm:^1.64.1"
     "@tailwindcss/postcss": "npm:^4.3.3"
@@ -3921,7 +3921,7 @@ __metadata:
     "@tiptap/react": "npm:^3.32.0"
     "@tiptap/starter-kit": "npm:^3.32.0"
     "@trivago/prettier-plugin-sort-imports": "npm:^6.0.2"
-    "@types/lodash": "npm:^4.17.26"
+    "@types/lodash": "npm:^4.17.27"
     "@types/node": "npm:26.6.5"
     "@types/react": "npm:^19.3.0"
     "@types/react-dom": "npm:^19.3.0"
