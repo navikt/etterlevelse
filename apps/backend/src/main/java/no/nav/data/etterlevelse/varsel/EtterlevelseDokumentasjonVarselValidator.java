@@ -7,6 +7,7 @@ import no.nav.data.common.varsel.QueuedVarselValidator;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public class EtterlevelseDokumentasjonVarselValidator implements QueuedVarselVal
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final SecurityProperties securityProperties;
 
+    @Value("${client.pvo.address}")
+    private String pvoEmail;
+
     @Override
     public boolean shouldStillSend(String etterlevelseDokumentasjonId, String recipient) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.findById(UUID.fromString(etterlevelseDokumentasjonId)).orElse(null);
@@ -29,6 +33,10 @@ public class EtterlevelseDokumentasjonVarselValidator implements QueuedVarselVal
         }
 
         if (!securityProperties.isDev()) {
+            if (pvoEmail.equals(recipient)) {
+                return true;
+            }
+
             List<Varslingsadresse> varslingsadresser = etterlevelseDokumentasjon.getVarslingsadresser();
             boolean stillValid = varslingsadresser != null && varslingsadresser.stream()
                     .anyMatch(varslingsadresse -> recipient != null && recipient.equals(varslingsadresse.getAdresse()));
