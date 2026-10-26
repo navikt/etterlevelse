@@ -47,17 +47,16 @@ const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   const accordionRef = useRef<HTMLButtonElement>(null)
 
   const [navigateUrl, setNavigateUrl] = useState<string>('')
+  const selectedRisikoscenarioIndex = risikoscenarioList.findIndex(
+    (risikoscenario) => risikoscenario.id === risikoscenarioId
+  )
 
   useEffect(() => {
-    if (risikoscenarioId) {
-      setTimeout(() => {
-        const element: HTMLElement | null = document.getElementById(risikoscenarioId)
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' })
-        }
-      }, 200)
+    if (risikoscenarioId && selectedRisikoscenarioIndex !== -1 && accordionRef.current) {
+      accordionRef.current.focus({ preventScroll: true })
+      accordionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  }, [])
+  }, [risikoscenarioId, selectedRisikoscenarioIndex])
 
   const handleAccordionChange = (risikoscenarioId?: string): void => {
     if (risikoscenarioId) {
@@ -72,11 +71,6 @@ const OppsumeringAccordianList: FunctionComponent<TProps> = ({
           { scroll: false }
         )
       }
-      setTimeout(() => {
-        if (accordionRef.current) {
-          window.scrollTo({ top: accordionRef.current.offsetTop - 30, behavior: 'smooth' })
-        }
-      }, 200)
     } else {
       setNavigateUrl(pvkDokumentasjonTabFilterUrl(steg, tabQuery, filterQuery))
       if (formRef.current?.dirty) {
@@ -90,13 +84,13 @@ const OppsumeringAccordianList: FunctionComponent<TProps> = ({
   return (
     <div>
       <Accordion>
-        {risikoscenarioList.map((risikoscenario: IRisikoscenario, index: number) => {
+        {risikoscenarioList.map((risikoscenario: IRisikoscenario) => {
           const expanded: boolean = risikoscenarioId === risikoscenario.id
 
           return (
             <Accordion.Item
               id={risikoscenario.id}
-              key={`${index}_${risikoscenario.id}`}
+              key={risikoscenario.id}
               open={expanded}
               onOpenChange={(open: boolean) => {
                 handleAccordionChange(open ? risikoscenario.id : undefined)

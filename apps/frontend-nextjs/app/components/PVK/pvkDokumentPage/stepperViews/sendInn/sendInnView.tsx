@@ -137,6 +137,9 @@ export const SendInnView: FunctionComponent<TProps> = ({
     IRisikoscenario[]
   >([])
   const [savnerVurderingError, setsavnerVurderingError] = useState<string>('')
+  const [risikoscenarioUtenVurdering, setRisikoscenarioUtenVurdering] = useState<IRisikoscenario[]>(
+    []
+  )
   const [tiltakError, setTiltakError] = useState<string>('')
   const [tiltakAnsvarligError, setTiltakAnsvarligError] = useState<string>('')
   const [tiltakFristError, setTiltakFristError] = useState<string>('')
@@ -468,6 +471,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
           risiko.nivaaBegrunnelseEtterTiltak === ''
       )
 
+    setRisikoscenarioUtenVurdering(savnerVurdering)
     setsavnerVurderingError(
       savnerVurdering.length !== 0
         ? `${savnerVurdering.length} risikoscenarioer savner en vurdering av tiltakenes effekt.`
@@ -771,6 +775,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                             tiltakFristUtgaattError={tiltakFristUtgaattError}
                             pvkKravError={pvkKravError}
                             savnerVurderingError={savnerVurderingError}
+                            risikoscenarioUtenVurdering={risikoscenarioUtenVurdering}
                             manglerBehandlingError={manglerBehandlingError}
                             errorSummaryRef={errorSummaryRef}
                           />
@@ -832,6 +837,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
+                              risikoscenarioUtenVurdering={risikoscenarioUtenVurdering}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                               marginTop={true}
@@ -878,6 +884,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
+                              risikoscenarioUtenVurdering={risikoscenarioUtenVurdering}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
@@ -926,6 +933,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               tiltakFristUtgaattError={tiltakFristUtgaattError}
                               pvkKravError={pvkKravError}
                               savnerVurderingError={savnerVurderingError}
+                              risikoscenarioUtenVurdering={risikoscenarioUtenVurdering}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
                             />
@@ -974,6 +982,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                               savnerVurderingError={savnerVurderingError}
                               manglerBehandlingError={manglerBehandlingError}
                               errorSummaryRef={errorSummaryRef}
+                              risikoscenarioUtenVurdering={risikoscenarioUtenVurdering}
                             />
                           }
                           savedAlert={

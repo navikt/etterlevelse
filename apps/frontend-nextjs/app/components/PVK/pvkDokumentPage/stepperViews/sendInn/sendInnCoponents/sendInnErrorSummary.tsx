@@ -12,6 +12,7 @@ import {
 import {
   etterlevelseDokumentasjonPvkTabUrl,
   pvkDokumentasjonStepUrl,
+  pvkDokumentasjonTabFilterRisikoscenarioUrl,
   pvkDokumentasjonTabFilterTiltakUrl,
 } from '@/routes/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensvurderingRoutes'
 import {
@@ -39,6 +40,7 @@ type TProps = {
   tiltakFristUtgaattError: string
   pvkKravError: string
   savnerVurderingError: string
+  risikoscenarioUtenVurdering: IRisikoscenario[]
   errorSummaryRef: RefObject<HTMLDivElement | null>
   marginTop?: boolean
 }
@@ -61,6 +63,7 @@ const SendInnErrorSummary: FunctionComponent<TProps> = ({
   tiltakFristUtgaattError,
   pvkKravError,
   savnerVurderingError,
+  risikoscenarioUtenVurdering,
   manglerBehandlingError,
   errorSummaryRef,
   marginTop,
@@ -311,15 +314,22 @@ const SendInnErrorSummary: FunctionComponent<TProps> = ({
               {tiltakFristError} (åpner i ny fane)
             </ErrorSummary.Item>
           )}
-          {savnerVurderingError !== '' && (
+          {risikoscenarioUtenVurdering.map((risiko) => (
             <ErrorSummary.Item
               target='_blank'
-              href={pvkDokumentasjonTabFilterTiltakUrl('7', 'risikoscenarioer', 'ikke-vurdert')}
+              href={pvkDokumentasjonTabFilterRisikoscenarioUrl(
+                '7',
+                'risikoscenarioer',
+                'ikke-vurdert',
+                risiko.id
+              )}
+              key={risiko.id}
               className='max-w-[75ch]'
             >
-              {savnerVurderingError} (åpner i ny fane)
+              Risikoscenarioet &quot;{risiko.navn}&quot; savner en vurdering av tiltakenes effekt.
+              (åpner i ny fane)
             </ErrorSummary.Item>
-          )}
+          ))}
 
           {risikoeiereDataError && (
             <ErrorSummary.Item

@@ -12,7 +12,7 @@ import {
   RadioGroup,
 } from '@navikt/ds-react'
 import { Field, FieldProps, Form, Formik } from 'formik'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   getRisikoscenario,
@@ -114,7 +114,13 @@ const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
     })
   }
 
+  const previousIsFormActive = useRef<boolean>(isFormActive)
+
   useEffect(() => {
+    if (previousIsFormActive.current === isFormActive) {
+      return
+    }
+    previousIsFormActive.current = isFormActive
     if (isFormActive) {
       const vurderTiltakForm = document.getElementById('vurderTiltakForm')
       if (vurderTiltakForm) {
