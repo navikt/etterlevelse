@@ -1,8 +1,8 @@
-import { Detail, Tag } from '@navikt/ds-react'
+import { Tag } from '@navikt/ds-react'
 
 const NyttInnholdTag = () => (
   <Tag variant='alt1' className='bg-[#DFC5FF] h-fit'>
-    <Detail>Nytt innhold</Detail>
+    Nytt innhold
   </Tag>
 )
 
