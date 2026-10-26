@@ -199,3 +199,12 @@ test('valideringsfeil lenker til hvert enkelt risikoscenario', async ({ page, co
     await newPage.close()
   }
 })
+
+test('steg 6 åpner og fokuserer risikoscenarioet fra lenken', async ({ page }) => {
+  await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`)
+
+  const selectedHeader = page.getByRole('button', { name: 'Andre risiko', exact: false })
+  await expect(selectedHeader).toHaveAttribute('aria-expanded', 'true')
+  await expect(selectedHeader).toBeFocused()
+  await expect(selectedHeader).toBeInViewport()
+})

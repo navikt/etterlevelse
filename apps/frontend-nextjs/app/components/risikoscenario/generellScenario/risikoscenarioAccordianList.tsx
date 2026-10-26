@@ -89,7 +89,9 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       setTimeout(() => {
         const element: HTMLElement | null = document.getElementById(risikoscenarioId)
         if (element) {
-          element.focus()
+          element
+            .querySelector<HTMLButtonElement>('.aksel-accordion__header')
+            ?.focus({ preventScroll: true })
           window.scrollTo({
             top: element.getBoundingClientRect().top + window.pageYOffset - 30,
             behavior: 'smooth',

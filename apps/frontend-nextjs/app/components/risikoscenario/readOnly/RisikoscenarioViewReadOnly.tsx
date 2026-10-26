@@ -28,7 +28,7 @@ const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
   > = useParams<{ etterlevelseDokumentasjonId?: string }>()
 
   return (
-    <div>
+    <div className='pt-2'>
       {!noCopyButton && (
         <CopyButton
           variant='action'

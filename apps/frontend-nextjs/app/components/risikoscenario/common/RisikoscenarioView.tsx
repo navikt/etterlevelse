@@ -31,7 +31,7 @@ const RisikoscenarioView: FunctionComponent<TProps> = ({
   const queryUrl: string = splittedUrl[1]
 
   return (
-    <div>
+    <div className='pt-2'>
       <div className='flex flex-col items-start gap-2'>
         {!noCopyButton && (
           <CopyButton
