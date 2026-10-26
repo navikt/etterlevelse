@@ -90,7 +90,12 @@ export const Markdown: FunctionComponent<TProps> = ({
       const content =
         shortenLinks && node.children[0]?.value?.indexOf('http') === 0 ? 'Lenke' : children
       return (
-        <Link className='break-all' href={href} target='_blank' rel='noopener noreferrer'>
+        <Link
+          className='break-normal wrap-anywhere'
+          href={href}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           {content} (åpner i en ny fane)
         </Link>
       )
@@ -101,7 +106,12 @@ export const Markdown: FunctionComponent<TProps> = ({
         shortenLinks && node.children[0]?.value?.indexOf('http') === 0 ? 'Lenke' : children
 
       return (
-        <Link className='break-all' href={href} target='_blank' rel='noopener noreferrer'>
+        <Link
+          className='break-normal wrap-anywhere'
+          href={href}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           {content} (åpner i en ny fane)
         </Link>
       )
