@@ -157,32 +157,42 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
                     <Tooltip content='Vis bruk'>
                       <Button
                         variant={code === selectedCode && showUsage ? 'primary' : 'tertiary'}
+                        aria-label={`Vis bruk for ${code.code}`}
+                        title='Vis bruk'
                         onClick={() => {
                           setSelectedCode(code)
                           setShowUsage(true)
                         }}
-                        icon={<GlassesIcon title='Vis bruk' />}
+                        icon={<GlassesIcon aria-hidden />}
                       />
                     </Tooltip>
-                    <AuditButton id={`${code.list}-${code.code}`} variant='tertiary' />
+                    <AuditButton
+                      id={`${code.list}-${code.code}`}
+                      variant='tertiary'
+                      aria-label={`Vis versjonering for ${code.code}`}
+                    />
                     <Tooltip content='Rediger'>
                       <Button
                         variant='tertiary'
+                        aria-label={`Rediger ${code.code}`}
+                        title='Rediger'
                         onClick={() => {
                           setSelectedCode(code)
                           setShowEditModal(true)
                         }}
-                        icon={<DocPencilIcon title='Rediger' />}
+                        icon={<DocPencilIcon aria-hidden />}
                       />
                     </Tooltip>
                     <Tooltip content='Slett'>
                       <Button
                         variant='tertiary'
+                        aria-label={`Slett ${code.code}`}
+                        title='Slett'
                         onClick={() => {
                           setSelectedCode(code)
                           setShowDeleteModal(true)
                         }}
-                        icon={<TrashIcon title='Slett' />}
+                        icon={<TrashIcon aria-hidden />}
                       />
                     </Tooltip>
                   </div>

@@ -1,4 +1,5 @@
-import { Alert, BodyShort, List, ReadMore } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyShort, InfoCard, List, ReadMore } from '@navikt/ds-react'
 import Image from 'next/image'
 import { behandlingensLivslopImage } from '../images/image'
 
@@ -14,11 +15,13 @@ const BehandlingensLivslopTextContent = () => (
       <List.Item>Hvor opplysningene flyter underveis i behandling.</List.Item>
       <List.Item>Om og hvor opplysningene sendes videre i Nav eller til eksterne.</List.Item>
     </List>
-    <Alert inline variant='info' className='mt-3'>
-      Det er kun påkrevd å tegne behandlingens livsløp hvis dere gjennomfører en PVK, men vi
-      anbefaler at alle tegner flyten. Dette vil være til hjelp når dere svarer ut etterlevelseskrav
-      innen Personvern og Arkiv og dokumentasjon.
-    </Alert>
+    <InfoCard data-color='info' className='mt-3'>
+      <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+        Det er kun påkrevd å tegne behandlingens livsløp hvis dere gjennomfører en PVK, men vi
+        anbefaler at alle tegner flyten. Dette vil være til hjelp når dere svarer ut
+        etterlevelseskrav innen Personvern og Arkiv og dokumentasjon.
+      </InfoCard.Message>
+    </InfoCard>
 
     <ReadMore header='Slik lager dere en god tegning av behandlingens livsløp' className='mt-3'>
       Du kan bruke verktøy som PowerPoint, Mural, eller Figma til å lage tegningen din som
@@ -32,8 +35,6 @@ const BehandlingensLivslopTextContent = () => (
         className='mr-2.5'
         src={behandlingensLivslopImage}
         alt='Illustrasjon på hvordan man kunne tegne behandlingens livsløp. Tegningen bruker et flytdiagram til å visualisere at visse opplysninger flyter mellom løsninger internt i Nav og utleveres eventuelt videre til omverden, for eksempel til andre offentlige etater. Illustrasjonen viser et eksempel der hvis X gjelder, flyter opplysninger en vei gjennom systemene, mens hvis Y gjelder, så tar opplysninger en annen rute. Illustrasjonen nevner også at P personer har tilgang til et visst saksystem, mens Q personer har tilgang til et annet.'
-        aria-hidden
-        aria-label=''
       />
       <br />
       Noen tips til hvordan lage gode tegninger:

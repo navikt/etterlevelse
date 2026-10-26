@@ -17,10 +17,12 @@ interface IAuditButtonProps extends ButtonProps {
 export const AuditButton: FunctionComponent<IAuditButtonProps> = (props) => {
   const { id, auditId, marginLeft, marginRight, children, ...restProps } = props
   const user = useContext(UserContext)
+
   return (
     <>
       {user.isAdmin() && (
         <Link
+          aria-label='Versjonering'
           className={`${marginLeft ? 'ml-2' : ''} ${marginRight ? 'mr-2' : ''}`}
           href={adminAuditUrl(id) + (auditId ? `?auditId=${auditId}` : '')}
         >
@@ -28,7 +30,12 @@ export const AuditButton: FunctionComponent<IAuditButtonProps> = (props) => {
           {!children && (
             <>
               <Tooltip content='Versjon'>
-                <Button {...restProps} icon={<ClockDashedIcon title='Versjonering' />} />
+                <Button
+                  {...restProps}
+                  aria-label='Versjonering'
+                  title='Versjonering'
+                  icon={<ClockDashedIcon aria-hidden />}
+                />
               </Tooltip>
             </>
           )}
