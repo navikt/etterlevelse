@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client/react'
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons'
-import { Alert, BodyShort, Heading, InfoCard, ReadMore, Tag } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import { BodyShort, Heading, InfoCard, ReadMore, Tag } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import moment from 'moment'
 import {
@@ -223,10 +223,12 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               </Heading>
 
               {krav.varselMelding && (
-                <div>
-                  <Alert size='small' variant='info' className='w-fit'>
-                    {krav.varselMelding}
-                  </Alert>
+                <div className='my-3'>
+                  <InfoCard data-color='info' className='w-fit' size='small'>
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                      {krav.varselMelding}
+                    </InfoCard.Message>
+                  </InfoCard>
                 </div>
               )}
             </div>
