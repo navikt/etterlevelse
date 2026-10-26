@@ -79,7 +79,7 @@ const SendTilPvo: FunctionComponent<TProps> = ({
 
         {errorComponent}
 
-        {!hasP360User && <P360IngenBrukerAlert />}
+        {!hasP360User && <P360IngenBrukerAlert forPvk={true} />}
 
         <div className='mt-5 flex justify-end gap-2 items-center'>
           <LagreOgFortsettSenereButton

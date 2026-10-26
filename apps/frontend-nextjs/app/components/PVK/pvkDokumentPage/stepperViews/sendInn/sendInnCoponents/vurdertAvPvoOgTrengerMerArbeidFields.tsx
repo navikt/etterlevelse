@@ -127,7 +127,7 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
             </div>
           </div>
 
-          {!hasP360User && <P360IngenBrukerAlert />}
+          {!hasP360User && <P360IngenBrukerAlert forPvk={true} />}
 
           {userHasAccess && (
             <div className='mt-5 flex gap-2 items-center'>

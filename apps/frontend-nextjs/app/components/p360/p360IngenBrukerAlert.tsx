@@ -1,11 +1,18 @@
 'use client'
 
 import { Link, LocalAlert } from '@navikt/ds-react'
+import { FunctionComponent } from 'react'
 
-const P360IngenBrukerAlert = () => (
+type TProps = {
+  forPvk?: boolean
+}
+
+const P360IngenBrukerAlert: FunctionComponent<TProps> = ({ forPvk }) => (
   <LocalAlert status='warning' className='max-w-[75ch] my-5'>
     <LocalAlert.Header>
-      <LocalAlert.Title>Du må ha tilgang til Public 360 for å kunne sende inn PVK</LocalAlert.Title>
+      <LocalAlert.Title>
+        Du må ha tilgang til Public 360 for å kunne sende inn {forPvk ? 'PVK' : 'Etterlevelse'}
+      </LocalAlert.Title>
     </LocalAlert.Header>
     <LocalAlert.Content>
       For å kunne sende inn, må du ha en gyldig bruker i Public 360. Det er din nærmeste leder som

@@ -140,7 +140,7 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                   <div>{!fieldProps.form.dirty && savedAlert}</div>
                 </div>
 
-                {!hasP360User && <P360IngenBrukerAlert />}
+                {!hasP360User && <P360IngenBrukerAlert forPvk={true} />}
 
                 <div className='mt-5 flex gap-2 items-center'>
                   <LagreOgFortsettSenereButton
