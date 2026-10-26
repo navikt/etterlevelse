@@ -21,13 +21,14 @@ import java.util.UUID;
 @Entity
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert kun på id
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = PvoTilbakemelding.TABLENAME)
 public class PvoTilbakemelding extends Auditable {
 
     @Id
+    @EqualsAndHashCode.Include
     @Builder.Default
     @Column(name = "ID")
     private UUID id = UUID.randomUUID();

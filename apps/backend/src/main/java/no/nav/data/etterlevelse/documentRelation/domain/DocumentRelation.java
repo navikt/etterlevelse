@@ -22,13 +22,14 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name = "DOCUMENT_RELATION")
 public class DocumentRelation extends Auditable {
 
     @Id
     @Builder.Default
+    @EqualsAndHashCode.Include
     @Column(name = "ID")
     private UUID id = UUID.randomUUID();
 

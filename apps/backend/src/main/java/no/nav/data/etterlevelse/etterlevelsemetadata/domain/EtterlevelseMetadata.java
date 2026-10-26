@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Data
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert kun på id
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -29,6 +29,7 @@ public class EtterlevelseMetadata extends Auditable implements KravId {
 
     @Id
     @Column(name = "ID")
+    @EqualsAndHashCode.Include
     @Builder.Default
     private UUID id = UUID.randomUUID();
 

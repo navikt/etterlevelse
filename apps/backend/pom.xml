@@ -42,8 +42,6 @@
         <testcontainers.version>2.0.5</testcontainers.version>
         <wiremock.version>3.0.1</wiremock.version>
         <docx4j.version>17.3.3</docx4j.version>
-
-
     </properties>
 
     <dependencies>
@@ -324,6 +322,12 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- Kreves for å kjøre JUnit 6-tester i Eclipse -->
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

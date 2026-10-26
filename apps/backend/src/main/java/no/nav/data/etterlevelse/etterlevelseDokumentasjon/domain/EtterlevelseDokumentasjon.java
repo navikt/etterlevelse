@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false) // Basert kun på id
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -32,6 +32,7 @@ import java.util.UUID;
 public class EtterlevelseDokumentasjon extends Auditable  {
 
     @Id
+    @EqualsAndHashCode.Include
     @Builder.Default
     @Column(name = "ID")
     private UUID id = UUID.randomUUID();

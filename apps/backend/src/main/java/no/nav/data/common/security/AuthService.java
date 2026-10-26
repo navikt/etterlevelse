@@ -65,7 +65,6 @@ public class AuthService {
     public Auth createAuth() {
         String codeVerifier = genChallengeKey();
         return authRepository.save(Auth.builder()
-                .generateId()
                 .userId("")
                 .encryptedRefreshToken(codeVerifier)
                 .initiated(LocalDateTime.now())

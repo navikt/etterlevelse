@@ -149,7 +149,7 @@ public class KravService {
             krav.setKravNummer(repo.nextKravNummer());
         }
         
-        if (krav.getId() != null) {
+        if (request.isUpdate()) {
             List<AuditVersion> kravAudits = auditVersionService.getByTableIdAndTimestamp(krav.getId(), LocalDateTime.now());
             KravStatus previousKravStatus = getKravStatus(kravAudits.get(0));
             if (previousKravStatus != KravStatus.AKTIV && krav.getStatus() == KravStatus.AKTIV) {
@@ -179,7 +179,7 @@ public class KravService {
         try {
             JsonNode root = JsonUtils.getObjectReader().readTree(auditVersion.getData());
             // The path to status is the same, regardless of what the archived krav is (GenStore vs. Krav)
-            String statusText = root.at("/data/status").asText();
+            String statusText = root.at("/data/status").asString();
             return KravStatus.valueOf(statusText);
         } catch (JacksonException e) {
             log.error("Could not extract Krav.status from json");
