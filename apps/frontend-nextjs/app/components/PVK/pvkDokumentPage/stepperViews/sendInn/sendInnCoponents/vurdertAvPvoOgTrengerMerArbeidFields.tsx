@@ -15,6 +15,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { ICode } from '@/constants/kodeverk/kodeverkConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
+import { env } from '@/util/env/env'
 import { pvkDokumentStatusToText } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import TilbakemeldingsHistorikk from './readOnly/TilbakemeldingsHistorikk'
 
@@ -138,7 +139,7 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
                 resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
               />
 
-              {hasP360User && (
+              {(hasP360User || env.isDev) && (
                 <Button
                   type='button'
                   variant='primary'

@@ -4,6 +4,7 @@ import { FunctionComponent, ReactNode } from 'react'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
 import { EPvkDokumentStatus } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { env } from '@/util/env/env'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {
@@ -53,7 +54,7 @@ const SendTilRisikoeier: FunctionComponent<TProps> = ({
         resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
       />
 
-      {hasP360User && (
+      {(hasP360User || env.isDev) && (
         <Button
           type='button'
           onClick={async () => {

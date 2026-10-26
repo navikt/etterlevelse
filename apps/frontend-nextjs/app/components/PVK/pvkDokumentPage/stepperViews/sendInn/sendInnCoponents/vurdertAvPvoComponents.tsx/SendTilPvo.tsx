@@ -7,6 +7,7 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { env } from '@/util/env/env'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 
 type TProps = {
@@ -88,7 +89,7 @@ const SendTilPvo: FunctionComponent<TProps> = ({
             initialStatus={fieldProps.form.initialValues.status}
             resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
           />
-          {hasP360User && (
+          {(hasP360User || env.isDev) && (
             <Button
               type='button'
               variant='primary'

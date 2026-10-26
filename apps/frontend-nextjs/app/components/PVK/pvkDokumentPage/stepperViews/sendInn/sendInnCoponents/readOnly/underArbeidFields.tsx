@@ -11,6 +11,7 @@ import {
   IMeldingTilPvo,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { env } from '@/util/env/env'
 import LagreOgFortsettSenereButton from '../lagreOgFortsettSenereButton'
 import SendTilRisikoeier from '../vurdertAvPvoComponents.tsx/SendTilRisikoeier'
 
@@ -150,7 +151,7 @@ const UnderArbeidFields: FunctionComponent<TProps> = ({
                     resetForm={() => fieldProps.form.resetForm({ values: fieldProps.form.values })}
                   />
 
-                  {hasP360User && (
+                  {(hasP360User || env.isDev) && (
                     <Button
                       type='button'
                       onClick={async () => {

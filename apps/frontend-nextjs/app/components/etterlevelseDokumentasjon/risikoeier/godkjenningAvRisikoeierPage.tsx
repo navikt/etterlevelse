@@ -44,6 +44,7 @@ import { UserContext } from '@/provider/user/userProvider'
 import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { dokumentasjonerBreadCrumbPath } from '@/util/breadCrumbPath/breadCrumbPath'
+import { env } from '@/util/env/env'
 import {
   filterEtterlevelseDokumentasjonStatsData,
   getKravForTema,
@@ -401,7 +402,7 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
                               Lagre og fortsett senere
                             </Button>
 
-                            {hasP360User && (
+                            {(hasP360User || env.isDev) && (
                               <Button
                                 type='button'
                                 variant='primary'

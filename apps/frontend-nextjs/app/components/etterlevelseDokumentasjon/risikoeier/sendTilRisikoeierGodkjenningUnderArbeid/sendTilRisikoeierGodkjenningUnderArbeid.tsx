@@ -19,6 +19,7 @@ import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { env } from '@/util/env/env'
 import { sendTilRisikoGodkjenningSchema } from '../sendTilrisikoeierGodkjenningSchema'
 
 type TProp = {
@@ -153,7 +154,7 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
 
               {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
                 !pvkBlocksSending &&
-                hasP360User && (
+                (hasP360User || env.isDev) && (
                   <Button
                     type='button'
                     variant='primary'
