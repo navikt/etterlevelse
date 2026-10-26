@@ -1,14 +1,5 @@
 package no.nav.data.etterlevelse.export;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.ZipFile;
@@ -50,7 +41,15 @@ import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.risikoscenario.dto.RisikoscenarioResponse;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.dto.TiltakResponse;
+import org.springframework.stereotype.Service;
 import tools.jackson.databind.JsonNode;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -109,6 +108,9 @@ public class PvkDokumentToDoc {
             if (!risikoscenario.isGenerelScenario()) {
                 risikoscenario.getRelevanteKravNummer().forEach(kravShort -> {
                     List<Krav> kravList = kravService.findByKravNummerAndActiveStatus(kravShort.getKravNummer());
+                    if (kravList.isEmpty()) {
+                        return;
+                    }
                     try {
                         RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
                         JsonNode lovData = regelverk.getLov().getData();
