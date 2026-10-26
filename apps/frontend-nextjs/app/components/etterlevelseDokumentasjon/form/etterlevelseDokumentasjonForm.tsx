@@ -1159,26 +1159,17 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                   <InfoCard.Title>ADMIN STUFFSSSS</InfoCard.Title>
                 </InfoCard.Header>
                 <InfoCard.Content>
-                  {env.isDev && (
-                    <>
-                      <div className='mt-5'>
-                        <TextAreaField
-                          rows={1}
-                          noPlaceholder
-                          label='P360 recnummer KUN I DEV'
-                          name='p360Recno'
-                        />
+                  <div className='mt-5'>
+                    <TextAreaField rows={1} noPlaceholder label='P360 recnummer' name='p360Recno' />
 
-                        <div className='mt-5'></div>
-                        <TextAreaField
-                          rows={1}
-                          noPlaceholder
-                          label='P360 saknummer  KUN I DEV'
-                          name='p360CaseNumber'
-                        />
-                      </div>
-                    </>
-                  )}
+                    <div className='mt-5'></div>
+                    <TextAreaField
+                      rows={1}
+                      noPlaceholder
+                      label='P360 saknummer'
+                      name='p360CaseNumber'
+                    />
+                  </div>
 
                   <div className='mt-5'>
                     <Select
