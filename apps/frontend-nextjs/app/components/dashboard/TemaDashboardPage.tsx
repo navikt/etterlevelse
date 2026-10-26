@@ -12,6 +12,7 @@ import {
   Select,
   Tabs,
 } from '@navikt/ds-react'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import {
@@ -20,7 +21,7 @@ import {
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
-import { useSearchTeamOptions } from '@/api/teamkatalogen/teamkatalogenApi'
+import { useSearchTeamOptions, useTeam } from '@/api/teamkatalogen/teamkatalogenApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
@@ -31,6 +32,7 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { TemaDashboardHowToReadmore } from './DashboardReadmore/TemaDashboardHowToReadmore'
 import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
@@ -475,12 +477,28 @@ const TemaDashboardPage = () => {
   const [avdelinger, setAvdelinger] = useState<IAvdelingDashboardStats[]>([])
   const [seksjoner, setSeksjoner] = useState<ISeksjonOption[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedTema, setSelectedTema] = useState<string>('')
-  const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
-  const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
-  const [selectedEnhet, setSelectedEnhet] = useState<string>('')
+  const searchParams = useSearchParams()
+  const teamName = useTeam()
+  const [selectedTema, setSelectedTema] = useState<string>(() => searchParams.get('tema') ?? '')
+  const [selectedAvdeling, setSelectedAvdeling] = useState<string>(
+    () => searchParams.get('avdeling') ?? ''
+  )
+  const [selectedSeksjon, setSelectedSeksjon] = useState<string>(
+    () => searchParams.get('seksjon') ?? ''
+  )
+  const [selectedEnhet, setSelectedEnhet] = useState<string>(() => searchParams.get('enhet') ?? '')
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
-  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
+  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>(() =>
+    searchParams.getAll('team').map((id) => ({ id, name: '' }))
+  )
+
+  useUrlFilterSync({
+    tema: selectedTema,
+    avdeling: selectedAvdeling,
+    seksjon: selectedSeksjon,
+    enhet: selectedEnhet,
+    team: selectedTeams.map((team) => team.id),
+  })
 
   useEffect(() => {
     getDashboardStats()
@@ -693,7 +711,7 @@ const TemaDashboardPage = () => {
             </Button>
           </div>
           <RenderTagList
-            list={selectedTeams.map((team) => team.name)}
+            list={selectedTeams.map((team) => team.name || teamName(team.id)[0])}
             onRemove={(index) => {
               setIsLoading(true)
               setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
