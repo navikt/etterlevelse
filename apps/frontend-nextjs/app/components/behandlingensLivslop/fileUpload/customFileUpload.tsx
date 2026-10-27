@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Alert,
   FileObject,
   FileRejected,
   FileRejectionReason,
@@ -99,6 +98,7 @@ const CustomFileUpload = (props: IProps) => {
         }}
         onSelect={(newFiles: FileObject[]) => {
           setFileUploadAlert(false)
+          setFileUploadError(false)
           setFiles([...files, ...newFiles])
           setFilesToUpload([
             ...files.map((file) => file.file),
@@ -109,23 +109,24 @@ const CustomFileUpload = (props: IProps) => {
       />
 
       {fileUploadAlert && (
-        <Alert
+        <LocalAlert
+          status={fileUploadError ? 'error' : 'success'}
           role='status'
-          variant={fileUploadError ? 'error' : 'success'}
-          closeButton
-          onClose={() => {
-            setFileUploadAlert(false)
-            setFileUploadError(false)
-          }}
+          aria-live={fileUploadError ? 'assertive' : 'polite'}
         >
-          {fileUploadError
-            ? 'Filopplasting har feilet. Sjekk at du har riktig filformat og prøv igjen. Passende filformater er PNG, PDF, JPG eller JPG.'
-            : 'Filen din er lastet opp.'}
-        </Alert>
+          <LocalAlert.Header>
+            <LocalAlert.Title>
+              {fileUploadError
+                ? 'Filopplasting har feilet. Sjekk at du har riktig filformat og prøv igjen. Passende filformater er PNG, PDF, JPG eller JPG.'
+                : 'Filen din er lastet opp.'}
+            </LocalAlert.Title>
+            <LocalAlert.CloseButton onClick={() => setFileUploadAlert(false)} />
+          </LocalAlert.Header>
+        </LocalAlert>
       )}
 
       {fileDeleteAlert && (
-        <LocalAlert status='success'>
+        <LocalAlert status='success' role='status' aria-live='polite'>
           <LocalAlert.Header>
             <LocalAlert.Title>Filen din ble slettet.</LocalAlert.Title>
             <LocalAlert.CloseButton onClick={() => setFileDeleteAlert(false)} />
