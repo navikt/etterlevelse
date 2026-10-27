@@ -17,6 +17,7 @@ import {
   Tabs,
   Tag,
 } from '@navikt/ds-react'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import {
@@ -27,7 +28,7 @@ import {
   getTemaDashboardStats,
 } from '@/api/dashboard/dashboardApi'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
-import { useSearchTeamOptions } from '@/api/teamkatalogen/teamkatalogenApi'
+import { useSearchTeamOptions, useTeam } from '@/api/teamkatalogen/teamkatalogenApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
@@ -41,6 +42,7 @@ import {
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { handleSort } from '@/util/handleTableSort'
+import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { TemaDashboardDetailHowToReadmore } from './DashboardReadmore/TemaDashboardDetailHowToReadmore'
 import { TemaDashboardDetailKravReadmore } from './DashboardReadmore/TemaDashboardDetailKravReadmore'
@@ -284,6 +286,8 @@ const exportKravToCsv = (
   URL.revokeObjectURL(url)
 }
 
+const TEMA_TABS = ['figurer', 'nokkeltall', 'etterlevelsesdokumenter']
+
 const TemaDetailPage = ({ temaCode }: IProps) => {
   const [temaStats, setTemaStats] = useState<ITemaDashboardStats | null>(null)
   const [temaDisplayName, setTemaDisplayName] = useState<string>(temaCode)
@@ -293,24 +297,54 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [kravSeksjoner, setKravSeksjoner] = useState<ISeksjonOption[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isKravLoading, setIsKravLoading] = useState(true)
-  const [selectedAvdeling, setSelectedAvdeling] = useState<string>('')
-  const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
-  const [selectedKravAvdeling, setSelectedKravAvdeling] = useState<string>('')
-  const [selectedKravSeksjon, setSelectedKravSeksjon] = useState<string>('')
-  const [selectedEnhet, setSelectedEnhet] = useState<string>('')
-  const [selectedKravEnhet, setSelectedKravEnhet] = useState<string>('')
+  const searchParams = useSearchParams()
+  const teamName = useTeam()
+  const [selectedAvdeling, setSelectedAvdeling] = useState<string>(
+    () => searchParams.get('avdeling') ?? ''
+  )
+  const [selectedSeksjon, setSelectedSeksjon] = useState<string>(
+    () => searchParams.get('seksjon') ?? ''
+  )
+  const [selectedKravAvdeling, setSelectedKravAvdeling] = useState<string>(
+    () => searchParams.get('kravAvdeling') ?? ''
+  )
+  const [selectedKravSeksjon, setSelectedKravSeksjon] = useState<string>(
+    () => searchParams.get('kravSeksjon') ?? ''
+  )
+  const [selectedEnhet, setSelectedEnhet] = useState<string>(() => searchParams.get('enhet') ?? '')
+  const [selectedKravEnhet, setSelectedKravEnhet] = useState<string>(
+    () => searchParams.get('kravEnhet') ?? ''
+  )
   const [enheter, setEnheter] = useState<IOrgEnhet[]>([])
   const [kravEnheter, setKravEnheter] = useState<IOrgEnhet[]>([])
-  const [selectedKrav, setSelectedKrav] = useState<string>('')
-  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>([])
+  const [selectedKrav, setSelectedKrav] = useState<string>(() => searchParams.get('krav') ?? '')
+  const [selectedTeams, setSelectedTeams] = useState<{ id: string; name: string }[]>(() =>
+    searchParams.getAll('team').map((id) => ({ id, name: '' }))
+  )
   const [dokTableData, setDokTableData] = useState<IDashboardTable[]>([])
   const [isTableLoading, setIsTableLoading] = useState(true)
   const [tableSort, setTableSort] = useState<SortState | undefined>()
+  const [temaTab, setTemaTab] = useState<string>(() => {
+    const tab = searchParams.get('tab') ?? ''
+    return TEMA_TABS.includes(tab) ? tab : 'figurer'
+  })
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
   const seksjonRequestId = useRef(0)
   const kravSeksjonRequestId = useRef(0)
   const tableRequestId = useRef(0)
+
+  useUrlFilterSync({
+    avdeling: selectedAvdeling,
+    seksjon: selectedSeksjon,
+    enhet: selectedEnhet,
+    team: selectedTeams.map((team) => team.id),
+    krav: selectedKrav,
+    kravAvdeling: selectedKravAvdeling,
+    kravSeksjon: selectedKravSeksjon,
+    kravEnhet: selectedKravEnhet,
+    tab: temaTab === 'figurer' ? undefined : temaTab,
+  })
 
   useEffect(() => {
     getDashboardStats()
@@ -815,7 +849,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
             </Button>
           </div>
           <RenderTagList
-            list={selectedTeams.map((team) => team.name)}
+            list={selectedTeams.map((team) => team.name || teamName(team.id)[0])}
             variant='action'
             onRemove={(index) => {
               setIsLoading(true)
@@ -832,7 +866,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
         )}
 
         {temaStats && (
-          <Tabs className='mt-6' defaultValue='figurer'>
+          <Tabs className='mt-6' value={temaTab} onChange={setTemaTab}>
             <Tabs.List>
               <Tabs.Tab value='figurer' label='Vis figurer' />
               <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
