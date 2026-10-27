@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private EtterlevelseStatus status;
     private boolean ikkeBehovForRevurdering;
     private List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelser;
+    private LocalDateTime endretInnholdDato;
 
     private Boolean update;
     private boolean prioritised;
@@ -77,6 +79,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
         etterlevelse.setFristForFerdigstillelse(fristForFerdigstillelse);
         etterlevelse.setStatus(status);
         etterlevelse.setIkkeBehovForRevurdering(ikkeBehovForRevurdering);
+        etterlevelse.setEndretInnholdDato(endretInnholdDato);
         etterlevelse.setSuksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser, SuksesskriterieBegrunnelseRequest::convertTo));
         return etterlevelse;
     }

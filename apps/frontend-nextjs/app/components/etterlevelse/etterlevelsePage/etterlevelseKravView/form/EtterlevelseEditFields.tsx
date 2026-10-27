@@ -237,7 +237,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         {moment(initialValues.changeStamp.lastModifiedDate).isAfter(
                           newVersjonDate
                         ) && (
-                          <InfoCard data-color='info' className='mb-1' size='small'>
+                          <InfoCard data-color='info' className='my-3'>
                             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
                               Det er ikke mulig å markere dette kravet som “ikke behov for
                               revurdering” fordi dere har gjort endringer siden siste gang
