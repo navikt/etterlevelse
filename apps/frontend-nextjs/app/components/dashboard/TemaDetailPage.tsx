@@ -286,6 +286,8 @@ const exportKravToCsv = (
   URL.revokeObjectURL(url)
 }
 
+const TEMA_TABS = ['figurer', 'nokkeltall', 'etterlevelsesdokumenter']
+
 const TemaDetailPage = ({ temaCode }: IProps) => {
   const [temaStats, setTemaStats] = useState<ITemaDashboardStats | null>(null)
   const [temaDisplayName, setTemaDisplayName] = useState<string>(temaCode)
@@ -322,6 +324,10 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const [dokTableData, setDokTableData] = useState<IDashboardTable[]>([])
   const [isTableLoading, setIsTableLoading] = useState(true)
   const [tableSort, setTableSort] = useState<SortState | undefined>()
+  const [temaTab, setTemaTab] = useState<string>(() => {
+    const tab = searchParams.get('tab') ?? ''
+    return TEMA_TABS.includes(tab) ? tab : 'figurer'
+  })
   const temaRequestId = useRef(0)
   const kravRequestId = useRef(0)
   const seksjonRequestId = useRef(0)
@@ -337,6 +343,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
     kravAvdeling: selectedKravAvdeling,
     kravSeksjon: selectedKravSeksjon,
     kravEnhet: selectedKravEnhet,
+    tab: temaTab === 'figurer' ? undefined : temaTab,
   })
 
   useEffect(() => {
@@ -859,7 +866,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
         )}
 
         {temaStats && (
-          <Tabs className='mt-6' defaultValue='figurer'>
+          <Tabs className='mt-6' value={temaTab} onChange={setTemaTab}>
             <Tabs.List>
               <Tabs.Tab value='figurer' label='Vis figurer' />
               <Tabs.Tab value='nokkeltall' label='Vis nøkkeltall' />
