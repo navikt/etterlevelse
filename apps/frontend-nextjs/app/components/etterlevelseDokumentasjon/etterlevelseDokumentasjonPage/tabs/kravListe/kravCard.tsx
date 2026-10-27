@@ -217,6 +217,10 @@ export const KravCard = (props: IProps) => {
                 />
               )}
 
+            <Tag variant='outline' data-color='neutral' className='h-fit'>
+              <Detail>Ikke behov for revurdering</Detail>
+            </Tag>
+
             {etterlevelseDokumentasjon.etterlevelseDokumentVersjon >= 2 &&
               krav.etterlevelseIkkeBehovForRevurdering && (
                 <Tag variant='outline' data-color='neutral' className='h-fit'>

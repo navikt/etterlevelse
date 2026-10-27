@@ -212,8 +212,9 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                   {etterlevelseDokumentasjon &&
                     etterlevelseDokumentasjon.etterlevelseDokumentVersjon >= 2 && (
                       <div>
-                        {moment(initialValues.changeStamp.lastModifiedDate).isBefore(
-                          newVersjonDate
+                        {moment(initialValues.endretInnholdDato).isBefore(
+                          newVersjonDate,
+                          'second'
                         ) && (
                           <CheckboxGroup
                             legend='Legg til i Prioritert kravliste'
@@ -238,8 +239,9 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           </CheckboxGroup>
                         )}
 
-                        {moment(initialValues.changeStamp.lastModifiedDate).isAfter(
-                          newVersjonDate
+                        {moment(initialValues.endretInnholdDato).isAfter(
+                          newVersjonDate,
+                          'second'
                         ) && (
                           <InfoCard data-color='info' className='my-3'>
                             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
