@@ -280,6 +280,13 @@ public class EtterlevelseDokumentasjonService {
             throw new ValidationException("Kan ikke øke versjon fordi det tilhørende PVK dokumentet ikke er godkjent av risikoeier.");
         }
 
+        //setter alle etterlevelses merket med ikke behov for revurdering til false når en ny versjon opprettes
+        List<Etterlevelse> etterlevelserIkkeBehovForRevurdering = etterlevelseService.getIkkeBehovForRevurderingByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId());
+        etterlevelserIkkeBehovForRevurdering.forEach(etterlevelse -> {
+            etterlevelse.setIkkeBehovForRevurdering(false);
+            etterlevelseService.save(etterlevelse);
+        });
+
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setStatus(EtterlevelseDokumentasjonStatus.UNDER_ARBEID);
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() + 1);
 
@@ -315,13 +322,6 @@ public class EtterlevelseDokumentasjonService {
                         .versjon(request.getEtterlevelseDokumentVersjon() + 1)
                         .build()
         );
-
-        //setter alle etterlevelses merket med ikke behov for revurdering til false når en ny versjon opprettes
-        List<Etterlevelse> etterlevelserIkkeBehovForRevurdering = etterlevelseService.getIkkeBehovForRevurderingByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId());
-        etterlevelserIkkeBehovForRevurdering.forEach(etterlevelse -> {
-            etterlevelse.setIkkeBehovForRevurdering(false);
-            etterlevelseService.save(etterlevelse);
-        });
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }

@@ -107,6 +107,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               id
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
+              ikkeBehovForRevurdering
               suksesskriterieBegrunnelser {
                 suksesskriterieStatus
               }
@@ -143,6 +144,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               status
               etterlevelseDokumentasjonId
               fristForFerdigstillelse
+              ikkeBehovForRevurdering
               suksesskriterieBegrunnelser {
                 suksesskriterieStatus
               }
@@ -178,6 +180,7 @@ export const getEtterlevelseDokumentasjonStatsQuery = gql`
               behandlingId
               status
               etterlevelseDokumentasjonId
+              ikkeBehovForRevurdering
               suksesskriterieBegrunnelser {
                 suksesskriterieStatus
               }

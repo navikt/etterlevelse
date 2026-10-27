@@ -16,7 +16,7 @@ import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormEr
 import _ from 'lodash'
 import moment from 'moment'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { getDocumentRelationByToIdAndRelationType } from '@/api/dokumentRelasjon/dokumentRelasjonApi'
 import {
   getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber,
@@ -110,6 +110,16 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
 
   const router = useRouter()
   const initialValues = mapEtterlevelseToFormValue(editedEtterlevelse || etterlevelse, krav)
+  const newVersjonDate = useMemo(() => {
+    if (etterlevelseDokumentasjon && etterlevelseDokumentasjon.etterlevelseDokumentVersjon >= 2) {
+      const currentVersion = etterlevelseDokumentasjon.etterlevelseDokumentVersjon
+      return etterlevelseDokumentasjon.versjonHistorikk.filter(
+        (historikk) => historikk.versjon === currentVersion - 1
+      )[0].nyVersjonOpprettetDato
+    } else {
+      return ''
+    }
+  }, [etterlevelseDokumentasjon])
 
   useEffect(() => {
     ;(async () => {
@@ -195,27 +205,48 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
             {!isPreview && (
               <div className='flex flex-col'>
                 <Form>
-                  <CheckboxGroup
-                    legend='Legg til i Prioritert kravliste'
-                    hideLegend
-                    onChange={(value: string[]) => {
-                      if (value.includes('check')) {
-                        setIsIkkeBehovForRevurdering(true)
-                        setFieldValue('ikkeBehovForRevurdering', true)
-                      } else {
-                        setIsIkkeBehovForRevurdering(false)
-                        setFieldValue('ikkeBehovForRevurdering', false)
-                      }
-                    }}
-                    value={isIkkeBehovForRevurdering ? ['check'] : []}
-                  >
-                    <Checkbox
-                      value='check'
-                      description='Kravet er satt til lesemodus, men dere kan ombestemme dere senere.  Krav markert som “ikke behov for redigering” kan filtreres bort på temaside for å gi bedre oversikt over hvilke krav som gjenstår å dokumentere.'
-                    >
-                      Marker dette kravet som “ikke behov for revurdering”
-                    </Checkbox>
-                  </CheckboxGroup>
+                  {etterlevelseDokumentasjon &&
+                    etterlevelseDokumentasjon.etterlevelseDokumentVersjon >= 2 && (
+                      <div>
+                        {moment(initialValues.changeStamp.lastModifiedDate).isBefore(
+                          newVersjonDate
+                        ) && (
+                          <CheckboxGroup
+                            legend='Legg til i Prioritert kravliste'
+                            hideLegend
+                            onChange={(value: string[]) => {
+                              if (value.includes('check')) {
+                                setIsIkkeBehovForRevurdering(true)
+                                setFieldValue('ikkeBehovForRevurdering', true)
+                              } else {
+                                setIsIkkeBehovForRevurdering(false)
+                                setFieldValue('ikkeBehovForRevurdering', false)
+                              }
+                            }}
+                            value={isIkkeBehovForRevurdering ? ['check'] : []}
+                          >
+                            <Checkbox
+                              value='check'
+                              description='Kravet er satt til lesemodus, men dere kan ombestemme dere senere.  Krav markert som “ikke behov for redigering” kan filtreres bort på temaside for å gi bedre oversikt over hvilke krav som gjenstår å dokumentere.'
+                            >
+                              Marker dette kravet som “ikke behov for revurdering”
+                            </Checkbox>
+                          </CheckboxGroup>
+                        )}
+
+                        {moment(initialValues.changeStamp.lastModifiedDate).isAfter(
+                          newVersjonDate
+                        ) && (
+                          <InfoCard data-color='info' className='mb-1' size='small'>
+                            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                              Det er ikke mulig å markere dette kravet som “ikke behov for
+                              revurdering” fordi dere har gjort endringer siden siste gang
+                              kravdokumentasjonen ble godkjent av risikoeier.
+                            </InfoCard.Message>
+                          </InfoCard>
+                        )}
+                      </div>
+                    )}
 
                   <div>
                     {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
