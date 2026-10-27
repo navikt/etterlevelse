@@ -202,7 +202,7 @@ export const KravCard = (props: IProps) => {
           </div>
         </div>
         {krav && (
-          <div className='self-center flex gap-2'>
+          <div className='self-center grid grid-cols-2 gap-2'>
             {user.isPersonvernombud() && nyttInnholdFlag && isPvkKrav && <NyttInnholdTag />}
 
             {kravMedRelevantRisikoscenario && (
