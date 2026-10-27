@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyShort, Detail, LinkPanel, Tag } from '@navikt/ds-react'
+import { BodyLong, Detail, LinkPanel, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
@@ -177,7 +177,7 @@ export const KravCard = (props: IProps) => {
               )}
             </div>
           </div>
-          <BodyShort>{krav.navn}</BodyShort>
+          <BodyLong>{krav.navn}</BodyLong>
           <div className='flex gap-2'>
             {!krav.isIrrelevant && (
               <div className='md:flex w-full gap-2'>
@@ -200,11 +200,15 @@ export const KravCard = (props: IProps) => {
               </div>
             )}
           </div>
+
+          {user.isPersonvernombud() && nyttInnholdFlag && isPvkKrav && (
+            <div className='mt-3'>
+              <NyttInnholdTag />
+            </div>
+          )}
         </div>
         {krav && (
-          <div className='self-center grid grid-cols-2 gap-2'>
-            {user.isPersonvernombud() && nyttInnholdFlag && isPvkKrav && <NyttInnholdTag />}
-
+          <div className='self-center flex gap-2'>
             {kravMedRelevantRisikoscenario && (
               <StatusView status='Inneholder risikoscenario' variant='alt1' />
             )}
@@ -216,10 +220,6 @@ export const KravCard = (props: IProps) => {
                   variant={getStatusLabelColor(krav.etterlevelseStatus)}
                 />
               )}
-
-            <Tag variant='outline' data-color='neutral' className='h-fit'>
-              <Detail>Ikke behov for revurdering</Detail>
-            </Tag>
 
             {etterlevelseDokumentasjon.etterlevelseDokumentVersjon >= 2 &&
               krav.etterlevelseIkkeBehovForRevurdering && (
