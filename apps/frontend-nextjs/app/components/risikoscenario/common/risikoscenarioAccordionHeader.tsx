@@ -48,7 +48,7 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
 
         {risikoscenario.generelScenario && (
           <Tag className='bg-white' variant='neutral'>
-            Øvrig
+            Ikke-kravspesifikt risikoscenario
           </Tag>
         )}
         {risikoscenario.relevanteKravNummer.map((krav: IKravReference, index: number) => (
