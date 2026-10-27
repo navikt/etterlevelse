@@ -160,17 +160,21 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   return (
     <div className='w-full'>
       <Formik
-        onSubmit={(values) =>
+        onSubmit={(values) => {
+          const suksesskriterieBegrunnelserUnchanged = _.isEqual(
+            _.sortBy(initialValues.suksesskriterieBegrunnelser, 'suksesskriterieId'),
+            _.sortBy(values.suksesskriterieBegrunnelser, 'suksesskriterieId')
+          )
           submit({
             ...values,
-            ikkeBehovForRevurdering: _.isEqual(
-              _.sortBy(initialValues.suksesskriterieBegrunnelser, 'suksesskriterieId'),
-              _.sortBy(values.suksesskriterieBegrunnelser, 'suksesskriterieId')
-            )
+            ikkeBehovForRevurdering: suksesskriterieBegrunnelserUnchanged
               ? values.ikkeBehovForRevurdering
               : false,
+            endretInnholdDato: suksesskriterieBegrunnelserUnchanged
+              ? values.endretInnholdDato
+              : moment().utc().format('YYYY-MM-DDTHH:mm:ss'),
           })
-        }
+        }}
         initialValues={initialValues}
         validate={(value) => {
           const mutatedEtterlevelse = value

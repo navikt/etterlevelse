@@ -66,6 +66,7 @@ public class EtterlevelseResponse {
                 .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
                 .status(etterlevelse.getStatus())
                 .ikkeBehovForRevurdering(etterlevelse.isIkkeBehovForRevurdering())
+                .endretInnholdDato(etterlevelse.getEndretInnholdDato())
                 .suksesskriterieBegrunnelser(StreamUtils.convert(etterlevelse.getSuksesskriterieBegrunnelser(), SuksesskriterieBegrunnelseResponse::buildFrom))
                 .build();
     }

@@ -13,6 +13,7 @@ export interface IEtterlevelse extends IDomainObject {
   fristForFerdigstillelse: string
   status: EEtterlevelseStatus
   ikkeBehovForRevurdering: boolean
+  endretInnholdDato?: string
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   prioritised?: boolean
 }
