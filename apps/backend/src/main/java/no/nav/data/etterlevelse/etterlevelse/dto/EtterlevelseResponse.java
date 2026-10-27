@@ -39,6 +39,7 @@ public class EtterlevelseResponse {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+    private boolean ikkeBehovForRevurdering;
     private List<SuksesskriterieBegrunnelseResponse> suksesskriterieBegrunnelser;
 
     private EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon;
@@ -62,6 +63,7 @@ public class EtterlevelseResponse {
                 .dokumentasjon(copyOf(etterlevelse.getDokumentasjon()))
                 .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
                 .status(etterlevelse.getStatus())
+                .ikkeBehovForRevurdering(etterlevelse.isIkkeBehovForRevurdering())
                 .suksesskriterieBegrunnelser(StreamUtils.convert(etterlevelse.getSuksesskriterieBegrunnelser(), SuksesskriterieBegrunnelseResponse::buildFrom))
                 .build();
     }

@@ -39,6 +39,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+    private boolean ikkeBehovForRevurdering;
     private List<SuksesskriterieBegrunnelseRequest> suksesskriterieBegrunnelser;
 
     private Boolean update;
@@ -75,6 +76,7 @@ public class EtterlevelseRequest implements RequestElement, KravId {
         etterlevelse.setDokumentasjon(copyOf(dokumentasjon));
         etterlevelse.setFristForFerdigstillelse(fristForFerdigstillelse);
         etterlevelse.setStatus(status);
+        etterlevelse.setIkkeBehovForRevurdering(ikkeBehovForRevurdering);
         etterlevelse.setSuksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser, SuksesskriterieBegrunnelseRequest::convertTo));
         return etterlevelse;
     }

@@ -96,6 +96,14 @@ public class Etterlevelse extends Auditable implements KravId {
     public void setStatus (EtterlevelseStatus status) {
         etterlevelseData.setStatus(status);
     }
+
+    public boolean isIkkeBehovForRevurdering() {
+        return etterlevelseData.isIkkeBehovForRevurdering();
+    }
+
+    public void setIkkeBehovForRevurdering(boolean ikkeBehovForRevurdering) {
+        etterlevelseData.setIkkeBehovForRevurdering(ikkeBehovForRevurdering);
+    }
     
     public List<SuksesskriterieBegrunnelse> getSuksesskriterieBegrunnelser() {
         return etterlevelseData.getSuksesskriterieBegrunnelser();

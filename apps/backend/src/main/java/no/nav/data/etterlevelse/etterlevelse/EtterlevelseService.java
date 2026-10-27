@@ -76,6 +76,10 @@ public class EtterlevelseService {
         return repo.findByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
     }
 
+    public List<Etterlevelse> getIkkeBehovForRevurderingByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId) {
+        return repo.findIkkeBehovForRevurderingByEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
+    }
+
     public Optional<Etterlevelse> getByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(UUID etterlevelseDokumentasjonId, int kravNummer, int kravVersjon) {
         return repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(etterlevelseDokumentasjonId, kravNummer, kravVersjon);
     }

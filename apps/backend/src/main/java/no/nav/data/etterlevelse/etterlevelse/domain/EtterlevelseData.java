@@ -19,6 +19,7 @@ public class EtterlevelseData {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+    private boolean ikkeBehovForRevurdering;
     private List<SuksesskriterieBegrunnelse> suksesskriterieBegrunnelser;
     
 }
