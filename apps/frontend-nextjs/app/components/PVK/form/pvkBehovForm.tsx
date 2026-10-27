@@ -364,7 +364,7 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                 )}
 
               {savedAlert && !dirty && (
-                <LocalAlert className='mt-5' status='success'>
+                <LocalAlert className='mt-5' status='success' role='status' aria-live='polite'>
                   <LocalAlert.Header>
                     <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                     <LocalAlert.CloseButton onClick={() => setSavedAlert(false)} />
@@ -373,7 +373,7 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
               )}
 
               {errorAlert && (
-                <LocalAlert className='mt-5' status='error'>
+                <LocalAlert className='mt-5' status='error' role='alert' aria-live='assertive'>
                   <LocalAlert.Header>
                     <LocalAlert.Title>
                       Kan ikke oppdatere vurderingen fordi personvernkonsekvensevurderingen pågår.

@@ -1,6 +1,7 @@
 'use client'
 
-import { Accordion, Alert, Button, Heading, Loader, LocalAlert } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { Accordion, Button, Heading, InfoCard, Loader, LocalAlert } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
@@ -188,9 +189,11 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
 
           <div className='mt-5'>
             {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioForKrav.length === 0 && (
-              <Alert variant='info' className='mb-5'>
-                Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
-              </Alert>
+              <InfoCard data-color='info' className='mb-5'>
+                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                  Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
+                </InfoCard.Message>
+              </InfoCard>
             )}
 
             {isLeggTilEksisterendeMode && (
@@ -257,7 +260,12 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
             )}
 
             {!isLeggTilEksisterendeMode && removedRisikoscenarioAlert && (
-              <LocalAlert status='success' className='mb-5 w-full max-w-[75ch] mx-auto'>
+              <LocalAlert
+                status='success'
+                role='status'
+                aria-live='polite'
+                className='mb-5 w-full max-w-[75ch] mx-auto'
+              >
                 <LocalAlert.Header>
                   <LocalAlert.Title>
                     Risikoscenarioet “{removedRisikoscenarioAlert.risikoscenarioName}” er flyttet

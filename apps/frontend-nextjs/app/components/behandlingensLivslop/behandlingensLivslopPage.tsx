@@ -280,7 +280,7 @@ const BehandlingensLivslopPage = () => {
 
                             {savedSuccessful && !dirty && (
                               <div className='mt-5'>
-                                <LocalAlert status='success'>
+                                <LocalAlert status='success' role='status' aria-live='polite'>
                                   <LocalAlert.Header>
                                     <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                                     <LocalAlert.CloseButton

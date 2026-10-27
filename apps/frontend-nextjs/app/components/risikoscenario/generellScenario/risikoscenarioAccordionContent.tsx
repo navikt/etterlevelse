@@ -386,7 +386,7 @@ const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           )}
 
         {submitSuccess && !isIngenTilgangFormDirty && (
-          <LocalAlert className='mt-3' status='success'>
+          <LocalAlert className='mt-3' status='success' role='status' aria-live='polite'>
             <LocalAlert.Header>
               <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
               <LocalAlert.CloseButton onClick={() => setSubmitSuccess(false)} />

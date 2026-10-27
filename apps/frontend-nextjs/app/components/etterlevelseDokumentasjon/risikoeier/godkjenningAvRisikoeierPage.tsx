@@ -363,7 +363,12 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
                         <div>
                           {saveSuccessfull && (
                             <div className='my-5'>
-                              <LocalAlert size='small' status='success'>
+                              <LocalAlert
+                                size='small'
+                                status='success'
+                                role='status'
+                                aria-live='polite'
+                              >
                                 <LocalAlert.Header>
                                   <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                                   <LocalAlert.CloseButton
@@ -376,7 +381,12 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
                           {errorMessage !== '' && (
                             <div className='my-5'>
-                              <LocalAlert size='small' status='error'>
+                              <LocalAlert
+                                size='small'
+                                status='error'
+                                role='alert'
+                                aria-live='assertive'
+                              >
                                 <LocalAlert.Header>
                                   <LocalAlert.Title>{errorMessage}</LocalAlert.Title>
                                   <LocalAlert.CloseButton onClick={() => setErrorMessage('')} />
@@ -461,7 +471,7 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
                   {saveSuccessfull && (
                     <div className='my-5'>
-                      <LocalAlert size='small' status='success'>
+                      <LocalAlert size='small' status='success' role='status' aria-live='polite'>
                         <LocalAlert.Header>
                           <LocalAlert.Title>Godkjent og arkivert i Public 360</LocalAlert.Title>
                           <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />

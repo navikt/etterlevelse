@@ -179,7 +179,12 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       />
 
       {movedRisikoscenarioAlert && movedRisikoscenarioAlert.kravRefs.length > 0 && (
-        <LocalAlert status='success' className='mt-5 w-full max-w-[75ch] mx-auto'>
+        <LocalAlert
+          status='success'
+          role='status'
+          aria-live='polite'
+          className='mt-5 w-full max-w-[75ch] mx-auto'
+        >
           <LocalAlert.Header>
             <LocalAlert.Title>
               Risikoscenariet &quot;{movedRisikoscenarioAlert.risikoscenarioName}&quot; er flyttet

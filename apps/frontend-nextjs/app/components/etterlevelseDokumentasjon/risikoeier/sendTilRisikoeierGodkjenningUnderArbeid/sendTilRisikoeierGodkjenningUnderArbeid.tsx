@@ -108,7 +108,7 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
 
             {saveSuccessful && (
               <div className='my-5 max-w-[75ch]'>
-                <LocalAlert status='success' size='small'>
+                <LocalAlert status='success' size='small' role='status' aria-live='polite'>
                   <LocalAlert.Header>
                     <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                     <LocalAlert.CloseButton onClick={() => setSaveSuccessful(false)} />
@@ -119,7 +119,7 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
 
             {trekkInnsendingSuccessful && (
               <div className='my-5 max-w-[75ch]'>
-                <LocalAlert status='success' size='small'>
+                <LocalAlert status='success' size='small' role='status' aria-live='polite'>
                   <LocalAlert.Header>
                     <LocalAlert.Title>Innsending er trukket</LocalAlert.Title>
                     <LocalAlert.CloseButton onClick={() => setTrekkInnsendingSuccessful(false)} />
@@ -129,7 +129,13 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
             )}
 
             {submitAlert !== '' && (
-              <LocalAlert status='error' size='small' className='my-5 max-w-[75ch]'>
+              <LocalAlert
+                status='error'
+                size='small'
+                className='my-5 max-w-[75ch]'
+                role='alert'
+                aria-live='assertive'
+              >
                 <LocalAlert.Header>
                   <LocalAlert.Title> {submitAlert}</LocalAlert.Title>
                   <LocalAlert.CloseButton onClick={() => setSubmitAlert('')} />

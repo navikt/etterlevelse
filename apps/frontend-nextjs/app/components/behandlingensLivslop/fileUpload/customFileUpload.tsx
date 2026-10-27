@@ -111,7 +111,7 @@ const CustomFileUpload = (props: IProps) => {
       {fileUploadAlert && (
         <LocalAlert
           status={fileUploadError ? 'error' : 'success'}
-          role='status'
+          role={fileUploadError ? 'alert' : 'status'}
           aria-live={fileUploadError ? 'assertive' : 'polite'}
         >
           <LocalAlert.Header>
