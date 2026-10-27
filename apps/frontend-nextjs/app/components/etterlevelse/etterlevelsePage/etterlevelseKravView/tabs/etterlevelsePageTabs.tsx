@@ -1,6 +1,7 @@
 'use client'
 
-import { Alert, Checkbox, CheckboxGroup, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { Checkbox, CheckboxGroup, InfoCard, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
 import { useParams, useRouter } from 'next/navigation'
@@ -172,7 +173,6 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
       suksesskriterieBegrunnelser: syncEtterlevelseKriterieBegrunnelseWithKrav(etterlevelse, krav),
       prioritised: isPrioritised,
     } as IEtterlevelse
-    setEditedEtterlevelse(mutatedEtterlevelse)
 
     if (
       mutatedEtterlevelse.suksesskriterieBegrunnelser.every(
@@ -200,6 +200,8 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     const updatedEtterlevelsesDokumentasjon = await getEtterlevelseDokumentasjon(
       etterlevelseDokumentasjon?.id as string
     )
+
+    setEditedEtterlevelse(mutatedEtterlevelse)
 
     if (
       updatedEtterlevelsesDokumentasjon.status !== EEtterlevelseDokumentasjonStatus.UNDER_ARBEID
@@ -312,15 +314,19 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
             )}
 
           {isPvoUnderarbeidWarningActive && (
-            <Alert className='mt-6' variant='info'>
-              Kan ikke redigeres når personvernombudet har påbegynt vurderingen
-            </Alert>
+            <InfoCard data-color='info' className='mt-6'>
+              <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                Kan ikke redigeres når personvernombudet har påbegynt vurderingen
+              </InfoCard.Message>
+            </InfoCard>
           )}
 
           {isPvkTabActive && (
-            <Alert className='mt-6' variant='info'>
-              Kan ikke redigeres når PVK skjema er aktiv på sidepanelet
-            </Alert>
+            <InfoCard data-color='info' className='mt-6'>
+              <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                Kan ikke redigeres når PVK skjema er aktiv på sidepanelet
+              </InfoCard.Message>
+            </InfoCard>
           )}
           {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
             etterlevelseDokumentasjon?.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&

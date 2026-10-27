@@ -1,6 +1,17 @@
 'use client'
 
-import { Alert, BodyShort, Button, Checkbox, ErrorSummary, Label, Modal } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import {
+  BodyShort,
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  ErrorSummary,
+  InfoCard,
+  Label,
+  LocalAlert,
+  Modal,
+} from '@navikt/ds-react'
 import { Form, Formik, FormikErrors, FormikProps, validateYupSchema, yupToFormErrors } from 'formik'
 import _ from 'lodash'
 import moment from 'moment'
@@ -91,8 +102,14 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
+  const [isIkkeBehovForRevurdering, setIsIkkeBehovForRevurdering] = useState<boolean>(
+    editedEtterlevelse
+      ? editedEtterlevelse.ikkeBehovForRevurdering
+      : etterlevelse.ikkeBehovForRevurdering
+  )
 
   const router = useRouter()
+  const initialValues = mapEtterlevelseToFormValue(editedEtterlevelse || etterlevelse, krav)
 
   useEffect(() => {
     ;(async () => {
@@ -133,12 +150,18 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   return (
     <div className='w-full'>
       <Formik
-        onSubmit={submit}
-        initialValues={
-          editedEtterlevelse
-            ? mapEtterlevelseToFormValue(editedEtterlevelse, krav)
-            : mapEtterlevelseToFormValue(etterlevelse, krav)
+        onSubmit={(values) =>
+          submit({
+            ...values,
+            ikkeBehovForRevurdering: _.isEqual(
+              _.sortBy(initialValues.suksesskriterieBegrunnelser, 'suksesskriterieId'),
+              _.sortBy(values.suksesskriterieBegrunnelser, 'suksesskriterieId')
+            )
+              ? values.ikkeBehovForRevurdering
+              : false,
+          })
         }
+        initialValues={initialValues}
         validate={(value) => {
           const mutatedEtterlevelse = value
           value.suksesskriterieBegrunnelser = syncEtterlevelseKriterieBegrunnelseWithKrav(
@@ -172,14 +195,38 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
             {!isPreview && (
               <div className='flex flex-col'>
                 <Form>
+                  <CheckboxGroup
+                    legend='Legg til i Prioritert kravliste'
+                    hideLegend
+                    onChange={(value: string[]) => {
+                      if (value.includes('check')) {
+                        setIsIkkeBehovForRevurdering(true)
+                        setFieldValue('ikkeBehovForRevurdering', true)
+                      } else {
+                        setIsIkkeBehovForRevurdering(false)
+                        setFieldValue('ikkeBehovForRevurdering', false)
+                      }
+                    }}
+                    value={isIkkeBehovForRevurdering ? ['check'] : []}
+                  >
+                    <Checkbox
+                      value='check'
+                      description='Kravet er satt til lesemodus, men dere kan ombestemme dere senere.  Krav markert som “ikke behov for redigering” kan filtreres bort på temaside for å gi bedre oversikt over hvilke krav som gjenstår å dokumentere.'
+                    >
+                      Marker dette kravet som “ikke behov for revurdering”
+                    </Checkbox>
+                  </CheckboxGroup>
+
                   <div>
                     {(etterlevelse.status === EEtterlevelseStatus.IKKE_RELEVANT ||
                       etterlevelse.status ===
                         EEtterlevelseStatus.IKKE_RELEVANT_FERDIG_DOKUMENTERT) && (
                       <div className={'mb-12'}>
-                        <Alert className='mb-1' size='small' variant='info'>
-                          Dette kravet er dokumentert som ikke relevant 20.05.2022
-                        </Alert>
+                        <InfoCard data-color='info' className='mb-1' size='small'>
+                          <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                            Dette kravet er dokumentert som ikke relevant 20.05.2022
+                          </InfoCard.Message>
+                        </InfoCard>
                         <Label>Beskrivelse av hvorfor kraver er ikke relevant</Label>
                         <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
                       </div>
@@ -227,9 +274,13 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                             <DateField name='fristForFerdigstillelse' />
                           </div>
                           {errors.fristForFerdigstillelse && (
-                            <Alert variant='error' size='small'>
-                              {errors.fristForFerdigstillelse}
-                            </Alert>
+                            <LocalAlert status='error' size='small'>
+                              <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                  {errors.fristForFerdigstillelse}
+                                </LocalAlert.Title>
+                              </LocalAlert.Header>
+                            </LocalAlert>
                           )}
                         </div>
                       )}
@@ -258,15 +309,18 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                     )}
 
                     {etterlevelseDokStatusAlert && (
-                      <Alert
-                        variant='error'
-                        closeButton
-                        onClose={() => setEtterlevelseDokStatusAlert(false)}
-                      >
-                        Fordi dette etterlevelsesdokumentet ligger til godkjenning hos risikoeier,
-                        vil det ikke være mulig å redigere kravdokumentasjon fram til at dokumentet
-                        er godkjent.
-                      </Alert>
+                      <LocalAlert status='error'>
+                        <LocalAlert.Header>
+                          <LocalAlert.Title>
+                            Fordi dette etterlevelsesdokumentet ligger til godkjenning hos
+                            risikoeier, vil det ikke være mulig å redigere kravdokumentasjon fram
+                            til at dokumentet er godkjent.
+                          </LocalAlert.Title>
+                          <LocalAlert.CloseButton
+                            onClick={() => setEtterlevelseDokStatusAlert(false)}
+                          />
+                        </LocalAlert.Header>
+                      </LocalAlert>
                     )}
 
                     <div className='w-full justify-end mt-5'>
