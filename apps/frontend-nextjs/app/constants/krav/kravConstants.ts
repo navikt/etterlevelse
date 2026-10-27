@@ -111,6 +111,7 @@ export type TKravEtterlevelseData = {
   varselMelding?: string
   prioriteringsId?: number
   etterlevelseStatus?: EEtterlevelseStatus
+  etterlevelseIkkeBehovForRevurdering?: boolean
   suksesskriterier: ISuksesskriterie[]
   gammelVersjon?: boolean
   etterlevelseChangeStamp?: IChangeStamp
