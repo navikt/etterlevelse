@@ -11,6 +11,7 @@ import no.nav.data.etterlevelse.documentRelation.DocumentRelationService;
 import no.nav.data.etterlevelse.documentRelation.domain.DocumentRelation;
 import no.nav.data.etterlevelse.documentRelation.domain.RelationType;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
+import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepo;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonRepoCustom;
@@ -288,10 +289,10 @@ public class EtterlevelseDokumentasjonService {
         EtterlevelseVersjonHistorikk historikk = relevantVerjonHistorikk.getFirst();
         historikk.setNyVersjonOpprettetDato(LocalDateTime.now());
 
-        if(pvkDokument.isPresent()) {
+        if (pvkDokument.isPresent()) {
             pvkDokument.get().getPvkDokumentData().getMeldingerTilPvo().forEach(innsending -> {
                 if (innsending.getInnsendingId() > pvkDokument.get().getPvkDokumentData().getAntallInnsendingTilPvo()) {
-                    innsending.setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() +1);
+                    innsending.setEtterlevelseDokumentVersjon(request.getEtterlevelseDokumentVersjon() + 1);
                 }
             });
 
@@ -315,6 +316,12 @@ public class EtterlevelseDokumentasjonService {
                         .build()
         );
 
+        //setter alle etterlevelses merket med ikke behov for revurdering til false når en ny versjon opprettes
+        List<Etterlevelse> etterlevelserIkkeBehovForRevurdering = etterlevelseService.getIkkeBehovForRevurderingByEtterlevelseDokumentasjonId(etterlevelseDokumentasjon.getId());
+        etterlevelserIkkeBehovForRevurdering.forEach(etterlevelse -> {
+            etterlevelse.setIkkeBehovForRevurdering(false);
+            etterlevelseService.save(etterlevelse);
+        });
 
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
