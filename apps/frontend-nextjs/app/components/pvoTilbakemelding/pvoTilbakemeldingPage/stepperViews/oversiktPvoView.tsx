@@ -355,8 +355,10 @@ const OversiktPvoView: FunctionComponent<TProps> = ({
           <List.Item>
             <BodyShort>
               <strong>Avdeling:</strong>{' '}
-              {etterlevelseDokumentasjon.nomAvdelingId && etterlevelseDokumentasjon.avdelingNavn}
-              {!etterlevelseDokumentasjon.nomAvdelingId && 'Avdeling er ikke angitt'}
+              {etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId &&
+                etterlevelseDokumentasjon.nomOrganisering.avdelingNavn}
+              {!etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId &&
+                'Avdeling er ikke angitt'}
             </BodyShort>
           </List.Item>
           <List.Item>

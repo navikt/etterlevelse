@@ -285,7 +285,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
   }
 
   const avdelingFieldCheck = (): boolean => {
-    const hasError = !etterlevelseDokumentasjon.nomAvdelingId
+    const hasError = !etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId
     setAvdelingError(hasError)
     return hasError
   }
