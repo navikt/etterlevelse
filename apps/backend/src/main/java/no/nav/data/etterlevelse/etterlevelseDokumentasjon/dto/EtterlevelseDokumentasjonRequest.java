@@ -14,6 +14,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomOrganisering;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 
@@ -62,10 +63,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     private List<String> ardoqSystemIds;
 
-    private String nomAvdelingId;
-    private String avdelingNavn;
-    private List<NomSeksjon> seksjoner;
-    private List<NomEnhet> enheter;
+    private NomOrganisering nomOrganisering;
 
     private List<Varslingsadresse> varslingsadresser;
 
@@ -88,8 +86,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         setRisikoeiere(formatList(risikoeiere));
         setArdoqSystemIds(copyOf(ardoqSystemIds));
         setVarslingsadresser(copyOf(varslingsadresser));
-        setNomAvdelingId(nomAvdelingId);
-        setAvdelingNavn(avdelingNavn);
+        setNomOrganisering(nomOrganisering);
         setRisikovurderinger(formatList(risikovurderinger));
         setP360Recno(P360Recno);
         setP360CaseNumber(trimToNull(P360CaseNumber));
@@ -122,10 +119,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
         eDokData.setBehandlerPersonopplysninger(behandlerPersonopplysninger);
         eDokData.setForGjenbruk(forGjenbruk);
         eDokData.setArdoqSystemIds(copyOf(ardoqSystemIds));
-        eDokData.setNomAvdelingId(nomAvdelingId);
-        eDokData.setAvdelingNavn(avdelingNavn);
-        eDokData.setSeksjoner(copyOf(seksjoner));
-        eDokData.setEnheter(copyOf(enheter));
+        eDokData.setNomOrganisering(nomOrganisering);
         eDokData.setPrioritertKravNummer(copyOf(prioritertKravNummer));
         eDokData.setVarslingsadresser(copyOf(varslingsadresser));
         eDokData.setRisikovurderinger(copyOf(risikovurderinger));

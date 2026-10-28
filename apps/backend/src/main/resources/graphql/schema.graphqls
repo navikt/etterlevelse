@@ -288,10 +288,7 @@ type EtterlevelseDokumentasjon {
     ardoqSystemData: [AdresseType!]!
     stats: EtterlevelseDokumentasjonStats!
     varslingsadresser: [Varslingsadresse!]!
-    nomAvdelingId: String
-    avdelingNavn: String
-    seksjoner: [NomSeksjon!]!
-    enheter: [NomEnhet!]!
+    nomOrganisering: NomOrganisering
     etterlevelseDokumentVersjon: Int!
     versjonHistorikk: [EtterlevelseVersjonHistorikk!]!
 }
@@ -311,6 +308,17 @@ type NomSeksjon {
 type NomEnhet {
     nomEnhetId: String!
     nomEnhetName: String!
+}
+
+type NomOrganisering {
+    nomAvdelingId: String
+    avdelingNavn: String
+    seksjoner: [NomSeksjon!]!
+    enheter: [NomEnhet!]!
+    linjer: [NomEnhet!]!
+    linjeEnheter: [NomEnhet!]!
+    linjeFylker: [NomEnhet!]!
+    fylkeKontorer: [NomEnhet!]!
 }
 
 type ArdoqSystem {

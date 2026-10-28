@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomOrganisering;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
@@ -69,10 +70,7 @@ public class EtterlevelseDokumentasjonResponse {
     private List<String> ardoqSystemIds;
     private List<ArdoqSystemResponse> ardoqSystemData;
 
-    private String nomAvdelingId;
-    private String avdelingNavn;
-    private List<NomSeksjon> seksjoner;
-    private List<NomEnhet> enheter;
+    private NomOrganisering nomOrganisering;
 
     private ProductAreaResponse produktOmradetData;
     private List<String> risikovurderinger; // Inneholder både lenke og beskrivelse, formattert som markdown
@@ -109,10 +107,7 @@ public class EtterlevelseDokumentasjonResponse {
                 .resources(nullsafeCopyOf(eDokData.getResources()))
                 .risikoeiere(nullsafeCopyOf(eDokData.getRisikoeiere()))
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
-                .nomAvdelingId(eDokData.getNomAvdelingId())
-                .avdelingNavn(eDokData.getAvdelingNavn())
-                .seksjoner(nullsafeCopyOf(eDokData.getSeksjoner()))
-                .enheter(nullsafeCopyOf(eDokData.getEnheter()))
+                .nomOrganisering(eDokData.getNomOrganisering())
                 .varslingsadresser(nullsafeCopyOf(eDokData.getVarslingsadresser()))
                 .risikovurderinger(nullsafeCopyOf(eDokData.getRisikovurderinger()))
                 .P360Recno(eDokData.getP360Recno())
