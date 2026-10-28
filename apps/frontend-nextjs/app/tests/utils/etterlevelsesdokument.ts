@@ -1,3 +1,5 @@
+import { INomOrganisering } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+
 export const oppretteEtterlevelsesdokument = {
   id: 'created-document-id',
   title: 'Test av nytt etterlevelsesdokument',
@@ -15,4 +17,15 @@ export const oppretteEtterlevelsesdokument = {
   riskAssessment: 'ROS-analyse for testdokumentet',
   p360CaseNumber: 'SAK-12345',
   reuseDescription: 'Veiledning for gjenbruk av testdokumentet',
+}
+
+export const mockNomOrganisering: INomOrganisering = {
+  nomAvdelingId: '',
+  avdelingNavn: '',
+  seksjoner: [],
+  enheter: [],
+  linjer: [],
+  linjeEnheter: [],
+  linjeFylker: [],
+  fylkeKontorer: [],
 }

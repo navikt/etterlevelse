@@ -29,7 +29,7 @@ export interface IEtterlevelseDokumentasjon {
   teams: string[]
   resources: string[]
   risikoeiere: string[]
-  nomOrganisering?: INomOrganisering
+  nomOrganisering: INomOrganisering
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]

@@ -1,5 +1,8 @@
 import test, { expect } from '@playwright/test'
-import { oppretteEtterlevelsesdokument } from '@/tests/utils/etterlevelsesdokument'
+import {
+  mockNomOrganisering,
+  oppretteEtterlevelsesdokument,
+} from '@/tests/utils/etterlevelsesdokument'
 import {
   mockAdmin,
   mockIdent,
@@ -132,17 +135,20 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
                 nummer: 202,
               },
             ],
-            nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
-            avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
-            seksjoner: [
-              {
-                nomSeksjonId: 'seksjon-1',
-                nomSeksjonName: oppretteEtterlevelsesdokument.sectionName,
-              },
-            ],
-            enheter: [
-              { nomEnhetId: 'enhet-1', nomEnhetName: oppretteEtterlevelsesdokument.unitName },
-            ],
+            nomOrganisering: {
+              ...mockNomOrganisering,
+              nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
+              avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
+              seksjoner: [
+                {
+                  nomSeksjonId: 'seksjon-1',
+                  nomSeksjonName: oppretteEtterlevelsesdokument.sectionName,
+                },
+              ],
+              enheter: [
+                { nomEnhetId: 'enhet-1', nomEnhetName: oppretteEtterlevelsesdokument.unitName },
+              ],
+            },
             teams: ['team-1'],
             teamsData: [
               { id: 'team-1', name: oppretteEtterlevelsesdokument.teamName, members: [] },
@@ -396,6 +402,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
             etterlevelseNummer: 1,
             etterlevelseDokumentVersjon: 1,
             prioritertKravNummer: [visibleRequirements[0].number.toString()],
+            nomOrganisering: mockNomOrganisering,
             irrelevansFor: [],
             hasCurrentUserAccess: true,
           },
@@ -750,6 +757,7 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
               beskrivelse: oppretteEtterlevelsesdokument.description,
               status: 'UNDER_ARBEID',
               etterlevelseNummer: 1,
+              nomOrganisering: mockNomOrganisering,
               etterlevelseDokumentVersjon: 1,
               resources: [],
               resourcesData: [],
