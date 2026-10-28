@@ -65,7 +65,7 @@ public class NomGraphClient {
     }
 
     private Map<String, OrgEnhet> getAvdelingCache() {
-        if (securityProperties.isDev()) {
+/*        if (securityProperties.isDev()) {
             var devAvdelinger = List.of(
                     createDevOrganisering("arbeidsavdelingen", "Arbeidsavdelingen"),
                     createDevOrganisering("arbeids_og_velferdsdirektor", "Arbeids- og velferdsdirektør"),
@@ -84,7 +84,7 @@ public class NomGraphClient {
             );
             return safeStream(devAvdelinger)
                     .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
-        } else {
+        } else {*/
             var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", "bu431e"));
             var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
 
@@ -101,7 +101,7 @@ public class NomGraphClient {
 
             return safeStream(alleAvdelinger)
                     .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
-        }
+       /* } */
     }
 
     public List<OrgEnhet> getAllSeksjonForAvdeling(String avdelingId) {

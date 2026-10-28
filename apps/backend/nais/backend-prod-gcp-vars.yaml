@@ -29,6 +29,6 @@ env:
   - name: CLIENT_BEGREPSKATALOG_FRONTEND_URL
     value: https://begrepskatalog.intern.nav.no/begrep
   - name: CLIENT_NOM_GRAPHQL_URL
-    value: http://nom-api.nom.svc.cluster.local/graphql
+    value: http://nom-api.nom/graphql
   - name: ETTERLEV_FRONTEND_URL
     value: https://etterlevelse.ansatt.nav.no
