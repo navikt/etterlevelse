@@ -33,6 +33,15 @@ public class NomController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Get All Linje")
+    @ApiResponse(description = "ok")
+    @GetMapping("/linjer")
+    public ResponseEntity<List<OrgEnhet>> getAllLinje() {
+        log.info("Get all linjer from nom");
+        List<OrgEnhet> response = nomGraphClient.getAllLinje();
+        return ResponseEntity.ok(response);
+    }
+
     @Operation(summary = "Get avdeling by nom id")
     @ApiResponse(description = "ok")
     @GetMapping("/avdeling/{id}")
@@ -71,4 +80,14 @@ public class NomController {
         OrgEnhet response = nomGraphClient.getById(id);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "Get All underenhet by overenhet id")
+    @ApiResponse(description = "ok")
+    @GetMapping("/underenheter/{id}")
+    public ResponseEntity<List<OrgEnhet>> getAllUnderenheterByOverenhetId(@PathVariable String id) {
+        log.info("Get all underenheter by overenhet id");
+        List<OrgEnhet> response = nomGraphClient.getUnderenheterById(id);
+        return ResponseEntity.ok(response);
+    }
+
 }

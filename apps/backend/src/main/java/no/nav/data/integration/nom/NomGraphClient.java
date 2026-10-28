@@ -65,7 +65,7 @@ public class NomGraphClient {
     }
 
     private Map<String, OrgEnhet> getAvdelingCache() {
-/*        if (securityProperties.isDev()) {
+        if (securityProperties.isDev()) {
             var devAvdelinger = List.of(
                     createDevOrganisering("arbeidsavdelingen", "Arbeidsavdelingen"),
                     createDevOrganisering("arbeids_og_velferdsdirektor", "Arbeids- og velferdsdirektør"),
@@ -84,7 +84,7 @@ public class NomGraphClient {
             );
             return safeStream(devAvdelinger)
                     .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
-        } else {*/
+        } else {
             var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", "bu431e"));
             var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
 
@@ -101,8 +101,59 @@ public class NomGraphClient {
 
             return safeStream(alleAvdelinger)
                     .collect(Collectors.toMap(OrgEnhet::getId, Function.identity()));
-       /* } */
+        }
     }
+
+    public List<OrgEnhet> getAllLinje() {
+        if (securityProperties.isDev()) {
+            return List.of(
+                    createDevOrganisering("arbeidsOgTjenestelinjen", "Arbeids- og tjenestelinjen"),
+                    createDevOrganisering("velferdslinjen", "Velferdslinjen"),
+                    createDevOrganisering("ytelseslinjen", "Ytelseslinjen"),
+                    createDevOrganisering("okonomilinjen", "Økonomilinjen")
+            );
+        } else {
+            var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", "py437s"));
+            var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
+
+            assert res.getBody() != null;
+            assert res.getBody().getData() != null;
+
+            var response = res.getBody().getData();
+
+            if (response.getOrgEnhet() == null) {
+                return List.of();
+            }
+
+            return response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).filter(org -> !org.getId().equals("bu431e")).toList();
+        }
+    }
+
+    public List<OrgEnhet> getUnderenheterById(String orgId) {
+        if (securityProperties.isDev()) {
+            return List.of(
+                    createDevOrganisering("underEnhet1", "Underenhet 1"),
+                    createDevOrganisering("underEnhet2", "Underenhet 2"),
+                    createDevOrganisering("underEnhet3", "Underenhet 3"),
+                    createDevOrganisering("underEnhet4", "Underenhet 4")
+            );
+        } else {
+            var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", orgId));
+            var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
+
+            assert res.getBody() != null;
+            assert res.getBody().getData() != null;
+
+            var response = res.getBody().getData();
+
+            if (response.getOrgEnhet() == null) {
+                return List.of();
+            }
+
+            return response.getOrgEnhet().getOrganiseringer().stream().map(Organisering::getOrgEnhet).toList();
+        }
+    }
+
 
     public List<OrgEnhet> getAllSeksjonForAvdeling(String avdelingId) {
         var avdeling = getAvdelingById(avdelingId);
