@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@navikt/ds-react'
+import { Button, LocalAlert } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
@@ -278,6 +278,16 @@ const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
 
         {!risikoscenario.ingenTiltak && (
           <div>
+            {risikoscenario.tiltakIds.length === 0 &&
+              !isCreateTiltakFormActive &&
+              !isEditTiltakFormActive && (
+                <LocalAlert className='mt-5 mb-9' status='warning'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title as='h4'>Dere har ikke lagt inn tiltak</LocalAlert.Title>
+                  </LocalAlert.Header>
+                </LocalAlert>
+              )}
+
             {risikoscenario.tiltakIds.length !== 0 && (
               <TiltakReadMoreList
                 risikoscenario={activeRisikoscenario}

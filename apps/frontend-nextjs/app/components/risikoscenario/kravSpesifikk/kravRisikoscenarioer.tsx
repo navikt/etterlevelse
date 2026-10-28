@@ -1,8 +1,8 @@
 'use client'
 
-import { Accordion, Alert, Button, Heading, Loader, LocalAlert } from '@navikt/ds-react'
+import { Accordion, Alert, Button, Heading, Loader, LocalAlert, Tag } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
@@ -33,6 +33,13 @@ type TProps = {
   formRef: RefObject<any>
 }
 
+const isIkkeFerdigUtfylt = (risikoscenario: IRisikoscenario): boolean =>
+  risikoscenario.beskrivelse === '' ||
+  risikoscenario.konsekvensNivaa === 0 ||
+  risikoscenario.sannsynlighetsNivaa === 0 ||
+  risikoscenario.konsekvensNivaaBegrunnelse === '' ||
+  risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
+
 const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   krav,
   pvkDokument,
@@ -55,6 +62,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   const risikoscenarioId: string | null = queryParams.get('risikoscenario')
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const accordionHeaderRef = useRef<HTMLButtonElement>(null)
   const [removedRisikoscenarioAlert, setRemovedRisikoscenarioAlert] = useState<{
     risikoscenarioName: string
   } | null>(null)
@@ -114,18 +122,16 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   }, [krav, pvkDokument])
 
   useEffect(() => {
-    ;(async () => {
-      if (risikoscenarioId) {
-        setTimeout(() => {
-          const accordionItem = document.getElementById(risikoscenarioId)
-          if (accordionItem) {
-            accordionItem.scrollIntoView({ behavior: 'smooth' })
-            accordionItem.focus()
-          }
-        }, 200)
+    if (!risikoscenarioId || isLoading) return
+    const timeout = setTimeout(() => {
+      const header = accordionHeaderRef.current
+      if (header) {
+        header.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        header.focus({ preventScroll: true })
       }
-    })()
-  }, [risikoscenarioId])
+    }, 200)
+    return () => clearTimeout(timeout)
+  }, [risikoscenarioId, isLoading])
 
   useEffect(() => {
     // One-shot success message set by the edit flow when a scenario is removed from this krav.
@@ -223,8 +229,24 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                           handleAccordionChange(open ? risikoscenario.id : '')
                         }}
                       >
-                        <Accordion.Header id={risikoscenario.id}>
+                        <Accordion.Header
+                          id={risikoscenario.id}
+                          ref={expanded ? accordionHeaderRef : undefined}
+                        >
                           <div className='flex items-center gap-2'>{risikoscenario.navn}</div>
+                          {(isIkkeFerdigUtfylt(risikoscenario) ||
+                            (!risikoscenario.ingenTiltak &&
+                              risikoscenario.tiltakIds.length === 0)) && (
+                            <div className='flex gap-2 mt-1'>
+                              {isIkkeFerdigUtfylt(risikoscenario) && (
+                                <Tag variant='alt2'>Ikke ferdig utfylt</Tag>
+                              )}
+                              {!risikoscenario.ingenTiltak &&
+                                risikoscenario.tiltakIds.length === 0 && (
+                                  <Tag variant='alt1'>Savner tiltak</Tag>
+                                )}
+                            </div>
+                          )}
                         </Accordion.Header>
                         {expanded && (
                           <Accordion.Content>

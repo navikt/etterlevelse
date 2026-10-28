@@ -107,7 +107,7 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
 
   return (
     <div>
-      <Accordion>
+      <Accordion className='mt-4'>
         {filteredTiltakList.map((tiltak, index) => {
           const expanded: boolean = tiltakId === tiltak.id
 

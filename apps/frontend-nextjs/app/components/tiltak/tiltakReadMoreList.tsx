@@ -1,7 +1,7 @@
 'use client'
 
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Button, ReadMore } from '@navikt/ds-react'
+import { Button, LocalAlert, ReadMore, Tag } from '@navikt/ds-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { RefObject, useMemo, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
@@ -124,6 +124,8 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
     !!godkjentAvRisikoeierDato &&
     !!tiltak.changeStamp.createdDate &&
     new Date(tiltak.changeStamp.createdDate + 'Z') < new Date(godkjentAvRisikoeierDato)
+  const isAnsvarligMissing = !tiltak.ansvarlig?.navIdent && !tiltak.ansvarligTeam?.name
+  const isFristMissing = !tiltak.iverksatt && !tiltak.frist
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
@@ -185,8 +187,27 @@ const TiltakListContent = (props: ITiltakListContentProps) => {
               router.push(risikoscenarioUrl(risikoscenario.id, steg), { scroll: false })
             }
           }}
-          header={tiltak.navn}
+          header={
+            <span className='inline-flex flex-wrap items-center gap-2'>
+              {tiltak.navn}
+              {isAnsvarligMissing && <Tag variant='alt2'>Tiltaksansvarlig savnes</Tag>}
+              {isFristMissing && <Tag variant='alt2'>Tiltaksfrist savnes</Tag>}
+            </span>
+          }
         >
+          {(isAnsvarligMissing || isFristMissing) && (
+            <LocalAlert className='mb-4' status='warning'>
+              <LocalAlert.Header>
+                <LocalAlert.Title as='h4'>
+                  {isAnsvarligMissing && isFristMissing
+                    ? 'Dere har ikke satt tiltaksansvarlig og tiltaksfrist'
+                    : isAnsvarligMissing
+                      ? 'Dere har ikke satt tiltaksansvarlig'
+                      : 'Dere har ikke satt tiltaksfrist'}
+                </LocalAlert.Title>
+              </LocalAlert.Header>
+            </LocalAlert>
+          )}
           <TiltakView tiltak={tiltak} risikoscenarioList={risikoscenarioList} />
         </ReadMore>
       )}
