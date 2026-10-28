@@ -30,7 +30,7 @@ const PvoSendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
   ].sort((a, b) => b - a)
 
   return (
-    <div>
+    <div className='px-2'>
       <Heading level='2' size='small' className='mb-5'>
         Tilbakemeldingshistorikk
       </Heading>

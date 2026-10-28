@@ -119,7 +119,7 @@ const RisikoscenarioView: FunctionComponent<TProps> = ({
         risikoscenario.sannsynlighetsNivaa === 0) && (
         <LocalAlert className='mt-5' status='warning'>
           <LocalAlert.Header>
-            <LocalAlert.Title>
+            <LocalAlert.Title as='h3'>
               {risikoscenario.sannsynlighetsNivaa === 0 &&
                 !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
                 'Dere må gjøre sannsynlighetsvurdering'}
@@ -150,7 +150,7 @@ const RisikoscenarioView: FunctionComponent<TProps> = ({
       {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
         <LocalAlert className='mt-5' status='warning'>
           <LocalAlert.Header>
-            <LocalAlert.Title>
+            <LocalAlert.Title as='h3'>
               {risikoscenario.konsekvensNivaa === 0 &&
                 !risikoscenario.konsekvensNivaaBegrunnelse &&
                 'Dere må gjøre konsekvensvurdering'}
