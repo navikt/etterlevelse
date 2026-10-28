@@ -29,7 +29,7 @@ export const GjenbrukFeilmelding: FunctionComponent<TProps> = ({
   const missingVarslingsadresser = isEmptyArray(values.varslingsadresser)
   const missingTeamsData = isEmptyArray(values.teamsData)
   const missingResourcesData = isEmptyArray(values.resourcesData)
-  const missingNomAvdelingId = isMissingText(values.nomAvdelingId)
+  const missingNomAvdelingId = isMissingText(values.nomOrganisering.nomAvdelingId)
 
   const hasMissingRequiredField =
     missingTitle ||
