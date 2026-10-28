@@ -292,7 +292,7 @@ const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               !isEditTiltakFormActive && (
                 <LocalAlert className='mt-5 mb-9' status='warning'>
                   <LocalAlert.Header>
-                    <LocalAlert.Title>Dere har ikke lagt inn tiltak</LocalAlert.Title>
+                    <LocalAlert.Title as='h4'>Dere har ikke lagt inn tiltak</LocalAlert.Title>
                   </LocalAlert.Header>
                 </LocalAlert>
               )}

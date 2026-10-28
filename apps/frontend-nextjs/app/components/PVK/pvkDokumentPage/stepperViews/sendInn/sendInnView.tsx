@@ -621,6 +621,28 @@ export const SendInnView: FunctionComponent<TProps> = ({
         innerRef={formRef}
         initialValues={initialFormValues}
         validate={async (value) => {
+          // Undo values the send buttons set before submitting, so a blocked attempt doesn't leave the form dirty
+          const restoreActionFields = (): void => {
+            const form = formRef.current
+            if (!form) return
+            const {
+              status,
+              antallInnsendingTilPvo,
+              godkjentAvRisikoeier,
+              godkjentAvRisikoeierDato,
+            } = form.initialValues
+            form.setValues(
+              {
+                ...value,
+                status,
+                antallInnsendingTilPvo,
+                godkjentAvRisikoeier,
+                godkjentAvRisikoeierDato,
+              },
+              false
+            )
+          }
+
           try {
             if (
               [
@@ -656,12 +678,16 @@ export const SendInnView: FunctionComponent<TProps> = ({
               }
 
               hasBlockingErrorsRef.current = hasBlockingErrors
+              if (hasBlockingErrors) {
+                restoreActionFields()
+              }
             } else {
               hasBlockingErrorsRef.current = false
             }
 
             validateYupSchema(value, pvkDocumentSchema(), true)
           } catch (err) {
+            restoreActionFields()
             return yupToFormErrors(err)
           } finally {
             setSubmitClick(!submitClick)

@@ -26,7 +26,7 @@ const TiltakAccordionListReadOnly = (props: IProps) => {
   const nyttInnholdBaseline = previousVurdering?.sendtDato ?? nyttInnholdFraDato
 
   return (
-    <Accordion>
+    <Accordion className='mt-4'>
       {tiltakList.map((tiltak) => {
         const isChangesMade =
           !!nyttInnholdBaseline &&
