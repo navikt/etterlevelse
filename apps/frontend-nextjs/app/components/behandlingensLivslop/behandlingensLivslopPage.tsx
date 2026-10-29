@@ -194,7 +194,7 @@ const BehandlingensLivslopPage = () => {
 
       {isLoading && (
         <div className='flex w-full justify-center'>
-          <Loader size='large' />
+          <Loader size='3xlarge' title='Venter...' />
         </div>
       )}
 
