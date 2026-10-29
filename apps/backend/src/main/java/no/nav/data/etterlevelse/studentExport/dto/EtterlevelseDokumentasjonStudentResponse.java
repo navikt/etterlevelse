@@ -8,7 +8,12 @@ import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.*;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomOrganisering;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.integration.behandling.dto.Behandling;
 import no.nav.data.integration.dpBehandling.dto.DpBehandling;
 import no.nav.data.integration.team.dto.ProductAreaResponse;
@@ -76,6 +81,7 @@ public class EtterlevelseDokumentasjonStudentResponse {
 
     public static EtterlevelseDokumentasjonStudentResponse buildFrom(EtterlevelseDokumentasjon eDok) {
         EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();
+        NomOrganisering nom = eDokData.getNomOrganisering();
         return EtterlevelseDokumentasjonStudentResponse.builder()
                 .id(eDok.getId())
                 .etterlevelseDokumentVersjon(eDok.getEtterlevelseDokumentVersjon())
@@ -93,10 +99,10 @@ public class EtterlevelseDokumentasjonStudentResponse {
                 .prioritertKravNummer(nullsafeCopyOf(eDokData.getPrioritertKravNummer()))
                 .forGjenbruk(eDokData.isForGjenbruk())
                 .behandlerPersonopplysninger(eDokData.isBehandlerPersonopplysninger())
-                .nomAvdelingId(eDokData.getNomAvdelingId())
-                .avdelingNavn(eDokData.getAvdelingNavn())
-                .seksjoner(nullsafeCopyOf(eDokData.getSeksjoner()))
-                .enheter(nullsafeCopyOf(eDokData.getEnheter()))
+                .nomAvdelingId(nom != null ? nom.getNomAvdelingId() : null)
+                .avdelingNavn(nom != null ? nom.getAvdelingNavn() : null)
+                .seksjoner(nom != null ? nullsafeCopyOf(nom.getSeksjoner()) : List.of())
+                .enheter(nom != null ? nullsafeCopyOf(nom.getEnheter()) : List.of())
                 .risikovurderinger(eDokData.getRisikovurderinger())
                 .P360Recno(eDokData.getP360Recno())
                 .P360CaseNumber(eDokData.getP360CaseNumber())

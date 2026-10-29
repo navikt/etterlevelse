@@ -1,10 +1,5 @@
 package no.nav.data.etterlevelse.dashboard.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +13,11 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.integration.team.dto.TeamResponse;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.pvkdokument.domain.PvkVurdering;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -66,6 +66,9 @@ public class DashboardTableResponse {
     private LocalDateTime sistGodkjentPvk;
 
     public static DashboardTableResponse buildFrom(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse){
+        var nom = etterlevelseDokumentasjonResponse.getNomOrganisering();
+        String nomAvdelingId = nom != null ? nom.getNomAvdelingId() : null;
+        String avdelingNavn = nom != null ? nom.getAvdelingNavn() : null;
         return DashboardTableResponse.builder()
                 .etterlevelseDokumentasjonId(etterlevelseDokumentasjonResponse.getId())
                 .etterlevelseDokumentasjonTittel(etterlevelseDokumentasjonResponse.getTitle())
@@ -79,10 +82,10 @@ public class DashboardTableResponse {
                 .risikoeiere(etterlevelseDokumentasjonResponse.getRisikoeiere())
                 .risikoeiereData(etterlevelseDokumentasjonResponse.getRisikoeiereData())
                 .behandlinger(etterlevelseDokumentasjonResponse.getBehandlinger())
-                .nomAvdelingId(Objects.equals(etterlevelseDokumentasjonResponse.getNomAvdelingId(), "") ? "ingen-avdeling" : etterlevelseDokumentasjonResponse.getNomAvdelingId())
-                .avdelingNavn(Objects.equals(etterlevelseDokumentasjonResponse.getAvdelingNavn(), "") ? "Ikke valgt avdeling" : etterlevelseDokumentasjonResponse.getAvdelingNavn())
-                .seksjoner(etterlevelseDokumentasjonResponse.getSeksjoner())
-                .enheter(etterlevelseDokumentasjonResponse.getEnheter())
+                .nomAvdelingId(Objects.equals(nomAvdelingId, "") ? "ingen-avdeling" : nomAvdelingId)
+                .avdelingNavn(Objects.equals(avdelingNavn, "") ? "Ikke valgt avdeling" : avdelingNavn)
+                .seksjoner(nom != null ? nom.getSeksjoner() : null)
+                .enheter(nom != null ? nom.getEnheter() : null)
                 .behandlerPersonopplysninger(etterlevelseDokumentasjonResponse.getIrrelevansFor().stream().noneMatch(c -> "PERSONOPPLYSNINGER".equals(c.getCode())))
                 .build();
     }

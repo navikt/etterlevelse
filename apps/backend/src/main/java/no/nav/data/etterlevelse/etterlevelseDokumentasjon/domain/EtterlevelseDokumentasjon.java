@@ -85,7 +85,8 @@ public class EtterlevelseDokumentasjon extends Auditable  {
     }
 
     public String getAvdeling() {
-        return etterlevelseDokumentasjonData.getAvdelingNavn();
+        NomOrganisering nomOrganisering = etterlevelseDokumentasjonData.getNomOrganisering();
+        return nomOrganisering != null ? nomOrganisering.getAvdelingNavn() : null;
     }
 
     public List<String> getResources() {

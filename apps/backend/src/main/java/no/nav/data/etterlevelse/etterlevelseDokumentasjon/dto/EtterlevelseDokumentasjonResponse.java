@@ -12,9 +12,7 @@ import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDok
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonData;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjonStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseVersjonHistorikk;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomEnhet;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomOrganisering;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.NomSeksjon;
 import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import no.nav.data.integration.behandling.dto.Behandling;
@@ -117,7 +115,8 @@ public class EtterlevelseDokumentasjonResponse {
                 .versjonHistorikk(copyOf(eDokData.getVersjonHistorikk()))
                 .build();
     }
-    
+
+
 }
 
 

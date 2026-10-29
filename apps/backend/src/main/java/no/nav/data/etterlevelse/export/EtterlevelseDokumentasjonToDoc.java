@@ -1,19 +1,5 @@
 package no.nav.data.etterlevelse.export;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.docx4j.jaxb.Context;
-import org.docx4j.wml.ObjectFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.utils.WordDocUtils;
@@ -46,6 +32,19 @@ import no.nav.data.integration.dpBehandling.DpBehandlingService;
 import no.nav.data.integration.team.teamcat.TeamcatTeamClient;
 import no.nav.data.pvk.pvkdokument.PvkDokumentService;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
+import org.docx4j.jaxb.Context;
+import org.docx4j.wml.ObjectFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -133,17 +132,18 @@ public class EtterlevelseDokumentasjonToDoc {
 
 
         doc.addHeading3("Avdeling");
-        if (etterlevelseDokumentasjon.getNomAvdelingId() == null || etterlevelseDokumentasjon.getNomAvdelingId().isEmpty()) {
+        var nom = etterlevelseDokumentasjon.getNomOrganisering();
+        if (nom == null || nom.getNomAvdelingId() == null || nom.getNomAvdelingId().isEmpty()) {
             doc.addMarkdownText("Ingen avdeling satt");
         } else {
-            doc.addMarkdownText(etterlevelseDokumentasjon.getAvdelingNavn());
+            doc.addMarkdownText(nom.getAvdelingNavn());
         }
 
         doc.newLine();
 
-        if (!etterlevelseDokumentasjon.getSeksjoner().isEmpty()) {
+        if (nom != null && nom.getSeksjoner() != null && !nom.getSeksjoner().isEmpty()) {
             doc.addHeading3("Seksjon");
-            etterlevelseDokumentasjon.getSeksjoner().forEach(seksjon -> {
+            nom.getSeksjoner().forEach(seksjon -> {
                 doc.addText(seksjon.getNomSeksjonName());
             });
             doc.newLine();

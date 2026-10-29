@@ -1,23 +1,5 @@
 package no.nav.data.etterlevelse.dashboard;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.etterlevelse.codelist.CodelistService;
@@ -58,6 +40,23 @@ import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
 import no.nav.data.pvk.tiltak.TiltakService;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -95,6 +94,39 @@ public class DashboardService {
         return buildDashboardTable(allEdoksWithAvdeling, aktivKrav);
     }
 
+    private List<EtterlevelseDokumentasjon> filterBySeksjonAndEnhet(List<EtterlevelseDokumentasjon> doks, String seksjonId, String enhetId) {
+        if (seksjonId != null && !seksjonId.isEmpty()) {
+            if (seksjonId.equals("ingen-seksjon")) {
+                doks = doks.stream().filter(d -> {
+                    var nom = d.getEtterlevelseDokumentasjonData().getNomOrganisering();
+                    return nom == null || nom.getSeksjoner() == null || nom.getSeksjoner().isEmpty();
+                }).toList();
+            } else {
+                doks = doks.stream().filter(d -> {
+                    var nom = d.getEtterlevelseDokumentasjonData().getNomOrganisering();
+                    return nom != null && nom.getSeksjoner() != null
+                            && nom.getSeksjoner().stream().anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()));
+                }).toList();
+            }
+        }
+
+        if (enhetId != null && !enhetId.isEmpty()) {
+            if (enhetId.equals("ingen-enhet")) {
+                doks = doks.stream().filter(d -> {
+                    var nom = d.getEtterlevelseDokumentasjonData().getNomOrganisering();
+                    return nom == null || nom.getEnheter() == null || nom.getEnheter().isEmpty();
+                }).toList();
+            } else {
+                doks = doks.stream().filter(d -> {
+                    var nom = d.getEtterlevelseDokumentasjonData().getNomOrganisering();
+                    return nom != null && nom.getEnheter() != null
+                            && nom.getEnheter().stream().anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()));
+                }).toList();
+            }
+        }
+        return doks;
+    }
+
     public List<DashboardTableResponse> getDashboardTableByTema(String temaCode, String avdelingId, String seksjonId, String enhetId, List<String> teamIds) {
         List<EtterlevelseDokumentasjon> doks;
 
@@ -102,35 +134,7 @@ public class DashboardService {
             String effectiveAvdelingId = "ingen-avdeling".equals(avdelingId) ? "" : avdelingId;
             doks = etterlevelseDokumentasjonService.getByAvdeling(effectiveAvdelingId);
 
-            if (seksjonId != null && !seksjonId.isEmpty()) {
-                if (seksjonId.equals("ingen-seksjon")) {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
-                    ).toList();
-                } else {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner() != null &&
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
-                                    .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
-                    ).toList();
-                }
-            }
-
-            if (enhetId != null && !enhetId.isEmpty()) {
-                if (enhetId.equals("ingen-enhet")) {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getEnheter() == null ||
-                            d.getEtterlevelseDokumentasjonData().getEnheter().isEmpty()
-                    ).toList();
-                } else {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
-                            d.getEtterlevelseDokumentasjonData().getEnheter().stream()
-                                    .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
-                    ).toList();
-                }
-            }
+            doks = filterBySeksjonAndEnhet(doks, seksjonId, enhetId);
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
         }
@@ -362,18 +366,20 @@ public class DashboardService {
         Map<String, DashboardResponse> statsBySeksjon = new LinkedHashMap<>();
         for (var seksjon : seksjonerFromNom) {
             var seksjonDoks = allDoks.stream()
-                    .filter(d -> d.getEtterlevelseDokumentasjonData().getSeksjoner() != null
-                            && d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
-                            .anyMatch(ns -> seksjon.getId().equals(ns.getNomSeksjonId())))
+                    .filter(d -> {
+                        var nom = d.getEtterlevelseDokumentasjonData().getNomOrganisering();
+                        return nom != null && nom.getSeksjoner() != null
+                                && nom.getSeksjoner().stream().anyMatch(ns -> seksjon.getId().equals(ns.getNomSeksjonId()));
+                    })
                     .toList();
             var seksjonStats = createAvdelingDashBoardResponse(seksjon.getId(), seksjon.getNavn(), seksjonDoks, pvkByDokId, aktivKrav, etterlevelseByDokId);
             statsBySeksjon.put(seksjon.getId(), seksjonStats);
         }
 
-        List<EtterlevelseDokumentasjon> eDoksWithNoSeksjon = allDoks.stream().filter(eDok ->
-                eDok.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
-                eDok.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
-        ).toList();
+        List<EtterlevelseDokumentasjon> eDoksWithNoSeksjon = allDoks.stream().filter(eDok -> {
+                var nom = eDok.getEtterlevelseDokumentasjonData().getNomOrganisering();
+                return nom == null || nom.getSeksjoner() == null || nom.getSeksjoner().isEmpty();
+        }).toList();
 
         if(!eDoksWithNoSeksjon.isEmpty()) {
             seksjonOptions.add(SeksjonOption.builder().id("ingen-seksjon").navn("Ikke valgt seksjon").build());
@@ -395,7 +401,8 @@ public class DashboardService {
 
         List<EtterlevelseDokumentasjon> allDoks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent().stream()
                 .filter(d -> {
-                    String nomAvdelingId = d.getEtterlevelseDokumentasjonData().getNomAvdelingId();
+                    var nom = d.getEtterlevelseDokumentasjonData().getNomOrganisering();
+                    String nomAvdelingId = nom != null ? nom.getNomAvdelingId() : null;
                     return nomAvdelingId == null || nomAvdelingId.isEmpty() || !validAvdelingIds.contains(nomAvdelingId);
                 })
                 .toList();
@@ -625,35 +632,7 @@ public class DashboardService {
             String effectiveAvdelingId = "ingen-avdeling".equals(avdelingId) ? "" : avdelingId;
             doks = etterlevelseDokumentasjonService.getByAvdeling(effectiveAvdelingId);
 
-            if (seksjonId != null && !seksjonId.isEmpty()) {
-                if (seksjonId.equals("ingen-seksjon")) {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
-                    ).toList();
-                } else {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner() != null &&
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
-                                    .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
-                    ).toList();
-                }
-            }
-
-            if (enhetId != null && !enhetId.isEmpty()) {
-                if (enhetId.equals("ingen-enhet")) {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getEnheter() == null ||
-                            d.getEtterlevelseDokumentasjonData().getEnheter().isEmpty()
-                    ).toList();
-                } else {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
-                            d.getEtterlevelseDokumentasjonData().getEnheter().stream()
-                                    .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
-                    ).toList();
-                }
-            }
+            doks = filterBySeksjonAndEnhet(doks, seksjonId, enhetId);
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
         }
@@ -809,35 +788,7 @@ public class DashboardService {
             String effectiveAvdelingId = "ingen-avdeling".equals(avdelingId) ? "" : avdelingId;
             doks = etterlevelseDokumentasjonService.getByAvdeling(effectiveAvdelingId);
 
-            if (seksjonId != null && !seksjonId.isEmpty()) {
-                if (seksjonId.equals("ingen-seksjon")) {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner() == null ||
-                                    d.getEtterlevelseDokumentasjonData().getSeksjoner().isEmpty()
-                    ).toList();
-                } else {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getSeksjoner() != null &&
-                                    d.getEtterlevelseDokumentasjonData().getSeksjoner().stream()
-                                            .anyMatch(ns -> seksjonId.equals(ns.getNomSeksjonId()))
-                    ).toList();
-                }
-            }
-
-            if (enhetId != null && !enhetId.isEmpty()) {
-                if (enhetId.equals("ingen-enhet")) {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getEnheter() == null ||
-                            d.getEtterlevelseDokumentasjonData().getEnheter().isEmpty()
-                    ).toList();
-                } else {
-                    doks = doks.stream().filter(d ->
-                            d.getEtterlevelseDokumentasjonData().getEnheter() != null &&
-                            d.getEtterlevelseDokumentasjonData().getEnheter().stream()
-                                    .anyMatch(ne -> enhetId.equals(ne.getNomEnhetId()))
-                    ).toList();
-                }
-            }
+            doks = filterBySeksjonAndEnhet(doks, seksjonId, enhetId);
         } else {
             doks = etterlevelseDokumentasjonService.getAll(Pageable.unpaged()).getContent();
         }
