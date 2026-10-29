@@ -4,7 +4,6 @@ const CONSENT_COOKIE_NAME = 'etterlevelse-cookie-consent'
 export const CONSENT_EVENT_NAME = 'etterlevelse-consent-changed'
 
 export const UMAMI_EVENTS = {
-  PAGEVIEW: 'pageview',
   CHECKBOX_TOGGLED: 'checkbox_toggled',
   MODAL_OPENED: 'modal_opened',
   BUTTON_CLICKED: 'button_clicked',
@@ -27,7 +26,6 @@ type TUmamiBaseEventData = {
 }
 
 type TUmamiEventDataMap = {
-  [UMAMI_EVENTS.PAGEVIEW]: TUmamiBaseEventData
   [UMAMI_EVENTS.CHECKBOX_TOGGLED]: TUmamiBaseEventData & {
     checked: boolean
   }
@@ -61,7 +59,6 @@ type TUmamiTrackData = {
 
 type TUmamiApi = {
   track?: (eventName: string, data?: TUmamiTrackData) => void
-  trackView?: () => void
 }
 
 const isConsentValue = (value: string | undefined): value is TConsentValue => {
@@ -110,26 +107,6 @@ const getUmami = (): TUmamiApi | undefined => {
   }
 
   return (window as typeof window & { umami?: TUmamiApi }).umami
-}
-
-export const trackUmamiPageView = (): void => {
-  if (!hasAnalyticsConsent() || typeof window === 'undefined') {
-    return
-  }
-
-  const umami = getUmami()
-  if (!umami) {
-    return
-  }
-
-  if (typeof umami.trackView === 'function') {
-    umami.trackView()
-    return
-  }
-
-  if (typeof umami.track === 'function') {
-    trackUmamiEvent(UMAMI_EVENTS.PAGEVIEW)
-  }
 }
 
 export const trackUmamiEvent = <TEventName extends TUmamiEventName>(
