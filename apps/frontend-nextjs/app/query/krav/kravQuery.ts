@@ -134,9 +134,11 @@ export const getKravWithEtterlevelseQuery = gql`
           etterlevelseNummer
           etterlevelseDokumentVersjon
           title
-          seksjoner {
-            nomSeksjonId
-            nomSeksjonName
+          nomOrganisering {
+            seksjoner {
+              nomSeksjonId
+              nomSeksjonName
+            }
           }
           teamsData {
             id

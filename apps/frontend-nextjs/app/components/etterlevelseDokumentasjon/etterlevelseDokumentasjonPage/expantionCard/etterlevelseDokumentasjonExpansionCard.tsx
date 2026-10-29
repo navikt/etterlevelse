@@ -31,17 +31,20 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
   const user = useContext(UserContext)
   const [seksjonerHaveEnheter, setSeksjonerHaveEnheter] = useState(false)
 
+  const nomSeksjoner = etterlevelseDokumentasjon.nomOrganisering.seksjoner
+  const nomEnheter = etterlevelseDokumentasjon.nomOrganisering.enheter
+  const nomAvdelingId = etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId
+  const avdelingNavn = etterlevelseDokumentasjon.nomOrganisering.avdelingNavn
+
   useEffect(() => {
     const promise =
-      etterlevelseDokumentasjon.seksjoner.length > 0
+      nomSeksjoner.length > 0
         ? Promise.all(
-            etterlevelseDokumentasjon.seksjoner.map((seksjon) =>
-              getEnheterBySeksjonId(seksjon.nomSeksjonId)
-            )
+            nomSeksjoner.map((seksjon) => getEnheterBySeksjonId(seksjon.nomSeksjonId))
           ).then((results) => results.some((enheter) => enheter.length > 0))
         : Promise.resolve(false)
     promise.then(setSeksjonerHaveEnheter)
-  }, [etterlevelseDokumentasjon.seksjoner])
+  }, [nomSeksjoner])
 
   const relevansCodeList: IGetParsedOptionsProps[] = codelist.utils.getParsedOptions(
     EListName.RELEVANS
@@ -160,8 +163,8 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 <Label size='medium'>Avdeling:</Label>
               </div>
               <BodyLong size='medium'>
-                {etterlevelseDokumentasjon.nomAvdelingId && etterlevelseDokumentasjon.avdelingNavn}
-                {!etterlevelseDokumentasjon.nomAvdelingId && 'Ikke angitt'}
+                {nomAvdelingId && avdelingNavn}
+                {!nomAvdelingId && 'Ikke angitt'}
               </BodyLong>
             </div>
 
@@ -170,16 +173,14 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                 <Label size='medium'>Seksjon:</Label>
               </div>
               <BodyLong as='div' size='medium'>
-                {etterlevelseDokumentasjon.seksjoner.length !== 0 && (
+                {nomSeksjoner.length !== 0 && (
                   <div className='flex flex-wrap tri'>
                     <BodyLong size='medium'>
-                      {etterlevelseDokumentasjon.seksjoner
-                        .map((seksjon) => seksjon.nomSeksjonName)
-                        .join(', ')}
+                      {nomSeksjoner.map((seksjon) => seksjon.nomSeksjonName).join(', ')}
                     </BodyLong>
                   </div>
                 )}
-                {etterlevelseDokumentasjon.seksjoner.length === 0 && 'Ikke angitt'}
+                {nomSeksjoner.length === 0 && 'Ikke angitt'}
               </BodyLong>
             </div>
 
@@ -189,19 +190,14 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
                   <Label size='medium'>Enhet:</Label>
                 </div>
                 <BodyLong as='div' size='medium'>
-                  {etterlevelseDokumentasjon.enheter &&
-                    etterlevelseDokumentasjon.enheter.length > 0 && (
-                      <div className='flex flex-wrap tri'>
-                        <BodyLong size='medium'>
-                          {etterlevelseDokumentasjon.enheter
-                            .map((enhet) => enhet.nomEnhetName)
-                            .join(', ')}
-                        </BodyLong>
-                      </div>
-                    )}
-                  {(!etterlevelseDokumentasjon.enheter ||
-                    etterlevelseDokumentasjon.enheter.length === 0) &&
-                    'Ikke angitt'}
+                  {nomEnheter.length > 0 && (
+                    <div className='flex flex-wrap tri'>
+                      <BodyLong size='medium'>
+                        {nomEnheter.map((enhet) => enhet.nomEnhetName).join(', ')}
+                      </BodyLong>
+                    </div>
+                  )}
+                  {nomEnheter.length === 0 && 'Ikke angitt'}
                 </BodyLong>
               </div>
             )}

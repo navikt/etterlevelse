@@ -29,10 +29,7 @@ export interface IEtterlevelseDokumentasjon {
   teams: string[]
   resources: string[]
   risikoeiere: string[]
-  nomAvdelingId?: string
-  avdelingNavn?: string
-  seksjoner: INomSeksjon[]
-  enheter: INomEnhet[]
+  nomOrganisering: INomOrganisering
   //data field for frontend only
   teamsData?: ITeam[]
   resourcesData?: ITeamResource[]
@@ -126,6 +123,17 @@ export interface INomSeksjon {
 export interface INomEnhet {
   nomEnhetId: string
   nomEnhetName: string
+}
+
+export interface INomOrganisering {
+  nomAvdelingId?: string
+  avdelingNavn?: string
+  seksjoner: INomSeksjon[]
+  enheter: INomEnhet[]
+  linjer: INomEnhet[]
+  linjeEnheter: INomEnhet[]
+  linjeFylker: INomEnhet[]
+  fylkeKontorer: INomEnhet[]
 }
 
 export enum EActionMenuRoles {

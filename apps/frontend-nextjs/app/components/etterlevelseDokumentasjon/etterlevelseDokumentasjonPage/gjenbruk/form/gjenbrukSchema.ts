@@ -1,7 +1,7 @@
 import * as yup from 'yup'
 import {
-  EEtterlevelseDokumentSchemaMelding,
   beskrivelseCheck,
+  nomOrganiseringCheck,
   resourcesDataCheck,
   teamsDataCheck,
   titleCheck,
@@ -17,6 +17,6 @@ export const gjenbrukDokumentasjonSchema = () =>
     varslingsadresser: varslingsadresserCheck,
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
-    nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
+    nomOrganisering: nomOrganiseringCheck,
     gjenbrukBeskrivelse: gjenbrukBeskrivelseCheck,
   })

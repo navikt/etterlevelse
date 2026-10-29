@@ -1,3 +1,5 @@
+import { mockNomOrganisering } from './etterlevelsesdokument'
+
 const recentDate = new Date().toISOString()
 
 export const mockNyligeEtterlevelseDokumentasjoner = {
@@ -13,6 +15,7 @@ export const mockNyligeEtterlevelseDokumentasjoner = {
           id: '1234-1234-1234-1234',
           title: 'Justice League',
           etterlevelseNummer: 716,
+          nomOrganisering: mockNomOrganisering,
           etterlevelseDokumentVersjon: 1,
           sistEndretEtterlevelse: null,
           sistEndretEtterlevelseAvMeg: recentDate,
@@ -38,6 +41,7 @@ export const mockIngenEndringerEtterlevelseDokumentasjoner = {
           id: 'umami-etterlevelse',
           title: 'Fortress of Solitude',
           etterlevelseNummer: 123,
+          nomOrganisering: mockNomOrganisering,
           etterlevelseDokumentVersjon: 1,
           hasCurrentUserAccess: true,
           sistEndretEtterlevelse: null,

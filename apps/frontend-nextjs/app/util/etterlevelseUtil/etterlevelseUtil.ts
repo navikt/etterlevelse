@@ -40,16 +40,17 @@ export const etterlevelserSorted = (krav: TKravQL): TEtterlevelseQL[] => {
     )
 
   etterlevelser.map((etterlevelse: TEtterlevelseQL) => {
-    if (
-      !etterlevelse.etterlevelseDokumentasjon.seksjoner ||
-      etterlevelse.etterlevelseDokumentasjon.seksjoner.length === 0
-    ) {
-      etterlevelse.etterlevelseDokumentasjon.seksjoner = [
-        {
-          nomSeksjonId: 'INGEN_SEKSJON',
-          nomSeksjonName: 'Ingen seksjon',
-        },
-      ]
+    const nom = etterlevelse.etterlevelseDokumentasjon.nomOrganisering
+    if (nom.seksjoner.length === 0) {
+      etterlevelse.etterlevelseDokumentasjon.nomOrganisering = {
+        ...nom,
+        seksjoner: [
+          {
+            nomSeksjonId: 'INGEN_SEKSJON',
+            nomSeksjonName: 'Ingen seksjon',
+          },
+        ],
+      }
     }
   })
 
@@ -102,7 +103,10 @@ export const filteredEtterlevelseSorted = (krav: TKravQL, filter: string): TEtte
 export const seksjonerSorted = (krav: TKravQL, filter: string) => {
   const seksjoner: INomSeksjon[] = _.sortedUniqBy(
     filteredEtterlevelseSorted(krav, filter)
-      .map((etterlevelse: TEtterlevelseQL) => etterlevelse.etterlevelseDokumentasjon.seksjoner)
+      .map(
+        (etterlevelse: TEtterlevelseQL) =>
+          etterlevelse.etterlevelseDokumentasjon.nomOrganisering.seksjoner
+      )
       .flat()
       .sort((a: INomSeksjon, b: INomSeksjon) => {
         if (a.nomSeksjonId === 'INGEN_SEKSJON') return 1

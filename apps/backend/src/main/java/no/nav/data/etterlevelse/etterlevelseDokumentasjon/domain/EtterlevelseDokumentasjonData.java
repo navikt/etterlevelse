@@ -49,10 +49,9 @@ public class EtterlevelseDokumentasjonData {
     private List<String> teams;
     private List<String> resources;
     private List<String> risikoeiere;
-    private String nomAvdelingId;
-    private String avdelingNavn;
-    private List<NomSeksjon> seksjoner;
-    private List<NomEnhet> enheter;
+
+    private NomOrganisering nomOrganisering;
+
     private List<String> irrelevansFor;
     private List<String> prioritertKravNummer;
     @JsonProperty("Risikovurderinger")
