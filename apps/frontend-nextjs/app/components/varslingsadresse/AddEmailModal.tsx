@@ -23,6 +23,7 @@ export const AddEmailModal = (props: IProps) => {
   const [val, setVal] = useState(user.getEmail())
   const [error, setError] = useState('')
   const [radioValue, setRadioValue] = useState('meg')
+  const emailSectionId = 'add-email-address-section'
 
   const add = (adresse?: string) => {
     const toAdd = adresse || val
@@ -59,14 +60,25 @@ export const AddEmailModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio value='meg'>Meg ({user.getEmail()})</Radio>
-          <Radio value='epost' className='w-full'>
+          <Radio
+            value='meg'
+            aria-expanded={radioValue === 'meg'}
+            aria-controls={radioValue === 'meg' ? undefined : emailSectionId}
+          >
+            Meg ({user.getEmail()})
+          </Radio>
+          <Radio
+            value='epost'
+            className='w-full'
+            aria-expanded={radioValue === 'epost'}
+            aria-controls={radioValue === 'epost' ? emailSectionId : undefined}
+          >
             Noen andre
           </Radio>
         </RadioGroup>
 
         {radioValue === 'epost' && (
-          <div className='w-full pl-8'>
+          <div id={emailSectionId} className='w-full pl-8' aria-live='polite'>
             <Label className='mb-2 block'>Skriv Epost adresse</Label>
             <TextField
               type='email'

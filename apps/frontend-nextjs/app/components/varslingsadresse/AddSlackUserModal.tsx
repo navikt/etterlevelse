@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
+import { Button, Loader, LocalAlert, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
@@ -29,6 +29,7 @@ export const AddSlackUserModal = (props: IProps) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
   const [radioValue, setRadioValue] = useState('meg')
+  const slackSearchSectionId = 'add-slack-user-search-section'
 
   const addEmail = (email: string) => {
     setLoadingSlackId(true)
@@ -66,11 +67,23 @@ export const AddSlackUserModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio value='meg'>Meg ({user.getName()})</Radio>
-          <Radio value='slack'>Noen andre</Radio>
+          <Radio
+            value='meg'
+            aria-expanded={radioValue === 'meg'}
+            aria-controls={radioValue === 'meg' ? undefined : slackSearchSectionId}
+          >
+            Meg ({user.getName()})
+          </Radio>
+          <Radio
+            value='slack'
+            aria-expanded={radioValue === 'slack'}
+            aria-controls={radioValue === 'slack' ? slackSearchSectionId : undefined}
+          >
+            Noen andre
+          </Radio>
         </RadioGroup>
         {radioValue === 'slack' && (
-          <div className='pl-8 w-full'>
+          <div id={slackSearchSectionId} className='pl-8 w-full' aria-live='polite'>
             <div className='flex flex-col'>
               <ContentLayout>
                 <div className='w-full'>
@@ -103,9 +116,11 @@ export const AddSlackUserModal = (props: IProps) => {
               </ContentLayout>
               {loadingSlackId && <Loader size='large' className='flex justify-self-center' />}
               {error && (
-                <Alert className='mt-2.5' variant='error'>
-                  {error}
-                </Alert>
+                <LocalAlert className='mt-2.5' status='error'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>{error}</LocalAlert.Title>
+                  </LocalAlert.Header>
+                </LocalAlert>
               )}
             </div>
           </div>
