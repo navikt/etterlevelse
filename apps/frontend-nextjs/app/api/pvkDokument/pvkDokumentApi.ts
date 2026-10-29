@@ -168,20 +168,22 @@ export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjon
 }
 
 export const useLastApprovedPvkDokument = (etterlevelseDokumentasjonId: string) => {
-  const [data, setData] = useState<IPvkDokument>(mapPvkDokumentToFormValue({}))
-  const [isLoading, setIsLoading] = useState<boolean>(!etterlevelseDokumentasjonId)
+  const [data, setData] = useState<IPvkDokument | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState<boolean>(!!etterlevelseDokumentasjonId)
   const abortedRef = useRef(false)
 
   useEffect(() => {
     abortedRef.current = false
     ;(async () => {
-      await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId).then(
-        async (etterlevelseDokumentasjon) => {
+      await getEtterlevelseDokumentasjon(etterlevelseDokumentasjonId)
+        .then(async (etterlevelseDokumentasjon) => {
           await getPvkDokumentByEtterlevelseDokumentId(etterlevelseDokumentasjonId).then(
             async (pvkDokument) => {
               if (pvkDokument) {
                 if (pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {
-                  setData(pvkDokument)
+                  if (!abortedRef.current) {
+                    setData(pvkDokument)
+                  }
                 } else if (etterlevelseDokumentasjon.etterlevelseDokumentVersjon > 1) {
                   const nyVersjonOpprettetDato = etterlevelseDokumentasjon.versjonHistorikk.find(
                     (historikk) =>
@@ -193,15 +195,21 @@ export const useLastApprovedPvkDokument = (etterlevelseDokumentasjonId: string) 
                     pvkDokument.id,
                     nyVersjonOpprettetDato || ''
                   ).then((approvedPvkDokument) => {
-                    setData(mapPvkDokumentToFormValue(approvedPvkDokument))
+                    if (!abortedRef.current) {
+                      setData(mapPvkDokumentToFormValue(approvedPvkDokument))
+                    }
                   })
                 }
               }
             }
           )
-          setIsLoading(false)
-        }
-      )
+        })
+        .catch(() => undefined)
+        .finally(() => {
+          if (!abortedRef.current) {
+            setIsLoading(false)
+          }
+        })
     })()
 
     return () => {
