@@ -243,7 +243,9 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                               )}
                               {!risikoscenario.ingenTiltak &&
                                 risikoscenario.tiltakIds.length === 0 && (
-                                  <Tag variant='alt1'>Savner tiltak</Tag>
+                                  <Tag variant='outline' data-color='warning'>
+                                    Savner tiltak
+                                  </Tag>
                                 )}
                             </div>
                           )}

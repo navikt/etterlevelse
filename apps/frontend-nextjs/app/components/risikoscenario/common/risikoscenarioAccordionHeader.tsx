@@ -85,7 +85,9 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
         {ikkeFerdigBeskrevet && <Tag variant='alt2'>Ikke ferdig utfylt</Tag>}
         {risikoscenario.ingenTiltak && <Tag variant='neutral'>Tiltak ikke aktuelt</Tag>}
         {!risikoscenario.ingenTiltak && risikoscenario.tiltakIds.length === 0 && (
-          <Tag variant='alt1'>Savner tiltak</Tag>
+          <Tag variant='outline' data-color='warning'>
+            Savner tiltak
+          </Tag>
         )}
         {((nyttInnholdBaseline &&
           moment(risikoscenario.changeStamp.lastModifiedDate).isAfter(nyttInnholdBaseline)) ||
