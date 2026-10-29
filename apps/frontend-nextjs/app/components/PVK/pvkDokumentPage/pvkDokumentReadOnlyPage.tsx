@@ -7,7 +7,10 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { useLastApprovedPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
-import { getLastPvoByApprovedPvkDokumentIdAndTimestamp } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
+import {
+  getLastPvoByApprovedPvkDokumentIdAndTimestamp,
+  mapPvoTilbakemeldingToFormValue,
+} from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import TilhorendeDokumentasjon from '@/components/PVK/pvkDokumentPage/stepperViews/tilhorendeDokumentasjon/tilhorendeDokumentasjon'
 import CustomizedBreadcrumbs from '@/components/common/customizedBreadcrumbs/customizedBreadcrumbs'
 import {
@@ -61,7 +64,7 @@ const PvkDokumentReadOnlyPage = () => {
   const [etterlevelseDokumentasjon] = useEtterlevelseDokumentasjon(
     params.etterlevelseDokumentasjonId
   )
-  const [pvkDokument, setPvkDokument] = useLastApprovedPvkDokument(
+  const [pvkDokument, setPvkDokument, isPvkDokumentLoading] = useLastApprovedPvkDokument(
     params.etterlevelseDokumentasjonId || ''
   )
   const [pvoTilbakemelding, setPvoTilbakemelding] = useState<IPvoTilbakemelding>()
@@ -178,7 +181,7 @@ const PvkDokumentReadOnlyPage = () => {
             pvkDokument.changeStamp.lastModifiedDate
           )
             .then((resp) => {
-              setPvoTilbakemelding(resp)
+              setPvoTilbakemelding(mapPvoTilbakemeldingToFormValue(resp))
             })
             .catch(() => undefined)
         }
@@ -192,13 +195,13 @@ const PvkDokumentReadOnlyPage = () => {
         <meta charSet='utf-8' />
         <title>Pvk Dokument</title>
       </Helmet>
-      {!etterlevelseDokumentasjon && (
+      {(!etterlevelseDokumentasjon || isPvkDokumentLoading) && (
         <div className='flex w-full justify-center'>
           <Loader size='large' />
         </div>
       )}
 
-      {etterlevelseDokumentasjon && pvkDokument && (
+      {etterlevelseDokumentasjon && !isPvkDokumentLoading && pvkDokument && (
         <div className='w-full'>
           <div className='min-h-48 bg-[#8269A21F] flex flex-col w-full items-center'>
             <div className='w-full max-w-7xl'>

@@ -33,6 +33,11 @@ const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
     ),
   ].sort((a, b) => b - a)
 
+  const isTidligereVurdering = (vurdering: IVurdering) =>
+    vurdering.etterlevelseDokumentVersjon < relevantVurdering.etterlevelseDokumentVersjon ||
+    (vurdering.etterlevelseDokumentVersjon === relevantVurdering.etterlevelseDokumentVersjon &&
+      vurdering.innsendingId < relevantVurdering.innsendingId)
+
   return (
     <div className='px-2'>
       <Heading level='2' size='small' className='mb-5'>
@@ -46,9 +51,7 @@ const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
 
         if (
           !forPvo &&
-          tilbakemeldinger.filter(
-            (vurdering) => vurdering.innsendingId < relevantVurdering.innsendingId
-          ).length === 0 &&
+          !tilbakemeldinger.some(isTidligereVurdering) &&
           [undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato)
         ) {
           return null
@@ -78,7 +81,7 @@ const PvoTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                 )}
 
               {tilbakemeldinger.map((vurdering) => {
-                if (vurdering.innsendingId < relevantVurdering.innsendingId) {
+                if (isTidligereVurdering(vurdering)) {
                   return (
                     <Accordion.Item key={`${versjon}_vurdering_${vurdering.innsendingId}`}>
                       <Accordion.Header>

@@ -70,10 +70,8 @@ const BehandlingensLivslopPage = () => {
   > = useParams<{ etterlevelseDokumentasjonId?: string; behandlingensLivslopId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
-  const [behandlingsLivslop, setBehandlingesLivslop] = useBehandlingensLivslop(
-    params.behandlingensLivslopId,
-    params.etterlevelseDokumentasjonId
-  )
+  const [behandlingsLivslop, setBehandlingesLivslop, isBehandlingensLivslopLoading] =
+    useBehandlingensLivslop(params.behandlingensLivslopId, params.etterlevelseDokumentasjonId)
   const [artOgOmfang] = useBehandlingensArtOgOmfang(params.etterlevelseDokumentasjonId)
 
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
@@ -86,6 +84,8 @@ const BehandlingensLivslopPage = () => {
   const [savedSuccessful, setSavedSuccessful] = useState<boolean>(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const formRef: RefObject<any> = useRef(undefined)
+
+  const isLoading = isEtterlevelseDokumentasjonLoading || isBehandlingensLivslopLoading
 
   const router = useRouter()
   const user = useContext(UserContext)
@@ -192,13 +192,13 @@ const BehandlingensLivslopPage = () => {
         Behandlingens livsløp
       </Heading>
 
-      {isEtterlevelseDokumentasjonLoading && (
+      {isLoading && (
         <div className='flex w-full justify-center'>
           <Loader size='large' />
         </div>
       )}
 
-      {!isEtterlevelseDokumentasjonLoading &&
+      {!isLoading &&
         etterlevelseDokumentasjon &&
         behandlingsLivslop &&
         !etterlevelseDokumentasjon.hasCurrentUserAccess &&
@@ -206,7 +206,7 @@ const BehandlingensLivslopPage = () => {
         !user.isAdmin() &&
         !user.isPersonvernombud() && <ForbiddenAlert />}
 
-      {!isEtterlevelseDokumentasjonLoading &&
+      {!isLoading &&
         etterlevelseDokumentasjon &&
         behandlingsLivslop &&
         (etterlevelseDokumentasjon.hasCurrentUserAccess ||

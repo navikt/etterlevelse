@@ -106,7 +106,7 @@ export const useBehandlingensLivslop = (
     isCreateNew ? mapBehandlingensLivslopToFormValue({}) : undefined
   )
   const [isLoading, setIsLoading] = useState<boolean>(
-    !behandlingensLivslopId && !etterlevelseDokumentasjonId
+    !!behandlingensLivslopId && (!isCreateNew || !!etterlevelseDokumentasjonId)
   )
   const abortedRef = useRef(false)
 
@@ -117,12 +117,17 @@ export const useBehandlingensLivslop = (
         if (!abortedRef.current) {
           setIsLoading(true)
         }
-        await getBehandlingensLivslop(behandlingensLivslopId).then(async (behandlingensLivslop) => {
-          if (!abortedRef.current) {
-            setData(behandlingensLivslop)
-            setIsLoading(false)
-          }
-        })
+        await getBehandlingensLivslop(behandlingensLivslopId)
+          .then(async (behandlingensLivslop) => {
+            if (!abortedRef.current) {
+              setData(behandlingensLivslop)
+            }
+          })
+          .finally(() => {
+            if (!abortedRef.current) {
+              setIsLoading(false)
+            }
+          })
       })()
     } else if (etterlevelseDokumentasjonId && isCreateNew) {
       //double check that behandlingenslivslop doesnt not exist
