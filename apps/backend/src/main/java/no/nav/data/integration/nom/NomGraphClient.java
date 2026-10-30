@@ -131,12 +131,7 @@ public class NomGraphClient {
 
     public List<OrgEnhet> getUnderenheterById(String orgId) {
         if (securityProperties.isDev()) {
-            return List.of(
-                    createDevOrganisering("underEnhet1", "Underenhet 1"),
-                    createDevOrganisering("underEnhet2", "Underenhet 2"),
-                    createDevOrganisering("underEnhet3", "Underenhet 3"),
-                    createDevOrganisering("underEnhet4", "Underenhet 4")
-            );
+            return getUnderEnheterForLinje(orgId);
         } else {
             var request = new GraphQLRequest(getUnderOrganiseringerQuery, Map.of("id", orgId));
             var res = template().postForEntity(nomGraphQlProperties.getUrl(), request, OrgEnhetGraphqlResponse.class);
@@ -424,4 +419,66 @@ public class NomGraphClient {
         };
     }
 
+    private List<OrgEnhet> getUnderEnheterForLinje(String orgId) {
+        return switch (orgId) {
+            case "arbeidsOgTjenestelinjen" -> getDevFylker();
+            case "velferdslinjen" -> List.of(
+                    createDevOrganisering("velferdslinjen_under_1", "Hjelpemidler og tilrettelegging")
+            );
+
+            case "ytelseslinjen" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_1", "Arbeid og Ytelser"),
+                    createDevOrganisering("ytelseslinjen_under_2", "Familie- og pensjonsytelser"),
+                    createDevOrganisering("ytelseslinjen_under_3", "Kontaktsenter"),
+                    createDevOrganisering("ytelseslinjen_under_4", "Kontroll")
+            );
+            case "okonomilinjen" -> List.of(
+                    createDevOrganisering("okonomilinjen_under_1", "NAV Økonomiteneste"),
+                    createDevOrganisering("okonomilinjen_under_2", "Økonomi Pensjon"),
+                    createDevOrganisering("okonomilinjen_under_3", "Økonomi Stønad")
+            );
+            case "fylke_1" -> getDevFylkeKontor("fylke_1");
+            case "fylke_2" -> getDevFylkeKontor("fylke_2");
+            case "fylke_3" -> getDevFylkeKontor("fylke_3");
+            case "fylke_4" -> getDevFylkeKontor("fylke_4");
+            case "fylke_5" -> getDevFylkeKontor("fylke_5");
+            default -> List.of();
+        };
+    }
+
+    private List<OrgEnhet> getDevFylker() {
+            return List.of(
+                    createDevOrganisering("fylke_1", "Agder"),
+                    createDevOrganisering("fylke_2", "Norland"),
+                    createDevOrganisering("fylke_3", "Oslo"),
+                    createDevOrganisering("fylke_4", "Vestland"),
+                    createDevOrganisering("fylke_5", "Rogaland")
+            );
+    };
+
+    private List<OrgEnhet> getDevFylkeKontor(String fylkeId) {
+        return switch (fylkeId) {
+            case "fylke_1" -> List.of(
+                    createDevOrganisering("kommune_1", "Arendal"),
+                    createDevOrganisering("kommune_2", "Kristiansand")
+            );
+            case "fylke_2" -> List.of(
+                    createDevOrganisering("kommune_3", "Bodø"),
+                    createDevOrganisering("kommune_4", "Narvik")
+            );
+            case "fylke_3" -> List.of(
+                    createDevOrganisering("kommune_5", "Alna"),
+                    createDevOrganisering("kommune_6", "Nordstrand")
+            );
+            case "fylke_4" -> List.of(
+                    createDevOrganisering("kommune_7", "Region Bergen"),
+                    createDevOrganisering("kommune_8", "Region Sogn")
+            );
+            case "fylke_5" -> List.of(
+                    createDevOrganisering("kommune_8", "Sandnes"),
+                    createDevOrganisering("kommune_9", "Gjesdal")
+            );
+            default -> List.of();
+        };
+    }
 }
