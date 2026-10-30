@@ -104,6 +104,7 @@ import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDoku
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
 import EtterlevelseDokumentEnheterForm from './nomOrganiseringForms/etterlevelseDokumentEnheterForm'
+import EtterlevelseDokumentLinjeForm from './nomOrganiseringForms/etterlevelseDokumentLinjeForm'
 import EtterlevelseDokumentSeksjonForm from './nomOrganiseringForms/etterlevelseDokumentSeksjonForm'
 import ROSEdit from './rosEdit'
 
@@ -887,13 +888,18 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
 
               <div className='flex-1' />
             </div>
+
             {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
-              <EtterlevelseDokumentSeksjonForm
-                seksjonerByAvdeling={seksjonerByAvdeling}
-                selectedAvdeling={selectedAvdeling}
-                enheterBySeksjon={enheterBySeksjon}
-                setEnheterBySeksjon={setEnheterBySeksjon}
-              />
+              <div>
+                <EtterlevelseDokumentSeksjonForm
+                  seksjonerByAvdeling={seksjonerByAvdeling}
+                  selectedAvdeling={selectedAvdeling}
+                  enheterBySeksjon={enheterBySeksjon}
+                  setEnheterBySeksjon={setEnheterBySeksjon}
+                />
+
+                <EtterlevelseDokumentLinjeForm />
+              </div>
             )}
 
             <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
