@@ -1,7 +1,7 @@
 'use client'
 
 import { LinkIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Editor } from '@tiptap/react'
+import { Editor, useEditorState } from '@tiptap/react'
 import { useEffect, useRef, useState } from 'react'
 import { ettlevColors } from '@/util/theme/theme'
 import { highlightColors, textColors } from './extensions'
@@ -97,7 +97,7 @@ export const Toolbar = ({
   const colorPickerRef = usePopover(showColorPicker, () => setShowColorPicker(false))
   const textColorPickerRef = usePopover(showTextColorPicker, () => setShowTextColorPicker(false))
 
-  const getBlockType = () => {
+  const getBlockType = (editor: Editor) => {
     if (editor.isActive('blockquote')) return 'blockquote'
     else if (editor.isActive('codeBlock')) return 'codeBlock'
     else if (editor.isActive('heading', { level: 2 })) return 'h2'
@@ -107,7 +107,22 @@ export const Toolbar = ({
     else if (editor.isActive('heading', { level: 6 })) return 'h6'
     return 'normal'
   }
-  const currentBlockType = getBlockType()
+
+  const editorState = useEditorState({
+    editor,
+    selector: ({ editor }) => ({
+      blockType: getBlockType(editor),
+      isBold: editor.isActive('bold'),
+      isItalic: editor.isActive('italic'),
+      isUnderline: editor.isActive('underline'),
+      isBulletList: editor.isActive('bulletList'),
+      isOrderedList: editor.isActive('orderedList'),
+      isLink: editor.isActive('link'),
+      canUndo: editor.can().undo(),
+      canRedo: editor.can().redo(),
+    }),
+  })
+  const currentBlockType = editorState.blockType
 
   const setBlockType = (value: string) => {
     const chain = editor.chain().focus()
@@ -155,14 +170,14 @@ export const Toolbar = ({
       <div className='rdw-inline-wrapper' role='group' aria-label='Tekststil'>
         <ToolbarButton
           label='Bold'
-          active={editor.isActive('bold')}
+          active={editorState.isBold}
           onClick={() => editor.chain().focus().toggleBold().run()}
         >
           <b>B</b>
         </ToolbarButton>
         <ToolbarButton
           label='Italic'
-          active={editor.isActive('italic')}
+          active={editorState.isItalic}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         >
           <i>I</i>
@@ -170,7 +185,7 @@ export const Toolbar = ({
         {withUnderline && (
           <ToolbarButton
             label='Underline'
-            active={editor.isActive('underline')}
+            active={editorState.isUnderline}
             onClick={() => editor.chain().focus().toggleUnderline().run()}
           >
             <u>U</u>
@@ -199,14 +214,14 @@ export const Toolbar = ({
       <div className='rdw-list-wrapper' role='group' aria-label='List'>
         <ToolbarButton
           label='Unordered'
-          active={editor.isActive('bulletList')}
+          active={editorState.isBulletList}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
           •
         </ToolbarButton>
         <ToolbarButton
           label='Ordered'
-          active={editor.isActive('orderedList')}
+          active={editorState.isOrderedList}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
           1.
@@ -216,13 +231,13 @@ export const Toolbar = ({
       <div className='rdw-link-wrapper' role='group' aria-label='Link' ref={linkFormRef}>
         <ToolbarButton
           label='Link'
-          active={editor.isActive('link')}
+          active={editorState.isLink}
           expanded={showLinkForm}
           onClick={openLinkForm}
         >
           <LinkIcon aria-hidden />
         </ToolbarButton>
-        {editor.isActive('link') && (
+        {editorState.isLink && (
           <ToolbarButton label='Unlink' onClick={removeLink}>
             Fjern lenke
           </ToolbarButton>
@@ -252,14 +267,14 @@ export const Toolbar = ({
         <div className='rdw-history-wrapper'>
           <ToolbarButton
             label='Undo'
-            disabled={!editor.can().undo()}
+            disabled={!editorState.canUndo}
             onClick={() => editor.chain().focus().undo().run()}
           >
             ↶
           </ToolbarButton>
           <ToolbarButton
             label='Redo'
-            disabled={!editor.can().redo()}
+            disabled={!editorState.canRedo}
             onClick={() => editor.chain().focus().redo().run()}
           >
             ↷
