@@ -16,7 +16,10 @@ export const ReadOnlyField: FunctionComponent<TProps> = ({ label, description, c
       {displayInline && (
         <div>
           <Label key='description_label'>{label}</Label>
-          <BodyShort className={`var(--a-font-line-height-large)`} key='description_text'>
+          <BodyShort
+            className={`var(--a-font-line-height-large) wrap-anywhere`}
+            key='description_text'
+          >
             {description}
           </BodyShort>
         </div>
@@ -24,7 +27,9 @@ export const ReadOnlyField: FunctionComponent<TProps> = ({ label, description, c
       {displayBlock && (
         <div>
           <Label>{label}</Label>
-          <BodyShort className={`var(--a-font-line-height-large)`}>{description}</BodyShort>
+          <BodyShort className={`var(--a-font-line-height-large) wrap-anywhere`}>
+            {description}
+          </BodyShort>
         </div>
       )}
     </div>
