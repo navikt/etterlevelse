@@ -1,6 +1,7 @@
 'use client'
 
 import { LinkIcon, XMarkIcon } from '@navikt/aksel-icons'
+import { TextSelection } from '@tiptap/pm/state'
 import { Editor, useEditorState } from '@tiptap/react'
 import { useEffect, useRef, useState } from 'react'
 import { ettlevColors } from '@/util/theme/theme'
@@ -137,7 +138,24 @@ export const Toolbar = ({
   const currentBlockType = editorState.blockType
 
   const setBlockType = (value: string) => {
-    const chain = editor.chain().focus()
+    const chain = editor
+      .chain()
+      .focus()
+      .command(({ tr }) => {
+        // Block types apply to whole textblocks, so move a partial selection into its own block first.
+        const { from, to, $from, $to, empty } = tr.selection
+        if (empty || !$from.sameParent($to) || !$from.parent.isTextblock) return true
+
+        const splitAtStart = from > $from.start()
+        const splitAtEnd = to < $to.end()
+        if (splitAtEnd) tr.split(to)
+        if (splitAtStart) tr.split(from)
+
+        const offset = splitAtStart ? 2 : 0
+        tr.setSelection(TextSelection.create(tr.doc, from + offset, to + offset))
+        return true
+      })
+
     if (value === 'normal') {
       chain.setParagraph().run()
     } else if (value === 'blockquote') {
