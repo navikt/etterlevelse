@@ -33,7 +33,7 @@ export const RisikoscenarioAccordianHeader: FunctionComponent<TProps> = ({
     risikoscenario.sannsynlighetsNivaaBegrunnelse !== ''
 
   return (
-    <Accordion.Header ref={ref}>
+    <Accordion.Header className='sticky top-0 z-1 bg-white' ref={ref}>
       {risikoscenario.navn}
       <div className='flex gap-2 mt-1'>
         {risikoscenario.ingenTiltak && <Tag variant='neutral'>Tiltak ikke aktuelt</Tag>}

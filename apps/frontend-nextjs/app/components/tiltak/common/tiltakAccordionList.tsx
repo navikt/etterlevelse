@@ -120,7 +120,10 @@ export const TiltakAccordionList: FunctionComponent<TProps> = ({
                 handleAccordionChange(open ? tiltak.id : undefined)
               }}
             >
-              <Accordion.Header ref={expanded ? accordionRef : undefined}>
+              <Accordion.Header
+                className='sticky top-0 z-1 bg-white'
+                ref={expanded ? accordionRef : undefined}
+              >
                 {tiltak.navn}{' '}
                 <div className='flex gap-2'>
                   {!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name && (
