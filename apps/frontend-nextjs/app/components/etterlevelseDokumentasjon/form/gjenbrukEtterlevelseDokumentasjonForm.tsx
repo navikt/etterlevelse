@@ -185,6 +185,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
         behandlinger: etterlevelseDokumentasjon.behandlinger,
         behandlingIds: etterlevelseDokumentasjon.behandlingIds,
         behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger,
+        nomOrganisering: etterlevelseDokumentasjon.nomOrganisering,
       })}
       innerRef={formRef}
       onSubmit={submit}
@@ -546,7 +547,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
             </Heading>
 
             <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
-              <FieldWrapper full>
+              <FieldWrapper marginTop full>
                 <Field name='nomOrganisering.nomAvdelingId'>
                   {(fieldProps: FieldProps) => (
                     <div>
@@ -561,7 +562,9 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                           if (value !== fieldProps.form.values.nomOrganisering.nomAvdelingId) {
                             await fieldProps.form.setFieldValue('nomOrganisering.seksjoner', [])
                             await fieldProps.form.setFieldValue('nomOrganisering.enheter', [])
+                            setEnheterBySeksjon(new Map())
                           }
+
                           await fieldProps.form.setFieldValue(
                             'nomOrganisering.nomAvdelingId',
                             value
