@@ -898,7 +898,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                   setEnheterBySeksjon={setEnheterBySeksjon}
                 />
 
-                <EtterlevelseDokumentLinjeForm />
+                {env.isDev && <EtterlevelseDokumentLinjeForm formValues={values} />}
               </div>
             )}
 
