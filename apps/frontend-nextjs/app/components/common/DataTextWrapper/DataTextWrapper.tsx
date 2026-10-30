@@ -12,7 +12,7 @@ const DataTextWrapper: FunctionComponent<TProps> = ({
   customEmptyMessage,
   className,
 }) => (
-  <div className={`p-3 rounded-lg bg-[#EEF6FC] mt-3 ${className ?? ''}`.trim()}>
+  <div className={`p-3 rounded-lg bg-[#EEF6FC] mt-3 wrap-break-word ${className ?? ''}`.trim()}>
     {children && typeof children === 'string' && (
       <BodyLongWithLineBreak>{children}</BodyLongWithLineBreak>
     )}

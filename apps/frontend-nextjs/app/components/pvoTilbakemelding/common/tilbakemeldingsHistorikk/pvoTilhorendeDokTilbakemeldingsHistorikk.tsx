@@ -55,7 +55,7 @@ const PvoTilhorendeDokTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                 ![undefined, null, ''].includes(pvkDokument.godkjentAvRisikoeierDato) &&
                 version === relevantVurdering.etterlevelseDokumentVersjon && (
                   <Accordion.Item key={`${version}_vurdering_${relevantVurdering.innsendingId}`}>
-                    <Accordion.Header>
+                    <Accordion.Header className='sticky top-0 z-1 bg-[#E3EFF7]'>
                       {relevantVurdering.innsendingId}. tilbakemelding -{' '}
                       {moment(relevantVurdering.sendtDato).format('LL')}
                     </Accordion.Header>
@@ -75,7 +75,7 @@ const PvoTilhorendeDokTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                   if (vurdering.innsendingId < relevantVurdering.innsendingId) {
                     return (
                       <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
-                        <Accordion.Header>
+                        <Accordion.Header className='sticky top-0 z-1 bg-[#E3EFF7]'>
                           {vurdering.innsendingId}. tilbakemelding -{' '}
                           {moment(vurdering.sendtDato).format('LL')}
                         </Accordion.Header>
