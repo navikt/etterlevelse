@@ -2,9 +2,9 @@
 
 #### Requirements
 
- * OpenJDK 25
- * Docker
- * Maven
+- OpenJDK 25
+- Docker
+- Maven
 
 For å bygge lokalt i Windows må man ha Docker desktop. Husk å legge til brukeren din i gruppen docker-users.
 
@@ -47,11 +47,13 @@ Terminal 2 – ta en dump av dev og legg den inn lokalt (la passordet stå tomt 
 
 ```bash
 pg_dump -h localhost -p 5434 -U <din-nav-epost> -d etterlevelsedb \
-  -Fc --no-owner --no-acl -f ~/etterlevelse-dev.dump
+  -Fc --no-owner --no-acl -v -f ~/etterlevelse-dev.dump
 
 pg_restore -h localhost -p 5433 -U postgres -d etterlevelsedb \
-  --clean --if-exists --no-owner --no-acl ~/etterlevelse-dev.dump
+  --clean --if-exists --no-owner --no-acl -v ~/etterlevelse-dev.dump
 ```
+
+`-v` viser fremdrift underveis. Dumpen kan ta noen minutter.
 
 Stopp proxyen (Ctrl+C) når dumpen er ferdig.
 
@@ -141,27 +143,29 @@ Ikke kjør `kubectl port-forward` mot dev-backend samtidig, siden den også bruk
 
 ### Vanlige feil
 
-| Feil | Løsning |
-| --- | --- |
-| `bind: address already in use` når du starter proxyen | Bruk en annen port med `--port`, og samme port i `pg_dump`. |
-| `Cannot compile module ... JVM target 25 ... SDK version 21` i IntelliJ | Sett Project SDK til JDK 25 (se steg 3). |
+| Feil                                                                                                                                             | Løsning                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bind: address already in use` når du starter proxyen                                                                                            | Bruk en annen port med `--port`, og samme port i `pg_dump`.                                                                                                                                                                                                                                                      |
+| `Cannot compile module ... JVM target 25 ... SDK version 21` i IntelliJ                                                                          | Sett Project SDK til JDK 25 (se steg 3).                                                                                                                                                                                                                                                                         |
 | `ClassNotFoundException`/`NoClassDefFoundError` når du kjører `LocalAppStarter`, eller 500-feil med et klassenavn (f.eks. `...$KravDataBuilder`) | Noe annet har overskrevet `target/classes`, typisk Java-utvidelsen i VS Code som bygger `apps/backend` automatisk. Lukk VS Code-vinduet med repoet, åpne bare `apps/frontend-nextjs` i VS Code, eller slå av **Language Support for Java** for workspacet. Kjør så **Build → Rebuild Project** og start på nytt. |
-| `Could not find or load main class ...` | Mellomrom i VM options uten anførselstegn, f.eks. en plassholder som `<NAV-ident>` som ikke er byttet ut. |
-| Samme feil i Eclipse | **Project → Clean...** og høyreklikk prosjektet → **Maven → Update Project**. |
-| Kompileringsfeil på getters/builders (`cannot find symbol`) i Eclipse | Lombok er ikke installert i Eclipse (se steg 3, alternativ C). |
-| Microsoft-innlogging med `AADSTS700016` | Backend kjører ikke, eller kjører uten `local`-profilen. Start via `LocalAppStarter`. |
+| `Could not find or load main class ...`                                                                                                          | Mellomrom i VM options uten anførselstegn, f.eks. en plassholder som `<NAV-ident>` som ikke er byttet ut.                                                                                                                                                                                                        |
+| Samme feil i Eclipse                                                                                                                             | **Project → Clean...** og høyreklikk prosjektet → **Maven → Update Project**.                                                                                                                                                                                                                                    |
+| Kompileringsfeil på getters/builders (`cannot find symbol`) i Eclipse                                                                            | Lombok er ikke installert i Eclipse (se steg 3, alternativ C).                                                                                                                                                                                                                                                   |
+| Microsoft-innlogging med `AADSTS700016`                                                                                                          | Backend kjører ikke, eller kjører uten `local`-profilen. Start via `LocalAppStarter`.                                                                                                                                                                                                                            |
 
-#### Build 
+#### Build
+
 `mvn clean package`
 
 ### Azure bruker trenger tilgang til
 
-
 #### Azure scopes:
+
 - Mail.Send - Delegated
+
 #### Epostbruker
+
 - Gi tilgang til epostbruker: teamkatalog@nav.no til app (dev/prod-fss:teamdatajegerne:etterlevelse-backend)
 - Gi tilgang til epostinnlogging i azure
-    - App-registrations -> finn app -> Authentication
-        - Advanced settings -> Allow public client flows -> Enable the following mobile and desktop flows: Yes
-
+  - App-registrations -> finn app -> Authentication
+    - Advanced settings -> Allow public client flows -> Enable the following mobile and desktop flows: Yes

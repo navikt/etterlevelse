@@ -417,6 +417,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
     const baseStats = getCurrentStats()
 
+    const sk = doks.reduce(
+      (acc, d) => ({
+        total: acc.total + (d.suksesskriterier?.total ?? 0),
+        ikkePaabegynt: acc.ikkePaabegynt + (d.suksesskriterier?.ikkePaabegyntAntall ?? 0),
+        underArbeid: acc.underArbeid + (d.suksesskriterier?.underArbeidAntall ?? 0),
+        oppfylt: acc.oppfylt + (d.suksesskriterier?.oppfyltAntall ?? 0),
+        ikkeOppfylt: acc.ikkeOppfylt + (d.suksesskriterier?.ikkeOppfyltAntall ?? 0),
+        ikkeRelevant: acc.ikkeRelevant + (d.suksesskriterier?.ikkeRelevantAntall ?? 0),
+      }),
+      { total: 0, ikkePaabegynt: 0, underArbeid: 0, oppfylt: 0, ikkeOppfylt: 0, ikkeRelevant: 0 }
+    )
+    const skProsent = (antall: number) => (sk.total > 0 ? Math.round((antall / sk.total) * 100) : 0)
+
     return {
       ...baseStats,
       dokumenter: {
@@ -427,17 +440,17 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         godkjentAvRisikoeier: godkjent,
       },
       suksesskriterier: {
-        total: 0,
-        ikkePaabegyntAntall: 0,
-        underArbeidAntall: 0,
-        oppfyltAntall: 0,
-        ikkeOppfyltAntall: 0,
-        ikkeRelevantAntall: 0,
-        ikkePaabegyntProsent: 0,
-        underArbeidProsent: 0,
-        oppfyltProsent: 0,
-        ikkeOppfyltProsent: 0,
-        ikkeRelevantProsent: 0,
+        total: sk.total,
+        ikkePaabegyntAntall: sk.ikkePaabegynt,
+        underArbeidAntall: sk.underArbeid,
+        oppfyltAntall: sk.oppfylt,
+        ikkeOppfyltAntall: sk.ikkeOppfylt,
+        ikkeRelevantAntall: sk.ikkeRelevant,
+        ikkePaabegyntProsent: skProsent(sk.ikkePaabegynt),
+        underArbeidProsent: skProsent(sk.underArbeid),
+        oppfyltProsent: skProsent(sk.oppfylt),
+        ikkeOppfyltProsent: skProsent(sk.ikkeOppfylt),
+        ikkeRelevantProsent: skProsent(sk.ikkeRelevant),
       },
       behovForPvk: {
         totalMedPersonopplysninger: medPersonopplysninger.length,

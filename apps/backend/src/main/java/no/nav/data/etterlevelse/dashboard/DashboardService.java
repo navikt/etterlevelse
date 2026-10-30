@@ -318,6 +318,7 @@ public class DashboardService {
                     int totalSuksesskriterier = antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav + antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav;
                     double prosent = totalSuksesskriterier > 0 ? ((double) antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav / totalSuksesskriterier) * 100 : 0;
                     dashboardTableResponse.setOppfyltKravProsent((int) Math.floor(prosent));
+                    dashboardTableResponse.setSuksesskriterier(getSuksesskriterierStats(aktivEtterlevelserForDok));
                     dashboardTableResponse.setSistOppdatertEtterlevelse(sistOppdatertEtterlevelse);
 
                     var versjonHistorikk = dok.getEtterlevelseDokumentasjonData().getVersjonHistorikk();
