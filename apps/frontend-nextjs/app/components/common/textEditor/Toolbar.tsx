@@ -98,14 +98,26 @@ export const Toolbar = ({
   const textColorPickerRef = usePopover(showTextColorPicker, () => setShowTextColorPicker(false))
 
   const getBlockType = (editor: Editor) => {
-    if (editor.isActive('blockquote')) return 'blockquote'
-    else if (editor.isActive('codeBlock')) return 'codeBlock'
-    else if (editor.isActive('heading', { level: 2 })) return 'h2'
-    else if (editor.isActive('heading', { level: 3 })) return 'h3'
-    else if (editor.isActive('heading', { level: 4 })) return 'h4'
-    else if (editor.isActive('heading', { level: 5 })) return 'h5'
-    else if (editor.isActive('heading', { level: 6 })) return 'h6'
-    return 'normal'
+    const { doc, selection } = editor.state
+    const blockTypes = new Set<string>()
+
+    // isActive() fails for select-all (Cmd+A), so inspect the textblocks in the selection directly.
+    doc.nodesBetween(selection.from, selection.to, (node, pos) => {
+      if (!node.isTextblock) return true
+      const $pos = doc.resolve(pos)
+      const inBlockquote = Array.from({ length: $pos.depth + 1 }, (_, depth) =>
+        $pos.node(depth)
+      ).some((ancestor) => ancestor.type.name === 'blockquote')
+
+      if (inBlockquote) blockTypes.add('blockquote')
+      else if (node.type.name === 'codeBlock') blockTypes.add('codeBlock')
+      else if (node.type.name === 'heading') blockTypes.add(`h${node.attrs.level}`)
+      else blockTypes.add('normal')
+      return false
+    })
+
+    if (blockTypes.size === 0) return 'normal'
+    return blockTypes.size === 1 ? [...blockTypes][0] : 'mixed'
   }
 
   const editorState = useEditorState({
@@ -200,6 +212,9 @@ export const Toolbar = ({
           onChange={(event) => setBlockType(event.target.value)}
           className='rdw-dropdown-wrapper'
         >
+          <option value='mixed' disabled hidden>
+            Blandet
+          </option>
           <option value='normal'>Normal</option>
           <option value='h2'>H2</option>
           <option value='h3'>H3</option>
