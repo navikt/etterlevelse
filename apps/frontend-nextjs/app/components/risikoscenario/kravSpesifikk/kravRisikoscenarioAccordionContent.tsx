@@ -2,7 +2,7 @@
 
 import { Button, LocalAlert } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   addTiltakToRisikoscenario,
@@ -84,7 +84,19 @@ const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
   const [isEditTiltakFormActive, setIsEditTiltakFormActive] = useState<boolean>(false)
   const [isIngenTiltakFormDirty, setIsIngenTilktakFormDirty] = useState<boolean>(false)
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
+  const tiltakIdToFocusRef = useRef<string>('')
   const router = useRouter()
+
+  useEffect(() => {
+    if (!tiltakIdToFocusRef.current) return
+    const tiltakHeader = document.getElementById(
+      `${activeRisikoscenario.id}_${tiltakIdToFocusRef.current}`
+    )
+    if (tiltakHeader) {
+      tiltakHeader.focus()
+      tiltakIdToFocusRef.current = ''
+    }
+  })
 
   const isLinkedToThisKrav = (scenario: IRisikoscenario): boolean => {
     if (scenario.generelScenario) return false
@@ -179,7 +191,8 @@ const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       })
       setTiltakList([...tiltakList, response])
       setIsCreateTiltakFormActive(false)
-      router.push(risikoscenarioIdQuery(risikoscenario.id, response.id))
+      tiltakIdToFocusRef.current = response.id
+      router.push(risikoscenarioIdQuery(risikoscenario.id, response.id), { scroll: false })
     })
   }
 
@@ -333,7 +346,7 @@ const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
               !isAddExistingMode &&
               !isCreateMode && (
                 <div
-                  className={`mt-5 flex gap-2 lg:flex-row flex-col${
+                  className={`mt-5 mb-2 flex gap-2 lg:flex-row flex-col${
                     isIngenTiltakFormDirty ? ' invisible pointer-events-none' : ''
                   }`}
                   aria-hidden={isIngenTiltakFormDirty}

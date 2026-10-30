@@ -170,9 +170,13 @@ const TiltakForm: FunctionComponent<TProps> = ({
                     styles={selectOverrides}
                   />
                   <RenderTagList
-                    list={[
-                      `${fieldRenderProps.form.values.ansvarlig.fullName} (${fieldRenderProps.form.values.ansvarlig.navIdent})`,
-                    ]}
+                    list={
+                      fieldRenderProps.form.values.ansvarlig?.navIdent
+                        ? [
+                            `${fieldRenderProps.form.values.ansvarlig.fullName} (${fieldRenderProps.form.values.ansvarlig.navIdent})`,
+                          ]
+                        : []
+                    }
                     onRemove={() => {
                       fieldRenderProps.form.setFieldValue('ansvarlig', {})
                     }}
@@ -269,7 +273,7 @@ const TiltakForm: FunctionComponent<TProps> = ({
             </ErrorSummary>
           )}
 
-          <div className='flex gap-2 mt-5'>
+          <div className='flex gap-2 mt-5 mb-2'>
             <Button
               type='button'
               onClick={async () => {
