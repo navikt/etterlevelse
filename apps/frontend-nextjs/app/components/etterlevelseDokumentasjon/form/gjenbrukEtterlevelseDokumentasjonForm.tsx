@@ -64,10 +64,7 @@ import {
   ERelationType,
   IEtterlevelseDokumentasjonWithRelation,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
-import {
-  INomSeksjon,
-  TEtterlevelseDokumentasjonQL,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
@@ -78,6 +75,8 @@ import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokumentasjonSchema'
+import EtterlevelseDokumentEnheterForm from './nomOrganiseringForms/etterlevelseDokumentEnheterForm'
+import EtterlevelseDokumentSeksjonForm from './nomOrganiseringForms/etterlevelseDokumentSeksjonForm'
 import ROSEdit from './rosEdit'
 
 type TProps = {
@@ -99,6 +98,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
       : ''
   )
   const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
+  const [enheterBySeksjon, setEnheterBySeksjon] = useState<Map<string, TOption[]>>(new Map())
   const user = useContext(UserContext)
   const codelist = useContext(CodelistContext)
   const router = useRouter()
@@ -585,66 +585,16 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               <div className='flex-1' />
             </div>
 
-            {selectedAvdeling !== '' &&
-              selectedAvdeling !== undefined &&
-              (() => {
-                const filteredSeksjoner = seksjonerByAvdeling.filter(
-                  (s) => s.value !== selectedAvdeling
-                )
-                if (filteredSeksjoner.length === 0) return null
-                return (
-                  <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                    <FieldWrapper marginTop full>
-                      <FieldArray name='nomOrganisering.seksjoner'>
-                        {(fieldProps: FieldArrayRenderProps) => (
-                          <div>
-                            <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
-                            <OptionList
-                              label='Seksjon'
-                              options={filteredSeksjoner}
-                              onChange={async (value: any) => {
-                                if (value) {
-                                  const selectedSeksjon = filteredSeksjoner.find(
-                                    (seksjon) => seksjon.value === value
-                                  )
+            {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
+              <EtterlevelseDokumentSeksjonForm
+                seksjonerByAvdeling={seksjonerByAvdeling}
+                selectedAvdeling={selectedAvdeling}
+                enheterBySeksjon={enheterBySeksjon}
+                setEnheterBySeksjon={setEnheterBySeksjon}
+              />
+            )}
 
-                                  if (!selectedSeksjon) return
-
-                                  const ikkeFinnesAlleredeIListe =
-                                    fieldProps.form.values.nomOrganisering.seksjoner.filter(
-                                      (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
-                                    ).length === 0
-
-                                  if (ikkeFinnesAlleredeIListe) {
-                                    await fieldProps.form.setFieldValue(
-                                      'nomOrganisering.seksjoner',
-                                      [
-                                        ...fieldProps.form.values.nomOrganisering.seksjoner,
-                                        {
-                                          nomSeksjonId: selectedSeksjon.value,
-                                          nomSeksjonName: selectedSeksjon.label,
-                                        },
-                                      ]
-                                    )
-                                  }
-                                }
-                              }}
-                            />
-                            <RenderTagList
-                              list={fieldProps.form.values.nomOrganisering.seksjoner.map(
-                                (seksjon: INomSeksjon) => seksjon.nomSeksjonName
-                              )}
-                              onRemove={fieldProps.remove}
-                            />
-                          </div>
-                        )}
-                      </FieldArray>
-                    </FieldWrapper>
-
-                    <div className='flex-1' />
-                  </div>
-                )
-              })()}
+            <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
 
             <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
               <FieldArray name='risikoeiereData'>

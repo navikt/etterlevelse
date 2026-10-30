@@ -74,8 +74,6 @@ import {
 import {
   EEtterlevelseDokumentasjonStatus,
   IEtterlevelseDokumentasjon,
-  INomEnhet,
-  INomSeksjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
@@ -88,6 +86,8 @@ import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
+import EtterlevelseDokumentEnheterForm from './nomOrganiseringForms/etterlevelseDokumentEnheterForm'
+import EtterlevelseDokumentSeksjonForm from './nomOrganiseringForms/etterlevelseDokumentSeksjonForm'
 
 type TProps = {
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
@@ -409,6 +409,51 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               </FieldArray>
             </ReadMore>
 
+            {env.isDev && (
+              <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
+                <FieldArray name='ardoqSystemData'>
+                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
+                    <div className='flex-1'>
+                      <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                      <div className='w-full'>
+                        <AsyncSelect
+                          aria-label='Søk etter system'
+                          placeholder=''
+                          tabSelectsValue={false}
+                          components={{ DropdownIndicator }}
+                          noOptionsMessage={({ inputValue }) => {
+                            return noOptionMessage(inputValue)
+                          }}
+                          controlShouldRenderValue={false}
+                          loadingMessage={() => 'Søker...'}
+                          isClearable={false}
+                          loadOptions={useArdoqSearch}
+                          onChange={(value: any) => {
+                            if (
+                              value &&
+                              fieldArrayRenderProps.form.values.ardoqSystemData.filter(
+                                (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
+                              ).length === 0
+                            ) {
+                              fieldArrayRenderProps.push(value)
+                            }
+                          }}
+                          styles={selectOverrides}
+                        />
+                        <RenderTagList
+                          list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
+                            (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
+                          )}
+                          onRemove={fieldArrayRenderProps.remove}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </FieldArray>
+                <div className='flex-1' />
+              </div>
+            )}
+
             <FieldWrapper marginBottom id='risikovurderinger'>
               <FieldArray name='risikovurderinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
@@ -632,202 +677,16 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               <div className='flex-1' />
             </div>
 
-            {selectedAvdeling !== '' &&
-              selectedAvdeling !== undefined &&
-              (() => {
-                const filteredSeksjoner = seksjonerByAvdeling.filter(
-                  (s) => s.value !== selectedAvdeling
-                )
-                if (filteredSeksjoner.length === 0) return null
-                return (
-                  <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                    <FieldWrapper marginTop full>
-                      <FieldArray name='nomOrganisering.seksjoner'>
-                        {(fieldProps: FieldArrayRenderProps) => (
-                          <div>
-                            <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
-                            <OptionList
-                              label='Seksjon'
-                              options={filteredSeksjoner}
-                              onChange={async (value: any) => {
-                                if (value) {
-                                  const selectedSeksjon = filteredSeksjoner.find(
-                                    (seksjon) => seksjon.value === value
-                                  )
-
-                                  if (!selectedSeksjon) return
-
-                                  const ikkeFinnesAlleredeIListe =
-                                    fieldProps.form.values.nomOrganisering.seksjoner.filter(
-                                      (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
-                                    ).length === 0
-
-                                  if (ikkeFinnesAlleredeIListe) {
-                                    await fieldProps.form.setFieldValue(
-                                      'nomOrganisering.seksjoner',
-                                      [
-                                        ...fieldProps.form.values.nomOrganisering.seksjoner,
-                                        {
-                                          nomSeksjonId: selectedSeksjon.value,
-                                          nomSeksjonName: selectedSeksjon.label,
-                                        },
-                                      ]
-                                    )
-
-                                    getEnheterBySeksjonId(String(selectedSeksjon.value))
-                                      .then((enheter) => {
-                                        if (enheter.length > 0) {
-                                          setEnheterBySeksjon((prev) => {
-                                            const next = new Map(prev)
-                                            next.set(
-                                              String(selectedSeksjon.value),
-                                              enheter.map((e) => ({ value: e.id, label: e.navn }))
-                                            )
-                                            return next
-                                          })
-                                        }
-                                      })
-                                      .catch(() => {})
-                                  }
-                                }
-                              }}
-                            />
-                            <RenderTagList
-                              list={fieldProps.form.values.nomOrganisering.seksjoner.map(
-                                (seksjon: INomSeksjon) => seksjon.nomSeksjonName
-                              )}
-                              onRemove={(index: number) => {
-                                const removedSeksjon =
-                                  fieldProps.form.values.nomOrganisering.seksjoner[index]
-                                fieldProps.remove(index)
-                                const removedEnheter =
-                                  fieldProps.form.values.nomOrganisering.enheter.filter(
-                                    (e: INomEnhet) => {
-                                      const enhetOptions = enheterBySeksjon.get(
-                                        removedSeksjon.nomSeksjonId
-                                      )
-                                      return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
-                                    }
-                                  )
-                                if (removedEnheter.length > 0) {
-                                  fieldProps.form.setFieldValue(
-                                    'nomOrganisering.enheter',
-                                    fieldProps.form.values.nomOrganisering.enheter.filter(
-                                      (e: INomEnhet) => !removedEnheter.includes(e)
-                                    )
-                                  )
-                                }
-                                setEnheterBySeksjon((prev) => {
-                                  const next = new Map(prev)
-                                  next.delete(removedSeksjon.nomSeksjonId)
-                                  return next
-                                })
-                              }}
-                            />
-                          </div>
-                        )}
-                      </FieldArray>
-                    </FieldWrapper>
-
-                    <div className='flex-1' />
-                  </div>
-                )
-              })()}
-
-            {(() => {
-              const allEnhetOptions = Array.from(enheterBySeksjon.values()).flat()
-              if (allEnhetOptions.length === 0) return null
-              return (
-                <div id='enhet' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                  <FieldWrapper marginTop full>
-                    <FieldArray name='nomOrganisering.enheter'>
-                      {(fieldProps: FieldArrayRenderProps) => (
-                        <div>
-                          <LabelWithDescription label='Angi hvilken enhet som er ansvarlig for etterlevelsen' />
-                          <OptionList
-                            label='Enhet'
-                            options={allEnhetOptions}
-                            onChange={async (value: any) => {
-                              if (value) {
-                                const selectedEnhet = allEnhetOptions.find(
-                                  (enhet) => enhet.value === value
-                                )
-                                if (!selectedEnhet) return
-                                const ikkeFinnesAlleredeIListe =
-                                  fieldProps.form.values.nomOrganisering.enheter.filter(
-                                    (enhet: INomEnhet) => enhet.nomEnhetId === value
-                                  ).length === 0
-                                if (ikkeFinnesAlleredeIListe) {
-                                  await fieldProps.form.setFieldValue('nomOrganisering.enheter', [
-                                    ...fieldProps.form.values.nomOrganisering.enheter,
-                                    {
-                                      nomEnhetId: selectedEnhet.value,
-                                      nomEnhetName: selectedEnhet.label,
-                                    },
-                                  ])
-                                }
-                              }
-                            }}
-                          />
-                          <RenderTagList
-                            list={fieldProps.form.values.nomOrganisering.enheter.map(
-                              (enhet: INomEnhet) => enhet.nomEnhetName
-                            )}
-                            onRemove={fieldProps.remove}
-                          />
-                        </div>
-                      )}
-                    </FieldArray>
-                  </FieldWrapper>
-                  <div className='flex-1' />
-                </div>
-              )
-            })()}
-
-            {env.isDev && (
-              <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                <FieldArray name='ardoqSystemData'>
-                  {(fieldArrayRenderProps: FieldArrayRenderProps) => (
-                    <div className='flex-1'>
-                      <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
-                      <div className='w-full'>
-                        <AsyncSelect
-                          aria-label='Søk etter system'
-                          placeholder=''
-                          tabSelectsValue={false}
-                          components={{ DropdownIndicator }}
-                          noOptionsMessage={({ inputValue }) => {
-                            return noOptionMessage(inputValue)
-                          }}
-                          controlShouldRenderValue={false}
-                          loadingMessage={() => 'Søker...'}
-                          isClearable={false}
-                          loadOptions={useArdoqSearch}
-                          onChange={(value: any) => {
-                            if (
-                              value &&
-                              fieldArrayRenderProps.form.values.ardoqSystemData.filter(
-                                (ardoqSystem: IArdoqSystem) => ardoqSystem.ardoqID === value.ardoqID
-                              ).length === 0
-                            ) {
-                              fieldArrayRenderProps.push(value)
-                            }
-                          }}
-                          styles={selectOverrides}
-                        />
-                        <RenderTagList
-                          list={fieldArrayRenderProps.form.values.ardoqSystemData.map(
-                            (ardoqSystem: IArdoqSystem) => ardoqSystem.navn
-                          )}
-                          onRemove={fieldArrayRenderProps.remove}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </FieldArray>
-                <div className='flex-1' />
-              </div>
+            {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
+              <EtterlevelseDokumentSeksjonForm
+                seksjonerByAvdeling={seksjonerByAvdeling}
+                selectedAvdeling={selectedAvdeling}
+                enheterBySeksjon={enheterBySeksjon}
+                setEnheterBySeksjon={setEnheterBySeksjon}
+              />
             )}
+
+            <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
 
             <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
               <FieldArray name='risikoeiereData'>
