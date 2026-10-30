@@ -79,7 +79,7 @@ export const IdentifiseringAvRisikoscenarioAccordianHeader: FunctionComponent<TP
     risikoscenario.sannsynlighetsNivaaBegrunnelse === ''
 
   return (
-    <Accordion.Header className='z-0' ref={ref}>
+    <Accordion.Header className='sticky top-0 z-1 bg-white' ref={ref}>
       {risikoscenario.navn}
       <div className='flex gap-2 mt-1'>
         {ikkeFerdigBeskrevet && <Tag variant='alt2'>Ikke ferdig utfylt</Tag>}
