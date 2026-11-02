@@ -214,7 +214,7 @@ const OppsumeringAccordianContent: FunctionComponent<TProps> = ({
 
       {isEditModalOpen && (
         <RisikoscenarioModalForm
-          headerText='Rediger øvrig risikoscenario'
+          headerText='Rediger risikoscenario'
           mode='update'
           isOpen={isEditModalOpen}
           setIsOpen={setIsEditModalOpen}
