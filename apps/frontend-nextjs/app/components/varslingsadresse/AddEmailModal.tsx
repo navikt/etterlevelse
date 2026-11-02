@@ -24,6 +24,7 @@ export const AddEmailModal = (props: IProps) => {
   const [error, setError] = useState('')
   const [radioValue, setRadioValue] = useState('meg')
   const emailSectionId = 'add-email-address-section'
+  const isEmailSectionVisible = radioValue === 'epost'
 
   const add = (adresse?: string) => {
     const toAdd = adresse || val
@@ -46,11 +47,12 @@ export const AddEmailModal = (props: IProps) => {
       header={{ heading: 'Legg til Epost adresse', closeButton: false }}
       width='medium'
     >
-      <Modal.Body className='min-h-[18.75rem]'>
+      <Modal.Body className='min-h-75'>
         <RadioGroup
           legend='Hvem skal varsles på Epost?'
           value={radioValue}
           onChange={(val) => {
+            setError('')
             if (val === 'meg') {
               setVal(user.getEmail())
             } else {
@@ -60,25 +62,21 @@ export const AddEmailModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio
-            value='meg'
-            aria-expanded={radioValue === 'meg'}
-            aria-controls={radioValue === 'meg' ? undefined : emailSectionId}
-          >
+          <Radio value='meg'>
             Meg ({user.getEmail()})
           </Radio>
           <Radio
             value='epost'
             className='w-full'
-            aria-expanded={radioValue === 'epost'}
-            aria-controls={radioValue === 'epost' ? emailSectionId : undefined}
+            aria-expanded={isEmailSectionVisible}
+            aria-controls={isEmailSectionVisible ? emailSectionId : undefined}
           >
             Noen andre
           </Radio>
         </RadioGroup>
 
-        {radioValue === 'epost' && (
-          <div id={emailSectionId} className='w-full pl-8' aria-live='polite'>
+        {isEmailSectionVisible && (
+          <div id={emailSectionId} className='w-full pl-8' aria-live='polite' role='region'>
             <Label className='mb-2 block'>Skriv Epost adresse</Label>
             <TextField
               type='email'

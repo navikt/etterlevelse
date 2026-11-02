@@ -30,6 +30,7 @@ export const AddSlackUserModal = (props: IProps) => {
   const [loadingSlackId, setLoadingSlackId] = useState(false)
   const [radioValue, setRadioValue] = useState('meg')
   const slackSearchSectionId = 'add-slack-user-search-section'
+  const isSlackSectionVisible = radioValue === 'slack'
 
   const addEmail = (email: string) => {
     setLoadingSlackId(true)
@@ -53,11 +54,12 @@ export const AddSlackUserModal = (props: IProps) => {
       header={{ heading: 'Legg til Slack-bruker', closeButton: false }}
       width='medium'
     >
-      <Modal.Body className='min-h-[31rem]'>
+      <Modal.Body className='min-h-124'>
         <RadioGroup
           legend='Hvem skal varsles på Slack?'
           value={radioValue}
           onChange={(val) => {
+            setError('')
             if (val === 'meg') {
               setVal(user.getEmail())
             } else {
@@ -67,23 +69,17 @@ export const AddSlackUserModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio
-            value='meg'
-            aria-expanded={radioValue === 'meg'}
-            aria-controls={radioValue === 'meg' ? undefined : slackSearchSectionId}
-          >
-            Meg ({user.getName()})
-          </Radio>
+          <Radio value='meg'>Meg ({user.getName()})</Radio>
           <Radio
             value='slack'
-            aria-expanded={radioValue === 'slack'}
-            aria-controls={radioValue === 'slack' ? slackSearchSectionId : undefined}
+            aria-expanded={isSlackSectionVisible}
+            aria-controls={isSlackSectionVisible ? slackSearchSectionId : undefined}
           >
             Noen andre
           </Radio>
         </RadioGroup>
-        {radioValue === 'slack' && (
-          <div id={slackSearchSectionId} className='pl-8 w-full' aria-live='polite'>
+        {isSlackSectionVisible && (
+          <div id={slackSearchSectionId} className='pl-8 w-full' aria-live='polite' role='region'>
             <div className='flex flex-col'>
               <ContentLayout>
                 <div className='w-full'>
