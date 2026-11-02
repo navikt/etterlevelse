@@ -26,9 +26,8 @@ const seksjonEtterlevelser = (
 
   const newFilteredEtterlevelse: TEtterlevelseQL[] = filteredEtterlevelse?.filter(
     (etterlevelse: TEtterlevelseQL) =>
-      etterlevelse.etterlevelseDokumentasjon.seksjoner &&
       seksjon &&
-      etterlevelse.etterlevelseDokumentasjon.seksjoner.filter(
+      etterlevelse.etterlevelseDokumentasjon.nomOrganisering.seksjoner.filter(
         (seksjonItem: INomSeksjon) => seksjonItem.nomSeksjonId === seksjon.nomSeksjonId
       ).length > 0
   )

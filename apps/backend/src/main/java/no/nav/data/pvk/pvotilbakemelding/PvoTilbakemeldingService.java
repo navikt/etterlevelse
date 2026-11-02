@@ -6,6 +6,7 @@ import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepo;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemeldingRepoCustom;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -69,9 +72,30 @@ public class PvoTilbakemeldingService {
         List<PvoTilbakemelding> pvoTilbakemeldingList = new ArrayList<>();
 
         auditPvoTilbakemelding.forEach(audit -> {
-            pvoTilbakemeldingList.add(audit.getObjectDataByDomain(PvoTilbakemelding.class));
+            pvoTilbakemeldingList.add(fromAuditData(audit.getData()));
         });
         return pvoTilbakemeldingList.isEmpty() ? null : pvoTilbakemeldingList.getFirst();
+    }
+
+    // Audit snapshots from before migration V1.47 store a single vurdering directly in the data object.
+    static PvoTilbakemelding fromAuditData(String auditData) {
+        JsonNode root = JsonUtils.toJsonNode(auditData);
+        if (root instanceof ObjectNode rootNode
+                && rootNode.get("pvoTilbakemeldingData") instanceof ObjectNode data
+                && !data.isEmpty()
+                && !data.has("vurderinger")) {
+            ObjectNode vurdering = data.deepCopy();
+            if (!vurdering.hasNonNull("innsendingId")) {
+                vurdering.put("innsendingId", 1);
+            }
+            if (!vurdering.hasNonNull("etterlevelseDokumentVersjon")) {
+                vurdering.put("etterlevelseDokumentVersjon", 1);
+            }
+            ObjectNode migratedData = rootNode.objectNode();
+            migratedData.putArray("vurderinger").add(vurdering);
+            rootNode.set("pvoTilbakemeldingData", migratedData);
+        }
+        return JsonUtils.toObject(root, PvoTilbakemelding.class);
     }
 
 

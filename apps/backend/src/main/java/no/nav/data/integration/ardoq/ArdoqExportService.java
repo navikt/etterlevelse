@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.integration.ardoq.domain.ArdoqExportEtterlevelseDokumentField;
 import no.nav.data.integration.ardoq.domain.ArdoqSystemRelationField;
+import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -42,6 +43,7 @@ public class ArdoqExportService {
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
+    private final ArdoqClient ardoqClient;
 
     @Value("${etterlev.frontend.url}")
     private String frontendUrl;
@@ -50,12 +52,13 @@ public class ArdoqExportService {
     public List<ArdoqSystemRelationField> getArdoqSystemEtterlevelseDocRelationData() {
         List<EtterlevelseDokumentasjon> etterlevelseDokumentasjonMedSystem = etterlevelseDokumentasjonService.getEtterlevelseDokumentasjonerWithSystem();
         List<ArdoqSystemRelationField> ardoqSystemRelationFields = new ArrayList<>();
+        List<ArdoqSystemResponse> ardoqSystems = ardoqClient.getAllArdoqSystems();
 
         etterlevelseDokumentasjonMedSystem.forEach(dokumentasjon -> {
             dokumentasjon.getEtterlevelseDokumentasjonData().getArdoqSystemIds().forEach(ardoqSystemId -> {
                 ardoqSystemRelationFields.add(
                         ArdoqSystemRelationField.builder()
-                                .ardoqId(ardoqSystemId)
+                                .ardoqId(ardoqSystems.stream().filter(s -> s.getArdoqID().equals(ardoqSystemId)).findFirst().map(ArdoqSystemResponse::getArdoqUrlId).orElse(null))
                                 .etterlevelseDokumentId(dokumentasjon.getId())
                                 .build()
                 );

@@ -12,6 +12,7 @@ import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,8 @@ public class EtterlevelseResponse {
     private List<String> dokumentasjon;
     private LocalDate fristForFerdigstillelse;
     private EtterlevelseStatus status;
+    private boolean ikkeBehovForRevurdering;
+    private LocalDateTime endretInnholdDato;
     private List<SuksesskriterieBegrunnelseResponse> suksesskriterieBegrunnelser;
 
     private EtterlevelseDokumentasjonResponse etterlevelseDokumentasjon;
@@ -62,6 +65,8 @@ public class EtterlevelseResponse {
                 .dokumentasjon(copyOf(etterlevelse.getDokumentasjon()))
                 .fristForFerdigstillelse(etterlevelse.getFristForFerdigstillelse())
                 .status(etterlevelse.getStatus())
+                .ikkeBehovForRevurdering(etterlevelse.isIkkeBehovForRevurdering())
+                .endretInnholdDato(etterlevelse.getEndretInnholdDato())
                 .suksesskriterieBegrunnelser(StreamUtils.convert(etterlevelse.getSuksesskriterieBegrunnelser(), SuksesskriterieBegrunnelseResponse::buildFrom))
                 .build();
     }

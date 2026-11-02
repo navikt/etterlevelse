@@ -238,7 +238,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
               {kravSenario.length} kravspesifikke risikoscenario
             </Tag>
             <Tag variant={generelSenario.length === 0 ? 'neutral' : 'success'} size='xsmall'>
-              {generelSenario.length} øvrige risikoscenario
+              {generelSenario.length} ikke krav-spesifikt risikoscenario
             </Tag>
             <Tag variant={allTiltak.length === 0 ? 'neutral' : 'success'} size='xsmall'>
               {allTiltak.length} tiltak
@@ -539,8 +539,10 @@ export const OversiktView: FunctionComponent<TProps> = ({
           <List.Item>
             <BodyShort>
               <strong>Avdeling:</strong>{' '}
-              {etterlevelseDokumentasjon.nomAvdelingId && etterlevelseDokumentasjon.avdelingNavn}
-              {!etterlevelseDokumentasjon.nomAvdelingId && 'Avdeling er ikke angitt'}
+              {etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId &&
+                etterlevelseDokumentasjon.nomOrganisering.avdelingNavn}
+              {!etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId &&
+                'Avdeling er ikke angitt'}
             </BodyShort>
           </List.Item>
           <List.Item>

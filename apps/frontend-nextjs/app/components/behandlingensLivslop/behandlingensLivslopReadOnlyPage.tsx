@@ -31,12 +31,14 @@ const BehandlingensLivslopReadOnlyPage: FunctionComponent<IProps> = ({ editorMod
   > = useParams<{ etterlevelseDokumentasjonId?: string; behandlingensLivslopId?: string }>()
   const [etterlevelseDokumentasjon, , isEtterlevelseDokumentasjonLoading] =
     useEtterlevelseDokumentasjon(params.etterlevelseDokumentasjonId)
-  const [behandlingsLivslop] = useBehandlingensLivslop(
+  const [behandlingsLivslop, , isBehandlingensLivslopLoading] = useBehandlingensLivslop(
     params.behandlingensLivslopId,
     params.etterlevelseDokumentasjonId
   )
 
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
+
+  const isLoading = isEtterlevelseDokumentasjonLoading || isBehandlingensLivslopLoading
 
   const breadcrumbPaths: IBreadCrumbPath[] = [
     dokumentasjonerBreadCrumbPath,
@@ -74,13 +76,13 @@ const BehandlingensLivslopReadOnlyPage: FunctionComponent<IProps> = ({ editorMod
         Behandlingens livsløp
       </Heading>
 
-      {isEtterlevelseDokumentasjonLoading && (
+      {isLoading && (
         <div className='flex w-full justify-center'>
           <Loader size='large' />
         </div>
       )}
 
-      {!isEtterlevelseDokumentasjonLoading && etterlevelseDokumentasjon && behandlingsLivslop && (
+      {!isLoading && etterlevelseDokumentasjon && behandlingsLivslop && (
         <ContentLayout>
           <MainPanelLayout hasSidePanel>
             {pvkDokument && (

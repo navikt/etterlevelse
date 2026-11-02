@@ -171,7 +171,9 @@ const VurdereTiltaksEffekt: FunctionComponent<TProps> = ({
                 </div>
 
                 {risikoscenario.nivaaBegrunnelseEtterTiltak !== '' && (
-                  <BodyLong className='mt-3'>{risikoscenario.nivaaBegrunnelseEtterTiltak}</BodyLong>
+                  <BodyLong className='mt-3 wrap-break-word'>
+                    {risikoscenario.nivaaBegrunnelseEtterTiltak}
+                  </BodyLong>
                 )}
 
                 {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (

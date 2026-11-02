@@ -1,6 +1,6 @@
 'use client'
 
-import { BodyShort, Detail, LinkPanel } from '@navikt/ds-react'
+import { BodyLong, Detail, LinkPanel, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
@@ -14,6 +14,7 @@ import { warningAlert } from '@/components/others/images/images'
 import NyttInnholdTag from '@/components/risikoscenario/common/NyttInnholdTag'
 import { EEtterlevelseStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
+import { IEtterlevelseDokumentasjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { EKravStatus, TKravEtterlevelseData } from '@/constants/krav/kravConstants'
@@ -29,7 +30,7 @@ import {
 interface IProps {
   krav: TKravEtterlevelseData
   noStatus?: boolean
-  etterlevelseDokumentasjonId: string
+  etterlevelseDokumentasjon: IEtterlevelseDokumentasjon
   risikoscenarioList: IRisikoscenario[]
   noVarsling?: boolean
   temaCode?: string
@@ -42,7 +43,7 @@ export const KravCard = (props: IProps) => {
     noVarsling,
     krav,
     temaCode,
-    etterlevelseDokumentasjonId,
+    etterlevelseDokumentasjon,
     risikoscenarioList,
     allTiltak,
     previousVurdering,
@@ -74,7 +75,7 @@ export const KravCard = (props: IProps) => {
   const [etterlevelseMetadata, setEtterlevelseMetadata] = useState<IEtterlevelseMetadata>(
     mapEtterlevelseMetadataToFormValue({
       id: 'ny',
-      etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+      etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
       kravNummer: krav.kravNummer,
       kravVersjon: krav.kravVersjon,
     })
@@ -82,7 +83,7 @@ export const KravCard = (props: IProps) => {
 
   const getEtterlevelseMetaData = () => {
     getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion(
-      etterlevelseDokumentasjonId,
+      etterlevelseDokumentasjon.id,
       krav.kravNummer,
       krav.kravVersjon
     ).then((resp) => {
@@ -92,7 +93,7 @@ export const KravCard = (props: IProps) => {
         setEtterlevelseMetadata(
           mapEtterlevelseMetadataToFormValue({
             id: 'ny',
-            etterlevelseDokumentasjonId: etterlevelseDokumentasjonId,
+            etterlevelseDokumentasjonId: etterlevelseDokumentasjon.id,
             kravNummer: krav.kravNummer,
             kravVersjon: krav.kravVersjon,
           })
@@ -108,7 +109,7 @@ export const KravCard = (props: IProps) => {
         setNyVersionFlag(
           (
             await getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber(
-              etterlevelseDokumentasjonId,
+              etterlevelseDokumentasjon.id,
               krav.kravNummer
             )
           ).content.length >= 1
@@ -152,7 +153,7 @@ export const KravCard = (props: IProps) => {
   return (
     <LinkPanel
       href={etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
-        etterlevelseDokumentasjonId,
+        etterlevelseDokumentasjon.id,
         temaCode,
         krav.kravNummer,
         krav.kravVersjon
@@ -176,7 +177,7 @@ export const KravCard = (props: IProps) => {
               )}
             </div>
           </div>
-          <BodyShort>{krav.navn}</BodyShort>
+          <BodyLong>{krav.navn}</BodyLong>
           <div className='flex gap-2'>
             {!krav.isIrrelevant && (
               <div className='md:flex w-full gap-2'>
@@ -199,11 +200,15 @@ export const KravCard = (props: IProps) => {
               </div>
             )}
           </div>
+
+          {user.isPersonvernombud() && nyttInnholdFlag && isPvkKrav && (
+            <div className='mt-3'>
+              <NyttInnholdTag />
+            </div>
+          )}
         </div>
         {krav && (
           <div className='self-center flex gap-2'>
-            {user.isPersonvernombud() && nyttInnholdFlag && isPvkKrav && <NyttInnholdTag />}
-
             {kravMedRelevantRisikoscenario && (
               <StatusView status='Inneholder risikoscenario' variant='alt1' />
             )}
@@ -214,6 +219,13 @@ export const KravCard = (props: IProps) => {
                   status={getEtterlevelseStatus(krav.etterlevelseStatus, krav.frist)}
                   variant={getStatusLabelColor(krav.etterlevelseStatus)}
                 />
+              )}
+
+            {etterlevelseDokumentasjon.etterlevelseDokumentVersjon >= 2 &&
+              krav.etterlevelseIkkeBehovForRevurdering && (
+                <Tag variant='outline' data-color='neutral' className='h-fit'>
+                  <Detail>Ikke behov for revurdering</Detail>
+                </Tag>
               )}
           </div>
         )}

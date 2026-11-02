@@ -50,6 +50,10 @@ export const resourcesDataCheck = yup.array().test({
   },
 })
 
+export const nomOrganiseringCheck = yup.object({
+  nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
+})
+
 export const etterlevelseDokumentasjonSchema = () =>
   yup.object({
     title: titleCheck,
@@ -57,7 +61,7 @@ export const etterlevelseDokumentasjonSchema = () =>
     varslingsadresser: varslingsadresserCheck,
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
-    nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
+    nomOrganisering: nomOrganiseringCheck,
   })
 
 export const etterlevelseDokumentasjonWithRelationSchema = () =>
@@ -69,5 +73,5 @@ export const etterlevelseDokumentasjonWithRelationSchema = () =>
       .required('Du må velge hvordan du ønsker å gjenbruke dette dokumentet'),
     teamsData: teamsDataCheck,
     resourcesData: resourcesDataCheck,
-    nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
+    nomOrganisering: nomOrganiseringCheck,
   })

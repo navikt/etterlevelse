@@ -112,7 +112,7 @@ const TillatGjenbrukModal: FunctionComponent<TProps> = ({
                 isMissingText(values.beskrivelse) ||
                 isEmptyArray(values.varslingsadresser) ||
                 (isEmptyArray(values.teamsData) && isEmptyArray(values.resourcesData)) ||
-                isMissingText(values.nomAvdelingId)
+                isMissingText(values.nomOrganisering.nomAvdelingId)
 
               return (
                 <>

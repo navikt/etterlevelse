@@ -119,7 +119,7 @@ const RisikoscenarioView: FunctionComponent<TProps> = ({
         risikoscenario.sannsynlighetsNivaa === 0) && (
         <LocalAlert className='mt-5' status='warning'>
           <LocalAlert.Header>
-            <LocalAlert.Title>
+            <LocalAlert.Title as='h3'>
               {risikoscenario.sannsynlighetsNivaa === 0 &&
                 !risikoscenario.sannsynlighetsNivaaBegrunnelse &&
                 'Dere må gjøre sannsynlighetsvurdering'}
@@ -135,7 +135,9 @@ const RisikoscenarioView: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
-        <BodyLong className='mt-5'>{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5 wrap-break-word'>
+          {risikoscenario.sannsynlighetsNivaaBegrunnelse}
+        </BodyLong>
       )}
 
       {risikoscenario.konsekvensNivaa !== 0 && (
@@ -150,7 +152,7 @@ const RisikoscenarioView: FunctionComponent<TProps> = ({
       {(!risikoscenario.konsekvensNivaaBegrunnelse || risikoscenario.konsekvensNivaa === 0) && (
         <LocalAlert className='mt-5' status='warning'>
           <LocalAlert.Header>
-            <LocalAlert.Title>
+            <LocalAlert.Title as='h3'>
               {risikoscenario.konsekvensNivaa === 0 &&
                 !risikoscenario.konsekvensNivaaBegrunnelse &&
                 'Dere må gjøre konsekvensvurdering'}
@@ -165,7 +167,9 @@ const RisikoscenarioView: FunctionComponent<TProps> = ({
         </LocalAlert>
       )}
       {risikoscenario.konsekvensNivaaBegrunnelse && (
-        <BodyLong className='mt-5'>{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5 wrap-break-word'>
+          {risikoscenario.konsekvensNivaaBegrunnelse}
+        </BodyLong>
       )}
     </div>
   )

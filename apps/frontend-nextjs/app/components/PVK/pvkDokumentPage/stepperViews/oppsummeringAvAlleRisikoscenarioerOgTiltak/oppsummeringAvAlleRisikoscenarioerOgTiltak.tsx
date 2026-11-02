@@ -14,7 +14,15 @@ import {
 } from '@navikt/ds-react'
 import moment from 'moment'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  FunctionComponent,
+  RefObject,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { getRisikoscenarioByPvkDokumentId } from '@/api/risikoscenario/risikoscenarioApi'
 import { getTiltakByPvkDokumentId } from '@/api/tiltak/tiltakApi'
 import AccordianAlertModal from '@/components/common/accordianAlertModal'
@@ -125,6 +133,8 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
   const [antallUtenFrist, setAntallUtenFrist] = useState<number>(0)
   const [antallFristUtloperSnart, setAntallFristUtloperSnart] = useState<number>(0)
   const [antallUtgaatteFrister, setAntallUtgaatteFrister] = useState<number>(0)
+  const tiltakFilterRef = useRef<HTMLDivElement>(null)
+  const hasFocusedTiltakFilterRef = useRef<boolean>(false)
 
   const isChangesMadeSinceLastApproval = useMemo(() => {
     if (
@@ -152,6 +162,26 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
       }
     })()
   }, [tabQuery, filterQuery, tiltakList])
+
+  useEffect(() => {
+    if (
+      hasFocusedTiltakFilterRef.current ||
+      isLoading ||
+      tiltakId ||
+      tabQuery !== tabValues.tiltak ||
+      !filterQuery ||
+      tiltakFilter !== filterQuery
+    ) {
+      return
+    }
+    const selectedItem =
+      tiltakFilterRef.current?.querySelector<HTMLButtonElement>('[aria-checked="true"]')
+    if (selectedItem) {
+      hasFocusedTiltakFilterRef.current = true
+      selectedItem.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      selectedItem.focus({ preventScroll: true })
+    }
+  }, [isLoading, tiltakId, tabQuery, filterQuery, tiltakFilter])
 
   useEffect(() => {
     if (pvkDokument) {
@@ -587,6 +617,7 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
 
                       {tiltakList.length !== 0 && (
                         <ToggleGroup
+                          ref={tiltakFilterRef}
                           className='mt-10'
                           value={tiltakFilter}
                           onChange={onTiltakFilterChange}

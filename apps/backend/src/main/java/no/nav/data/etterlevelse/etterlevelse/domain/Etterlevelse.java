@@ -16,6 +16,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,6 +96,22 @@ public class Etterlevelse extends Auditable implements KravId {
     
     public void setStatus (EtterlevelseStatus status) {
         etterlevelseData.setStatus(status);
+    }
+
+    public boolean isIkkeBehovForRevurdering() {
+        return etterlevelseData.isIkkeBehovForRevurdering();
+    }
+
+    public void setIkkeBehovForRevurdering(boolean ikkeBehovForRevurdering) {
+        etterlevelseData.setIkkeBehovForRevurdering(ikkeBehovForRevurdering);
+    }
+
+    public void setEndretInnholdDato(LocalDateTime endretInnholdDato) {
+        etterlevelseData.setEndretInnholdDato(endretInnholdDato);
+    }
+
+    public LocalDateTime getEndretInnholdDato() {
+        return etterlevelseData.getEndretInnholdDato();
     }
     
     public List<SuksesskriterieBegrunnelse> getSuksesskriterieBegrunnelser() {

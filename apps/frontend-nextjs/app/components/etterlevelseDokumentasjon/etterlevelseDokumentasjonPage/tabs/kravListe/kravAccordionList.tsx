@@ -163,7 +163,7 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                                 risikoscenarioList={risikoscenarioList}
                                 allTiltak={allTiltak}
                                 krav={krav}
-                                etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                                 temaCode={tema.code}
                                 previousVurdering={previousVurdering}
                               />

@@ -14,7 +14,7 @@ import {
   ReadMore,
   TextField,
 } from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik } from 'formik'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik, getIn } from 'formik'
 import _ from 'lodash'
 import { useRouter } from 'next/navigation'
 import {
@@ -64,10 +64,7 @@ import {
   ERelationType,
   IEtterlevelseDokumentasjonWithRelation,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
-import {
-  INomSeksjon,
-  TEtterlevelseDokumentasjonQL,
-} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
@@ -78,6 +75,8 @@ import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { etterlevelseDokumentasjonWithRelationSchema } from './etterlevelseDokumentasjonSchema'
+import EtterlevelseDokumentEnheterForm from './nomOrganiseringForms/etterlevelseDokumentEnheterForm'
+import EtterlevelseDokumentSeksjonForm from './nomOrganiseringForms/etterlevelseDokumentSeksjonForm'
 import ROSEdit from './rosEdit'
 
 type TProps = {
@@ -94,11 +93,12 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const [isSubmitSuccess, setIsSubmitSuccess] = useState<boolean>(false)
   const [selectedAvdeling, setSelectedAvdeling] = useState<string>(
-    etterlevelseDokumentasjon && etterlevelseDokumentasjon.nomAvdelingId
-      ? etterlevelseDokumentasjon.nomAvdelingId
+    etterlevelseDokumentasjon && etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId
+      ? etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId
       : ''
   )
   const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
+  const [enheterBySeksjon, setEnheterBySeksjon] = useState<Map<string, TOption[]>>(new Map())
   const user = useContext(UserContext)
   const codelist = useContext(CodelistContext)
   const router = useRouter()
@@ -185,6 +185,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
         behandlinger: etterlevelseDokumentasjon.behandlinger,
         behandlingIds: etterlevelseDokumentasjon.behandlingIds,
         behandlerPersonopplysninger: etterlevelseDokumentasjon.behandlerPersonopplysninger,
+        nomOrganisering: etterlevelseDokumentasjon.nomOrganisering,
       })}
       innerRef={formRef}
       onSubmit={submit}
@@ -546,8 +547,8 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
             </Heading>
 
             <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
-              <FieldWrapper full>
-                <Field name='nomAvdelingId'>
+              <FieldWrapper marginTop full>
+                <Field name='nomOrganisering.nomAvdelingId'>
                   {(fieldProps: FieldProps) => (
                     <div>
                       <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
@@ -558,19 +559,25 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                         onChange={async (value: any) => {
                           setSelectedAvdeling(value)
 
-                          if (value !== fieldProps.form.values.nomAvdelingId) {
-                            await fieldProps.form.setFieldValue('seksjoner', [])
+                          if (value !== fieldProps.form.values.nomOrganisering.nomAvdelingId) {
+                            await fieldProps.form.setFieldValue('nomOrganisering.seksjoner', [])
+                            await fieldProps.form.setFieldValue('nomOrganisering.enheter', [])
+                            setEnheterBySeksjon(new Map())
                           }
-                          await fieldProps.form.setFieldValue('nomAvdelingId', value)
+
                           await fieldProps.form.setFieldValue(
-                            'avdelingNavn',
+                            'nomOrganisering.nomAvdelingId',
+                            value
+                          )
+                          await fieldProps.form.setFieldValue(
+                            'nomOrganisering.avdelingNavn',
                             alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
                               .label
                           )
                         }}
                         error={
-                          fieldProps.form.errors && fieldProps.form.errors.nomAvdelingId ? (
-                            <FormError fieldName='nomAvdelingId' />
+                          getIn(fieldProps.form.errors, 'nomOrganisering.nomAvdelingId') ? (
+                            <FormError fieldName='nomOrganisering.nomAvdelingId' />
                           ) : undefined
                         }
                       />
@@ -581,63 +588,16 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               <div className='flex-1' />
             </div>
 
-            {selectedAvdeling !== '' &&
-              selectedAvdeling !== undefined &&
-              (() => {
-                const filteredSeksjoner = seksjonerByAvdeling.filter(
-                  (s) => s.value !== selectedAvdeling
-                )
-                if (filteredSeksjoner.length === 0) return null
-                return (
-                  <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
-                    <FieldWrapper marginTop full>
-                      <FieldArray name='seksjoner'>
-                        {(fieldProps: FieldArrayRenderProps) => (
-                          <div>
-                            <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
-                            <OptionList
-                              label='Seksjon'
-                              options={filteredSeksjoner}
-                              onChange={async (value: any) => {
-                                if (value) {
-                                  const selectedSeksjon = filteredSeksjoner.find(
-                                    (seksjon) => seksjon.value === value
-                                  )
+            {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
+              <EtterlevelseDokumentSeksjonForm
+                seksjonerByAvdeling={seksjonerByAvdeling}
+                selectedAvdeling={selectedAvdeling}
+                enheterBySeksjon={enheterBySeksjon}
+                setEnheterBySeksjon={setEnheterBySeksjon}
+              />
+            )}
 
-                                  if (!selectedSeksjon) return
-
-                                  const ikkeFinnesAlleredeIListe =
-                                    fieldProps.form.values.seksjoner.filter(
-                                      (seksjon: INomSeksjon) => seksjon.nomSeksjonId === value
-                                    ).length === 0
-
-                                  if (ikkeFinnesAlleredeIListe) {
-                                    await fieldProps.form.setFieldValue('seksjoner', [
-                                      ...fieldProps.form.values.seksjoner,
-                                      {
-                                        nomSeksjonId: selectedSeksjon.value,
-                                        nomSeksjonName: selectedSeksjon.label,
-                                      },
-                                    ])
-                                  }
-                                }
-                              }}
-                            />
-                            <RenderTagList
-                              list={fieldProps.form.values.seksjoner.map(
-                                (seksjon: INomSeksjon) => seksjon.nomSeksjonName
-                              )}
-                              onRemove={fieldProps.remove}
-                            />
-                          </div>
-                        )}
-                      </FieldArray>
-                    </FieldWrapper>
-
-                    <div className='flex-1' />
-                  </div>
-                )
-              })()}
+            <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
 
             <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
               <FieldArray name='risikoeiereData'>
@@ -725,7 +685,11 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                 ref={errorSummaryRef}
                 heading='Du må rette disse feilene før du kan fortsette'
               >
-                {Object.entries(errors)
+                {Object.entries({
+                  ...errors,
+                  nomOrganisering: undefined,
+                  nomAvdelingId: getIn(errors, 'nomOrganisering.nomAvdelingId'),
+                })
                   .filter(([, error]) => error)
                   .map(([key, error]) => (
                     <ErrorSummary.Item href={`#${key}`} key={key}>

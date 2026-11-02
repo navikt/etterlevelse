@@ -126,5 +126,7 @@ export const mapEtterlevelseToFormValue = (
     dokumentasjon: etterlevelse.dokumentasjon || [],
     fristForFerdigstillelse: etterlevelse.fristForFerdigstillelse || '',
     status: etterlevelse.status || EEtterlevelseStatus.UNDER_REDIGERING,
+    ikkeBehovForRevurdering: etterlevelse.ikkeBehovForRevurdering || false,
+    endretInnholdDato: etterlevelse.endretInnholdDato || '',
   }
 }

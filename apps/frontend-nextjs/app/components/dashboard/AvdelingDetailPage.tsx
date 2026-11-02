@@ -22,6 +22,7 @@ import {
   Tabs,
 } from '@navikt/ds-react'
 import moment from 'moment'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import {
   getDashboardAvdelingStats,
@@ -47,6 +48,7 @@ import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { handleSort } from '@/util/handleTableSort'
+import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 import { AvdelingDetailReadMore } from './DashboardReadmore/AvdelingDetailReadMore'
 import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
@@ -98,17 +100,27 @@ const getPvkOnlyStatusText = (
 }
 
 const AvdelingDetailPage = ({ avdelingId }: IProps) => {
+  const searchParams = useSearchParams()
   const [data, setData] = useState<IDashboardDetailResponse>()
   const [tableData, settableData] = useState<IDashboardTable[]>()
   const [isLoading, setIsLoading] = useState(true)
   const [isTableLoading, setIsTableLoading] = useState(true)
-  const [selectedSeksjon, setSelectedSeksjon] = useState<string>('')
-  const [selectedEnhet, setSelectedEnhet] = useState<string>('')
+  const [selectedSeksjon, setSelectedSeksjon] = useState<string>(
+    () => searchParams.get('seksjon') ?? ''
+  )
+  const [selectedEnhet, setSelectedEnhet] = useState<string>(() => searchParams.get('enhet') ?? '')
   const [enhetOptions, setEnhetOptions] = useState<IOrgEnhet[]>([])
-  const [tableTab, setTableTab] = useState('dok_pvk')
+  const [tableTab, setTableTab] = useState(() => searchParams.get('tab') ?? 'dok_pvk')
   const [sort, setSort] = useState<SortState | undefined>()
-  const [searchFilters, setSearchFilters] = useState<string[]>([])
+  const [searchFilters, setSearchFilters] = useState<string[]>(() => searchParams.getAll('sok'))
   const [searchValue, setSearchValue] = useState<string>('')
+
+  useUrlFilterSync({
+    seksjon: selectedSeksjon,
+    enhet: selectedEnhet,
+    sok: searchFilters,
+    tab: tableTab === 'dok_pvk' ? undefined : tableTab,
+  })
 
   useEffect(() => {
     ;(async () => {
@@ -126,14 +138,14 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   }, [avdelingId])
 
   useEffect(() => {
-    const promise =
-      selectedSeksjon && selectedSeksjon !== 'ingen-seksjon'
-        ? getEnheterBySeksjonId(selectedSeksjon)
-        : Promise.resolve([])
+    const hasValidSeksjon = selectedSeksjon && selectedSeksjon !== 'ingen-seksjon'
+    const promise = hasValidSeksjon ? getEnheterBySeksjonId(selectedSeksjon) : Promise.resolve([])
     promise
       .then((result) => {
         setEnhetOptions(result)
-        setSelectedEnhet('')
+        if (!hasValidSeksjon) {
+          setSelectedEnhet('')
+        }
       })
       .catch(() => {
         setEnhetOptions([])
@@ -405,6 +417,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
     const baseStats = getCurrentStats()
 
+    const sk = doks.reduce(
+      (acc, d) => ({
+        total: acc.total + (d.suksesskriterier?.total ?? 0),
+        ikkePaabegynt: acc.ikkePaabegynt + (d.suksesskriterier?.ikkePaabegyntAntall ?? 0),
+        underArbeid: acc.underArbeid + (d.suksesskriterier?.underArbeidAntall ?? 0),
+        oppfylt: acc.oppfylt + (d.suksesskriterier?.oppfyltAntall ?? 0),
+        ikkeOppfylt: acc.ikkeOppfylt + (d.suksesskriterier?.ikkeOppfyltAntall ?? 0),
+        ikkeRelevant: acc.ikkeRelevant + (d.suksesskriterier?.ikkeRelevantAntall ?? 0),
+      }),
+      { total: 0, ikkePaabegynt: 0, underArbeid: 0, oppfylt: 0, ikkeOppfylt: 0, ikkeRelevant: 0 }
+    )
+    const skProsent = (antall: number) => (sk.total > 0 ? Math.round((antall / sk.total) * 100) : 0)
+
     return {
       ...baseStats,
       dokumenter: {
@@ -415,17 +440,17 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         godkjentAvRisikoeier: godkjent,
       },
       suksesskriterier: {
-        total: 0,
-        ikkePaabegyntAntall: 0,
-        underArbeidAntall: 0,
-        oppfyltAntall: 0,
-        ikkeOppfyltAntall: 0,
-        ikkeRelevantAntall: 0,
-        ikkePaabegyntProsent: 0,
-        underArbeidProsent: 0,
-        oppfyltProsent: 0,
-        ikkeOppfyltProsent: 0,
-        ikkeRelevantProsent: 0,
+        total: sk.total,
+        ikkePaabegyntAntall: sk.ikkePaabegynt,
+        underArbeidAntall: sk.underArbeid,
+        oppfyltAntall: sk.oppfylt,
+        ikkeOppfyltAntall: sk.ikkeOppfylt,
+        ikkeRelevantAntall: sk.ikkeRelevant,
+        ikkePaabegyntProsent: skProsent(sk.ikkePaabegynt),
+        underArbeidProsent: skProsent(sk.underArbeid),
+        oppfyltProsent: skProsent(sk.oppfylt),
+        ikkeOppfyltProsent: skProsent(sk.ikkeOppfylt),
+        ikkeRelevantProsent: skProsent(sk.ikkeRelevant),
       },
       behovForPvk: {
         totalMedPersonopplysninger: medPersonopplysninger.length,
@@ -529,7 +554,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                 label='Velg seksjon'
                 className='mt-4 w-fit min-w-64'
                 value={selectedSeksjon}
-                onChange={(e) => setSelectedSeksjon(e.target.value)}
+                onChange={(e) => {
+                  setSelectedSeksjon(e.target.value)
+                  setSelectedEnhet('')
+                }}
               >
                 <option value=''>Alle seksjoner</option>
                 {data.seksjoner

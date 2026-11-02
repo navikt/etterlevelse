@@ -40,4 +40,7 @@ public interface EtterlevelseRepo extends JpaRepository<Etterlevelse, UUID> {
             "order by etterlevelse_dokumentasjon_id, last_modified_date desc" +
             ") latest where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months')", nativeQuery = true)
     List<Etterlevelse> findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
+
+    @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1 and data ->> 'ikkeBehovForRevurdering' = 'true'", nativeQuery = true)
+    List<Etterlevelse> findIkkeBehovForRevurderingByEtterlevelseDokumentasjonId(UUID etterlevelseDokumentasjonId);
 }

@@ -138,7 +138,7 @@ const KravRisikoscenarioGodkjentAccordianList: FunctionComponent<TProps> = ({
                     }
                   }}
                 >
-                  <Accordion.Header id={risikoscenario.id}>
+                  <Accordion.Header id={risikoscenario.id} className='sticky top-0 z-1 bg-white'>
                     <div>{risikoscenario.navn}</div>
                     {hasNewContent && (
                       <div className='mt-2'>

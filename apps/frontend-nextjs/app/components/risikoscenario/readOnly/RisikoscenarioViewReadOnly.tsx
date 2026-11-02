@@ -90,7 +90,9 @@ const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.sannsynlighetsNivaaBegrunnelse && (
-        <BodyLong className='mt-5'>{risikoscenario.sannsynlighetsNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5 wrap-break-word'>
+          {risikoscenario.sannsynlighetsNivaaBegrunnelse}
+        </BodyLong>
       )}
 
       {risikoscenario.konsekvensNivaa !== 0 && (
@@ -103,7 +105,9 @@ const RisikoscenarioViewReadOnly: FunctionComponent<TProps> = ({
       )}
 
       {risikoscenario.konsekvensNivaaBegrunnelse && (
-        <BodyLong className='mt-5'>{risikoscenario.konsekvensNivaaBegrunnelse}</BodyLong>
+        <BodyLong className='mt-5 wrap-break-word'>
+          {risikoscenario.konsekvensNivaaBegrunnelse}
+        </BodyLong>
       )}
     </div>
   )

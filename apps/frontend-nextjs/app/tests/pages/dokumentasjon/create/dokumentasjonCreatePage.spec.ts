@@ -1,5 +1,8 @@
 import test, { expect } from '@playwright/test'
-import { oppretteEtterlevelsesdokument } from '@/tests/utils/etterlevelsesdokument'
+import {
+  mockNomOrganisering,
+  oppretteEtterlevelsesdokument,
+} from '@/tests/utils/etterlevelsesdokument'
 import {
   mockAdmin,
   mockIdent,
@@ -139,8 +142,10 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       expect(route.request().postDataJSON()).toMatchObject({
         title: oppretteEtterlevelsesdokument.title,
         beskrivelse: oppretteEtterlevelsesdokument.description,
-        nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
-        avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
+        nomOrganisering: {
+          nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
+          avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
+        },
         resources: [mockIdent],
         varslingsadresser: [{ type: 'EPOST', adresse: oppretteEtterlevelsesdokument.email }],
       })
@@ -220,6 +225,7 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
               beskrivelse: oppretteEtterlevelsesdokument.description,
               status: 'UNDER_ARBEID',
               etterlevelseNummer: 1,
+              nomOrganisering: mockNomOrganisering,
               etterlevelseDokumentVersjon: 1,
               resources: [],
               resourcesData: [],

@@ -457,6 +457,7 @@ export type TFilterKravProps = {
   etterlevelseStatus: EEtterlevelseStatus | undefined
   etterlevelseSuksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[] | undefined
   etterlevelseChangeStamp: IChangeStamp | undefined
+  etterlevelseIkkeBehovForRevurdering: boolean | undefined
   gammelVersjon: boolean
   kravNummer: number
   kravVersjon: number
@@ -531,6 +532,7 @@ const mapEtterlevelseData = (etterlevelse?: IEtterlevelse) => ({
   etterlevelseSuksesskriterieBegrunnelser: etterlevelse?.suksesskriterieBegrunnelser,
   etterlevelseChangeStamp: etterlevelse?.changeStamp,
   gammelVersjon: false,
+  etterlevelseIkkeBehovForRevurdering: etterlevelse?.ikkeBehovForRevurdering,
 })
 
 export const getEtterlevelseDokumentStatusText = (
