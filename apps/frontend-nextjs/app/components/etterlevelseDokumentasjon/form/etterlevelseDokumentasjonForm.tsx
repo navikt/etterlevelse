@@ -897,12 +897,14 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                   enheterBySeksjon={enheterBySeksjon}
                   setEnheterBySeksjon={setEnheterBySeksjon}
                 />
-
-                {env.isDev && <EtterlevelseDokumentLinjeForm formValues={values} />}
               </div>
             )}
 
             <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
+
+            {selectedAvdeling !== '' && selectedAvdeling !== undefined && env.isDev && (
+              <EtterlevelseDokumentLinjeForm formValues={values} />
+            )}
 
             <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
               <FieldArray name='risikoeiereData'>
