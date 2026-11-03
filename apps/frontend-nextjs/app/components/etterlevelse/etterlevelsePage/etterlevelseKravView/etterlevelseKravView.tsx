@@ -9,6 +9,7 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -16,7 +17,7 @@ import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
-import { getKravByKravNumberAndVersion, getKravByKravNummer } from '@/api/krav/kravApi'
+import { getKravByKravNummer } from '@/api/krav/kravApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
@@ -94,7 +95,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
   const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
-  const [forrigeKrav, setForrigeKrav] = useState<IKrav>()
+  const [alleKrav, setAlleKrav] = useState<IKrav[]>([])
 
   const user = useContext(UserContext)
 
@@ -158,6 +159,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
         setKrav(data.kravById)
         getKravByKravNummer(data.kravById.kravNummer).then((resp) => {
           if (resp.content.length) {
+            setAlleKrav(resp.content)
             const alleVersjoner = resp.content
               .map((krav) => {
                 return {
@@ -185,27 +187,17 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
     })()
   }, [data])
 
-  useEffect(() => {
-    ;(async () => {
-      if (!krav) return
-      const sisteDokumenterteVersjon = tidligereEtterlevelser
-        ?.map((tidligere) => tidligere.kravVersjon)
-        .filter((versjon) => versjon < krav.kravVersjon)
-        .sort((a, b) => b - a)[0]
-      const forrigeKravVersjon =
-        sisteDokumenterteVersjon ??
-        alleKravVersjoner
-          .map((versjon) => Number(versjon.kravVersjon))
-          .filter((versjon) => versjon > 0 && versjon < krav.kravVersjon)
-          .sort((a, b) => b - a)[0]
+  const forrigeKrav = useMemo(() => {
+    if (!krav) return undefined
+    const tidligereKrav = alleKrav
+      .filter((k) => k.kravVersjon < krav.kravVersjon && k.status !== EKravStatus.UTKAST)
+      .sort((a, b) => b.kravVersjon - a.kravVersjon)
+    const dokumenterteVersjoner = (tidligereEtterlevelser ?? []).map((e) => e.kravVersjon)
 
-      setForrigeKrav(
-        forrigeKravVersjon
-          ? await getKravByKravNumberAndVersion(krav.kravNummer, forrigeKravVersjon)
-          : undefined
-      )
-    })()
-  }, [krav, alleKravVersjoner, tidligereEtterlevelser])
+    return (
+      tidligereKrav.find((k) => dokumenterteVersjoner.includes(k.kravVersjon)) ?? tidligereKrav[0]
+    )
+  }, [krav, alleKrav, tidligereEtterlevelser])
 
   useEffect(() => {
     ;(async () => {
