@@ -17,7 +17,7 @@ import {
   Select,
   TextField,
 } from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps, Form, Formik, getIn } from 'formik'
+import { FieldArray, FieldArrayRenderProps, Form, Formik, getIn } from 'formik'
 import _ from 'lodash'
 import { usePathname, useRouter } from 'next/navigation'
 import {
@@ -44,11 +44,6 @@ import {
   etterlevelseDokumentasjonMapToFormVal,
   updateEtterlevelseDokumentasjon,
 } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
-import {
-  getAvdelingOptions,
-  getEnheterBySeksjonId,
-  getSeksjonOptionsByAvdelingId,
-} from '@/api/nom/nomApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import {
   searchResourceByNameOptions,
@@ -58,13 +53,11 @@ import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
-import { OptionList } from '@/components/common/inputs'
 import LabelWithTooltip, {
   LabelWithDescription,
 } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { Error } from '@/components/common/modalSchema/ModalSchema'
-import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
@@ -75,7 +68,6 @@ import {
   IBehandling,
   IDpBehandling,
 } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
-import { TOption } from '@/constants/commonConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
   ERelationType,
@@ -103,9 +95,7 @@ import { env } from '@/util/env/env'
 import { getMembersFromEtterlevelseDokumentasjon } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { etterlevelseDokumentasjonSchema } from './etterlevelseDokumentasjonSchema'
-import EtterlevelseDokumentEnheterForm from './nomOrganiseringForms/etterlevelseDokumentEnheterForm'
-import EtterlevelseDokumentLinjeForm from './nomOrganiseringForms/etterlevelseDokumentLinjeForm'
-import EtterlevelseDokumentSeksjonForm from './nomOrganiseringForms/etterlevelseDokumentSeksjonForm'
+import EtterlevelseDokumentNomOrganiseringForm from './nomOrganiseringForms/etterlevelseDokumentNomOrganiseringForm'
 import ROSEdit from './rosEdit'
 
 type TEditEtterlevelseDokumentasjonModalProps = {
@@ -138,14 +128,6 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
   const formRef: RefObject<any> = useRef(undefined)
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
-  const [alleAvdelingOptions, setAllAvdelingOptions] = useState<TOption[]>([])
-  const [selectedAvdeling, setSelectedAvdeling] = useState<string>(
-    etterlevelseDokumentasjon && etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId
-      ? etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId
-      : ''
-  )
-  const [seksjonerByAvdeling, setSeksjonerByAvdeling] = useState<TOption[]>([])
-  const [enheterBySeksjon, setEnheterBySeksjon] = useState<Map<string, TOption[]>>(new Map())
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [behandlingensLivslop, setBehandlingensLivslop] = useState<IBehandlingensLivslop>()
   const [behandlingensArtOgOmfang, setBehandlingensArtOgOmfang] =
@@ -224,12 +206,6 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
   }, [etterlevelseDokumentasjon])
 
   useEffect(() => {
-    ;(async () => {
-      await getAvdelingOptions().then(setAllAvdelingOptions)
-    })()
-  }, [])
-
-  useEffect(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash
 
@@ -252,35 +228,6 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
       errorSummaryRef.current.focus()
     }
   }, [submitClick])
-
-  useEffect(() => {
-    ;(async () => {
-      if (selectedAvdeling !== '' && selectedAvdeling !== undefined) {
-        await getSeksjonOptionsByAvdelingId(selectedAvdeling).then(setSeksjonerByAvdeling)
-      }
-    })()
-  }, [selectedAvdeling])
-
-  useEffect(() => {
-    if (etterlevelseDokumentasjon?.nomOrganisering.seksjoner.length) {
-      etterlevelseDokumentasjon.nomOrganisering.seksjoner.forEach((seksjon) => {
-        getEnheterBySeksjonId(seksjon.nomSeksjonId)
-          .then((enheter) => {
-            if (enheter.length > 0) {
-              setEnheterBySeksjon((prev) => {
-                const next = new Map(prev)
-                next.set(
-                  seksjon.nomSeksjonId,
-                  enheter.map((e) => ({ value: e.id, label: e.navn }))
-                )
-                return next
-              })
-            }
-          })
-          .catch(() => {})
-      })
-    }
-  }, [etterlevelseDokumentasjon?.nomOrganisering.seksjoner])
 
   const submit = async (etterlevelseDokumentasjon: TEtterlevelseDokumentasjonQL): Promise<void> => {
     if (!etterlevelseDokumentasjon.id || etterlevelseDokumentasjon.id === 'ny') {
@@ -846,65 +793,10 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
               Ansvar for etterlevelsen
             </Heading>
 
-            <div id='nomAvdelingId' className='flex flex-col lg:flex-row gap-5 mb-5'>
-              <FieldWrapper marginTop full>
-                <Field name='nomOrganisering.nomAvdelingId'>
-                  {(fieldProps: FieldProps) => (
-                    <div>
-                      <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
-                      <OptionList
-                        label='Avdeling'
-                        options={alleAvdelingOptions}
-                        value={fieldProps.field.value}
-                        onChange={async (value: any) => {
-                          setSelectedAvdeling(value)
-
-                          if (value !== fieldProps.form.values.nomOrganisering.nomAvdelingId) {
-                            await fieldProps.form.setFieldValue('nomOrganisering.seksjoner', [])
-                            await fieldProps.form.setFieldValue('nomOrganisering.enheter', [])
-                            setEnheterBySeksjon(new Map())
-                          }
-
-                          await fieldProps.form.setFieldValue(
-                            'nomOrganisering.nomAvdelingId',
-                            value
-                          )
-                          await fieldProps.form.setFieldValue(
-                            'nomOrganisering.avdelingNavn',
-                            alleAvdelingOptions.filter((avdeling) => avdeling.value === value)[0]
-                              .label
-                          )
-                        }}
-                        error={
-                          getIn(fieldProps.form.errors, 'nomOrganisering.nomAvdelingId') ? (
-                            <FormError fieldName='nomOrganisering.nomAvdelingId' />
-                          ) : undefined
-                        }
-                      />
-                    </div>
-                  )}
-                </Field>
-              </FieldWrapper>
-
-              <div className='flex-1' />
-            </div>
-
-            {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
-              <div>
-                <EtterlevelseDokumentSeksjonForm
-                  seksjonerByAvdeling={seksjonerByAvdeling}
-                  selectedAvdeling={selectedAvdeling}
-                  enheterBySeksjon={enheterBySeksjon}
-                  setEnheterBySeksjon={setEnheterBySeksjon}
-                />
-              </div>
-            )}
-
-            <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
-
-            {selectedAvdeling !== '' && selectedAvdeling !== undefined && env.isDev && (
-              <EtterlevelseDokumentLinjeForm formValues={values} />
-            )}
+            <EtterlevelseDokumentNomOrganiseringForm
+              etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+              formValues={values}
+            />
 
             <div id='risikoeiereData' className='flex flex-col lg:flex-row gap-5 mt-5'>
               <FieldArray name='risikoeiereData'>
