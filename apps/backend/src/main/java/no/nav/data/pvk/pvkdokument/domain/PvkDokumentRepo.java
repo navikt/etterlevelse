@@ -21,6 +21,6 @@ public interface PvkDokumentRepo extends JpaRepository<PvkDokument, UUID> {
     @Query(value = "select * from pvk_dokument where etterlevelse_dokumentasjon_id = ?1", nativeQuery = true)
     Optional<PvkDokument> findByEtterlevelseDokumensjon(UUID etterlevelseDokumentasjonId);
 
-    @Query(value = "select * from pvk_dokument where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months')", nativeQuery = true)
+    @Query(value = "select * from pvk_dokument where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months') and data ->> 'pvkVurdering' != 'ALLEREDE_UTFORT' and data ->> 'pvkVurdering' != 'SKAL_IKKE_UTFORE' and data ->> 'pvkVurdering' != 'UNDEFINED'", nativeQuery = true)
     List<PvkDokument> findPvkDokumentMedLastModifiedEldreEnn6mnd();
 }
