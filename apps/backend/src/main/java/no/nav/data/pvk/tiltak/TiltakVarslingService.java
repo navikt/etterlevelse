@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.varsel.domain.Varslingsadresse;
 import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
+import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
 import no.nav.data.pvk.tiltak.domain.TiltakRepo;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -56,17 +57,19 @@ public class TiltakVarslingService {
             PvkDokument pvkDokument = pkDokumentRepo.findById(tiltak.getPvkDokumentId()).orElseThrow();
             EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(pvkDokument.getEtterlevelseDokumentId());
 
-            String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
-            String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
-            if (etterlevelseDokumentasjonKortTittel.length() > 50) {
-                etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
-            }
+            if (pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+                String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+                String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
+                if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+                    etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+                }
 
-            varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
-                            .title("Tiltak nærmer seg tiltaksfrist %s".formatted(etterlevelseDokumentasjonKortTittel))
-                    .paragraph(new Varsel.Paragraph("Digital PVK for %s inneholder tiltak som ikke er markert som iverksatt og som nærmer seg fastsatt tiltaksfrist.",
-                            url(urlGenerator.pvkDokumentTiltakListUrl(etterlevelseDokumentasjon.getId().toString(), pvkDokument.getId().toString()),etterlevelseDokumentasjonKortTittel)))
-                    .build(), String.valueOf(etterlevelseDokumentasjon.getId()));
+                varselService.varsle(etterlevelseDokumentasjon.getVarslingsadresser(), Varsel.builder()
+                        .title("Tiltak nærmer seg tiltaksfrist %s".formatted(etterlevelseDokumentasjonKortTittel))
+                        .paragraph(new Varsel.Paragraph("Digital PVK for %s inneholder tiltak som ikke er markert som iverksatt og som nærmer seg fastsatt tiltaksfrist.",
+                                url(urlGenerator.pvkDokumentTiltakListUrl(etterlevelseDokumentasjon.getId().toString(), pvkDokument.getId().toString()),etterlevelseDokumentasjonKortTittel)))
+                        .build(), String.valueOf(etterlevelseDokumentasjon.getId()));
+            }
         });
 
         tiltakMedFristPassert1Dag.forEach(tiltak -> {
@@ -75,28 +78,31 @@ public class TiltakVarslingService {
             List<Resource> risikoeiere = etterlevelseDokumentasjonService.getResourcesData(etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere());
             List<Varslingsadresse> risikoeiereVarslingsadresser = new ArrayList<>();
 
-            if (risikoeiere != null && !risikoeiere.isEmpty()) {
-                risikoeiere.forEach(risikoeier -> {
-                    risikoeiereVarslingsadresser.add(
-                            Varslingsadresse.builder()
-                                    .adresse(risikoeier.getEmail())
-                                    .type(AdresseType.EPOST)
-                                    .build()
-                    );
-                });
-            }
+            if (pvkDokument.getStatus().equals(PvkDokumentStatus.GODKJENT_AV_RISIKOEIER)) {
+                if (risikoeiere != null && !risikoeiere.isEmpty()) {
+                    risikoeiere.forEach(risikoeier -> {
+                        risikoeiereVarslingsadresser.add(
+                                Varslingsadresse.builder()
+                                        .adresse(risikoeier.getEmail())
+                                        .type(AdresseType.EPOST)
+                                        .build()
+                        );
+                    });
+                }
 
-            String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
-            String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
-            if (etterlevelseDokumentasjonKortTittel.length() > 50) {
-                etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
-            }
+                String etterlevelseNummmer = "E%s.%s".formatted(etterlevelseDokumentasjon.getEtterlevelseNummer(), etterlevelseDokumentasjon.getEtterlevelseDokumentVersjon());
+                String etterlevelseDokumentasjonKortTittel = "%s %s".formatted(etterlevelseNummmer, etterlevelseDokumentasjon.getTitle());
+                if (etterlevelseDokumentasjonKortTittel.length() > 50) {
+                    etterlevelseDokumentasjonKortTittel = etterlevelseDokumentasjonKortTittel.substring(0, 47) + "...";
+                }
 
-            varselService.varsle(risikoeiereVarslingsadresser, Varsel.builder()
-                    .title("Tiltak er ikke gjennomført innen tiltaksfrist for %s".formatted(etterlevelseDokumentasjonKortTittel))
-                    .paragraph(new Varsel.Paragraph("Digital PVK for %s inneholder tiltak som ikke er markert som iverksatt innen fastsatt tiltaksfrist.",
-                            url(urlGenerator.pvkDokumentTiltakListUrl(etterlevelseDokumentasjon.getId().toString(), pvkDokument.getId().toString()),etterlevelseDokumentasjonKortTittel)))
-                    .build(), String.valueOf(etterlevelseDokumentasjon.getId()));
+                varselService.varsle(risikoeiereVarslingsadresser, Varsel.builder()
+                        .title("Tiltak er ikke gjennomført innen tiltaksfrist for %s".formatted(etterlevelseDokumentasjonKortTittel))
+                        .paragraph(new Varsel.Paragraph("Digital PVK for %s inneholder tiltak som ikke er markert som iverksatt innen fastsatt tiltaksfrist.",
+                                url(urlGenerator.pvkDokumentTiltakListUrl(etterlevelseDokumentasjon.getId().toString(), pvkDokument.getId().toString()),etterlevelseDokumentasjonKortTittel)))
+                        .build(), String.valueOf(etterlevelseDokumentasjon.getId()));
+
+            }
         });
     }
 }
