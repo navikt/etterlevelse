@@ -107,7 +107,7 @@ public class NomGraphClient {
     public List<OrgEnhet> getAllLinje() {
         if (securityProperties.isDev()) {
             return List.of(
-                    createDevOrganisering("arbeidsOgTjenestelinjen", "Arbeids- og tjenestelinjen"),
+                    createDevOrganisering("ry630r", "Arbeids- og tjenestelinjen"),
                     createDevOrganisering("velferdslinjen", "Velferdslinjen"),
                     createDevOrganisering("ytelseslinjen", "Ytelseslinjen"),
                     createDevOrganisering("okonomilinjen", "Økonomilinjen")
@@ -421,7 +421,7 @@ public class NomGraphClient {
 
     private List<OrgEnhet> getUnderEnheterForLinje(String orgId) {
         return switch (orgId) {
-            case "arbeidsOgTjenestelinjen" -> getDevFylker();
+            case "ry630r" -> getDevFylker();
             case "velferdslinjen" -> List.of(
                     createDevOrganisering("velferdslinjen_under_1", "Hjelpemidler og tilrettelegging")
             );
