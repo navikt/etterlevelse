@@ -22,6 +22,7 @@ import {
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import EtterlevelseCard from '../../etterlevelseModal/etterlevelseCard'
+import SuksesskriterieEndringTag from '../suksesskriterieEndringTag'
 
 type TProps = {
   etterlevelse: IEtterlevelse
@@ -29,6 +30,7 @@ type TProps = {
   tidligereEtterlevelser?: IEtterlevelse[]
   isBortfiltrert?: boolean
   previousVurdering?: IVurdering
+  forrigeSuksesskriterier?: ISuksesskriterie[]
 }
 
 export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
@@ -37,6 +39,7 @@ export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
   tidligereEtterlevelser,
   isBortfiltrert,
   previousVurdering,
+  forrigeSuksesskriterier,
 }) => {
   const user = useContext(UserContext)
   const [previousEtterlevelse, setPreviousEtterlevelse] = useState<IEtterlevelse>()
@@ -89,6 +92,7 @@ export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
               previousEtterlevelse={previousEtterlevelse}
               totalSuksesskriterie={suksesskriterier.length}
               isBortfiltrert={isBortfiltrert}
+              forrigeSuksesskriterier={forrigeSuksesskriterier}
             />
           </div>
         )
@@ -148,6 +152,7 @@ type TKriterieBegrunnelseProps = {
   totalSuksesskriterie: number
   isBortfiltrert?: boolean
   previousEtterlevelse?: IEtterlevelse
+  forrigeSuksesskriterier?: ISuksesskriterie[]
 }
 
 const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
@@ -157,6 +162,7 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
   totalSuksesskriterie,
   isBortfiltrert,
   previousEtterlevelse,
+  forrigeSuksesskriterier,
 }) => {
   const user = useContext(UserContext)
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
@@ -191,9 +197,16 @@ const KriterieBegrunnelse: FunctionComponent<TKriterieBegrunnelseProps> = ({
       borderRadius='8'
     >
       <div className='flex w-full lg:flex-row flex-col mb-2.5'>
-        <BodyShort className='min-w-fit'>
-          Suksesskriterium {index + 1} av {totalSuksesskriterie}
-        </BodyShort>
+        <div className='flex flex-wrap items-center gap-3 min-w-fit'>
+          <BodyShort className='min-w-fit'>
+            Suksesskriterium {index + 1} av {totalSuksesskriterie}
+          </BodyShort>
+          <SuksesskriterieEndringTag
+            suksesskriterie={suksesskriterie}
+            sammenlignMed={forrigeSuksesskriterier}
+            versjon='gjeldende'
+          />
+        </div>
 
         <div className='flex w-full lg:justify-end justify-normal'>
           {isBortfiltrert && <BodyShort className='text-text-danger'>Bortfiltert</BodyShort>}

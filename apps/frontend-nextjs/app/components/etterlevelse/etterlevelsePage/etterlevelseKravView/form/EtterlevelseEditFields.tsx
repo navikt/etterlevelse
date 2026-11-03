@@ -35,7 +35,7 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
+import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
 import { env } from '@/util/env/env'
@@ -65,6 +65,7 @@ type TEditProps = {
   forrigeTema?: TKravNavigationTarget
   nesteTema?: TKravNavigationTarget
   kravGrupper?: TKravNavigationGroup[]
+  forrigeSuksesskriterier?: ISuksesskriterie[]
 }
 
 const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
@@ -84,6 +85,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   forrigeTema,
   nesteTema,
   kravGrupper,
+  forrigeSuksesskriterier,
 }) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
@@ -281,6 +283,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                       suksesskriterie={krav.suksesskriterier}
                       forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
                       morEtterlevelse={morEtterlevelse}
+                      forrigeSuksesskriterier={forrigeSuksesskriterier}
                     />
                   </div>
 
@@ -588,6 +591,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                 etterlevelse={values}
                 suksesskriterier={krav.suksesskriterier}
                 tidligereEtterlevelser={tidligereEtterlevelser}
+                forrigeSuksesskriterier={forrigeSuksesskriterier}
               />
             )}
           </div>

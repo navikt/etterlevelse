@@ -19,13 +19,14 @@ import { KravInfoView } from '@/components/krav/kravPage/kravInfoView/kravViewIn
 import KravRisikoscenarioGodkjentAccordianList from '@/components/risikoscenario/kravSpesifikk/KravRisikoscenarioGodkjentAccordianList'
 import KravRisikoscenarioer from '@/components/risikoscenario/kravSpesifikk/kravRisikoscenarioer'
 import KravRisikoscenarioReadOnly from '@/components/risikoscenario/readOnly/KravRisikoscenarioReadOnly'
+import { IEtterlevelse } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IEtterlevelseMetadata } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseMetadataConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
@@ -33,6 +34,7 @@ import {
   skalHaPvkDokument,
 } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import EditNotatfelt from '../../etterlevelseMetadata/editNotatfelt'
+import Svarhistorikk from './svarhistorikk'
 
 type TProps = {
   krav: TKravQL
@@ -44,6 +46,8 @@ type TProps = {
   setIsPvkTabActive: (state: boolean) => void
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   previousVurdering?: IVurdering
+  tidligereEtterlevelser?: IEtterlevelse[]
+  forrigeKrav?: IKrav
 }
 
 const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
@@ -56,8 +60,21 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   setIsPvkTabActive,
   etterlevelseDokumentasjon,
   previousVurdering,
+  tidligereEtterlevelser,
+  forrigeKrav,
 }) => {
   const user = useContext(UserContext)
+  const forrigeEtterlevelse = forrigeKrav
+    ? tidligereEtterlevelser?.find(
+        (etterlevelse) => etterlevelse.kravVersjon === forrigeKrav.kravVersjon
+      )
+    : undefined
+  const versjonerUtenDokumentasjon = forrigeKrav
+    ? alleKravVersjoner
+        .map((versjon) => Number(versjon.kravVersjon))
+        .filter((versjon) => versjon > forrigeKrav.kravVersjon && versjon < krav.kravVersjon)
+        .sort((a, b) => a - b)
+    : []
   const [isNotatModalOpen, setIsNotatModalOpen] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('mer')
   const [selectedTab, setSelectedTab] = useState<string>('')
@@ -132,6 +149,17 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                   }
                 />
               )}
+            {forrigeEtterlevelse && (
+              <Tabs.Tab
+                className='whitespace-nowrap'
+                value='svarhistorikk'
+                label={
+                  <Heading level='2' size='xsmall'>
+                    Svarhistorikk
+                  </Heading>
+                }
+              />
+            )}
             <Tabs.Tab
               value='notat'
               label={
@@ -178,6 +206,19 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                     previousVurdering={previousVurdering}
                   />
                 )}
+              </div>
+            </Tabs.Panel>
+          )}
+
+          {forrigeKrav && forrigeEtterlevelse && (
+            <Tabs.Panel className='overflow-auto h-[90vh]' value='svarhistorikk'>
+              <div className='mt-2 p-4 mb-52'>
+                <Svarhistorikk
+                  forrigeKrav={forrigeKrav}
+                  forrigeEtterlevelse={forrigeEtterlevelse}
+                  gjeldendeSuksesskriterier={krav.suksesskriterier}
+                  versjonerUtenDokumentasjon={versjonerUtenDokumentasjon}
+                />
               </div>
             </Tabs.Panel>
           )}

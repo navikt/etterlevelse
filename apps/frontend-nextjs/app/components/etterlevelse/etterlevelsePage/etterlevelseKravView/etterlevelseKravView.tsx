@@ -16,7 +16,7 @@ import {
   getEtterlevelseMetadataByEtterlevelseDokumentasjonAndKravNummerAndKravVersion,
   mapEtterlevelseMetadataToFormValue,
 } from '@/api/etterlevelseMetadata/etterlevelseMetadataApi'
-import { getKravByKravNummer } from '@/api/krav/kravApi'
+import { getKravByKravNumberAndVersion, getKravByKravNummer } from '@/api/krav/kravApi'
 import { getPvkDokumentByEtterlevelseDokumentId } from '@/api/pvkDokument/pvkDokumentApi'
 import { getPvoTilbakemeldingByPvkDokumentId } from '@/api/pvoTilbakemelding/pvoTilbakemeldingApi'
 import { CenteredLoader } from '@/components/common/centeredLoader/centeredLoader'
@@ -94,6 +94,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
   const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
+  const [forrigeKrav, setForrigeKrav] = useState<IKrav>()
 
   const user = useContext(UserContext)
 
@@ -183,6 +184,28 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       }
     })()
   }, [data])
+
+  useEffect(() => {
+    ;(async () => {
+      if (!krav) return
+      const sisteDokumenterteVersjon = tidligereEtterlevelser
+        ?.map((tidligere) => tidligere.kravVersjon)
+        .filter((versjon) => versjon < krav.kravVersjon)
+        .sort((a, b) => b - a)[0]
+      const forrigeKravVersjon =
+        sisteDokumenterteVersjon ??
+        alleKravVersjoner
+          .map((versjon) => Number(versjon.kravVersjon))
+          .filter((versjon) => versjon > 0 && versjon < krav.kravVersjon)
+          .sort((a, b) => b - a)[0]
+
+      setForrigeKrav(
+        forrigeKravVersjon
+          ? await getKravByKravNumberAndVersion(krav.kravNummer, forrigeKravVersjon)
+          : undefined
+      )
+    })()
+  }, [krav, alleKravVersjoner, tidligereEtterlevelser])
 
   useEffect(() => {
     ;(async () => {
@@ -324,6 +347,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 previousVurdering={previousVurdering}
                 kravGrupper={kravGrupper}
+                forrigeKrav={forrigeKrav}
               />
             </div>
 
@@ -337,6 +361,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               setIsPvkTabActive={setIsPvkTabActive}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               previousVurdering={previousVurdering}
+              tidligereEtterlevelser={tidligereEtterlevelser}
+              forrigeKrav={forrigeKrav}
             />
           </div>
         </div>
