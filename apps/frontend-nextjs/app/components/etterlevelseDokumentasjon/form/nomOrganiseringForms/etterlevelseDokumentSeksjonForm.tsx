@@ -46,7 +46,7 @@ const EtterlevelseDokumentSeksjonForm: FunctionComponent<TProps> = ({
   if (filteredSeksjoner.length === 0) return null
   return (
     <div id='seksjon' className='flex flex-col lg:flex-row gap-5 mb-5'>
-      <FieldWrapper marginTop full>
+      <FieldWrapper full>
         <FieldArray name='nomOrganisering.seksjoner'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>

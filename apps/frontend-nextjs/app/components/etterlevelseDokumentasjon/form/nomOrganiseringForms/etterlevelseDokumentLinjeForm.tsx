@@ -43,7 +43,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
   return (
     <div>
       <div id='linje' className='flex flex-col lg:flex-row gap-2 mb-5'>
-        <FieldWrapper marginTop full>
+        <FieldWrapper full>
           <FieldArray name='nomOrganisering.linjer'>
             {(fieldProps: FieldArrayRenderProps) => (
               <div>
