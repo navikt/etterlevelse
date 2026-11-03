@@ -616,6 +616,8 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                   ...errors,
                   nomOrganisering: undefined,
                   nomAvdelingId: getIn(errors, 'nomOrganisering.nomAvdelingId'),
+                  seksjon: getIn(errors, 'nomOrganisering.seksjoner'),
+                  linje: getIn(errors, 'nomOrganisering.linjer'),
                 })
                   .filter(([, error]) => error)
                   .map(([key, error]) => (

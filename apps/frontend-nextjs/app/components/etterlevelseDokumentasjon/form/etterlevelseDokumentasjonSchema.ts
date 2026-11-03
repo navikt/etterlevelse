@@ -11,6 +11,7 @@ export enum EEtterlevelseDokumentSchemaMelding {
   TEAMDATA = 'Påkrevd minst 1 team',
   RESOURCEDATA = 'Påkrevd minst 1 person',
   NOM_AVDELING_ID = 'Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen',
+  NOM_SEKSJON_ELLER_LINJE = 'Dere må velge minst en seksjon i direktoratet eller en linje',
 }
 
 export const titleCheck = yup.string().required(EEtterlevelseDokumentSchemaMelding.TITLE)
@@ -50,8 +51,20 @@ export const resourcesDataCheck = yup.array().test({
   },
 })
 
+const seksjonEllerLinjeCheck = yup.array().test({
+  name: 'seksjonEllerLinjeCheck',
+  message: EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON_ELLER_LINJE,
+  test: function () {
+    const { parent } = this
+    if (!parent.nomAvdelingId) return true
+    return (parent.seksjoner?.length ?? 0) > 0 || (parent.linjer?.length ?? 0) > 0
+  },
+})
+
 export const nomOrganiseringCheck = yup.object({
   nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
+  seksjoner: seksjonEllerLinjeCheck,
+  linjer: seksjonEllerLinjeCheck,
 })
 
 export const etterlevelseDokumentasjonSchema = () =>

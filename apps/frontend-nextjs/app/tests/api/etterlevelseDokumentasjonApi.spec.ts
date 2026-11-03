@@ -83,4 +83,33 @@ for (const [name, schema] of [
       schema.validateAt('nomOrganisering.nomAvdelingId', { ...values, nomOrganisering })
     ).resolves.toBe('avdeling-1')
   })
+
+  test(`${name} requires at least one seksjon or linje when avdeling is set`, async () => {
+    const values = etterlevelseDokumentasjonMapToFormVal({})
+    const withAvdeling = (
+      seksjoner: INomOrganisering['seksjoner'],
+      linjer: INomOrganisering['linjer']
+    ) => ({
+      ...values,
+      nomOrganisering: {
+        ...values.nomOrganisering,
+        nomAvdelingId: 'avdeling-1',
+        seksjoner,
+        linjer,
+      },
+    })
+
+    await expect(schema.validateAt('nomOrganisering.seksjoner', values)).resolves.toEqual([])
+    for (const path of ['nomOrganisering.seksjoner', 'nomOrganisering.linjer']) {
+      await expect(schema.validateAt(path, withAvdeling([], []))).rejects.toThrow(
+        EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON_ELLER_LINJE
+      )
+      await expect(
+        schema.validateAt(path, withAvdeling(nomOrganisering.seksjoner, []))
+      ).resolves.toBeDefined()
+      await expect(
+        schema.validateAt(path, withAvdeling([], nomOrganisering.linjer))
+      ).resolves.toBeDefined()
+    }
+  })
 }

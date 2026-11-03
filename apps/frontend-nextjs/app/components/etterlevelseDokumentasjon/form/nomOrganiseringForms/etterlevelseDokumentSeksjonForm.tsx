@@ -1,9 +1,10 @@
-import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { FieldArray, FieldArrayRenderProps, getIn } from 'formik'
 import { FunctionComponent, SetStateAction } from 'react'
 import { getEnheterBySeksjonId } from '@/api/nom/nomApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
 import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
+import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import {
   INomEnhet,
@@ -93,6 +94,11 @@ const EtterlevelseDokumentSeksjonForm: FunctionComponent<TProps> = ({
                     }
                   }
                 }}
+                error={
+                  getIn(fieldProps.form.errors, 'nomOrganisering.seksjoner') ? (
+                    <FormError fieldName='nomOrganisering.seksjoner' />
+                  ) : undefined
+                }
               />
               <RenderTagList
                 list={fieldProps.form.values.nomOrganisering.seksjoner.map(

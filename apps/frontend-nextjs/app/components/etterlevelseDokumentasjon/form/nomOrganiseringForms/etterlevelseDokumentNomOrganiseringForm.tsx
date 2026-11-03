@@ -13,7 +13,6 @@ import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/L
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TOption } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { env } from '@/util/env/env'
 import EtterlevelseDokumentEnheterForm from './etterlevelseDokumentEnheterForm'
 import EtterlevelseDokumentLinjeForm from './etterlevelseDokumentLinjeForm'
 import EtterlevelseDokumentSeksjonForm from './etterlevelseDokumentSeksjonForm'
@@ -139,11 +138,9 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
             Velg ansvar for etterlevelsen i linjen
           </Heading>
 
-          {env.isDev && (
-            <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-              <EtterlevelseDokumentLinjeForm formValues={formValues} />
-            </div>
-          )}
+          <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
+            <EtterlevelseDokumentLinjeForm formValues={formValues} />
+          </div>
         </div>
       )}
     </div>

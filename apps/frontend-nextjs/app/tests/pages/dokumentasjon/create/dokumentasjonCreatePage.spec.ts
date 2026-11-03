@@ -134,9 +134,12 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await context.route(
       `**/nom/seksjon/avdeling/${oppretteEtterlevelsesdokument.departmentId}`,
       async (route) => {
-        await route.fulfill({ json: [] })
+        await route.fulfill({ json: [{ id: 'seksjon-1', navn: 'Seksjon 1' }] })
       }
     )
+    await context.route('**/nom/enhet/seksjon/seksjon-1', async (route) => {
+      await route.fulfill({ json: [] })
+    })
     await context.route('**/etterlevelsedokumentasjon', async (route) => {
       expect(route.request().method()).toBe('POST')
       expect(route.request().postDataJSON()).toMatchObject({
@@ -145,6 +148,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         nomOrganisering: {
           nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
           avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
+          seksjoner: [{ nomSeksjonId: 'seksjon-1', nomSeksjonName: 'Seksjon 1' }],
         },
         resources: [mockIdent],
         varslingsadresser: [{ type: 'EPOST', adresse: oppretteEtterlevelsesdokument.email }],
@@ -176,6 +180,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByRole('button', { name: 'Legg til epost' }).click()
     await page.getByRole('button', { name: 'Legg til Epost', exact: true }).click()
     await page.getByLabel('Avdeling').selectOption(oppretteEtterlevelsesdokument.departmentId)
+    await page.getByLabel('Seksjon').selectOption('seksjon-1')
 
     await expect(titleField).toHaveValue(oppretteEtterlevelsesdokument.title)
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()
