@@ -79,7 +79,10 @@ export const EtterlevelseDokumentasjon = () => {
             >
               Opprett nytt etterlevelsesdokument
             </Button>
-            <Link href={etterlevelseDokumentasjonerUrl()} onClick={() => window.scrollTo(0, 0)}>
+            <Link
+              href={etterlevelseDokumentasjonerUrl('alle')}
+              onClick={() => window.scrollTo(0, 0)}
+            >
               Se alle etterlevelsesdokumenter
             </Link>
           </div>

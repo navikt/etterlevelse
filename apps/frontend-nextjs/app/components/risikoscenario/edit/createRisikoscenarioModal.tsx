@@ -66,7 +66,7 @@ const CreateRisikoscenarioModal: FunctionComponent<TProps> = ({
           }
           variant='secondary'
         >
-          Legg til øvrig risikoscenario
+          Legg til ikke krav-spesifikt risikoscenario
         </Button>
       )}
 

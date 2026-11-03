@@ -190,53 +190,55 @@ const OppsumeringAccordianListGodkjentView: FunctionComponent<TProps> = ({
                     </div>
                   )}
 
-                  <div className='mt-5'>
-                    <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
+                  {!risikoscenario.ingenTiltak && (
+                    <div className='mt-5'>
+                      <Label>Antatt risikonivå etter gjennomførte tiltak </Label>
 
-                    {revurdertEffektCheck && (
-                      <LocalAlert className='mt-3' status='warning'>
-                        <LocalAlert.Header>
-                          <LocalAlert.Title>Dere må vurdere tiltakenes effekt</LocalAlert.Title>
-                        </LocalAlert.Header>
-                      </LocalAlert>
-                    )}
+                      {revurdertEffektCheck && (
+                        <LocalAlert className='mt-3' status='warning'>
+                          <LocalAlert.Header>
+                            <LocalAlert.Title>Dere må vurdere tiltakenes effekt</LocalAlert.Title>
+                          </LocalAlert.Header>
+                        </LocalAlert>
+                      )}
 
-                    {!revurdertEffektCheck && (
-                      <div className='mt-3'>
-                        <RisikoscenarioTag
-                          level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
-                          text={getSannsynlighetsnivaaText(
-                            risikoscenario.sannsynlighetsNivaaEtterTiltak
-                          )}
-                        />
-
+                      {!revurdertEffektCheck && (
                         <div className='mt-3'>
                           <RisikoscenarioTag
-                            level={risikoscenario.konsekvensNivaaEtterTiltak}
-                            text={getKonsekvenssnivaaText(
-                              risikoscenario.konsekvensNivaaEtterTiltak
+                            level={risikoscenario.sannsynlighetsNivaaEtterTiltak}
+                            text={getSannsynlighetsnivaaText(
+                              risikoscenario.sannsynlighetsNivaaEtterTiltak
                             )}
                           />
+
+                          <div className='mt-3'>
+                            <RisikoscenarioTag
+                              level={risikoscenario.konsekvensNivaaEtterTiltak}
+                              text={getKonsekvenssnivaaText(
+                                risikoscenario.konsekvensNivaaEtterTiltak
+                              )}
+                            />
+                          </div>
+
+                          {risikoscenario.nivaaBegrunnelseEtterTiltak !== '' && (
+                            <BodyLong className='mt-3'>
+                              {risikoscenario.nivaaBegrunnelseEtterTiltak}
+                            </BodyLong>
+                          )}
+
+                          {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
+                            <LocalAlert status='warning' className='mt-3'>
+                              <LocalAlert.Header>
+                                <LocalAlert.Title>
+                                  Dere må begrunne denne vurderingen av tiltakenes effekt.
+                                </LocalAlert.Title>
+                              </LocalAlert.Header>
+                            </LocalAlert>
+                          )}
                         </div>
-
-                        {risikoscenario.nivaaBegrunnelseEtterTiltak !== '' && (
-                          <BodyLong className='mt-3'>
-                            {risikoscenario.nivaaBegrunnelseEtterTiltak}
-                          </BodyLong>
-                        )}
-
-                        {risikoscenario.nivaaBegrunnelseEtterTiltak === '' && (
-                          <LocalAlert status='warning' className='mt-3'>
-                            <LocalAlert.Header>
-                              <LocalAlert.Title>
-                                Dere må begrunne denne vurderingen av tiltakenes effekt.
-                              </LocalAlert.Title>
-                            </LocalAlert.Header>
-                          </LocalAlert>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </Accordion.Content>
             </Accordion.Item>

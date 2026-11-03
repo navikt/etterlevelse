@@ -66,7 +66,10 @@ export const MineSistDokumenterte: FunctionComponent<TProps> = ({
           />
           <BodyShort>
             Vi fant ingen dokumenter du har dokumentert på de siste 6 månedene.{' '}
-            <Link href={etterlevelseDokumentasjonerUrl()}>Se alle etterlevelsesdokumenter</Link>.
+            <Link href={etterlevelseDokumentasjonerUrl('alle')}>
+              Se alle etterlevelsesdokumenter
+            </Link>
+            .
           </BodyShort>
         </div>
       )}

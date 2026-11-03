@@ -44,6 +44,7 @@ import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { handleSort } from '@/util/handleTableSort'
 import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
+import { DashboardCopyLinkButton } from './DashboardCopyLinkButton'
 import { TemaDashboardDetailHowToReadmore } from './DashboardReadmore/TemaDashboardDetailHowToReadmore'
 import { TemaDashboardDetailKravReadmore } from './DashboardReadmore/TemaDashboardDetailKravReadmore'
 import { TemaDashboardDetailReadmore } from './DashboardReadmore/TemaDashboardDetailReadmore'
@@ -334,7 +335,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
   const kravSeksjonRequestId = useRef(0)
   const tableRequestId = useRef(0)
 
-  useUrlFilterSync({
+  const shareUrl = useUrlFilterSync({
     avdeling: selectedAvdeling,
     seksjon: selectedSeksjon,
     enhet: selectedEnhet,
@@ -773,7 +774,18 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                 styles={selectOverrides}
               />
             </div>
-
+          </div>
+          <RenderTagList
+            list={selectedTeams.map((team) => team.name || teamName(team.id)[0])}
+            variant='action'
+            onRemove={(index) => {
+              setIsLoading(true)
+              setIsTableLoading(true)
+              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
+            }}
+          />
+          <div className='flex flex-row flex-wrap items-center gap-4 mt-5'>
+            <DashboardCopyLinkButton url={shareUrl} />
             <Button
               variant='tertiary'
               size='small'
@@ -848,15 +860,6 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               Last ned nøkkeltall som CSV
             </Button>
           </div>
-          <RenderTagList
-            list={selectedTeams.map((team) => team.name || teamName(team.id)[0])}
-            variant='action'
-            onRemove={(index) => {
-              setIsLoading(true)
-              setIsTableLoading(true)
-              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
-            }}
-          />
         </div>
 
         {isLoading && <CenteredLoader />}
