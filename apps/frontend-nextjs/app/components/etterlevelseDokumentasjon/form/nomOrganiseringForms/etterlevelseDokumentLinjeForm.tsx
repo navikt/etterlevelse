@@ -1,5 +1,5 @@
 import { FieldArray, FieldArrayRenderProps, getIn } from 'formik'
-import { FunctionComponent, useEffect, useState } from 'react'
+import { FunctionComponent, useEffect, useMemo, useState } from 'react'
 import { getLinjeOptions, getUnderenheterOptions } from '@/api/nom/nomApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
@@ -11,21 +11,30 @@ import {
   INomEnhet,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { env } from '@/util/env/env'
 
 type TProps = {
   formValues: TEtterlevelseDokumentasjonQL
 }
 
 const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }) => {
+  const tjenestelinjeId = 'ry630r'
+
   const [alleLinjeOptions, setAlleLinjeOptions] = useState<TOption[]>([])
   const [alleFylkeOptions, setAlleFylkeOptions] = useState<TOption[]>([])
+  const hasArbeidsOgTjenestelinjen = useMemo(() => {
+    return formValues.nomOrganisering.linjer
+      .map((linje) => linje.nomEnhetId)
+      .includes(tjenestelinjeId)
+  }, [formValues.nomOrganisering.linjer])
 
-  let tjenestelinjeId = 'ry630r'
+  const hasOtherLinjeNotTjeneste = useMemo(() => {
+    return (
+      formValues.nomOrganisering.linjer.filter((linje) => linje.nomEnhetId !== tjenestelinjeId)
+        .length !== 0
+    )
+  }, [formValues.nomOrganisering.linjer])
 
-  if (env.isDev) {
-    tjenestelinjeId = 'arbeidsOgTjenestelinjen'
-  }
+  console.debug(hasOtherLinjeNotTjeneste)
 
   useEffect(() => {
     ;(async () => {
@@ -36,7 +45,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
 
   return (
     <div>
-      <div id='linje' className='flex flex-col lg:flex-row gap-5 mb-5'>
+      <div id='linje' className='flex flex-col lg:flex-row gap-2 mb-5'>
         <FieldWrapper marginTop full>
           <FieldArray name='nomOrganisering.linjer'>
             {(fieldProps: FieldArrayRenderProps) => (
@@ -87,7 +96,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
 
         <div className='flex-1' />
 
-        {formValues.nomOrganisering.linjer && (
+        {formValues.nomOrganisering.linjer && hasArbeidsOgTjenestelinjen && (
           <FieldWrapper marginTop full>
             <FieldArray name='nomOrganisering.linjeFylker'>
               {(fieldProps: FieldArrayRenderProps) => (
