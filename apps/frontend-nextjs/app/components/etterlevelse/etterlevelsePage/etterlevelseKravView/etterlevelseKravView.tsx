@@ -9,6 +9,7 @@ import {
   SetStateAction,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -94,6 +95,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [pvkDokument, setPvkDokument] = useState<IPvkDokument>()
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
   const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
+  const [alleKrav, setAlleKrav] = useState<IKrav[]>([])
 
   const user = useContext(UserContext)
 
@@ -157,6 +159,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
         setKrav(data.kravById)
         getKravByKravNummer(data.kravById.kravNummer).then((resp) => {
           if (resp.content.length) {
+            setAlleKrav(resp.content)
             const alleVersjoner = resp.content
               .map((krav) => {
                 return {
@@ -183,6 +186,18 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
       }
     })()
   }, [data])
+
+  const forrigeKrav = useMemo(() => {
+    if (!krav) return undefined
+    const tidligereKrav = alleKrav
+      .filter((k) => k.kravVersjon < krav.kravVersjon && k.status !== EKravStatus.UTKAST)
+      .sort((a, b) => b.kravVersjon - a.kravVersjon)
+    const dokumenterteVersjoner = (tidligereEtterlevelser ?? []).map((e) => e.kravVersjon)
+
+    return (
+      tidligereKrav.find((k) => dokumenterteVersjoner.includes(k.kravVersjon)) ?? tidligereKrav[0]
+    )
+  }, [krav, alleKrav, tidligereEtterlevelser])
 
   useEffect(() => {
     ;(async () => {
@@ -324,6 +339,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                 previousVurdering={previousVurdering}
                 kravGrupper={kravGrupper}
+                forrigeKrav={forrigeKrav}
               />
             </div>
 
@@ -337,6 +353,8 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               setIsPvkTabActive={setIsPvkTabActive}
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               previousVurdering={previousVurdering}
+              tidligereEtterlevelser={tidligereEtterlevelser}
+              forrigeKrav={forrigeKrav}
             />
           </div>
         </div>
