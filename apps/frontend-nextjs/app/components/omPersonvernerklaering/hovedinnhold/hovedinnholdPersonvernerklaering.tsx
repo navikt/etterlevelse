@@ -6,7 +6,7 @@ import {
   EOverskrifterPersonvernerklaering,
   EPersonvernerklaeringId,
 } from '@/constants/omPersonvernerklaering/omPersonvernerklaeringConstants'
-import { TConsentValue } from '@/util/analytics/umami'
+import { TConsentValue } from '@/util/analytics/innblikk'
 import { useConsent } from '@/util/analytics/useConsent'
 
 const HovedinnholdPersonerklaering = () => {

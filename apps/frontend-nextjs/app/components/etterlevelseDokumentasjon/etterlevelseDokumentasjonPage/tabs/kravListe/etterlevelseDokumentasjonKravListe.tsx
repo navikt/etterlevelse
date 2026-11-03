@@ -1,5 +1,6 @@
 'use client'
 
+import { Events } from '@navikt/analytics-types'
 import { BodyShort, Label, Loader, Switch, TextField } from '@navikt/ds-react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, useEffect, useMemo, useState } from 'react'
@@ -18,7 +19,7 @@ import {
   etterlevelseDokumentasjonAlleClosedUrl,
   etterlevelseDokumentasjonAlleOpenUrl,
 } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
+import { sporInnblikkHendelse } from '@/util/analytics/innblikk'
 import {
   filterKravEtterlevelseStatus,
   filterSuksesskriterieStatus,
@@ -178,15 +179,17 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
           label='Søk etter kravet'
           onChange={(event) => {
             const value = event.target.value
-            setSearchKrav(value)
 
-            if (value.length === 1) {
-              trackUmamiEvent(UMAMI_EVENTS.FILTER_CHANGED, {
-                page: 'etterlevelse-dokumentasjon',
-                component: 'krav-liste',
-                filter: 'kravnummer',
+            if (searchKrav.trim() === '' && value.trim() !== '') {
+              sporInnblikkHendelse(Events.SOK_NAVNO, {
+                kontekst: 'etterlevelse-dokumentasjon',
+                komponentId: 'krav-liste-sok',
+                seksjon: 'etterlevelse-dokumentasjon',
+                opprinnelse: 'etterlevelse',
               })
             }
+
+            setSearchKrav(value)
           }}
         />
 
