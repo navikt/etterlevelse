@@ -63,5 +63,3 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
             ") latest where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months')", nativeQuery = true)
     List<Tiltak> findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
 }
-
-
