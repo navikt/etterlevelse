@@ -36,31 +36,31 @@ const StatusTag: FunctionComponent<{ status?: ESuksesskriterieStatus }> = ({ sta
   switch (status) {
     case ESuksesskriterieStatus.UNDER_ARBEID:
       return (
-        <Tag size='small' variant='moderate' data-color='info'>
+        <Tag size='small' variant='outline' data-color='info'>
           Under arbeid
         </Tag>
       )
     case ESuksesskriterieStatus.OPPFYLT:
       return (
-        <Tag size='small' variant='moderate' data-color='success'>
+        <Tag size='small' variant='outline' data-color='success'>
           Oppfylt
         </Tag>
       )
     case ESuksesskriterieStatus.IKKE_OPPFYLT:
       return (
-        <Tag size='small' variant='moderate' data-color='danger'>
+        <Tag size='small' variant='outline' data-color='danger'>
           Ikke oppfylt
         </Tag>
       )
     case ESuksesskriterieStatus.IKKE_RELEVANT:
       return (
-        <Tag size='small' variant='moderate' data-color='brand-beige'>
+        <Tag size='small' variant='outline' data-color='brand-beige'>
           Ikke relevant
         </Tag>
       )
     default:
       return (
-        <Tag size='small' variant='moderate' data-color='neutral'>
+        <Tag size='small' variant='outline' data-color='neutral'>
           Ikke påbegynt
         </Tag>
       )
@@ -91,7 +91,7 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex items-center gap-3 flex-wrap'>
-        <Tag size='small' variant='moderate' data-color='neutral'>
+        <Tag size='small' variant='outline' data-color='neutral'>
           {forrigeKravNavn}
         </Tag>
         {lastModifiedDate && lastModifiedBy && (
