@@ -412,8 +412,8 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
           </Alert>
         )}
 
-      <div className='w-full mt-5'>
-        <div className='min-w-fit'>
+      <div className='w-full mt-5 bg-blue-50 rounded-lg p-4'>
+        <div>
           <RadioGroup
             id={'suksesskriterieStatus_' + index}
             value={suksessKriterieStatus}
@@ -443,7 +443,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                   </ReadMore>
                 )}
               </div>
-              <div className='block lg:flex lg:gap-6'>
+              <div className='block lg:flex lg:flex-wrap lg:gap-x-6 [&_label]:whitespace-nowrap'>
                 <Radio value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</Radio>
                 <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
                 <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
