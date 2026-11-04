@@ -89,7 +89,7 @@ export const documentRelationMapToFormVal = (
 ): IDocumentRelation => ({
   id: documentRelation.id || '',
   changeStamp: documentRelation.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  version: documentRelation.version || -1,
+  version: documentRelation.version ?? -1,
   fromDocument: documentRelation.fromDocument || '',
   toDocument: documentRelation.toDocument || '',
   RelationType: documentRelation.RelationType || ERelationType.ARVER,

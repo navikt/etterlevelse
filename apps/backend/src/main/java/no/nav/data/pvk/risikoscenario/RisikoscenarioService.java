@@ -1,5 +1,6 @@
 package no.nav.data.pvk.risikoscenario;
 
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
@@ -90,7 +91,16 @@ public class RisikoscenarioService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario delete(UUID id) {
+        return delete(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes hvis oppgitt.
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Risikoscenario delete(UUID id, Integer version) {
         var pvkDokumentToDelete = risikoscenarioRepo.findById(id);
+        pvkDokumentToDelete.ifPresent(r -> OptimisticLockUtil.checkVersionIfPresent(Risikoscenario.class, id, r.getVersion(), version));
         risikoscenarioRepo.deleteById(id);
         return pvkDokumentToDelete.orElse(null);
     }

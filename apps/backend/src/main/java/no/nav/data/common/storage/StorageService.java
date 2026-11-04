@@ -2,6 +2,7 @@ package no.nav.data.common.storage;
 
 import lombok.RequiredArgsConstructor;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.storage.domain.DomainObject;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.storage.domain.GenericStorageRepository;
@@ -44,6 +45,10 @@ public class StorageService<T extends DomainObject> {
     @Transactional
     public T save(T object) {
         GenericStorage<T> storage = object.getId() != null ? getStorage(object.getId()) : new GenericStorage<T>();
+        // Domeneobjektet bærer versjonen fra da det ble lest (se GenericStorage.getDomainObjectData). Er raden endret siden, er det en konflikt.
+        if (object.getId() != null && object.getVersion() != null) {
+            OptimisticLockUtil.checkVersion(object.getClass(), object.getId(), storage.getVersion(), object.getVersion());
+        }
         storage.setDomainObjectData(object);
         GenericStorage<T> saved = repository.save(storage);
         repository.flush();
@@ -52,7 +57,12 @@ public class StorageService<T extends DomainObject> {
 
     @Transactional
     public void deleteAll(List<T> objects) {
-        repository.deleteAll(convert(objects, DomainObject::getId));
+        var storages = convert(objects, o -> {
+            var storage = getStorage(o.getId());
+            OptimisticLockUtil.checkVersionIfPresent(o.getClass(), o.getId(), storage.getVersion(), o.getVersion());
+            return storage;
+        });
+        repository.deleteAll(storages);
     }
 
     private GenericStorage<T> getStorage(UUID uuid) {
@@ -72,9 +82,19 @@ public class StorageService<T extends DomainObject> {
 
     @Transactional
     public T delete(UUID id) {
+        return delete(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes hvis oppgitt.
+     */
+    @Transactional
+    public T delete(UUID id, Integer version) {
         var storage = getStorage(id);
+        T domainObject = storage.getDomainObjectData();
+        OptimisticLockUtil.checkVersionIfPresent(domainObject.getClass(), id, storage.getVersion(), version);
         repository.delete(storage);
-        return storage.getDomainObjectData();
+        return domainObject;
     }
 
     public List<T> getAll(Class<T> type) {

@@ -57,10 +57,14 @@ public interface KravRepo extends JpaRepository<Krav, UUID>, KravRepoCustom {
     @Query(value = "select * from generic_storage where data ->> 'kravId' = cast(?1 as text) and id = ?2 and type = 'KravImage'", nativeQuery = true)
     GenericStorage<KravImage> findKravImage(UUID kravId, UUID fileId);
 
+    /**
+     * Setter status UTGAATT på en bestemt versjon av et krav. Optimistisk låsing: oppdaterer kun hvis version matcher, og øker version.
+     * @return antall rader oppdatert (forventet 1)
+     */
     @Modifying(clearAutomatically = true)
     @Transactional(propagation = Propagation.MANDATORY)
-    @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ) where krav_nummer = ?1 and krav_versjon = ?2", nativeQuery = true)
-    void updateKravToUtgaatt(int kravNummer, int kravVersjon);
+    @Query(value = "update krav set data = jsonb_set(DATA, '{status}', '\"UTGAATT\"', false ), version = version + 1 where krav_nummer = ?1 and krav_versjon = ?2 and version = ?3", nativeQuery = true)
+    int updateKravToUtgaatt(int kravNummer, int kravVersjon, int version);
 
     @Modifying
     @Transactional(propagation = Propagation.MANDATORY)

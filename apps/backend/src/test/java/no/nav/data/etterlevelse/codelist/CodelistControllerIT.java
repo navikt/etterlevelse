@@ -175,6 +175,7 @@ class CodelistControllerIT extends IntegrationTestBase {
 
             List<CodelistRequest> updatedCodelists = List.of(
                     createCodelistRequest("RELEVANS", "CODE", "UpdatedShortName", "UpdatedDescription"));
+            updatedCodelists.getFirst().setVersion(CodelistService.getCodelist(ListName.RELEVANS, "CODE").getVersion());
 
             ResponseEntity<String> responseEntity = restTemplate.exchange(
                     "/codelist", HttpMethod.PUT, new HttpEntity<>(updatedCodelists), String.class);
@@ -195,6 +196,7 @@ class CodelistControllerIT extends IntegrationTestBase {
             requests.forEach(request -> {
                 request.setShortName("UpdatedShortName");
                 request.setDescription("UpdatedDescription");
+                request.setVersion(CodelistService.getCodelist(ListName.valueOf(request.getList()), request.getCode()).getVersion());
             });
 
             ResponseEntity<List<Codelist>> responseEntity = restTemplate.exchange(
@@ -229,7 +231,7 @@ class CodelistControllerIT extends IntegrationTestBase {
         @Test
         void shouldThrowCodelistNotErasableException_whenCodelistToBeDeletedIsStillInUse() {
             saveCodelist(createCodelist(ListName.RELEVANS, "DELETE_CODE"));
-            kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+            kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
                     .data(KravData.builder().relevansFor(List.of("DELETE_CODE")).status(KravStatus.AKTIV).build())
                     .build()
             );

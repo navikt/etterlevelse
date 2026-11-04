@@ -74,6 +74,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
         var request = PvkDokumentRequest.builder()
                 .id(pvkDokument.getId())
+                .version(pvkDokument.getVersion())
                 .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
                 .status(PvkDokumentStatus.UNDERARBEID)
                 .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
@@ -127,6 +128,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
 
         var request = PvkDokumentRequest.builder()
                 .id(pvkDokument.getId())
+                .version(pvkDokumentRepo.findById(pvkDokument.getId()).orElseThrow().getVersion())
                 .etterlevelseDokumentId(pvkDokument.getEtterlevelseDokumentId())
                 .status(PvkDokumentStatus.TRENGER_GODKJENNING)
                 .ytterligereEgenskaper(List.of("PROFILERING", "TEKNOLOGI"))
@@ -176,7 +178,7 @@ public class PvkDokumentIT extends IntegrationTestBase {
                 .build();
         var resp = restTemplate.exchange("/pvkdokument/{id}", HttpMethod.PUT, new HttpEntity<>(request), String.class, request.getId());
 
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
 }

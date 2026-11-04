@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
+
 import { useEffect, useRef, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -36,8 +38,12 @@ export const updateTiltak = async (tiltak: ITiltak): Promise<ITiltak> => {
   return (await axios.put<ITiltak>(`${env.backendBaseUrl}/tiltak/${tiltak.id}`, dto)).data
 }
 
-export const deleteTiltak = async (id: string): Promise<ITiltak> =>
-  (await axios.delete<ITiltak>(`${env.backendBaseUrl}/tiltak/${id}?comment=slettet av bruker`)).data
+export const deleteTiltak = async (id: string, version?: number): Promise<ITiltak> =>
+  (
+    await axios.delete<ITiltak>(
+      `${env.backendBaseUrl}/tiltak/${id}?comment=slettet av bruker${versionParam(version)}`
+    )
+  ).data
 
 const tiltakTotiltakDto = (tiltak: ITiltak) => {
   const dto = {
@@ -46,7 +52,6 @@ const tiltakTotiltakDto = (tiltak: ITiltak) => {
     ansvarligTeam: tiltak.ansvarligTeam.id || '',
   } as any
   delete dto.changeStamp
-  delete dto.version
   delete dto.risikoscenarioIds
   return dto
 }
@@ -97,7 +102,7 @@ export const mapTiltakToFormValue = (tiltak: Partial<ITiltak>): ITiltak => {
   return {
     id: tiltak.id || '',
     changeStamp: tiltak.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: tiltak.version ?? -1,
     pvkDokumentId: tiltak.pvkDokumentId || '',
     navn: tiltak.navn || '',
     beskrivelse: tiltak.beskrivelse || '',

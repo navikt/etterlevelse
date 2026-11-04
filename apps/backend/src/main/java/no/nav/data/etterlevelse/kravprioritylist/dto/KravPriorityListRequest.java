@@ -28,6 +28,8 @@ public class KravPriorityListRequest implements RequestElement {
 
     private Boolean update;
 
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
+
     @Override
     public void format() {
         setTemaId(trimToNull(temaId));

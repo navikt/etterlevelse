@@ -9,7 +9,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.UnauthorizedException;
 import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.UtcDateTimeUtil;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tools.jackson.databind.JsonNode;
 
@@ -170,6 +173,8 @@ public class RisikoscenarioController {
             throw new NotFoundException(String.format("Could not find risikoscenario to be updated with id = %s ", id));
         }
 
+        OptimisticLockUtil.checkVersion(Risikoscenario.class, id, risikoscenarioToUpdate.getVersion(), request.getVersion());
+
         if (request.isGenerelScenario() && !risikoscenarioToUpdate.getRisikoscenarioData().isGenerelScenario()) {
             risikoscenarioToUpdate.getRisikoscenarioData().setRelevanteKravNummer(List.of());
         }
@@ -185,14 +190,14 @@ public class RisikoscenarioController {
     @Operation(summary = "Delete Risikoscenario", parameters = {@Parameter(name = "comment", description = "Reason for deleting the risikoscenario", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Risikoscenario deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id) {
+    public ResponseEntity<RisikoscenarioResponse> deleteRisikoscenarioById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete Risikoscenario id={}", id);
         Risikoscenario risikoscenario;
         if (!risikoscenarioService.getTiltak(id).isEmpty()) {
             log.warn("Could not delete Risikoscenario with id = {}: Risikoscenario is related to one or more Tiltak", id);
             throw new ValidationException("Could not delete Risikoscenario: Risikoscenario is related to one or more Tiltak");
         } else {
-            risikoscenario = risikoscenarioService.delete(id);
+            risikoscenario = risikoscenarioService.delete(id, version);
             if (risikoscenario == null) {
                 log.warn("Could not find risikoscenario with id = {} to delete", id);
                 return ResponseEntity.ok(null);
@@ -328,7 +333,7 @@ public class RisikoscenarioController {
                 try {
                     RegelverkResponse regelverk = kravList.get(0).getRegelverk().get(0).toResponse();
                     JsonNode lovData = regelverk.getLov().getData();
-                    kravShort.setTemaCode(lovData.get("tema").asText());
+                    kravShort.setTemaCode(lovData.get("tema").asString());
                 } catch (RuntimeException e) {
                     // Ignore. If something went wrong (IOOBE or NPE), temaCode is not set.
                 }
@@ -350,7 +355,7 @@ public class RisikoscenarioController {
         var edok = etterlevelseDokumentasjonService.get(pvkDok.getEtterlevelseDokumentId());
 
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", pvkDokumentId));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", pvkDokumentId));
         }
     }
 }

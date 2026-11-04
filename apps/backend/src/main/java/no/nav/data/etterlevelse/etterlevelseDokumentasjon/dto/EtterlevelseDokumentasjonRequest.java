@@ -35,6 +35,7 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
 
     private UUID id;
     private Boolean update;
+
     private Integer etterlevelseNummer;
     private String title;
     private List<String> behandlingIds;
@@ -70,6 +71,9 @@ public class EtterlevelseDokumentasjonRequest implements RequestElement {
     //versjonering
     private int etterlevelseDokumentVersjon;
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
+    
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
+
 
     @Override
     public void format() {

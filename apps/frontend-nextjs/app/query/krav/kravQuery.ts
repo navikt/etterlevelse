@@ -54,6 +54,7 @@ export const getKravWithEtterlevelseQuery = gql`
   query getKravWithEtterlevelse($kravId: ID, $kravNummer: Int, $kravVersjon: Int) {
     kravById(id: $kravId, nummer: $kravNummer, versjon: $kravVersjon) {
       id
+      version
       kravNummer
       kravVersjon
       changeStamp {

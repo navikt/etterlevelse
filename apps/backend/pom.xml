@@ -95,7 +95,6 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
-            <version>1.4.0</version>
         </dependency>
 
         <!-- Jwt parsing and verifying -->
@@ -285,7 +284,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>${commons-collections4.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

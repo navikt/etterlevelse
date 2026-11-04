@@ -65,7 +65,7 @@ public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase
         var otherFromId = createEtterlevelseDokumentasjon().getId();
         DocumentRelation otherRel = buildDocumentRelationRequest().toDocumentRelation();
         otherRel.setFromDocument(otherFromId);
-        otherRel = documentRelationService.save(otherRel, false);
+        otherRel = documentRelationService.create(otherRel);
 
         // Try to update the last one so it matches the first one...
         var updateRequest = DocumentRelationRequest.builder()
@@ -89,6 +89,7 @@ public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase
                 .fromDocument(fromId)
                 .toDocument(newToId)
                 .relationType(RelationType.BYGGER)
+                .version(documentRelationService.getById(relId).getVersion())
                 .build();
 
         var updateResp = restTemplate.exchange("/documentrelation/{id}", HttpMethod.PUT, new HttpEntity<>(updateRequest), DocumentRelationResponse.class, relId);
@@ -109,7 +110,7 @@ public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase
         DocumentRelation otherRel = buildDocumentRelationRequest().toDocumentRelation();
         otherRel.setFromDocument(otherFromId);
         otherRel.setRelationType(RelationType.BYGGER);
-        documentRelationService.save(otherRel, false);
+        documentRelationService.create(otherRel);
 
         var resp = restTemplate.getForEntity("/documentrelation?pageSize=1", DocumentRelationController.DocumentRelationPage.class);
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -141,7 +142,7 @@ public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase
         var otherFromId = createEtterlevelseDokumentasjon().getId();
         DocumentRelation otherDocumentRelationToNotDelete = buildDocumentRelationRequest().toDocumentRelation();
         otherDocumentRelationToNotDelete.setFromDocument(otherFromId);
-        documentRelationService.save(otherDocumentRelationToNotDelete, false);
+        documentRelationService.create(otherDocumentRelationToNotDelete);
         
         restTemplate.delete("/documentrelation/{id}?comment=test-cleanup", documentRelationToDelete.getId());
 
@@ -160,7 +161,7 @@ public class EtterlevelseDocumentationControllerTest extends IntegrationTestBase
     }
 
     private DocumentRelation createDocumentRelation() {
-        return documentRelationService.save(buildDocumentRelationRequest().toDocumentRelation(), false);
+        return documentRelationService.create(buildDocumentRelationRequest().toDocumentRelation());
     }
 
 }

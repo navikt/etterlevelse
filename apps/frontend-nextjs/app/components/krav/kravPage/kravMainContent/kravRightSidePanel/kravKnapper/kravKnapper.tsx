@@ -63,6 +63,7 @@ export const KravKnapper: FunctionComponent<TProps> = ({ alleKravVersjoner, krav
               <div className='mt-2.5 flex'>
                 <KravSlettKnapp
                   kravId={krav.id}
+                  kravVersion={krav.version}
                   buttonLabel='Slett krav'
                   buttonSize='small'
                   redirect={kravlisteQueryUrl()}

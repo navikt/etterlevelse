@@ -4,9 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.common.utils.UtcDateTimeUtil;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
+import no.nav.data.etterlevelse.etterlevelseDokumentasjon.domain.EtterlevelseDokumentasjon;
 import no.nav.data.etterlevelse.varsel.UrlGenerator;
 import no.nav.data.etterlevelse.varsel.VarselService;
 import no.nav.data.etterlevelse.varsel.domain.AdresseType;
@@ -16,6 +20,7 @@ import no.nav.data.integration.team.dto.Resource;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentRepo;
 import no.nav.data.pvk.pvkdokument.domain.PvkDokumentStatus;
+import no.nav.data.pvk.pvkdokument.dto.PvkDokumentRequest;
 import no.nav.data.pvk.pvotilbakemelding.PvoTilbakemeldingService;
 import no.nav.data.pvk.risikoscenario.RisikoscenarioService;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioType;
@@ -65,7 +70,7 @@ public class PvkDokumentService {
     }
 
     public Optional<PvkDokument> getByEtterlevelseDokumentasjon(UUID etterlevelseDokumentasjonId) {
-        return pvkDokumentRepo.findByEtterlevelseDokumensjon(etterlevelseDokumentasjonId);
+        return pvkDokumentRepo.findByetterlevelseDokumentId(etterlevelseDokumentasjonId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -75,7 +80,7 @@ public class PvkDokumentService {
         if (!isUpdate) {
             if (existingPvkDokument.isPresent()) {
                 log.warn("Found existing pvk document when trying to create for etterlevelse dokumentation id: {}", pvkDokument.getEtterlevelseDokumentId());
-                pvkDokument.setId(existingPvkDokument.get().getId());
+                throw new ValidationException("Can not create new PvoDokument: EtterlevelseDokumentasjon has already a PvkDokument");
             } else {
                 pvkDokument.setId(UUID.randomUUID());
             }
@@ -84,15 +89,15 @@ public class PvkDokumentService {
         if (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)) {
             sendVarselToPvo(pvkDokument);
         }
-        //viktig at vi sjekker at eksisterende pvk dokument har status sendt til pvo eller sendt til pvo for revurdering,
+        // Viktig at vi sjekker at eksisterende pvk dokument har status sendt til pvo eller sendt til pvo for revurdering,
         // ellers vil vi sende varsel hver gang vi oppdaterer pvk dokumentet etter vurdering fra pvo
         // eller når vi oppretter ny versjon av etterlevelsesdokumentasjon
         else if (
                 existingPvkDokument.isPresent() &&
                 (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)
-                || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.PVO_UNDERARBEID)
+                        || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.PVO_UNDERARBEID)
                 )  &&
-                        (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID))) {
+                (pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID))) {
             sendPvoVarselToEtterlever(pvkDokument);
         } else if (pvkDokument.getStatus().equals(PvkDokumentStatus.TRENGER_GODKJENNING)) {
             sendVarselToRisikoeier(pvkDokument);
@@ -100,7 +105,8 @@ public class PvkDokumentService {
             sendVarselToEtterlever(pvkDokument);
         }
 
-        return pvkDokumentRepo.save(pvkDokument);
+        // Merk: Omsluttende @Transactional i Controller.
+        return pvkDokumentRepo.saveAndFlush(pvkDokument);
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -123,6 +129,17 @@ public class PvkDokumentService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public PvkDokument deletePvkAndAllChildren(UUID id) {
+        return deletePvkAndAllChildren(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes (før noe slettes) hvis oppgitt.
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public PvkDokument deletePvkAndAllChildren(UUID id, Integer version) {
+        if (version != null) {
+            pvkDokumentRepo.findById(id).ifPresent(p -> OptimisticLockUtil.checkVersionIfPresent(PvkDokument.class, id, p.getVersion(), version));
+        }
 
         log.info("deleting tiltak connected to pvk dokument with id={}", id);
         tiltakService.deleteByPvkDokumentId(id);
@@ -134,6 +151,20 @@ public class PvkDokumentService {
         pvoTilbakemeldingService.deleteByPvkDokumentId(id);
 
         return delete(id);
+    }
+
+    public boolean hasPvkDokumentWriteAccess (EtterlevelseDokumentasjon edok, PvkDokument pvkDokumentToUpdate, PvkDokumentRequest request) {
+        boolean risikoeierIsEmpty = edok.getEtterlevelseDokumentasjonData().getRisikoeiere() == null || edok.getEtterlevelseDokumentasjonData().getRisikoeiere().isEmpty();
+
+        if (pvkDokumentToUpdate.getStatus() == PvkDokumentStatus.GODKJENT_AV_RISIKOEIER && request.getStatus() == PvkDokumentStatus.TRENGER_GODKJENNING) {
+            if (!risikoeierIsEmpty) {
+                return edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent()) || SecurityUtils.isAdmin();
+            } else {
+                return false;
+            }
+        } else {
+            return etterlevelseDokumentasjonService.hasUserWriteAccess(edok);
+        }
     }
 
     private void sendVarselToPvo(PvkDokument pvkDokument) {

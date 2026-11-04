@@ -2,6 +2,9 @@ package no.nav.data.etterlevelse.etterlevelse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
@@ -12,9 +15,9 @@ import no.nav.data.etterlevelse.etterlevelse.dto.SuksesskriterieBegrunnelseReque
 import no.nav.data.etterlevelse.krav.domain.Krav;
 import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.etterlevelse.krav.domain.KravStatus;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,15 +96,19 @@ public class EtterlevelseService {
         Validator.validate(request)
                 .addValidations(this::validateKrav)
                 .ifErrorsThrowValidationException();
-
         var etterlevelse = request.isUpdate() ? get(request.getId()) : new Etterlevelse();
-
+        if (etterlevelse == null) {
+            throw new NotFoundException("Couldn't find etterlevelse with id " + request.getId());
+        }
         if (!request.isUpdate()) {
             var existingEtterlevelse = repo.findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
             if (existingEtterlevelse.isPresent()) {
-                log.warn("Found existing etterlevelse when trying to create for etterlevelse dokumentation id: {}, for krav: K{}.{}", request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon());
-                etterlevelse = existingEtterlevelse.get();
+                throw new ValidationException(String.format("Found existing etterlevelse when trying to create for etterlevelse dokumentation id: %s, for krav: K%s.%s", request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.getKravVersjon()));
             }
+        }
+        
+        if (request.isUpdate()) {
+            OptimisticLockUtil.checkVersion(Etterlevelse.class, etterlevelse.getId(), etterlevelse.getVersion(), request.getVersion());
         }
 
         request.mergeInto(etterlevelse);
@@ -150,7 +157,16 @@ public class EtterlevelseService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Etterlevelse delete(UUID id) {
+        return delete(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes hvis oppgitt.
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Etterlevelse delete(UUID id, Integer version) {
         var etterlevelseToDelete = repo.findById(id);
+        etterlevelseToDelete.ifPresent(e -> OptimisticLockUtil.checkVersionIfPresent(Etterlevelse.class, id, e.getVersion(), version));
         repo.deleteById(id);
         return etterlevelseToDelete.orElse(null);
     }
@@ -159,7 +175,6 @@ public class EtterlevelseService {
         return repo.findAll(page);
     }
 
-    // TODO: Validering må flyttes ut til en egen komponent og kalles av Controller eksplisitt. Se lignende kommentar i DomainService.
     private void validateKrav(Validator<EtterlevelseRequest> validator) {
         // Check if (kravNummer, kravVersjon) point to existing krav...
         Integer kravNummer = validator.getItem().getKravNummer();

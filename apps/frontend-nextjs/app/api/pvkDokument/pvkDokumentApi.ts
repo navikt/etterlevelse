@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
+
 import { useEffect, useRef, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
@@ -109,9 +111,16 @@ export const godkjenOgArkiverPvkDokument = async (
   ).data
 }
 
-export const deletePvkDokument = async (id: string, reason: string): Promise<IPvkDokument> =>
-  (await axios.delete<IPvkDokument>(`${env.backendBaseUrl}/pvkdokument/${id}?comment=${reason}`))
-    .data
+export const deletePvkDokument = async (
+  id: string,
+  reason: string,
+  version?: number
+): Promise<IPvkDokument> =>
+  (
+    await axios.delete<IPvkDokument>(
+      `${env.backendBaseUrl}/pvkdokument/${id}?comment=${reason}${versionParam(version)}`
+    )
+  ).data
 
 export const usePvkDokument = (pvkDokumentId?: string, etterlevelseDokumentasjonId?: string) => {
   const isCreateNew = pvkDokumentId === 'ny'
@@ -231,7 +240,6 @@ const pvkDokumentToPvkDokumentDto = (pvkDokument: IPvkDokument) => {
   } as any
   delete dto.currentEtterlevelseDokumentVersjon
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 
@@ -275,7 +283,7 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
   return {
     id: pvkDokument.id || '',
     changeStamp: pvkDokument.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: pvkDokument.version ?? -1,
     etterlevelseDokumentId: pvkDokument.etterlevelseDokumentId || '',
     status: pvkDokument.status || EPvkDokumentStatus.UNDERARBEID,
     behandlingensLivslopBeskrivelse: pvkDokument.behandlingensLivslopBeskrivelse || '',

@@ -6,6 +6,7 @@ import { deleteKrav } from '@/api/krav/kravApi'
 
 type TProps = {
   kravId: string
+  kravVersion?: number
   redirect: string
   buttonLabel?: string
   buttonSize?: 'small' | 'medium' | 'xsmall'
@@ -13,6 +14,7 @@ type TProps = {
 
 export const KravSlettKnapp: FunctionComponent<TProps> = ({
   kravId,
+  kravVersion,
   redirect,
   buttonLabel,
   buttonSize,
@@ -49,7 +51,7 @@ export const KravSlettKnapp: FunctionComponent<TProps> = ({
           </Button>
           <Button
             disabled={deleteComment === ''}
-            onClick={() => deleteKrav(kravId, deleteComment).then(() => router.push(redirect))}
+            onClick={() => deleteKrav(kravId, deleteComment, kravVersion).then(() => router.push(redirect))}
             size='small'
           >
             Slett

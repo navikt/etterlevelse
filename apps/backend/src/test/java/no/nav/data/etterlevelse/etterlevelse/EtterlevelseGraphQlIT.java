@@ -24,7 +24,7 @@ public class EtterlevelseGraphQlIT extends GraphQLTestBase {
 
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
 
-        var krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+        var krav = kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
                 .data(KravData.builder()
                         .navn("Krav 1")
                         .relevansFor(List.of("SAK"))

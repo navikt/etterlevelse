@@ -41,7 +41,6 @@ import java.util.UUID;
 @Tag(name = "Etterlevelse", description = "Etterlevelse for behandlinger")
 public class EtterlevelseController {
 
-
     private final EtterlevelseService service;
     private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
@@ -56,10 +55,11 @@ public class EtterlevelseController {
             log.info("Get all Etterlevelse for behandling={}", etterlevelseDokumentasjon);
             List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentasjon);
             return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(EtterlevelseResponse::buildFrom));
+        } else {
+            log.info("Get all Etterlevelse");
+            Page<Etterlevelse> page = service.getAll(pageParameters);
+            return ResponseEntity.ok(new RestResponsePage<>(page).convert(EtterlevelseResponse::buildFrom));
         }
-        log.info("Get all Etterlevelse");
-        Page<Etterlevelse> page = service.getAll(pageParameters);
-        return ResponseEntity.ok(new RestResponsePage<>(page).convert(EtterlevelseResponse::buildFrom));
     }
 
     @Operation(summary = "Get Etterlevelse by KravNummer and KravVersjon, include etterlevelse dokumentajson metadata")
@@ -92,7 +92,10 @@ public class EtterlevelseController {
     @Operation(summary = "Get Etterlevelse by etterlevelseDokumentasjonId and KravNummer")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelseDokumentasjon/{etterlevelseDokumentasjonId}/{kravNummer}")
-    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByEtterlevelseDokumentasjonIdAndKravNummer(@PathVariable UUID etterlevelseDokumentasjonId, @PathVariable Integer kravNummer) {
+    public ResponseEntity<RestResponsePage<EtterlevelseResponse>> getByEtterlevelseDokumentasjonIdAndKravNummer(
+            @PathVariable UUID etterlevelseDokumentasjonId, 
+            @PathVariable Integer kravNummer
+    ) {
         log.info("Get Etterlevelse by etterlevelseDokumentasjonId={} and kravNummer={}", etterlevelseDokumentasjonId, kravNummer);
         List<Etterlevelse> etterlevelseList = service.getByEtterlevelseDokumentasjonIdAndKravNummer(etterlevelseDokumentasjonId, kravNummer);
         return ResponseEntity.ok(new RestResponsePage<>(etterlevelseList).convert(EtterlevelseResponse::buildFrom));
@@ -141,6 +144,7 @@ public class EtterlevelseController {
     @ApiResponse(description = "Etterlevelse updated")
     @PutMapping("/{id}")
     public ResponseEntity<EtterlevelseResponse> updateEtterlevelse(@PathVariable UUID id, @Valid @RequestBody EtterlevelseRequest request) {
+        // TODO: All forretningslogikk i denne metoden må flyttes til service. Det medfører bl.a. at lagring og repriotitering ikke skjer i samme transaksjon.
         log.debug("Update Etterlevelse id={}", id);
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
@@ -151,7 +155,6 @@ public class EtterlevelseController {
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
             throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
-
 
         if (request.getEtterlevelseDokumentasjonId() == null) {
             throw new ValidationException("Tried to create etterlevelse with old architecture");
@@ -165,22 +168,22 @@ public class EtterlevelseController {
             throw new ForbiddenException("Har du lagt til team og eller person i dokument egenskaper? Dette er nødvendig for å lagre endringer.");
         }
 
+        // Lagre etterlevelsen først, slik at en versjonskonflikt (409) ikke etterlater endret prioriteringsliste
+        var etterlevelse = service.save(request);
         etterlevelseDokumentasjonService.updatePriorityList(request.getEtterlevelseDokumentasjonId(), request.getKravNummer(), request.isPrioritised());
 
-        var etterlevelse = service.save(request);
         return ResponseEntity.ok(EtterlevelseResponse.buildFrom(etterlevelse));
     }
 
     @Operation(summary = "Delete Etterlevelse", parameters = {@Parameter(name = "comment", description = "Reason for deleting the etterlevelse", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Etterlevelse deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<EtterlevelseResponse> deleteEtterlevelseById(@PathVariable UUID id) {
+    public ResponseEntity<EtterlevelseResponse> deleteEtterlevelseById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete Etterlevelse id={}", id);
-        var etterlevelse = service.delete(id);
+        var etterlevelse = service.delete(id, version);
         return ResponseEntity.ok(EtterlevelseResponse.buildFrom(etterlevelse));
     }
 
     static class EtterlevelsePage extends RestResponsePage<EtterlevelseResponse> {
-
     }
 }

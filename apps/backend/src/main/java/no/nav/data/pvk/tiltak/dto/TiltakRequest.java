@@ -8,7 +8,6 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.pvk.tiltak.domain.Tiltak;
-import no.nav.data.pvk.tiltak.domain.TiltakData;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -33,7 +32,9 @@ public class TiltakRequest implements RequestElement {
     private LocalDate iverksattDato;
     private String iverksettingsKommentar;
     
-    private Boolean update;
+    private Boolean update; // Ignorert, kan fjernes
+
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
 
     @Override
     public void format() {
@@ -51,20 +52,9 @@ public class TiltakRequest implements RequestElement {
     }
 
     public Tiltak convertToTiltak() {
-        return Tiltak.builder()
-                .id(id)
-                .pvkDokumentId(UUID.fromString(pvkDokumentId))
-                .tiltakData(TiltakData.builder()
-                        .navn(navn)
-                        .beskrivelse(beskrivelse)
-                        .ansvarlig(ansvarlig)
-                        .ansvarligTeam(ansvarligTeam)
-                        .frist(frist)
-                        .iverksatt(iverksatt)
-                        .iverksattDato(iverksattDato)
-                        .iverksettingsKommentar(iverksettingsKommentar)
-                        .build())
-                .build();
+        Tiltak tiltak = new Tiltak();
+        mergeInto(tiltak);
+        return tiltak;
     }
 
     public void mergeInto(Tiltak tiltakToMerge) {
@@ -77,5 +67,6 @@ public class TiltakRequest implements RequestElement {
         tiltakToMerge.getTiltakData().setIverksatt(iverksatt);
         tiltakToMerge.getTiltakData().setIverksattDato(iverksattDato);
         tiltakToMerge.getTiltakData().setIverksettingsKommentar(iverksettingsKommentar);
+        // Merk: version skal aldri kopieres fra request til entity
     }
 }
