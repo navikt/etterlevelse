@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client/react'
 import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
-import { BodyShort, Heading, InfoCard, ReadMore, Tag } from '@navikt/ds-react'
+import { BodyShort, Heading, InfoCard, Link, ReadMore, Tag } from '@navikt/ds-react'
 import { FormikProps } from 'formik'
 import moment from 'moment'
 import {
@@ -96,6 +96,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
   const [isPvkTabActive, setIsPvkTabActive] = useState<boolean>(false)
   const [previousVurdering, setPreviousVurdering] = useState<IVurdering | undefined>(undefined)
   const [alleKrav, setAlleKrav] = useState<IKrav[]>([])
+  const apneSvarhistorikkRef = useRef<(() => void) | null>(null)
 
   const user = useContext(UserContext)
 
@@ -271,6 +272,19 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 {krav.versjonEndringer && (
                   <ReadMore header='Se hva som er nytt'>
                     <Markdown source={krav.versjonEndringer} />
+                    {forrigeKrav && (
+                      <div className='mt-4'>
+                        <Link
+                          href='#svarhistorikk'
+                          onClick={(event) => {
+                            event.preventDefault()
+                            apneSvarhistorikkRef.current?.()
+                          }}
+                        >
+                          Gå til svarhistorikk
+                        </Link>
+                      </div>
+                    )}
                   </ReadMore>
                 )}
               </div>
@@ -355,6 +369,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
               previousVurdering={previousVurdering}
               tidligereEtterlevelser={tidligereEtterlevelser}
               forrigeKrav={forrigeKrav}
+              apneSvarhistorikkRef={apneSvarhistorikkRef}
             />
           </div>
         </div>
