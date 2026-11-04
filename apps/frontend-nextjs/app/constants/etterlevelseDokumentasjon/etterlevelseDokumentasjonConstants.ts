@@ -54,6 +54,7 @@ export interface IKravNivaaStatusFilter {
   UNDER_REDIGERING: boolean
   FERDIG_DOKUMENTERT: boolean
   OPPFYLLES_SENERE: boolean
+  IKKE_BEHOV_FOR_REVURDERING: boolean
 }
 
 export interface ISuksesskriterieStatusFilter {
