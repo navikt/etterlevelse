@@ -5,6 +5,7 @@ import {
   BodyShort,
   Box,
   CopyButton,
+  Heading,
   InfoCard,
   InlineMessage,
   Label,
@@ -27,7 +28,7 @@ import SuksesskriterieEndringTag from '../../suksesskriterieEndringTag'
 
 type TProps = {
   forrigeKrav: IKrav
-  forrigeEtterlevelse: IEtterlevelse
+  forrigeEtterlevelse?: IEtterlevelse
   gjeldendeSuksesskriterier: ISuksesskriterie[]
   versjonerUtenDokumentasjon: number[]
 }
@@ -69,9 +70,7 @@ const StatusTag: FunctionComponent<{ status?: ESuksesskriterieStatus }> = ({ sta
 
 const InfoMelding: FunctionComponent<{ tekst: string }> = ({ tekst }) => (
   <InfoCard data-color='info' size='small'>
-    <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-      <InfoCard.Title>{tekst}</InfoCard.Title>
-    </InfoCard.Header>
+    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>{tekst}</InfoCard.Message>
   </InfoCard>
 )
 
@@ -81,19 +80,39 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
   gjeldendeSuksesskriterier,
   versjonerUtenDokumentasjon,
 }) => {
+  const forrigeKravNavn = `K${forrigeKrav.kravNummer}.${forrigeKrav.kravVersjon}`
+  const overskrift = (
+    <Heading level='3' size='small'>
+      Forrige versjon av dette kravet, og deres svar
+    </Heading>
+  )
+  const kravnummerTag = (
+    <Tag size='small' variant='outline' data-color='neutral'>
+      {forrigeKravNavn}
+    </Tag>
+  )
+
+  if (!forrigeEtterlevelse) {
+    return (
+      <div className='flex flex-col gap-4'>
+        {overskrift}
+        <div>{kravnummerTag}</div>
+        <InfoMelding tekst='Forrige kravversjon ble ikke dokumentert.' />
+      </div>
+    )
+  }
+
   const gjeldendeIds = gjeldendeSuksesskriterier.map((kriterie) => kriterie.id)
   const { lastModifiedBy, lastModifiedDate } = forrigeEtterlevelse.changeStamp
-  const forrigeKravNavn = `K${forrigeKrav.kravNummer}.${forrigeKrav.kravVersjon}`
   const manglendeVersjoner = versjonerUtenDokumentasjon
     .map((versjon) => `K${forrigeKrav.kravNummer}.${versjon}`)
     .join(', ')
 
   return (
     <div className='flex flex-col gap-4'>
+      {overskrift}
       <div className='flex items-center gap-3 flex-wrap'>
-        <Tag size='small' variant='outline' data-color='neutral'>
-          {forrigeKravNavn}
-        </Tag>
+        {kravnummerTag}
         {lastModifiedDate && lastModifiedBy && (
           <BodyShort size='small'>
             Sist endret {moment(lastModifiedDate).format('LL')} av{' '}

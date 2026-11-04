@@ -149,7 +149,7 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
                   }
                 />
               )}
-            {forrigeEtterlevelse && (
+            {forrigeKrav && (
               <Tabs.Tab
                 className='whitespace-nowrap'
                 value='svarhistorikk'
@@ -210,7 +210,7 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
             </Tabs.Panel>
           )}
 
-          {forrigeKrav && forrigeEtterlevelse && (
+          {forrigeKrav && (
             <Tabs.Panel className='overflow-auto h-[90vh]' value='svarhistorikk'>
               <div className='mt-2 p-4 mb-52'>
                 <Svarhistorikk
