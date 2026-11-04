@@ -267,7 +267,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
       borderWidth='3'
       borderRadius='8'
     >
-      <div className='flex flex-wrap items-center gap-3'>
+      <div className='flex flex-wrap items-center gap-3 mb-4'>
         <BodyShort>
           Suksesskriterium {index + 1} av {totalSuksesskriterie}
         </BodyShort>
