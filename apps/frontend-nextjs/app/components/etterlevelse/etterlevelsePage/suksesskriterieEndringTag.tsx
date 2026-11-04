@@ -28,7 +28,7 @@ export const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
         Nytt suksesskriterium
       </Tag>
     ) : (
-      <Tag size='small' variant='outline' data-color='danger'>
+      <Tag size='small' variant='outline' data-color='neutral'>
         Utgått suksesskriterium
       </Tag>
     )

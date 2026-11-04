@@ -138,11 +138,13 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
           const harSkrevetBegrunnelse = !!begrunnelse.begrunnelse?.trim()
           const erBesvart =
             harSkrevetBegrunnelse || (!!status && status !== ESuksesskriterieStatus.IKKE_PAABEGYNT)
+          const erUtgaatt = !gjeldendeIds.includes(suksesskriterie.id)
 
           return (
             <Box
               key={suksesskriterie.id}
-              className='bg-white'
+              className={erUtgaatt ? undefined : 'bg-white'}
+              background={erUtgaatt ? 'neutral-soft' : undefined}
               padding='space-16'
               borderColor='neutral-subtle'
               borderWidth='1'
@@ -158,11 +160,11 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
                   versjon='forrige'
                 />
               </div>
-              <Label as='p' className='mb-2'>
+              <Heading level='4' size='xsmall' className='mb-2'>
                 {suksesskriterie.navn}
-              </Label>
+              </Heading>
 
-              {!gjeldendeIds.includes(suksesskriterie.id) && (
+              {erUtgaatt && (
                 <InlineMessage status='warning' size='small' className='mb-2'>
                   Dette suksesskriteriet har blitt slettet i nåværende kravversjon
                 </InlineMessage>
@@ -187,7 +189,10 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
               )}
 
               {suksesskriterie.behovForBegrunnelse && erBesvart && (
-                <Box className='bg-blue-50 rounded-md' padding='space-16'>
+                <Box
+                  className={erUtgaatt ? 'rounded-md' : 'bg-blue-50 rounded-md'}
+                  padding='space-16'
+                >
                   <Label as='p' className='mb-2'>
                     {getLabelForSuksessKriterie(status)}
                   </Label>
