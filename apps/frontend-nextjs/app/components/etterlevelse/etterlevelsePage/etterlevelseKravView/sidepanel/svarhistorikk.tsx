@@ -128,7 +128,7 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
         </BodyShort>
       )}
 
-      <div className='flex flex-col gap-3 bg-gray-100 rounded-lg p-3'>
+      <div className='flex flex-col gap-3'>
         {forrigeKrav.suksesskriterier.map((suksesskriterie, index) => {
           const begrunnelse = getSuksesskriterieBegrunnelse(
             forrigeEtterlevelse.suksesskriterieBegrunnelser,
