@@ -23,7 +23,10 @@ import {
   mapEtterlevelseToFormValue,
 } from '@/api/etterlevelse/etterlevelseApi'
 import { DateField } from '@/components/common/inputs'
-import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
+import {
+  UnsavedChangesGuard,
+  bypassUnsavedGuard,
+} from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import EtterlevelseCard from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
 import {
   ERelationType,
@@ -167,7 +170,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
             _.sortBy(initialValues.suksesskriterieBegrunnelser, 'suksesskriterieId'),
             _.sortBy(values.suksesskriterieBegrunnelser, 'suksesskriterieId')
           )
-          submit({
+          return submit({
             ...values,
             ikkeBehovForRevurdering: suksesskriterieBegrunnelserUnchanged
               ? values.ikkeBehovForRevurdering
@@ -205,6 +208,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
           setFieldError,
           setFieldValue,
           resetForm,
+          validateForm,
           dirty,
         }: FormikProps<IEtterlevelse>) => (
           <div className='w-full'>
@@ -511,16 +515,39 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                       <Modal
                         onClose={() => setPendingNavUrl(undefined)}
                         header={{
-                          heading: 'Vil du gå videre uten å lagre endringene dine?',
+                          heading: 'Vil du lagre endringene dine før du går videre?',
                           closeButton: false,
                         }}
                         open={!!pendingNavUrl}
                       >
-                        <Modal.Body>
-                          Du har endringer som ikke er lagret. Hvis du går videre nå, blir de ikke
-                          lagret.
-                        </Modal.Body>
                         <Modal.Footer>
+                          <Button
+                            type='button'
+                            disabled={isSubmitting}
+                            onClick={async () => {
+                              const url = pendingNavUrl
+                              if (!url) return
+                              await setFieldValue(
+                                'status',
+                                values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                                  !isOppfylesSenere
+                                  ? EEtterlevelseStatus.UNDER_REDIGERING
+                                  : EEtterlevelseStatus.OPPFYLLES_SENERE
+                              )
+                              const formErrors = await validateForm()
+                              if (Object.keys(formErrors).length > 0) {
+                                setPendingNavUrl(undefined)
+                                setSubmitClick(!submitClick)
+                                return
+                              }
+                              await submitForm()
+                              bypassUnsavedGuard()
+                              // Hard navigation skips the "changes saved" modal opened after submit
+                              window.location.assign(url)
+                            }}
+                          >
+                            Lagre og fortsette
+                          </Button>
                           <Button
                             type='button'
                             variant='secondary'
