@@ -34,7 +34,7 @@ export const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
     )
   }
 
-  if (erEndret(suksesskriterie, motpart)) {
+  if (versjon === 'gjeldende' && erEndret(suksesskriterie, motpart)) {
     return (
       <Tag size='small' variant='outline' data-color='warning'>
         Endringer i suksesskriterium
