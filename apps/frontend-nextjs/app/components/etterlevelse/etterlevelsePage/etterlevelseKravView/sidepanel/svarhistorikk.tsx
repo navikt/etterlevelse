@@ -189,10 +189,7 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
               )}
 
               {suksesskriterie.behovForBegrunnelse && erBesvart && (
-                <Box
-                  className={erUtgaatt ? 'rounded-md' : 'bg-blue-50 rounded-md'}
-                  padding='space-16'
-                >
+                <Box>
                   <Label as='p' className='mb-2'>
                     {getLabelForSuksessKriterie(status)}
                   </Label>
