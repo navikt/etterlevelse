@@ -135,7 +135,14 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   return (
     <div className='pl-4 border-l border-[#071a3636] w-full max-w-lg min-w-0'>
       <div className='sticky top-4'>
-        <Tabs defaultValue='mer' value={activeTab} size='small' onChange={velgFane}>
+        <Tabs
+          defaultValue='mer'
+          value={activeTab}
+          size='small'
+          onChange={velgFane}
+          // Hidden scroll buttons still take up space and push the first tab to the right
+          className='[&_.aksel-tabs\_\_scroll-button--hidden]:hidden'
+        >
           <Tabs.List>
             <Tabs.Tab
               className='whitespace-nowrap'
