@@ -21,7 +21,7 @@ export const SUKSESS_COLORS = {
 export const FERDIG_SUKSESS_COLORS = {
   oppfylt: '#005d5d',
   ikkeOppfylt: '#fa4d56',
-  ikkeRelevant: '#9f1853',
+  ikkeRelevant: '#6929c4',
 }
 
 export const roundedPercentages = (values: number[]): number[] => {
