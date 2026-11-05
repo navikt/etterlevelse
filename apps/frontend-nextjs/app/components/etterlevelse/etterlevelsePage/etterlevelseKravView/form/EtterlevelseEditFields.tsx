@@ -546,7 +546,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                               window.location.assign(url)
                             }}
                           >
-                            Lagre og fortsette
+                            Lagre og fortsett
                           </Button>
                           <Button
                             type='button'
