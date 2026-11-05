@@ -66,7 +66,11 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
       validateOnChange={false}
       validateOnBlur={false}
       initialValues={etterlevelseDokumentasjonMapToFormVal(etterlevelseDokumentasjon)}
-      onSubmit={(values) => submit(values)}
+      onSubmit={(values) => {
+        setSaveSuccessful(false)
+        setSubmitAlert('')
+        return submit(values)
+      }}
       validationSchema={sendTilRisikoGodkjenningSchema()}
       innerRef={formRef}
     >
@@ -108,7 +112,7 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
 
             {saveSuccessful && (
               <div className='my-5 max-w-[75ch]'>
-                <LocalAlert status='success' size='small'>
+                <LocalAlert status='success' size='small' role='region' aria-label='Lagringsstatus'>
                   <LocalAlert.Header>
                     <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                     <LocalAlert.CloseButton onClick={() => setSaveSuccessful(false)} />
@@ -117,9 +121,18 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
               </div>
             )}
 
+            <div role='status' aria-atomic='true' className='sr-only'>
+              {saveSuccessful && 'Lagring vellykket'}
+            </div>
+
             {trekkInnsendingSuccessful && (
               <div className='my-5 max-w-[75ch]'>
-                <LocalAlert status='success' size='small'>
+                <LocalAlert
+                  status='success'
+                  size='small'
+                  role='region'
+                  aria-label='Status for innsending'
+                >
                   <LocalAlert.Header>
                     <LocalAlert.Title>Innsending er trukket</LocalAlert.Title>
                     <LocalAlert.CloseButton onClick={() => setTrekkInnsendingSuccessful(false)} />
@@ -128,14 +141,28 @@ const SendTilRisikoeierGodkjenningUnderArbeid: FunctionComponent<TProp> = ({
               </div>
             )}
 
+            <div role='status' aria-atomic='true' className='sr-only'>
+              {trekkInnsendingSuccessful && 'Innsending er trukket'}
+            </div>
+
             {submitAlert !== '' && (
-              <LocalAlert status='error' size='small' className='my-5 max-w-[75ch]'>
+              <LocalAlert
+                status='error'
+                size='small'
+                className='my-5 max-w-[75ch]'
+                role='region'
+                aria-label='Feil ved innsending'
+              >
                 <LocalAlert.Header>
-                  <LocalAlert.Title> {submitAlert}</LocalAlert.Title>
+                  <LocalAlert.Title>{submitAlert}</LocalAlert.Title>
                   <LocalAlert.CloseButton onClick={() => setSubmitAlert('')} />
                 </LocalAlert.Header>
               </LocalAlert>
             )}
+
+            <div role='alert' aria-atomic='true' className='sr-only'>
+              {submitAlert}
+            </div>
 
             {!hasP360User && <P360IngenBrukerAlert />}
 
