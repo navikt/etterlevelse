@@ -68,8 +68,11 @@ const StatusTag: FunctionComponent<{ status?: ESuksesskriterieStatus }> = ({ sta
   }
 }
 
-const InfoMelding: FunctionComponent<{ tekst: string }> = ({ tekst }) => (
-  <InfoCard data-color='info' size='small'>
+const InfoMelding: FunctionComponent<{ tekst: string; size?: 'small' | 'medium' }> = ({
+  tekst,
+  size = 'small',
+}) => (
+  <InfoCard data-color='info' size={size}>
     <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>{tekst}</InfoCard.Message>
   </InfoCard>
 )
@@ -114,7 +117,7 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
       <div className='flex items-center gap-3 flex-wrap'>
         {kravnummerTag}
         {lastModifiedDate && lastModifiedBy && (
-          <BodyShort size='small'>
+          <BodyShort>
             Sist endret {moment(lastModifiedDate).format('LL')} av{' '}
             {lastModifiedBy.split(' - ')[1] ?? lastModifiedBy}
           </BodyShort>
@@ -122,10 +125,10 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
       </div>
 
       {versjonerUtenDokumentasjon.length > 0 && (
-        <BodyShort size='small'>
-          Det finnes ingen dokumentasjon på {manglendeVersjoner}. Derfor vises svarene fra{' '}
-          {forrigeKravNavn}, som er siste versjon dere har dokumentert.
-        </BodyShort>
+        <InfoMelding
+          size='medium'
+          tekst={`Det finnes ingen dokumentasjon på ${manglendeVersjoner}. Derfor vises svarene fra ${forrigeKravNavn}, som er siste versjon som ble dokumentert.`}
+        />
       )}
 
       <div className='flex flex-col gap-3'>
