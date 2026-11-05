@@ -398,7 +398,7 @@ const PvoTilbakemeldingPage = () => {
                     setIsUnsaved(false)
                   }}
                 >
-                  Lagre og fortsette
+                  Lagre og fortsett
                 </Button>
                 <Button
                   type='button'

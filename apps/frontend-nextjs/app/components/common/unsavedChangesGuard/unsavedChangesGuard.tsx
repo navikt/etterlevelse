@@ -183,7 +183,7 @@ export const UnsavedChangesGuard: FunctionComponent<TProps> = ({
             window.location.assign(navigateUrlRef.current)
           }}
         >
-          Lagre og fortsette
+          Lagre og fortsett
         </Button>
         <Button type='button' variant='secondary' onClick={() => leave()}>
           Fortsett uten å lagre
