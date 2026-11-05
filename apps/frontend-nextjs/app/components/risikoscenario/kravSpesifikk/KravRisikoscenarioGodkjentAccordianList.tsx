@@ -161,9 +161,7 @@ const KravRisikoscenarioGodkjentAccordianList: FunctionComponent<TProps> = ({
           </Accordion>
         </div>
 
-        {user.isPersonvernombud() && (
-          <KravRisikoscenarioOvrigeRisikoscenarierLink pvkDokument={pvkDokument} pvoLink />
-        )}
+        <KravRisikoscenarioOvrigeRisikoscenarierLink pvkDokument={pvkDokument} pvoLink />
       </div>
     </div>
   )
