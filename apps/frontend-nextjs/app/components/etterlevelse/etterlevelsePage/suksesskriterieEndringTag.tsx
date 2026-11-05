@@ -24,7 +24,7 @@ export const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
 
   if (!motpart) {
     return versjon === 'gjeldende' ? (
-      <Tag size='small' variant='outline' data-color='info'>
+      <Tag size='small' variant='outline' data-color='warning'>
         Nytt suksesskriterium
       </Tag>
     ) : (
