@@ -226,6 +226,18 @@ export const SendInnView: FunctionComponent<TProps> = ({
                     }
                   })
                 }
+              } else if (
+                [
+                  EPvkDokumentStatus.VURDERT_AV_PVO,
+                  EPvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID,
+                ].includes(submitedValues.status)
+              ) {
+                updatedPvkDokument.meldingerTilPvo.forEach((meldingTilPvo) => {
+                  if (meldingTilPvo.innsendingId > submitedValues.antallInnsendingTilPvo) {
+                    meldingTilPvo.sendtTilPvoAv = ''
+                    meldingTilPvo.sendtTilPvoDato = ''
+                  }
+                })
               }
 
               if (submitedValues.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER) {

@@ -316,5 +316,6 @@ export const mapPvkDokumentToFormValue = (pvkDokument: Partial<IPvkDokument>): I
       pvkDokument.dpProcessHelautomatiskBehandling === undefined
         ? false
         : pvkDokument.dpProcessHelautomatiskBehandling,
+    innsendingTrukket: pvkDokument.innsendingTrukket || false,
   }
 }

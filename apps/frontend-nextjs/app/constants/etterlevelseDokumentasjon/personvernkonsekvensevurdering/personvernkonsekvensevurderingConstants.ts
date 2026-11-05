@@ -35,6 +35,8 @@ export interface IPvkDokument {
 
   dpProcessProfilering: boolean
   dpProcessHelautomatiskBehandling: boolean
+
+  innsendingTrukket: boolean
 }
 
 export interface IMeldingTilPvo {
