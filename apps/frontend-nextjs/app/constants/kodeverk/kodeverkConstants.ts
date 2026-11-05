@@ -48,6 +48,7 @@ export interface ICodeListFormValues {
   // Optimistisk låsing: versjonen som sist ble lest
   version?: number
 }
+
 export interface ICodeUsage {
   listName: EListName
   code: string
@@ -66,14 +67,6 @@ interface IUse {
 export interface IRegelverk {
   lov: TLovCode
   spesifisering?: string
-}
-
-export interface ICodeListFormValues {
-  list: string
-  code: string
-  shortName?: string
-  description?: string
-  data?: ILovCodeData | ITemaCodeData
 }
 
 export interface ILovCodeData {

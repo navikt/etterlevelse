@@ -304,6 +304,7 @@ const lovCodeListDataCheck = (testName: string) =>
 
 export const codeListSchema: yup.ObjectSchema<ICodeListFormValues> = yup.object({
   list: yup.string().required(required),
+  version: yup.number(),
   code: yup
     .string()
     .test({
