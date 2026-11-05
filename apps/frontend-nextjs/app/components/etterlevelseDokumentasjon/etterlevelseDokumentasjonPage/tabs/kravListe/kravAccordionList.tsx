@@ -144,11 +144,12 @@ export const KravAccordionList: FunctionComponent<TProps> = ({
                   </Accordion.Header>
                   <Accordion.Content>
                     <div className='flex flex-col gap-6 p-2'>
-                      {tema.code === 'PERSONVERN' && (
-                        <PvkBehovVarsel
-                          etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                        />
-                      )}
+                      {tema.code === 'PERSONVERN' &&
+                        etterlevelseDokumentasjon.hasCurrentUserAccess && (
+                          <PvkBehovVarsel
+                            etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                          />
+                        )}
                       <div className='pl-8'>
                         <Link href={`${temaUrl}/${tema.code}`} target='_blank'>
                           Lær mer om {tema.shortName} (åpner i en ny fane)
