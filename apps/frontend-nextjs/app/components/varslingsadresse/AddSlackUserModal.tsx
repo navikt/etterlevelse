@@ -79,7 +79,12 @@ export const AddSlackUserModal = (props: IProps) => {
           </Radio>
         </RadioGroup>
         {isSlackSectionVisible && (
-          <div id={slackSearchSectionId} className='pl-8 w-full' aria-live='polite' role='region'>
+          <div
+            id={slackSearchSectionId}
+            className='pl-8 w-full'
+            role='region'
+            aria-label='Søk etter Slack-bruker'
+          >
             <div className='flex flex-col'>
               <ContentLayout>
                 <div className='w-full'>
@@ -112,7 +117,12 @@ export const AddSlackUserModal = (props: IProps) => {
               </ContentLayout>
               {loadingSlackId && <Loader size='large' className='flex justify-self-center' />}
               {error && (
-                <LocalAlert className='mt-2.5' status='error'>
+                <LocalAlert
+                  className='mt-2.5'
+                  status='error'
+                  role='region'
+                  aria-label='Feil ved oppslag av Slack-bruker'
+                >
                   <LocalAlert.Header>
                     <LocalAlert.Title>{error}</LocalAlert.Title>
                   </LocalAlert.Header>
@@ -121,6 +131,12 @@ export const AddSlackUserModal = (props: IProps) => {
             </div>
           </div>
         )}
+        <div role='status' aria-atomic='true' className='sr-only'>
+          {isSlackSectionVisible && 'Søk etter Slack-bruker. Skriv minst 3 tegn.'}
+        </div>
+        <div role='alert' aria-atomic='true' className='sr-only'>
+          {isSlackSectionVisible && error}
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button type='button' onClick={() => addEmail(val)} className='ml-2.5'>

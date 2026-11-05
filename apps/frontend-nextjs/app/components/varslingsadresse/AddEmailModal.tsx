@@ -62,9 +62,7 @@ export const AddEmailModal = (props: IProps) => {
           }}
           className='w-full'
         >
-          <Radio value='meg'>
-            Meg ({user.getEmail()})
-          </Radio>
+          <Radio value='meg'>Meg ({user.getEmail()})</Radio>
           <Radio
             value='epost'
             className='w-full'
@@ -76,7 +74,7 @@ export const AddEmailModal = (props: IProps) => {
         </RadioGroup>
 
         {isEmailSectionVisible && (
-          <div id={emailSectionId} className='w-full pl-8' aria-live='polite' role='region'>
+          <div id={emailSectionId} className='w-full pl-8' role='region' aria-label='Epostadresse'>
             <Label className='mb-2 block'>Skriv Epost adresse</Label>
             <TextField
               type='email'
@@ -90,6 +88,9 @@ export const AddEmailModal = (props: IProps) => {
             {error && <Error message={error} />}
           </div>
         )}
+        <div role='status' aria-atomic='true' className='sr-only'>
+          {isEmailSectionVisible && 'Skriv Epost adresse'}
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button type='button' onClick={() => add(val)} className='ml-2.5'>

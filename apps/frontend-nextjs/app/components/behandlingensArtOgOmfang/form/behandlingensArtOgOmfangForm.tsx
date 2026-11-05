@@ -262,7 +262,7 @@ const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
 
                 {savedSuccessful && !dirty && (
                   <div className='mt-5'>
-                    <LocalAlert status='success' role='status' aria-live='polite'>
+                    <LocalAlert status='success' role='region' aria-label='Lagringsstatus'>
                       <LocalAlert.Header>
                         <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                         <LocalAlert.CloseButton onClick={() => setSavedSuccessful(false)} />
@@ -270,6 +270,10 @@ const BehandlingensArtOgOmfangForm: FunctionComponent<TProps> = ({
                     </LocalAlert>
                   </div>
                 )}
+
+                <div role='status' aria-atomic='true' className='sr-only'>
+                  {savedSuccessful && !dirty && 'Lagring vellykket'}
+                </div>
 
                 <div className='mt-5 flex gap-2'>
                   <Button

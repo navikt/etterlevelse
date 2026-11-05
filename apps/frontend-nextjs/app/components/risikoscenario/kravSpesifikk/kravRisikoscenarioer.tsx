@@ -67,10 +67,18 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   const [removedRisikoscenarioAlert, setRemovedRisikoscenarioAlert] = useState<{
     risikoscenarioName: string
   } | null>(null)
+  const [isAnnouncementReady, setIsAnnouncementReady] = useState(false)
 
   const handleRemovedFromThisKrav = (payload: { risikoscenarioName: string }) => {
+    setIsAnnouncementReady(false)
     setRemovedRisikoscenarioAlert(payload)
   }
+
+  useEffect(() => {
+    if (!removedRisikoscenarioAlert || isLoading) return
+    const timeout = setTimeout(() => setIsAnnouncementReady(true), 100)
+    return () => clearTimeout(timeout)
+  }, [removedRisikoscenarioAlert, isLoading])
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
@@ -143,7 +151,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
       try {
         const parsed = JSON.parse(raw) as { risikoscenarioName: string }
         if (parsed?.risikoscenarioName) {
-          setRemovedRisikoscenarioAlert(parsed)
+          handleRemovedFromThisKrav(parsed)
         }
       } finally {
         window.sessionStorage.removeItem(storageKey)
@@ -287,8 +295,8 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
             {!isLeggTilEksisterendeMode && removedRisikoscenarioAlert && (
               <LocalAlert
                 status='success'
-                role='status'
-                aria-live='polite'
+                role='region'
+                aria-label='Flytting av risikoscenario'
                 className='mb-5 w-full max-w-[75ch] mx-auto'
               >
                 <LocalAlert.Header>
@@ -296,7 +304,12 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                     Risikoscenarioet “{removedRisikoscenarioAlert.risikoscenarioName}” er flyttet
                     til
                   </LocalAlert.Title>
-                  <LocalAlert.CloseButton onClick={() => setRemovedRisikoscenarioAlert(null)} />
+                  <LocalAlert.CloseButton
+                    onClick={() => {
+                      setIsAnnouncementReady(false)
+                      setRemovedRisikoscenarioAlert(null)
+                    }}
+                  />
                 </LocalAlert.Header>
                 <LocalAlert.Content>
                   <ExternalLink
@@ -311,6 +324,15 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                 </LocalAlert.Content>
               </LocalAlert>
             )}
+
+            <div role='status' aria-atomic='true' className='sr-only'>
+              {isAnnouncementReady && !isLeggTilEksisterendeMode && removedRisikoscenarioAlert && (
+                <>
+                  Risikoscenarioet “{removedRisikoscenarioAlert.risikoscenarioName}” er flyttet til
+                  Identifisering av risikoscenarioer og tiltak
+                </>
+              )}
+            </div>
 
             {isCreateMode && (
               <CreateRisikoscenario

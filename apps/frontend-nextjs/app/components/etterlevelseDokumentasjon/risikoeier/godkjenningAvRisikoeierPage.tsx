@@ -366,8 +366,8 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
                               <LocalAlert
                                 size='small'
                                 status='success'
-                                role='status'
-                                aria-live='polite'
+                                role='region'
+                                aria-label='Lagringsstatus'
                               >
                                 <LocalAlert.Header>
                                   <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
@@ -384,8 +384,8 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
                               <LocalAlert
                                 size='small'
                                 status='error'
-                                role='alert'
-                                aria-live='assertive'
+                                role='region'
+                                aria-label='Feil ved godkjenning'
                               >
                                 <LocalAlert.Header>
                                   <LocalAlert.Title>{errorMessage}</LocalAlert.Title>
@@ -471,7 +471,12 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
 
                   {saveSuccessfull && (
                     <div className='my-5'>
-                      <LocalAlert size='small' status='success' role='status' aria-live='polite'>
+                      <LocalAlert
+                        size='small'
+                        status='success'
+                        role='region'
+                        aria-label='Godkjenningsstatus'
+                      >
                         <LocalAlert.Header>
                           <LocalAlert.Title>Godkjent og arkivert i Public 360</LocalAlert.Title>
                           <LocalAlert.CloseButton onClick={() => setSaveSuccessfull(false)} />
@@ -490,6 +495,27 @@ const GodkjenningAvEtterlevelsesDokumentPage = () => {
               )}
             </div>
           )}
+          <div role='status' aria-atomic='true' className='sr-only'>
+            {hasAccess &&
+              etterlevelseDokumentasjon.status ===
+                EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER &&
+              etterlevelseDokumentasjon.risikoeiere.length > 0 &&
+              saveSuccessfull &&
+              'Lagring vellykket'}
+          </div>
+          <div role='status' aria-atomic='true' className='sr-only'>
+            {etterlevelseDokumentasjon.status ===
+              EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER &&
+              saveSuccessfull &&
+              'Godkjent og arkivert i Public 360'}
+          </div>
+          <div role='alert' aria-atomic='true' className='sr-only'>
+            {hasAccess &&
+              etterlevelseDokumentasjon.status ===
+                EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER &&
+              etterlevelseDokumentasjon.risikoeiere.length > 0 &&
+              errorMessage}
+          </div>
         </div>
       )}
     </PageLayout>
