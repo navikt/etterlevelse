@@ -55,7 +55,7 @@ const StatusTag: FunctionComponent<{ status?: ESuksesskriterieStatus }> = ({ sta
       )
     case ESuksesskriterieStatus.IKKE_RELEVANT:
       return (
-        <Tag size='small' variant='outline' data-color='brand-beige'>
+        <Tag size='small' variant='outline' data-color='neutral'>
           Ikke relevant
         </Tag>
       )
