@@ -20,23 +20,23 @@ export const KravRisikoscenarioOvrigeRisikoscenarierLink: FunctionComponent<TPro
   pvoLink,
 }) => {
   const user = useContext(UserContext)
+
   return (
     <div className='mt-5 gap-2.5'>
-      {!pvoLink ||
-        (user.isAdmin() && (
-          <Link
-            type='button'
-            href={pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 6)}
-          >
-            Gå til PVK: Identifisering av risikoscenarier og tiltak
-            {user.isAdmin() ? ' (etterlever link)' : ''}
-          </Link>
-        ))}
+      {(!pvoLink || user.isAdmin()) && (
+        <Link
+          type='button'
+          href={pvkDokumentasjonStepUrl(pvkDokument.etterlevelseDokumentId, pvkDokument.id, 6)}
+        >
+          Gå til PVK: Identifisering av risikoscenarier og tiltak
+          {user.isAdmin() ? ' (etterlever link).' : '.'}
+        </Link>
+      )}
 
-      {pvoLink && (user.isPersonvernombud() || user.isAdmin()) && (
+      {pvoLink === true && (user.isPersonvernombud() || user.isAdmin()) && (
         <Link type='button' href={pvkDokumenteringPvoTilbakemeldingUrl(pvkDokument.id, 6)}>
           Gå til PVK: Identifisering av risikoscenarier og tiltak
-          {user.isAdmin() ? ' (Pvo link)' : ''}
+          {user.isAdmin() ? ' (Pvo link).' : '.'}
         </Link>
       )}
 
