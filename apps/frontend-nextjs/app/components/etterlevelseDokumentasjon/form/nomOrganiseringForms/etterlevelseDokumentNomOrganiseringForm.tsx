@@ -119,7 +119,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
             </InfoCard.Message>
           </InfoCard>
 
-          <FieldWrapper id='nomOrganisering.forEtterlevelseILinje'>
+          <FieldWrapper id='forEtterlevelseILinje'>
             <Field name='nomOrganisering.forEtterlevelseILinje'>
               {(fieldProps: FieldProps) => (
                 <div className='my-5'>

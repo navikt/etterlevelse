@@ -198,8 +198,8 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       page.getByRole('link', {
         name: EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE,
       })
-    ).toHaveAttribute('href', '#nomOrganisering.forEtterlevelseILinje')
-    await expect(page.locator('[id="nomOrganisering.forEtterlevelseILinje"]')).toBeVisible()
+    ).toHaveAttribute('href', '#forEtterlevelseILinje')
+    await expect(page.locator('#forEtterlevelseILinje')).toBeVisible()
     await lineCompliance.getByRole('radio', { name: 'Seksjon', exact: true }).check()
     await page.getByRole('combobox', { name: 'Seksjon', exact: true }).selectOption('seksjon-1')
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()

@@ -995,10 +995,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                   nomAvdelingId: getIn(errors, 'nomOrganisering.nomAvdelingId'),
                   seksjon: getIn(errors, 'nomOrganisering.seksjoner'),
                   linje: getIn(errors, 'nomOrganisering.linjer'),
-                  'nomOrganisering.forEtterlevelseILinje': getIn(
-                    errors,
-                    'nomOrganisering.forEtterlevelseILinje'
-                  ),
+                  forEtterlevelseILinje: getIn(errors, 'nomOrganisering.forEtterlevelseILinje'),
                 })
                   .filter(([, error]) => error)
                   .map(([key, error]) => (
