@@ -26,7 +26,7 @@ const EtterlevelseDokumentFylkeForm: FunctionComponent<TProps> = ({
         <FieldArray name='nomOrganisering.linjeFylker'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
-              <LabelWithDescription label='Angi hvilken fylke som er ansvarlig for etterlevelsen' />
+              <LabelWithDescription label='Angi fylke' />
               <OptionList
                 label='Fylke'
                 options={alleFylkeOptions}

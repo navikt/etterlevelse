@@ -47,7 +47,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
           <FieldArray name='nomOrganisering.linjer'>
             {(fieldProps: FieldArrayRenderProps) => (
               <div>
-                <LabelWithDescription label='Angi hvilken linje som er ansvarlig for etterlevelsen' />
+                <LabelWithDescription label='Angi linje' />
                 <OptionList
                   label='Linje'
                   options={alleLinjeOptions}

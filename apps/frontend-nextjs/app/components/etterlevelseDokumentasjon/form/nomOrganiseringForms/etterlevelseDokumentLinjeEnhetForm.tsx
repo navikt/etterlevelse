@@ -22,7 +22,7 @@ const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({ linjeEn
         <FieldArray name='nomOrganisering.linjeEnhet'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
-              <LabelWithDescription label='Angi hvilken linje enhet som er ansvarlig for etterlevelsen' />
+              <LabelWithDescription label='Angi linjeenhet' />
               <OptionList
                 label='Linje enhet'
                 options={alleLinjeEnhter}

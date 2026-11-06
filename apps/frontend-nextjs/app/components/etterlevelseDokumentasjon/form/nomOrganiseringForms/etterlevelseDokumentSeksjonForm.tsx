@@ -51,7 +51,7 @@ const EtterlevelseDokumentSeksjonForm: FunctionComponent<TProps> = ({
         <FieldArray name='nomOrganisering.seksjoner'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
-              <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
+              <LabelWithDescription label='Angi seksjon' />
               <OptionList
                 label='Seksjon'
                 options={filteredSeksjoner}

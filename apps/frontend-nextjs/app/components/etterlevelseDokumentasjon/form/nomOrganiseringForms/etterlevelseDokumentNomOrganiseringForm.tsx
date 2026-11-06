@@ -119,7 +119,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
             </InfoCard.Message>
           </InfoCard>
 
-          <Heading level='3' size='xsmall' className='mt-5 mb-3'>
+          <Heading level='3' size='xsmall' className='mt-7 mb-5'>
             Velg ansvar for etterlevelsen i direktoratet
           </Heading>
 
@@ -134,7 +134,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
             <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
           </div>
 
-          <Heading level='3' size='xsmall' className='mt-7 mb-3'>
+          <Heading level='3' size='xsmall' className='mt-7 mb-5'>
             Velg ansvar for etterlevelsen i linjen
           </Heading>
 

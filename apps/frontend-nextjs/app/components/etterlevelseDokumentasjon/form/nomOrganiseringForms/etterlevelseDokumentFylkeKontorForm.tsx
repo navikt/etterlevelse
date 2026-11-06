@@ -22,7 +22,7 @@ const EtterlevelseDokumentFylkeKontorForm: FunctionComponent<TProps> = ({ kontor
         <FieldArray name='nomOrganisering.fylkeKontorer'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
-              <LabelWithDescription label='Angi hvilken kontor enhet som er ansvarlig for etterlevelsen' />
+              <LabelWithDescription label='Angi kontor' />
               <OptionList
                 label='Kontor'
                 options={alleFylkeKontorer}

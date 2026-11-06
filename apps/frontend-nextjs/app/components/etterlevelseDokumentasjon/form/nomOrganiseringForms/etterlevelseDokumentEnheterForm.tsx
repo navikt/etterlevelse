@@ -25,7 +25,7 @@ const EtterlevelseDokumentEnheterForm: FunctionComponent<TProps> = ({ enheterByS
         <FieldArray name='nomOrganisering.enheter'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
-              <LabelWithDescription label='Angi hvilken enhet som er ansvarlig for etterlevelsen' />
+              <LabelWithDescription label='Angi enhet' />
               <OptionList
                 label='Enhet'
                 options={allEnhetOptions}

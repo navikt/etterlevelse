@@ -807,7 +807,9 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                       EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
                   return (
                     <div className='flex-1'>
-                      <LabelWithTooltip label='Søk etter risikoeier' tooltip='' />
+                      <Heading level='3' size='xsmall' className='mt-7'>
+                        Angi risikoeier
+                      </Heading>
                       {isRisikoeiereFieldLocked && (
                         <InfoCard data-color='info' size='small' className='mt-2 max-w-[75ch] mb-3'>
                           <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
