@@ -17,6 +17,8 @@ public class NomOrganisering {
 
     private String nomAvdelingId;
     private String avdelingNavn;
+
+    private Boolean forEtterlevelseILinje;
     private List<NomSeksjon> seksjoner;
 
     private List<NomEnhet> enheter;
