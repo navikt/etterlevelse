@@ -443,7 +443,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                   </ReadMore>
                 )}
               </div>
-              <div className='block lg:flex lg:flex-wrap lg:gap-x-6 [&_label]:whitespace-nowrap'>
+              <div className='block lg:flex lg:flex-wrap lg:gap-x-4 [&_label]:whitespace-nowrap'>
                 <Radio value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</Radio>
                 <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
                 <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
