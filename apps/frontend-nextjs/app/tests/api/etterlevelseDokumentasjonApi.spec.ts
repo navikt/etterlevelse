@@ -108,32 +108,37 @@ for (const [name, schema] of [
     ).resolves.toBe('avdeling-1')
   })
 
-  test(`${name} requires at least one seksjon or linje when avdeling is set`, async () => {
-    const values = etterlevelseDokumentasjonMapToFormVal({})
-    const withAvdeling = (
-      seksjoner: INomOrganisering['seksjoner'],
-      linjer: INomOrganisering['linjer']
-    ) => ({
-      ...values,
-      nomOrganisering: {
-        ...values.nomOrganisering,
-        nomAvdelingId: 'avdeling-1',
-        seksjoner,
-        linjer,
-      },
-    })
+  for (const [forEtterlevelseILinje, requiredField, otherField, message] of [
+    [false, 'seksjoner', 'linjer', EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON],
+    [true, 'linjer', 'seksjoner', EEtterlevelseDokumentSchemaMelding.NOM_LINJE],
+  ] as const) {
+    test(`${name} requires ${requiredField} for the selected responsibility`, async () => {
+      for (const nomAvdelingId of ['avdeling-1', '']) {
+        for (const value of [[], undefined, null]) {
+          const values = {
+            nomOrganisering: {
+              ...nomOrganisering,
+              nomAvdelingId,
+              forEtterlevelseILinje,
+              [requiredField]: value,
+            },
+          }
+          await expect(
+            schema.validateAt(`nomOrganisering.${requiredField}`, values)
+          ).rejects.toThrow(message)
+        }
+      }
 
-    await expect(schema.validateAt('nomOrganisering.seksjoner', values)).resolves.toEqual([])
-    for (const path of ['nomOrganisering.seksjoner', 'nomOrganisering.linjer']) {
-      await expect(schema.validateAt(path, withAvdeling([], []))).rejects.toThrow(
-        EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON_ELLER_LINJE
+      const values = {
+        nomOrganisering: {
+          ...nomOrganisering,
+          forEtterlevelseILinje,
+          [otherField]: [],
+        },
+      }
+      await expect(schema.validateAt('nomOrganisering', values)).resolves.toEqual(
+        values.nomOrganisering
       )
-      await expect(
-        schema.validateAt(path, withAvdeling(nomOrganisering.seksjoner, []))
-      ).resolves.toBeDefined()
-      await expect(
-        schema.validateAt(path, withAvdeling([], nomOrganisering.linjer))
-      ).resolves.toBeDefined()
-    }
-  })
+    })
+  }
 }

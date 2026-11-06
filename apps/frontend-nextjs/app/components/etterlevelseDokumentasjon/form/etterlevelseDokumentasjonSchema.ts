@@ -12,7 +12,8 @@ export enum EEtterlevelseDokumentSchemaMelding {
   RESOURCEDATA = 'Påkrevd minst 1 person',
   NOM_AVDELING_ID = 'Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen',
   NOM_FOR_ETTERLEVELSE_I_LINJE = 'Dere må angi om ansvaret er under seksjon eller linje',
-  NOM_SEKSJON_ELLER_LINJE = 'Dere må velge minst en seksjon i direktoratet eller en linje',
+  NOM_SEKSJON = 'Dere må velge minst en seksjon i direktoratet',
+  NOM_LINJE = 'Dere må velge minst en linje',
 }
 
 export const titleCheck = yup.string().required(EEtterlevelseDokumentSchemaMelding.TITLE)
@@ -52,16 +53,6 @@ export const resourcesDataCheck = yup.array().test({
   },
 })
 
-const seksjonEllerLinjeCheck = yup.array().test({
-  name: 'seksjonEllerLinjeCheck',
-  message: EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON_ELLER_LINJE,
-  test: function () {
-    const { parent } = this
-    if (!parent.nomAvdelingId) return true
-    return (parent.seksjoner?.length ?? 0) > 0 || (parent.linjer?.length ?? 0) > 0
-  },
-})
-
 export const nomOrganiseringCheck = yup.object({
   nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
   forEtterlevelseILinje: yup
@@ -69,8 +60,20 @@ export const nomOrganiseringCheck = yup.object({
     .strict()
     .typeError(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE)
     .required(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE),
-  seksjoner: seksjonEllerLinjeCheck,
-  linjer: seksjonEllerLinjeCheck,
+  seksjoner: yup.array().when('forEtterlevelseILinje', {
+    is: false,
+    then: (schema) =>
+      schema
+        .required(EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON)
+        .min(1, EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON),
+  }),
+  linjer: yup.array().when('forEtterlevelseILinje', {
+    is: true,
+    then: (schema) =>
+      schema
+        .required(EEtterlevelseDokumentSchemaMelding.NOM_LINJE)
+        .min(1, EEtterlevelseDokumentSchemaMelding.NOM_LINJE),
+  }),
 })
 
 export const etterlevelseDokumentasjonSchema = () =>
