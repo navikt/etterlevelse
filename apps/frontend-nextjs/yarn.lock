@@ -3918,7 +3918,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
     "@navikt/aksel-icons": "npm:^8.22.1"
     "@navikt/ds-css": "npm:^8.22.1"
-    "@navikt/ds-react": "npm:^8.22.1"
+    "@navikt/ds-react": "npm:^8.21.0"
     "@navikt/ds-tailwind": "npm:^8.22.1"
     "@next/eslint-plugin-next": "npm:^16.4.5"
     "@playwright/test": "npm:^1.64.1"
