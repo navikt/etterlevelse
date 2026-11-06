@@ -160,7 +160,11 @@ const VurdertAvPvoFields: FunctionComponent<TProps> = ({
               {pvkDokument.innsendingTrukket && (
                 <InfoCard data-color='info' className='my-5'>
                   <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-                    <InfoCard.Title>Innsending til PVO trukket</InfoCard.Title>
+                    <InfoCard.Title>
+                      Innsending til{' '}
+                      {fieldProps.form.initialValues.berOmNyVurderingFraPvo ? 'PVO' : 'risikoeier'}{' '}
+                      trukket
+                    </InfoCard.Title>
                   </InfoCard.Header>
                   <InfoCard.Content>
                     Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
