@@ -129,6 +129,7 @@ export interface INomEnhet {
 export interface INomOrganisering {
   nomAvdelingId?: string
   avdelingNavn?: string
+  forEtterlevelseILinje?: boolean
   seksjoner: INomSeksjon[]
   enheter: INomEnhet[]
   linjer: INomEnhet[]

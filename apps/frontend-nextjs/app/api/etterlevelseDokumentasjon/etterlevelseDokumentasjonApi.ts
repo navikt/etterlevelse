@@ -191,6 +191,8 @@ export const etterlevelseDokumentasjonMapToFormVal = (
     avdelingNavn: etterlevelseDokumentasjon.nomOrganisering?.avdelingNavn || '',
     seksjoner: etterlevelseDokumentasjon.nomOrganisering?.seksjoner || [],
     enheter: etterlevelseDokumentasjon.nomOrganisering?.enheter || [],
+    forEtterlevelseILinje:
+      etterlevelseDokumentasjon.nomOrganisering?.forEtterlevelseILinje ?? undefined,
     linjer: etterlevelseDokumentasjon.nomOrganisering?.linjer || [],
     linjeEnheter: etterlevelseDokumentasjon.nomOrganisering?.linjeEnheter || [],
     linjeFylker: etterlevelseDokumentasjon.nomOrganisering?.linjeFylker || [],

@@ -1,5 +1,5 @@
 import { InformationSquareIcon } from '@navikt/aksel-icons'
-import { Heading, InfoCard } from '@navikt/ds-react'
+import { Heading, InfoCard, Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, getIn } from 'formik'
 import { FunctionComponent, useEffect, useState } from 'react'
 import {
@@ -115,32 +115,73 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
         <div>
           <InfoCard data-color='info' className='max-w-155.5 w-full'>
             <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-              Dere må velge minst én av direktoratet eller linje, men kan velge begge deler.
+              Dere må velge minst én av direktoratet eller linje.
             </InfoCard.Message>
           </InfoCard>
 
-          <Heading level='3' size='xsmall' className='mt-7 mb-5'>
-            Velg ansvar for etterlevelsen i direktoratet
-          </Heading>
+          <FieldWrapper id='nomOrganisering.forEtterlevelseILinje'>
+            <Field name='nomOrganisering.forEtterlevelseILinje'>
+              {(fieldProps: FieldProps) => (
+                <div className='my-5'>
+                  <RadioGroup
+                    legend='Hvem har ansvar for etterlevelsen?'
+                    value={fieldProps.field.value}
+                    onChange={(value) => {
+                      fieldProps.form.setFieldValue('nomOrganisering.forEtterlevelseILinje', value)
+                    }}
+                    error={
+                      getIn(fieldProps.form.errors, 'nomOrganisering.forEtterlevelseILinje') && (
+                        <FormError fieldName='nomOrganisering.forEtterlevelseILinje' />
+                      )
+                    }
+                  >
+                    <Stack
+                      gap='space-0 space-24'
+                      direction={{
+                        xs: 'column',
+                        sm: 'row',
+                      }}
+                      wrap={false}
+                    >
+                      <Radio value={false}>Seksjon</Radio>
+                      <Radio value={true}>Linje</Radio>
+                    </Stack>
+                  </RadioGroup>
+                </div>
+              )}
+            </Field>
+          </FieldWrapper>
 
-          <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-            <EtterlevelseDokumentSeksjonForm
-              seksjonerByAvdeling={seksjonerByAvdeling}
-              selectedAvdeling={selectedAvdeling}
-              enheterBySeksjon={enheterBySeksjon}
-              setEnheterBySeksjon={setEnheterBySeksjon}
-            />
+          {formValues.nomOrganisering.forEtterlevelseILinje === false && (
+            <div>
+              <Heading level='3' size='xsmall' className='mt-7 mb-5'>
+                Velg ansvar for etterlevelsen i direktoratet
+              </Heading>
 
-            <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
-          </div>
+              <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
+                <EtterlevelseDokumentSeksjonForm
+                  seksjonerByAvdeling={seksjonerByAvdeling}
+                  selectedAvdeling={selectedAvdeling}
+                  enheterBySeksjon={enheterBySeksjon}
+                  setEnheterBySeksjon={setEnheterBySeksjon}
+                />
 
-          <Heading level='3' size='xsmall' className='mt-7 mb-5'>
-            Velg ansvar for etterlevelsen i linjen
-          </Heading>
+                <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
+              </div>
+            </div>
+          )}
 
-          <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-            <EtterlevelseDokumentLinjeForm formValues={formValues} />
-          </div>
+          {formValues.nomOrganisering.forEtterlevelseILinje === true && (
+            <div>
+              <Heading level='3' size='xsmall' className='mt-7 mb-5'>
+                Velg ansvar for etterlevelsen i linjen
+              </Heading>
+
+              <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
+                <EtterlevelseDokumentLinjeForm formValues={formValues} />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

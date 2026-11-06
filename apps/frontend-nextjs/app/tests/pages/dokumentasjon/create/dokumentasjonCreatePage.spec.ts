@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test'
+import { EEtterlevelseDokumentSchemaMelding } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -149,6 +150,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
           nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
           avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
           seksjoner: [{ nomSeksjonId: 'seksjon-1', nomSeksjonName: 'Seksjon 1' }],
+          forEtterlevelseILinje: false,
         },
         resources: [mockIdent],
         varslingsadresser: [{ type: 'EPOST', adresse: oppretteEtterlevelsesdokument.email }],
@@ -180,9 +182,26 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByRole('button', { name: 'Legg til epost' }).click()
     await page.getByRole('button', { name: 'Legg til Epost', exact: true }).click()
     await page.getByLabel('Avdeling').selectOption(oppretteEtterlevelsesdokument.departmentId)
-    await page.getByLabel('Seksjon').selectOption('seksjon-1')
 
     await expect(titleField).toHaveValue(oppretteEtterlevelsesdokument.title)
+    await page.getByRole('button', { name: 'Opprett', exact: true }).click()
+
+    const lineCompliance = page.getByRole('radiogroup', {
+      name: 'Hvem har ansvar for etterlevelsen?',
+    })
+    await expect(
+      lineCompliance.getByText(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE, {
+        exact: true,
+      })
+    ).toBeVisible()
+    await expect(
+      page.getByRole('link', {
+        name: EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE,
+      })
+    ).toHaveAttribute('href', '#nomOrganisering.forEtterlevelseILinje')
+    await expect(page.locator('[id="nomOrganisering.forEtterlevelseILinje"]')).toBeVisible()
+    await lineCompliance.getByRole('radio', { name: 'Seksjon', exact: true }).check()
+    await page.getByRole('combobox', { name: 'Seksjon', exact: true }).selectOption('seksjon-1')
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()
 
     await expect(page).toHaveURL(

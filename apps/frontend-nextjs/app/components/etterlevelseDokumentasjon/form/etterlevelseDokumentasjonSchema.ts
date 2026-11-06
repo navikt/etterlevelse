@@ -11,6 +11,7 @@ export enum EEtterlevelseDokumentSchemaMelding {
   TEAMDATA = 'Påkrevd minst 1 team',
   RESOURCEDATA = 'Påkrevd minst 1 person',
   NOM_AVDELING_ID = 'Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen',
+  NOM_FOR_ETTERLEVELSE_I_LINJE = 'Dere må angi om ansvaret er under seksjon eller linje',
   NOM_SEKSJON_ELLER_LINJE = 'Dere må velge minst en seksjon i direktoratet eller en linje',
 }
 
@@ -63,6 +64,11 @@ const seksjonEllerLinjeCheck = yup.array().test({
 
 export const nomOrganiseringCheck = yup.object({
   nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
+  forEtterlevelseILinje: yup
+    .boolean()
+    .strict()
+    .typeError(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE)
+    .required(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE),
   seksjoner: seksjonEllerLinjeCheck,
   linjer: seksjonEllerLinjeCheck,
 })

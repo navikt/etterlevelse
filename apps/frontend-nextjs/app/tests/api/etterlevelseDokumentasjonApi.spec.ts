@@ -74,6 +74,30 @@ for (const [name, schema] of [
   ['related document', etterlevelseDokumentasjonWithRelationSchema()],
   ['reuse', gjenbrukDokumentasjonSchema()],
 ] as const) {
+  test(`${name} requires an explicit boolean for line compliance`, async () => {
+    const withLineCompliance = (forEtterlevelseILinje: unknown) => ({
+      nomOrganisering: { ...nomOrganisering, forEtterlevelseILinje },
+    })
+
+    for (const value of [true, false]) {
+      await expect(
+        schema.validateAt('nomOrganisering.forEtterlevelseILinje', withLineCompliance(value))
+      ).resolves.toBe(value)
+      await expect(
+        schema.validateAt('nomOrganisering', withLineCompliance(value))
+      ).resolves.toEqual(withLineCompliance(value).nomOrganisering)
+    }
+
+    for (const value of [undefined, null, '', 'true', 'false', 0, 1, [], {}]) {
+      await expect(
+        schema.validateAt('nomOrganisering.forEtterlevelseILinje', withLineCompliance(value))
+      ).rejects.toThrow(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE)
+      await expect(schema.validateAt('nomOrganisering', withLineCompliance(value))).rejects.toThrow(
+        EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE
+      )
+    }
+  })
+
   test(`${name} validates the nested department field`, async () => {
     const values = etterlevelseDokumentasjonMapToFormVal({})
     await expect(schema.validateAt('nomOrganisering.nomAvdelingId', values)).rejects.toThrow(
