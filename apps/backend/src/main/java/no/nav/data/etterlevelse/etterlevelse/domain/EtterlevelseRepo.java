@@ -16,12 +16,12 @@ public interface EtterlevelseRepo extends JpaRepository<Etterlevelse, UUID> {
             countQuery = "select count(1) from etterlevelse",
             nativeQuery = true)
     Page<Etterlevelse> findAll(Pageable pageable);
-
+// FIXME
     @Query(value = "select * from etterlevelse where krav_nummer = ?1", nativeQuery = true)
-    List<Etterlevelse> findByKravNummer(int nummer);
+    List<Etterlevelse> findByKravNummer(int kravNummer);
 
     @Query(value = "select * from etterlevelse where krav_nummer = ?1 and krav_versjon = ?2", nativeQuery = true)
-    List<Etterlevelse> findByKravNummer(int nummer, int versjon);
+    List<Etterlevelse> findByKravNummer(int kravNummer, int kravVersjon);
 
     @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1", nativeQuery = true)
     List<Etterlevelse> findByEtterlevelseDokumensjon(UUID etterlevelseDokumentasjonId);
@@ -33,7 +33,7 @@ public interface EtterlevelseRepo extends JpaRepository<Etterlevelse, UUID> {
     List<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummer(UUID etterlevelseDokumentasjonId, int nummer);
 
     @Query(value = "select * from etterlevelse where etterlevelse_dokumentasjon_id = ?1 and krav_nummer = ?2 and krav_versjon = ?3", nativeQuery = true)
-    Optional<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(UUID etterlevelseDokumentasjonId, int nummer, int versjon);
+    Optional<Etterlevelse> findByEtterlevelseDokumentasjonIdAndKravNummerAndKravVersjon(UUID etterlevelseDokumentasjonId, int kravNummer, int kravVersjon);
 
     @Query(value = "select * from (" +
             "select distinct on (etterlevelse_dokumentasjon_id) * from etterlevelse " +

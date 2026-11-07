@@ -24,7 +24,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class RisikoscenarioRequest implements RequestElement {
 
     private UUID id;
-    private String pvkDokumentId;
+    private String pvkDokumentId; // TODO: Refaktorer til UUID
 
     private String navn;
     private String beskrivelse;
@@ -41,7 +41,9 @@ public class RisikoscenarioRequest implements RequestElement {
     private Integer konsekvensNivaaEtterTiltak;
     private String nivaaBegrunnelseEtterTiltak;
 
-    private Boolean update;
+    private Boolean update; // Denne blir helt ignorert i Controller
+
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
 
     @Override
     public void format() {
@@ -58,7 +60,6 @@ public class RisikoscenarioRequest implements RequestElement {
         validator.checkUUID(Fields.pvkDokumentId, pvkDokumentId);
         validator.checkId(this);
     }
-
 
     public Risikoscenario convertToRisikoscenario() {
         var risikoscenarioData = RisikoscenarioData.builder()
@@ -98,6 +99,7 @@ public class RisikoscenarioRequest implements RequestElement {
         risikoscenarioToMerge.getRisikoscenarioData().setSannsynlighetsNivaaEtterTiltak(sannsynlighetsNivaaEtterTiltak);
         risikoscenarioToMerge.getRisikoscenarioData().setKonsekvensNivaaEtterTiltak(konsekvensNivaaEtterTiltak);
         risikoscenarioToMerge.getRisikoscenarioData().setNivaaBegrunnelseEtterTiltak(nivaaBegrunnelseEtterTiltak);
+        // Merk: version skal aldri kopierest fra request til entity.
     }
 }
 

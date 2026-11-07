@@ -95,7 +95,6 @@ const behandlingensArtOgOmfangToBehandlingensArtOgOmfangDto = (
     ...artOgOmfang,
   } as any
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 
@@ -105,7 +104,7 @@ export const mapBehandlingensArtOgOmfangToFormValue = (
   return {
     id: artOgOmfang.id || '',
     changeStamp: artOgOmfang.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: artOgOmfang.version ?? -1,
     etterlevelseDokumentasjonId: artOgOmfang.etterlevelseDokumentasjonId || '',
     stemmerPersonkategorier:
       artOgOmfang.stemmerPersonkategorier === undefined

@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.melding;
 
 import lombok.RequiredArgsConstructor;
+import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -38,6 +40,12 @@ public class MeldingService extends DomainService<Melding> {
     @Transactional(propagation = Propagation.REQUIRED)
     public Melding save(MeldingRequest request) {
         var melding = request.isUpdate() ? storage.get(request.getId()) : new Melding();
+        if (request.isUpdate()) {
+            if (melding == null) {
+                throw new NotFoundException("Couldn't find melding with id " + request.getId());
+            }
+            OptimisticLockUtil.checkVersion(Melding.class, melding.getId(), melding.getVersion(), request.getVersion());
+        }
         melding.merge(request);
         return storage.save(melding);
     }
@@ -45,5 +53,10 @@ public class MeldingService extends DomainService<Melding> {
     @Transactional(propagation = Propagation.REQUIRED)
     public Melding delete(UUID id) {
         return storage.delete(id);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Melding delete(UUID id, Integer version) {
+        return storage.delete(id, version);
     }
 }

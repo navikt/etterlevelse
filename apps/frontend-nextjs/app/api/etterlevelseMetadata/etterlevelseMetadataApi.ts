@@ -39,7 +39,6 @@ function etterlevelseMetadataToEtterlevelseMetadataDto(
     ...etterlevelseMetadata,
   } as any
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 
@@ -55,6 +54,6 @@ export const mapEtterlevelseMetadataToFormValue = (
     tildeltMed: etterlevelsemetaData.tildeltMed || [],
     notater: etterlevelsemetaData.notater || '',
     changeStamp: etterlevelsemetaData.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: etterlevelsemetaData.version ?? -1,
   }
 }

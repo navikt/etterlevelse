@@ -1,5 +1,6 @@
 package no.nav.data.pvk.tiltak;
 
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -30,6 +31,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -106,7 +108,7 @@ public class TiltakController {
     public ResponseEntity<TiltakResponse> createTiltak(@PathVariable UUID risikoscenarioId, @RequestBody TiltakRequest request) {
         log.info("Create Tiltak");
         try {
-            if(request.isIverksatt()) {
+            if (request.isIverksatt()) {
                 request.setIverksattDato(LocalDate.now());
             }
             hasUserWriteAccessCheck(UUID.fromString(request.getPvkDokumentId()));
@@ -142,6 +144,7 @@ public class TiltakController {
             throw new NotFoundException(String.format("Could not find tiltak to be updated with id = %s ", id));
         }
         hasUserWriteAccessCheck(tiltakToUpdate.getPvkDokumentId());
+        OptimisticLockUtil.checkVersion(Tiltak.class, id, tiltakToUpdate.getVersion(), request.getVersion());
         service.updateIverksattDato(tiltakToUpdate, request);
         request.mergeInto(tiltakToUpdate);
         Tiltak tiltak = service.save(tiltakToUpdate, null, true);
@@ -155,18 +158,15 @@ public class TiltakController {
     @Operation(summary = "Delete tiltak", parameters = {@Parameter(name = "comment", description = "Reason for deleting the tiltak", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "tiltak deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<TiltakResponse> deleteTiltakById(@PathVariable UUID id) {
+    public ResponseEntity<TiltakResponse> deleteTiltakById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete tiltak id={}", id);
         List<UUID> risikoscenarioIds = service.getRisikoscenarioer(id);
-        Tiltak tiltak;
 
         if (!risikoscenarioIds.isEmpty()) {
             log.warn("Could not delete Tiltak with id = {}: Tiltak is related to one or more Risikoscenario", id);
             throw new ValidationException("Could not delete Tiltak: Tiltak is related to one or more Risikoscenario");
         } else {
-
-            tiltak = service.delete(id);
-
+            Tiltak tiltak = service.delete(id, version);
             if (tiltak == null) {
                 log.warn("Could not find tiltak with id = {} to delete", id);
                 return ResponseEntity.ok(null);
@@ -174,7 +174,6 @@ public class TiltakController {
                 return ResponseEntity.ok(TiltakResponse.buildFrom(tiltak));
             }
         }
-
     }
 
     @Operation(summary = "Get last approved tiltak by Pvk Document and timestamp")

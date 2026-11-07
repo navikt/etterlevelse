@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PvoTilbakemeldingRepo extends JpaRepository<PvoTilbakemelding, UUID> {
+    // FIXME: Fjern 
     @Query(value = "select * from pvo_tilbakemelding where pvk_dokument_id = ?1", nativeQuery = true)
     Optional<PvoTilbakemelding> findByPvkDokumentId(UUID pvkDokumentId);
 }

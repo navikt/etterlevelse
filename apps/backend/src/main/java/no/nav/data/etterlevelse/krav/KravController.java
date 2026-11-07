@@ -171,6 +171,9 @@ public class KravController {
     public ResponseEntity<KravResponse> createKrav(@RequestBody KravRequest request) {
         log.info("Create Krav");
         validator.validate(request);
+        if (request.isUpdate()) {
+            throw new ValidationException("Requeat to create new Krav, but request.isUpdate is true");
+        }
         var krav = service.save(request);
         return new ResponseEntity<>(KravResponse.buildFrom(krav), HttpStatus.CREATED);
     }
@@ -184,6 +187,9 @@ public class KravController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
+        if (!request.isUpdate()) {
+            throw new ValidationException("Requeat to update Krav, but request.isUpdate is false");
+        }
         var krav = service.save(request);
         return ResponseEntity.ok(KravResponse.buildFrom(krav));
     }
@@ -191,7 +197,7 @@ public class KravController {
     @Operation(summary = "Delete Krav", parameters = {@Parameter(name = "comment", description = "Reason for deleting the krav", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Krav deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<KravResponse> deleteKravById(@PathVariable UUID id) {
+    public ResponseEntity<KravResponse> deleteKravById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete Krav id={}", id);
         var krav = service.get(id);
         List<Etterlevelse> etterlevelseList = etterlevelseService.getByKravNummer(krav.getKravNummer(), krav.getKravVersjon());
@@ -210,8 +216,7 @@ public class KravController {
                 throw new ValidationException(String.format("Can not delete krav. Relevant for at least one risikoscenario (%s).", risikoscenarios.get(0).getId()));
             }
         }
-        // FIXME: Sjekke om krav har relasjon til risikoscenario
-        var deletedKrav = service.delete(id);
+        var deletedKrav = service.delete(id, version);
         return ResponseEntity.ok(KravResponse.buildFrom(deletedKrav));
     }
 

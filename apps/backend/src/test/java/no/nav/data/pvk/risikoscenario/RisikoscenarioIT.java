@@ -113,7 +113,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
     @Test
     void testCrateRisikoscenarioKnyttetTilKrav() {
         PvkDokument pvkDokument = createPvkDokument();
-        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+        kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
                 .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder().lov("ARKIV").spesifisering("§1").build()))
                         .status(KravStatus.AKTIV).build())
                 .build()
@@ -153,6 +153,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         
         // Test update...
         request.setId(risikoscenario.getId());
+        request.setVersion(risikoscenario.getVersion());
         respEnt = restTemplate.exchange("/risikoscenario/{id}", HttpMethod.PUT, new HttpEntity<>(request), RisikoscenarioResponse.class, request.getId());
         risikoscenario = risikoscenarioService.get(risikoscenario.getId());
         assertThat(risikoscenario.getRisikoscenarioData().getNavn()).isEqualTo("2024 YR4");
@@ -201,7 +202,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         assertThat(respEntPage.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
         // Test add Krav...
-        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(99).kravVersjon(1)
+        kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(99).kravVersjon(1)
                 .data(KravData.builder().navn("Krav 40").status(KravStatus.AKTIV).build()).build());
         relReq.setKravnummer(99);
         respEntPage = restTemplate.exchange(
@@ -220,7 +221,7 @@ public class RisikoscenarioIT extends IntegrationTestBase {
         Risikoscenario risikoscenario = insertRisikoscenario();
         
         // Should get BAD REQUEST if unknown Krav or Krav not related to Risikoscenario...
-        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(51).kravVersjon(1)
+        kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(51).kravVersjon(1)
                 .data(KravData.builder().navn("Krav 51").status(KravStatus.AKTIV).build()).build());
         ResponseEntity<RisikoscenarioResponse> respEntPage = restTemplate.exchange(
                 "/risikoscenario/{id}/removeKrav/{kravnummer}", HttpMethod.PUT, null, RisikoscenarioResponse.class, risikoscenario.getId(), 51

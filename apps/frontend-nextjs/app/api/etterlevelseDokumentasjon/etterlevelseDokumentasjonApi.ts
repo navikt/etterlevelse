@@ -164,7 +164,7 @@ export const etterlevelseDokumentasjonMapToFormVal = (
     lastModifiedDate: '',
     lastModifiedBy: '',
   },
-  version: -1,
+  version: etterlevelseDokumentasjon.version ?? -1,
   title: etterlevelseDokumentasjon.title || '',
   beskrivelse: etterlevelseDokumentasjon.beskrivelse || '',
   status: etterlevelseDokumentasjon.status || EEtterlevelseDokumentasjonStatus.UNDER_ARBEID,
@@ -243,7 +243,6 @@ const etterlevelseDokumentasjonToDataTransferObject = (
       : [],
   } as any
   delete dataTransferObject.changeStamp
-  delete dataTransferObject.version
   delete dataTransferObject.teamsData
   delete dataTransferObject.resourcesData
   delete dataTransferObject.behandlinger

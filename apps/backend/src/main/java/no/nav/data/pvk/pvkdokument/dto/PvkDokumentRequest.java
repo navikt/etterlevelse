@@ -59,6 +59,8 @@ public class PvkDokumentRequest implements RequestElement {
 
     private Boolean update;
 
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
+
     @Override
     public void format() {
         setPvkVurderingsBegrunnelse(trimToNull(pvkVurderingsBegrunnelse));
@@ -115,6 +117,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .status(status != null ? status : PvkDokumentStatus.UNDERARBEID)
                 .pvkDokumentData(pkvDokumentData)
                 .build();
+        // Merk: version skal aldri kopieres fra request til entity.
     }
 
     public void mergeInto(PvkDokument pvkDokumentToMerge) {
