@@ -6,7 +6,6 @@ import {
   getAvdelingOptions,
   getEnheterBySeksjonId,
   getSeksjonOptionsByAvdelingId,
-  getUnderenheter,
 } from '@/api/nom/nomApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
@@ -51,7 +50,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
   }, [selectedAvdeling])
 
   useEffect(() => {
-    if (etterlevelseDokumentasjon?.nomOrganisering.seksjoner.length) {
+    if (etterlevelseDokumentasjon?.nomOrganisering.linjer.length) {
       etterlevelseDokumentasjon.nomOrganisering.seksjoner.forEach((seksjon) => {
         getEnheterBySeksjonId(seksjon.nomSeksjonId)
           .then((enheter) => {
@@ -70,27 +69,6 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
       })
     }
   }, [etterlevelseDokumentasjon?.nomOrganisering.seksjoner])
-
-  useEffect(() => {
-    if (etterlevelseDokumentasjon?.nomOrganisering.linjer.length) {
-      etterlevelseDokumentasjon.nomOrganisering.linjer.forEach((linje) => {
-        getUnderenheter(linje.nomEnhetId)
-          .then((enheter) => {
-            if (enheter.length > 0) {
-              setEnheterBySeksjon((prev) => {
-                const next = new Map(prev)
-                next.set(
-                  linje.nomEnhetId,
-                  enheter.map((e) => ({ value: e.id, label: e.navn }))
-                )
-                return next
-              })
-            }
-          })
-          .catch(() => {})
-      })
-    }
-  }, [etterlevelseDokumentasjon?.nomOrganisering.linjer])
 
   return (
     <div className='mb-7'>
@@ -205,7 +183,10 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
               </Heading>
 
               <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-                <EtterlevelseDokumentLinjeForm formValues={formValues} />
+                <EtterlevelseDokumentLinjeForm
+                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                  formValues={formValues}
+                />
               </div>
             </div>
           )}

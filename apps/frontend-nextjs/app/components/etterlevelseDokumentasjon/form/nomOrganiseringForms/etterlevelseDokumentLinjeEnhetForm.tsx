@@ -1,5 +1,6 @@
 import { FieldArray, FieldArrayRenderProps, getIn } from 'formik'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, SetStateAction } from 'react'
+import { getUnderenheter } from '@/api/nom/nomApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
 import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
@@ -10,16 +11,22 @@ import { INomEnhet } from '@/constants/etterlevelseDokumentasjon/etterlevelseDok
 
 type TProps = {
   linjeEnheterByLinje: Map<string, TOption[]>
+  lokalEnheterByLinje: Map<string, TOption[]>
+  setLokalEnheterByLinje: (value: SetStateAction<Map<string, TOption[]>>) => void
 }
 
-const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({ linjeEnheterByLinje }) => {
+const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({
+  linjeEnheterByLinje,
+  lokalEnheterByLinje,
+  setLokalEnheterByLinje,
+}) => {
   const alleLinjeEnhter = Array.from(linjeEnheterByLinje.values()).flat()
   if (alleLinjeEnhter.length === 0) return null
 
   return (
     <div id='linjeEnhet' className='flex flex-col lg:flex-row gap-2 mb-5'>
       <FieldWrapper marginTop full>
-        <FieldArray name='nomOrganisering.linjeEnhet'>
+        <FieldArray name='nomOrganisering.linjeEnheter'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
               <LabelWithDescription label='Angi linjeenhet' />
@@ -27,9 +34,9 @@ const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({ linjeEn
                 label='Linje enhet'
                 options={alleLinjeEnhter}
                 onChange={async (value: any) => {
-                  const selectedFylke = alleLinjeEnhter.find((enhet) => enhet.value === value)
+                  const selectedLinjeenhet = alleLinjeEnhter.find((enhet) => enhet.value === value)
 
-                  if (selectedFylke) {
+                  if (selectedLinjeenhet) {
                     const ikkeFinnesAlleredeIListe =
                       fieldProps.form.values.nomOrganisering.linjeEnheter.filter(
                         (linjeFylke: INomEnhet) => linjeFylke.nomEnhetId === value
@@ -39,11 +46,26 @@ const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({ linjeEn
                       await fieldProps.form.setFieldValue('nomOrganisering.linjeEnheter', [
                         ...fieldProps.form.values.nomOrganisering.linjeEnheter,
                         {
-                          nomEnhetId: selectedFylke.value,
-                          nomEnhetName: selectedFylke.label,
+                          nomEnhetId: selectedLinjeenhet.value,
+                          nomEnhetName: selectedLinjeenhet.label,
                         },
                       ])
                     }
+
+                    getUnderenheter(String(selectedLinjeenhet.value))
+                      .then((enheter) => {
+                        if (enheter.length > 0) {
+                          setLokalEnheterByLinje((prev) => {
+                            const next = new Map(prev)
+                            next.set(
+                              String(selectedLinjeenhet.value),
+                              enheter.map((e) => ({ value: e.id, label: e.navn }))
+                            )
+                            return next
+                          })
+                        }
+                      })
+                      .catch(() => {})
                   }
                 }}
                 error={
@@ -58,7 +80,27 @@ const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({ linjeEn
                   (linje: INomEnhet) => linje.nomEnhetName
                 )}
                 onRemove={(index: number) => {
+                  const removedLinjeenhet: INomEnhet =
+                    fieldProps.form.values.nomOrganisering.linjeEnheter[index]
                   fieldProps.remove(index)
+                  const removedLokalEnheter =
+                    fieldProps.form.values.nomOrganisering.lokalEnheter.filter((e: INomEnhet) => {
+                      const enhetOptions = lokalEnheterByLinje.get(removedLinjeenhet.nomEnhetId)
+                      return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
+                    })
+                  if (removedLokalEnheter.length > 0) {
+                    fieldProps.form.setFieldValue(
+                      'nomOrganisering.lokalEnheter',
+                      fieldProps.form.values.nomOrganisering.lokalEnheter.filter(
+                        (e: INomEnhet) => !removedLokalEnheter.includes(e)
+                      )
+                    )
+                  }
+                  setLokalEnheterByLinje((prev) => {
+                    const next = new Map(prev)
+                    next.delete(removedLinjeenhet.nomEnhetId)
+                    return next
+                  })
                 }}
               />
             </div>

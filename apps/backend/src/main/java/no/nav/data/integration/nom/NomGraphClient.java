@@ -442,6 +442,26 @@ public class NomGraphClient {
             case "fylke_3" -> getDevFylkeKontor("fylke_3");
             case "fylke_4" -> getDevFylkeKontor("fylke_4");
             case "fylke_5" -> getDevFylkeKontor("fylke_5");
+            case "velferdslinjen_under_1" -> List.of(
+                    createDevOrganisering("velferdslinjen_under_1_enhet_1", "Sentral forsyningsenhet"),
+                    createDevOrganisering("velferdslinjen_under_1_enhet_2", "Styringsenhet Hjelpemidler og tilrettelegging")
+            );
+            case "ytelseslinjen_under_1" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_1_enhet_1", "Arbeidsavklaringspenger"),
+                    createDevOrganisering("ytelseslinjen_under_1_enhet_2", "Arbeidsytelser")
+            );
+            case "ytelseslinjen_under_2" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_2_enhet_1", "Familieytelser"),
+                    createDevOrganisering("ytelseslinjen_under_2_enhet_2", "Helseytelser"),
+                    createDevOrganisering("ytelseslinjen_under_2_enhet_3", "Kontroll og internasjonalt"),
+                    createDevOrganisering("ytelseslinjen_under_2_enhet_4", "Pensjon og uføretrygd")
+            );
+            case "ytelseslinjen_under_3" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_3_enhet_1", "Kontaktsenter")
+            );
+            case "ytelseslinjen_under_4" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_4_enhet_1", "Kontroll")
+            );
             default -> List.of();
         };
     }

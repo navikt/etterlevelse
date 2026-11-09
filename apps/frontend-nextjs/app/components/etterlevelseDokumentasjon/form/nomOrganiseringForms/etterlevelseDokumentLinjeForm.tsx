@@ -14,18 +14,24 @@ import {
 import EtterlevelseDokumentFylkeForm from './etterlevelseDokumentFylkeForm'
 import EtterlevelseDokumentFylkeKontorForm from './etterlevelseDokumentFylkeKontorForm'
 import EtterlevelseDokumentLinjeEnhetForm from './etterlevelseDokumentLinjeEnhetForm'
+import EtterlevelseDokumentLokalEnheterForm from './etterlevelseDokumentLokalEnheterForm'
 
 type TProps = {
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   formValues: TEtterlevelseDokumentasjonQL
 }
 
-const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }) => {
+const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  formValues,
+}) => {
   const tjenestelinjeId = 'ry630r'
 
   const [alleLinjeOptions, setAlleLinjeOptions] = useState<TOption[]>([])
   const [alleFylkeOptions, setAlleFylkeOptions] = useState<TOption[]>([])
   const [linjeEnheterByLinje, setLinjeEnheterByLinje] = useState<Map<string, TOption[]>>(new Map())
   const [kontorByFylke, setKontorByFylke] = useState<Map<string, TOption[]>>(new Map())
+  const [lokalEnheterByLinje, setLokalEnheterByLinje] = useState<Map<string, TOption[]>>(new Map())
 
   const hasArbeidsOgTjenestelinjen = useMemo(() => {
     return formValues.nomOrganisering.linjer
@@ -39,6 +45,29 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
       await getUnderenheterOptions(tjenestelinjeId).then(setAlleFylkeOptions)
     })()
   }, [])
+
+  useEffect(() => {
+    if (etterlevelseDokumentasjon?.nomOrganisering.linjer.length) {
+      formValues.nomOrganisering.linjer.forEach((linje) => {
+        if (linje.nomEnhetId !== tjenestelinjeId) {
+          getUnderenheter(linje.nomEnhetId)
+            .then((enheter) => {
+              if (enheter.length > 0) {
+                setLinjeEnheterByLinje((prev) => {
+                  const next = new Map(prev)
+                  next.set(
+                    linje.nomEnhetId,
+                    enheter.map((e) => ({ value: e.id, label: e.navn }))
+                  )
+                  return next
+                })
+              }
+            })
+            .catch(() => {})
+        }
+      })
+    }
+  }, [etterlevelseDokumentasjon?.nomOrganisering.linjer])
 
   return (
     <div>
@@ -139,7 +168,13 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
         <div className='flex-1' />
       </div>
 
-      <EtterlevelseDokumentLinjeEnhetForm linjeEnheterByLinje={linjeEnheterByLinje} />
+      <EtterlevelseDokumentLinjeEnhetForm
+        linjeEnheterByLinje={linjeEnheterByLinje}
+        lokalEnheterByLinje={lokalEnheterByLinje}
+        setLokalEnheterByLinje={setLokalEnheterByLinje}
+      />
+
+      <EtterlevelseDokumentLokalEnheterForm lokalEnheterByLinje={lokalEnheterByLinje} />
 
       {formValues.nomOrganisering.linjer && hasArbeidsOgTjenestelinjen && (
         <EtterlevelseDokumentFylkeForm
