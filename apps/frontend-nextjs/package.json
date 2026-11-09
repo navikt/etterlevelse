@@ -53,7 +53,7 @@
     "@tiptap/extension-image": "^3.32.2",
     "@tiptap/extension-link": "^3.32.2",
     "@tiptap/extension-list": "^3.32.2",
-    "@tiptap/extension-ordered-list": "^3.32.2",
+    "@tiptap/extension-ordered-list": "^3.33.0",
     "@tiptap/extension-underline": "^3.32.2",
     "@tiptap/pm": "^3.32.2",
     "@tiptap/react": "^3.32.2",
