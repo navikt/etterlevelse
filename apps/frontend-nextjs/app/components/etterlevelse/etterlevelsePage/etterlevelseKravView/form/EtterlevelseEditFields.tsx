@@ -235,7 +235,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           >
                             <Checkbox
                               value='check'
-                              description='Kravet er satt til lesemodus, men dere kan ombestemme dere senere.  Krav markert som “ikke behov for redigering” kan filtreres bort på temaside for å gi bedre oversikt over hvilke krav som gjenstår å dokumentere.'
+                              description='Kravet blir satt til lesemodus, men dere kan ombestemme dere senere.  Krav markert som “ikke behov for redigering” kan filtreres bort på temaside for å gi bedre oversikt over hvilke krav som gjenstår å dokumentere.'
                             >
                               Marker dette kravet som “ikke behov for revurdering”
                             </Checkbox>
