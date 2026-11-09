@@ -1,5 +1,5 @@
 import { FieldArray, FieldArrayRenderProps, getIn } from 'formik'
-import { FunctionComponent, SetStateAction } from 'react'
+import { FunctionComponent, SetStateAction, useEffect } from 'react'
 import { getUnderenheter } from '@/api/nom/nomApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
@@ -7,20 +7,47 @@ import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/L
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TOption } from '@/constants/commonConstants'
-import { INomEnhet } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  INomEnhet,
+  TEtterlevelseDokumentasjonQL,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 
 type TProps = {
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   linjeEnheterByLinje: Map<string, TOption[]>
   lokalEnheterByLinje: Map<string, TOption[]>
   setLokalEnheterByLinje: (value: SetStateAction<Map<string, TOption[]>>) => void
 }
 
 const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
   linjeEnheterByLinje,
   lokalEnheterByLinje,
   setLokalEnheterByLinje,
 }) => {
   const alleLinjeEnhter = Array.from(linjeEnheterByLinje.values()).flat()
+
+  useEffect(() => {
+    if (etterlevelseDokumentasjon?.nomOrganisering.linjeEnheter.length) {
+      etterlevelseDokumentasjon.nomOrganisering.linjeEnheter.forEach((linjeenhet) => {
+        getUnderenheter(linjeenhet.nomEnhetId)
+          .then((enheter) => {
+            if (enheter.length > 0) {
+              setLokalEnheterByLinje((prev) => {
+                const next = new Map(prev)
+                next.set(
+                  linjeenhet.nomEnhetId,
+                  enheter.map((e) => ({ value: e.id, label: e.navn }))
+                )
+                return next
+              })
+            }
+          })
+          .catch(() => {})
+      })
+    }
+  }, [etterlevelseDokumentasjon?.nomOrganisering.linjeEnheter])
+
   if (alleLinjeEnhter.length === 0) return null
 
   return (

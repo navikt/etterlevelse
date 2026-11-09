@@ -48,7 +48,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
 
   useEffect(() => {
     if (etterlevelseDokumentasjon?.nomOrganisering.linjer.length) {
-      formValues.nomOrganisering.linjer.forEach((linje) => {
+      etterlevelseDokumentasjon.nomOrganisering.linjer.forEach((linje) => {
         if (linje.nomEnhetId !== tjenestelinjeId) {
           getUnderenheter(linje.nomEnhetId)
             .then((enheter) => {
@@ -169,6 +169,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
       </div>
 
       <EtterlevelseDokumentLinjeEnhetForm
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
         linjeEnheterByLinje={linjeEnheterByLinje}
         lokalEnheterByLinje={lokalEnheterByLinje}
         setLokalEnheterByLinje={setLokalEnheterByLinje}

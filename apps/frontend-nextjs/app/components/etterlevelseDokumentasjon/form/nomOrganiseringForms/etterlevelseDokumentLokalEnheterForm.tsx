@@ -21,7 +21,7 @@ const EtterlevelseDokumentLokalEnheterForm: FunctionComponent<TProps> = ({
   return (
     <div id='lokalEnheter' className='flex flex-col lg:flex-row gap-2 mb-5'>
       <FieldWrapper marginTop full>
-        <FieldArray name='nomOrganisering.fylkeKontorer'>
+        <FieldArray name='nomOrganisering.lokalEnheter'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
               <LabelWithDescription label='Angi lokal enhet' />
