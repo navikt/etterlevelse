@@ -221,6 +221,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           'second'
                         ) && (
                           <CheckboxGroup
+                            className='mb-3'
                             legend='Legg til i Prioritert kravliste'
                             hideLegend
                             onChange={(value: string[]) => {

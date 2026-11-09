@@ -331,7 +331,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
           {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
             etterlevelseDokumentasjon?.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
             !isPvoUnderarbeidWarningActive && (
-              <div className='mt-2'>
+              <div className='mt-3'>
                 {!isPreview && (
                   <CheckboxGroup
                     legend='Legg til i Prioritert kravliste'
