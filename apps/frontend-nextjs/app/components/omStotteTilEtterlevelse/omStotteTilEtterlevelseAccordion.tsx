@@ -577,14 +577,14 @@ const OmStotteTilEtterlevelseAccordion = () => {
             oppdateringer kan så kreve at Nav-kontor revurderer deler av etterlevelsesdokumentasjon
             sin.
           </ReadMore>
-          <ReadMore header='Eksempel: bruk av Umami til måling av brukeratferd' className='mb-6'>
-            Flere team i Nav bruker verktøyet Umami til å måle brukeratferd i digitale løsninger.
-            Umami forvaltes av Team ResearchOps, som har lagd et sentralt etterlevelsesdokument hvor
-            de har gjort noen vurderinger som vil gjelde uansett hvor og hvordan man bruker Umami.
-            Ved enkelte etterlevelseskrav har ResearchOps skrevet veiledning som er spesielt
-            tilpasset bruk av Umami, og kladdet noen svar. Kravene med veiledning og kladd har de
-            samlet under Prioritert kravliste. Enkelte team som skal bruke Umami tar en
-            gjenbrukskopi av etterlevelsesdokumentet. I gjenbrukskopien arver de Prioritert
+          <ReadMore header='Eksempel: bruk av Innblikk til måling av brukeratferd' className='mb-6'>
+            Flere team i Nav bruker verktøyet Innblikk til å måle brukeratferd i digitale løsninger.
+            Innblikk forvaltes av Team ResearchOps, som har lagd et sentralt etterlevelsesdokument
+            hvor de har gjort noen vurderinger som vil gjelde uansett hvor og hvordan man bruker
+            Innblikk. Ved enkelte etterlevelseskrav har ResearchOps skrevet veiledning som er
+            spesielt tilpasset bruk av Innblikk, og kladdet noen svar. Kravene med veiledning og
+            kladd har de samlet under Prioritert kravliste. Enkelte team som skal bruke Innblikk tar
+            en gjenbrukskopi av etterlevelsesdokumentet. I gjenbrukskopien arver de Prioritert
             kravliste med sine tilpassede etterlevelseskrav. Teamet dokumenterer etterlevelse ved
             både disse og alle resterende etterlevelseskrav i dokumentet.
           </ReadMore>

@@ -5,6 +5,7 @@ import {
   ExclamationmarkTriangleFillIcon,
   InformationSquareIcon,
 } from '@navikt/aksel-icons'
+import { Events } from '@navikt/analytics-types'
 import {
   Button,
   Chips,
@@ -22,7 +23,7 @@ import {
 import { DataGrid } from '@navikt/ds-react/PREVIEW/DataGrid'
 import moment from 'moment'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   getDashboardAvdelingStats,
   getDashboardTableByAvdeling,
@@ -42,7 +43,7 @@ import {
   EPvkVurdering,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
+import { sporInnblikkHendelse } from '@/util/analytics/innblikk'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
@@ -110,6 +111,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [selectedEnhet, setSelectedEnhet] = useState<string>(() => searchParams.get('enhet') ?? '')
   const [enhetOptions, setEnhetOptions] = useState<IOrgEnhet[]>([])
   const [tableTab, setTableTab] = useState(() => searchParams.get('tab') ?? 'dok_pvk')
+  const navigasjonsMetode = useRef<'click' | 'keyboard' | undefined>(undefined)
   const [sort, setSort] = useState<SortState | undefined>()
   const [searchFilters, setSearchFilters] = useState<string[]>(() => searchParams.getAll('sok'))
   const [searchValue, setSearchValue] = useState<string>('')
@@ -1359,26 +1361,43 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             <Tabs
               value={tableTab}
               onChange={(val) => {
+                const metode = navigasjonsMetode.current
+                navigasjonsMetode.current = undefined
+                if (val === tableTab) return
+
                 setTableTab(val)
                 setSort(undefined)
 
-                trackUmamiEvent(UMAMI_EVENTS.TAB_SELECTED, {
-                  page: 'dashboard',
-                  component: 'avdeling-detail-table-tabs',
-                  group: 'detail-table',
-                  tab: val,
-                  tab_label:
+                sporInnblikkHendelse(Events.FANE_BYTTET, {
+                  fraFane: tableTab,
+                  tilFane: val,
+                  tilFaneTekst:
                     val === 'dok_pvk'
                       ? 'Dokumentasjonsoversikt'
                       : val === 'krav'
                         ? 'Etterlevelse'
                         : 'Digital PVK',
-                  avdeling_id: avdelingId,
+                  navigasjonsMetode: metode,
+                  antallFaner: 3,
+                  selectionFollowsFocus: false,
+                  kontekst: 'dashboard-avdeling-detail',
+                  komponentId: 'dashboard-avdeling-detail-table-tabs',
+                  seksjon: 'dashboard',
+                  opprinnelse: 'etterlevelse',
                 })
               }}
               className='mt-4'
             >
-              <Tabs.List>
+              <Tabs.List
+                onPointerDownCapture={() => {
+                  navigasjonsMetode.current = 'click'
+                }}
+                onKeyDownCapture={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    navigasjonsMetode.current = 'keyboard'
+                  }
+                }}
+              >
                 <Tabs.Tab value='dok_pvk' label='Dokumentasjonsoversikt' />
                 <Tabs.Tab value='krav' label='Etterlevelse' />
                 <Tabs.Tab value='pvk' label='Digital PVK' />

@@ -1,6 +1,7 @@
 'use client'
 
 import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { Events } from '@navikt/analytics-types'
 import {
   BodyShort,
   Button,
@@ -39,7 +40,7 @@ import {
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
+import { sporInnblikkHendelse } from '@/util/analytics/innblikk'
 import { env } from '@/util/env/env'
 import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
@@ -287,14 +288,13 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         checked={isOppfylesSenere}
                         onChange={() => {
                           setOppfylesSenere(!isOppfylesSenere)
-                          trackUmamiEvent(UMAMI_EVENTS.CHECKBOX_TOGGLED, {
-                            page: 'etterlevelse',
-                            component: 'etterlevelse-form',
-                            field: 'oppfylles_senere',
+                          sporInnblikkHendelse(Events.AVKRYSNINGSBOKS_ENDRET, {
+                            tekst: 'Kravet skal etterleves senere',
                             checked: !isOppfylesSenere,
-                            status: !isOppfylesSenere ? 'selected' : 'unselected',
-                            id: krav.kravNummer,
-                            context: 'krav-status',
+                            kontekst: 'etterlevelse-krav-status',
+                            komponentId: 'etterlevelse-form-oppfylles-senere',
+                            seksjon: 'etterlevelse',
+                            opprinnelse: 'etterlevelse',
                           })
                         }}
                         key={EEtterlevelseStatus.OPPFYLLES_SENERE}

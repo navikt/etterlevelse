@@ -1029,6 +1029,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@navikt/analytics-types@npm:^0.0.13":
+  version: 0.0.13
+  resolution: "@navikt/analytics-types@npm:0.0.13"
+  checksum: 10c0/be7594f3f3c9d4f5cf05e087e414a443b0ae269431ca8b76c247e34232988736d8cfb5b883d496b3a96716908f4d6414e641966346da2c6733815ac53cd8ef8e
+  languageName: node
+  linkType: hard
+
 "@navikt/ds-css@npm:^8.22.1":
   version: 8.22.1
   resolution: "@navikt/ds-css@npm:8.22.1"
@@ -3917,6 +3924,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^7.3.1"
     "@fortawesome/react-fontawesome": "npm:^3.5.0"
     "@navikt/aksel-icons": "npm:^8.22.1"
+    "@navikt/analytics-types": "npm:^0.0.13"
     "@navikt/ds-css": "npm:^8.22.1"
     "@navikt/ds-react": "npm:^8.21.0"
     "@navikt/ds-tailwind": "npm:^8.22.1"
