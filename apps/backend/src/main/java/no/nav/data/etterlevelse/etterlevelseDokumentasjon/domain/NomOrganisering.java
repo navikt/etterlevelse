@@ -24,6 +24,7 @@ public class NomOrganisering {
     private List<NomEnhet> enheter;
     private List<NomEnhet> linjer;
     private List<NomEnhet> linjeEnheter;
+    private List<NomEnhet> lokalEnheter;
     private List<NomEnhet> linjeFylker;
     private List<NomEnhet> fylkeKontorer;
 }

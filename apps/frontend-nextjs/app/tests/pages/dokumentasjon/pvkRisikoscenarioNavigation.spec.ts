@@ -94,6 +94,7 @@ test.beforeEach(async ({ context }) => {
           enheter: [],
           linjer: [],
           linjeEnheter: [],
+          lokalEnheter: [],
           linjeFylker: [],
           fylkeKontorer: [],
         },

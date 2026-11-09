@@ -90,6 +90,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
                       await fieldProps.form.setFieldValue('nomOrganisering.enheter', [])
                       await fieldProps.form.setFieldValue('nomOrganisering.linjer', [])
                       await fieldProps.form.setFieldValue('nomOrganisering.linjeEnheter', [])
+                      await fieldProps.form.setFieldValue('nomOrganisering.lokalEnheter', [])
                       await fieldProps.form.setFieldValue('nomOrganisering.linjeFylker', [])
                       await fieldProps.form.setFieldValue('nomOrganisering.fylkeKontorer', [])
                       setEnheterBySeksjon(new Map())

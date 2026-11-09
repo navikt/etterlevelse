@@ -19,6 +19,7 @@ const nomOrganisering: INomOrganisering = {
   enheter: [{ nomEnhetId: 'enhet-1', nomEnhetName: 'Enhet' }],
   linjer: [{ nomEnhetId: 'linje-1', nomEnhetName: 'Linje' }],
   linjeEnheter: [{ nomEnhetId: 'linje-enhet-1', nomEnhetName: 'Linjeenhet' }],
+  lokalEnheter: [{ nomEnhetId: 'lokal-enhet-1', nomEnhetName: 'Lokalenhet' }],
   linjeFylker: [{ nomEnhetId: 'fylke-1', nomEnhetName: 'Fylke' }],
   fylkeKontorer: [{ nomEnhetId: 'kontor-1', nomEnhetName: 'Kontor' }],
 }
@@ -33,6 +34,7 @@ test('initializes nested organization fields without flattened duplicates', () =
     enheter: [],
     linjer: [],
     linjeEnheter: [],
+    lokalEnheter: [],
     linjeFylker: [],
     fylkeKontorer: [],
   })

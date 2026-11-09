@@ -134,6 +134,7 @@ export interface INomOrganisering {
   enheter: INomEnhet[]
   linjer: INomEnhet[]
   linjeEnheter: INomEnhet[]
+  lokalEnheter: INomEnhet[]
   linjeFylker: INomEnhet[]
   fylkeKontorer: INomEnhet[]
 }

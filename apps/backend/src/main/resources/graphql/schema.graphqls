@@ -318,6 +318,7 @@ type NomOrganisering {
     enheter: [NomEnhet!]!
     linjer: [NomEnhet!]!
     linjeEnheter: [NomEnhet!]!
+    lokalEnheter: [NomEnhet!]!
     linjeFylker: [NomEnhet!]!
     fylkeKontorer: [NomEnhet!]!
 }
