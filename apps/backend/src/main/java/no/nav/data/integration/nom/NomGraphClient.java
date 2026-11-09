@@ -442,26 +442,14 @@ public class NomGraphClient {
             case "fylke_3" -> getDevFylkeKontor("fylke_3");
             case "fylke_4" -> getDevFylkeKontor("fylke_4");
             case "fylke_5" -> getDevFylkeKontor("fylke_5");
-            case "velferdslinjen_under_1" -> List.of(
-                    createDevOrganisering("velferdslinjen_under_1_enhet_1", "Sentral forsyningsenhet"),
-                    createDevOrganisering("velferdslinjen_under_1_enhet_2", "Styringsenhet Hjelpemidler og tilrettelegging")
-            );
-            case "ytelseslinjen_under_1" -> List.of(
-                    createDevOrganisering("ytelseslinjen_under_1_enhet_1", "Arbeidsavklaringspenger"),
-                    createDevOrganisering("ytelseslinjen_under_1_enhet_2", "Arbeidsytelser")
-            );
-            case "ytelseslinjen_under_2" -> List.of(
-                    createDevOrganisering("ytelseslinjen_under_2_enhet_1", "Familieytelser"),
-                    createDevOrganisering("ytelseslinjen_under_2_enhet_2", "Helseytelser"),
-                    createDevOrganisering("ytelseslinjen_under_2_enhet_3", "Kontroll og internasjonalt"),
-                    createDevOrganisering("ytelseslinjen_under_2_enhet_4", "Pensjon og uføretrygd")
-            );
-            case "ytelseslinjen_under_3" -> List.of(
-                    createDevOrganisering("ytelseslinjen_under_3_enhet_1", "Kontaktsenter")
-            );
-            case "ytelseslinjen_under_4" -> List.of(
-                    createDevOrganisering("ytelseslinjen_under_4_enhet_1", "Kontroll")
-            );
+            case "velferdslinjen_under_1" -> getDevLokalEnheterForLinjeenhet("velferdslinjen_under_1");
+            case "ytelseslinjen_under_1" -> getDevLokalEnheterForLinjeenhet("ytelseslinjen_under_1");
+            case "ytelseslinjen_under_2" -> getDevLokalEnheterForLinjeenhet("ytelseslinjen_under_2");
+            case "ytelseslinjen_under_3" -> getDevLokalEnheterForLinjeenhet("ytelseslinjen_under_3");
+            case "ytelseslinjen_under_4" -> getDevLokalEnheterForLinjeenhet("ytelseslinjen_under_4");
+            case "okonomilinjen_under_1" -> getDevLokalEnheterForLinjeenhet("okonomilinjen_under_1");
+            case "okonomilinjen_under_2" -> getDevLokalEnheterForLinjeenhet("okonomilinjen_under_2");
+            case "okonomilinjen_under_3" -> getDevLokalEnheterForLinjeenhet("okonomilinjen_under_3");
             default -> List.of();
         };
     }
@@ -474,7 +462,7 @@ public class NomGraphClient {
                     createDevOrganisering("fylke_4", "Vestland"),
                     createDevOrganisering("fylke_5", "Rogaland")
             );
-    };
+    }
 
     private List<OrgEnhet> getDevFylkeKontor(String fylkeId) {
         return switch (fylkeId) {
@@ -497,6 +485,43 @@ public class NomGraphClient {
             case "fylke_5" -> List.of(
                     createDevOrganisering("kommune_8", "Sandnes"),
                     createDevOrganisering("kommune_9", "Gjesdal")
+            );
+            default -> List.of();
+        };
+    }
+
+    private List<OrgEnhet> getDevLokalEnheterForLinjeenhet(String linjeenhetId) {
+        return switch (linjeenhetId) {
+            case "velferdslinjen_under_1" -> List.of(
+                    createDevOrganisering("velferdslinjen_under_1_enhet_1", "Sentral forsyningsenhet"),
+                    createDevOrganisering("velferdslinjen_under_1_enhet_2", "Styringsenhet Hjelpemidler og tilrettelegging")
+            );
+            case "ytelseslinjen_under_1" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_1_enhet_1", "Arbeid og ytelser dagpenger"),
+                    createDevOrganisering("ytelseslinjen_under_1_enhet_2", "Arbeid og Ytelser Innlandet")
+            );
+            case "ytelseslinjen_under_2" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_2_enhet_1", "Familie- og pensjonsytelser Bergen"),
+                    createDevOrganisering("ytelseslinjen_under_2_enhet_2", "Familie- og pensjonsytelser Drammen")
+            );
+            case "ytelseslinjen_under_3" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_3_enhet_1", "Kontaktsenter Agder"),
+                    createDevOrganisering("ytelseslinjen_under_3_enhet_2", "Kontaktsenter Innlandet")
+            );
+            case "ytelseslinjen_under_4" -> List.of(
+                    createDevOrganisering("ytelseslinjen_under_4_enhet_1", "Kontroll Analyse"),
+                    createDevOrganisering("ytelseslinjen_under_4_enhet_2", "Kontroll Nord")
+            );
+            case "okonomilinjen_under_1" -> List.of(
+                    createDevOrganisering("okonomilinjen_under_1_enhet_1", "Økonomiteneste")
+            );
+            case "okonomilinjen_under_2" -> List.of(
+                    createDevOrganisering("okonomilinjen_under_2_enhet_1", "Økonomi Pensjon Regnskap"),
+                    createDevOrganisering("okonomilinjen_under_2_enhet_2", "Økonomi Pensjon Utbetaling")
+            );
+            case "okonomilinjen_under_3" -> List.of(
+                    createDevOrganisering("okonomilinjen_under_3_enhet_1", "Styring og utvikling"),
+                    createDevOrganisering("okonomilinjen_under_3_enhet_2", "Økonomi")
             );
             default -> List.of();
         };
