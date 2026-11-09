@@ -54,6 +54,7 @@ export interface IKravNivaaStatusFilter {
   UNDER_REDIGERING: boolean
   FERDIG_DOKUMENTERT: boolean
   OPPFYLLES_SENERE: boolean
+  IKKE_BEHOV_FOR_REVURDERING: boolean
 }
 
 export interface ISuksesskriterieStatusFilter {
@@ -128,6 +129,7 @@ export interface INomEnhet {
 export interface INomOrganisering {
   nomAvdelingId?: string
   avdelingNavn?: string
+  forEtterlevelseILinje?: boolean
   seksjoner: INomSeksjon[]
   enheter: INomEnhet[]
   linjer: INomEnhet[]

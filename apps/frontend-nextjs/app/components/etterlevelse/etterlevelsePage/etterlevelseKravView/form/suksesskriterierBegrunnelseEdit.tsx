@@ -34,17 +34,19 @@ import {
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
+import SuksesskriterieEndringTag from '../../suksesskriterieEndringTag'
 
 type TPropsSuksesskriterierBegrunnelseEdit = {
   suksesskriterie: ISuksesskriterie[]
   disableEdit: boolean
   forGjenbruk?: boolean
   morEtterlevelse?: IEtterlevelse
+  forrigeSuksesskriterier?: ISuksesskriterie[]
 }
 
 export const SuksesskriterierBegrunnelseEdit: FunctionComponent<
   TPropsSuksesskriterierBegrunnelseEdit
-> = ({ suksesskriterie, disableEdit, forGjenbruk, morEtterlevelse }) => (
+> = ({ suksesskriterie, disableEdit, forGjenbruk, morEtterlevelse, forrigeSuksesskriterier }) => (
   <FieldWrapper>
     <FieldArray name={'suksesskriterieBegrunnelser'}>
       {(feildArrayRenderProps: FieldArrayRenderProps) => (
@@ -54,6 +56,7 @@ export const SuksesskriterierBegrunnelseEdit: FunctionComponent<
           suksesskriterier={suksesskriterie}
           forGjenbruk={forGjenbruk}
           morEtterlevelse={morEtterlevelse}
+          forrigeSuksesskriterier={forrigeSuksesskriterier}
         />
       )}
     </FieldArray>
@@ -66,6 +69,7 @@ type TPropsKriterieBegrunnelseList = {
   disableEdit: boolean
   forGjenbruk?: boolean
   morEtterlevelse?: IEtterlevelse
+  forrigeSuksesskriterier?: ISuksesskriterie[]
 }
 
 const KriterieBegrunnelseList: FunctionComponent<TPropsKriterieBegrunnelseList> = ({
@@ -74,6 +78,7 @@ const KriterieBegrunnelseList: FunctionComponent<TPropsKriterieBegrunnelseList> 
   disableEdit,
   forGjenbruk,
   morEtterlevelse,
+  forrigeSuksesskriterier,
 }) => {
   const suksesskriterieBegrunnelser = fieldArrayRenderProps.form.values
     .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
@@ -93,6 +98,7 @@ const KriterieBegrunnelseList: FunctionComponent<TPropsKriterieBegrunnelseList> 
             totalSuksesskriterie={suksesskriterier.length}
             forGjenbruk={forGjenbruk}
             morEtterlevelse={morEtterlevelse}
+            forrigeSuksesskriterier={forrigeSuksesskriterier}
           />
         </div>
       ))}
@@ -111,6 +117,7 @@ type TPropsKriterieBegrunnelse = {
   totalSuksesskriterie: number
   forGjenbruk?: boolean
   morEtterlevelse?: IEtterlevelse
+  forrigeSuksesskriterier?: ISuksesskriterie[]
 }
 
 const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
@@ -124,6 +131,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
   totalSuksesskriterie,
   forGjenbruk,
   morEtterlevelse,
+  forrigeSuksesskriterier,
 }) => {
   const suksesskriterieBegrunnelse = getSuksesskriterieBegrunnelse(
     suksesskriterieBegrunnelser,
@@ -259,9 +267,16 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
       borderWidth='3'
       borderRadius='8'
     >
-      <BodyShort>
-        Suksesskriterium {index + 1} av {totalSuksesskriterie}
-      </BodyShort>
+      <div className='flex flex-wrap items-center gap-3 mb-4'>
+        <BodyShort>
+          Suksesskriterium {index + 1} av {totalSuksesskriterie}
+        </BodyShort>
+        <SuksesskriterieEndringTag
+          suksesskriterie={suksesskriterie}
+          sammenlignMed={forrigeSuksesskriterier}
+          versjon='gjeldende'
+        />
+      </div>
 
       <div className='flex flex-col gap-4 mb-4'>
         <Heading size='xsmall' level='3'>
@@ -397,8 +412,8 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
           </Alert>
         )}
 
-      <div className='w-full mt-5'>
-        <div className='min-w-fit'>
+      <div className='w-full mt-5 bg-blue-50 rounded-lg p-4'>
+        <div>
           <RadioGroup
             id={'suksesskriterieStatus_' + index}
             value={suksessKriterieStatus}
@@ -428,7 +443,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                   </ReadMore>
                 )}
               </div>
-              <div className='block lg:flex lg:gap-6'>
+              <div className='block lg:flex lg:flex-wrap lg:gap-x-4 [&_label]:whitespace-nowrap'>
                 <Radio value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</Radio>
                 <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
                 <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>

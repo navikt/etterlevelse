@@ -53,7 +53,7 @@ const PvoSendInnTilbakemeldingsHistorikk: FunctionComponent<TProps> = ({
                 <Accordion className='mt-3'>
                   {vurderingerForVersjon.map((vurdering: IVurdering) => (
                     <Accordion.Item key={`vurdering_${vurdering.innsendingId}`}>
-                      <Accordion.Header>
+                      <Accordion.Header className='sticky top-0 z-1 bg-white'>
                         {vurdering.innsendingId}. tilbakemelding -{' '}
                         {moment(vurdering.sendtDato).format('LL')}
                       </Accordion.Header>

@@ -99,6 +99,12 @@ export const KravNivaaStatusFilter: FunctionComponent<IKravNivaaStatusFilterProp
         >
           Oppfylles senere
         </ActionMenu.CheckboxItem>
+        <ActionMenu.CheckboxItem
+          checked={kravNivaaStatusFilter.IKKE_BEHOV_FOR_REVURDERING}
+          onCheckedChange={() => handleCheckboxChange('IKKE_BEHOV_FOR_REVURDERING')}
+        >
+          Ikke behov for revurdering
+        </ActionMenu.CheckboxItem>
       </ActionMenu.Content>
     </ActionMenu>
   )

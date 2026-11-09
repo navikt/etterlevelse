@@ -1,7 +1,8 @@
 'use client'
 
 import { LinkIcon, XMarkIcon } from '@navikt/aksel-icons'
-import { Editor } from '@tiptap/react'
+import { TextSelection } from '@tiptap/pm/state'
+import { Editor, useEditorState } from '@tiptap/react'
 import { useEffect, useRef, useState } from 'react'
 import { ettlevColors } from '@/util/theme/theme'
 import { highlightColors, textColors } from './extensions'
@@ -97,20 +98,64 @@ export const Toolbar = ({
   const colorPickerRef = usePopover(showColorPicker, () => setShowColorPicker(false))
   const textColorPickerRef = usePopover(showTextColorPicker, () => setShowTextColorPicker(false))
 
-  const getBlockType = () => {
-    if (editor.isActive('blockquote')) return 'blockquote'
-    else if (editor.isActive('codeBlock')) return 'codeBlock'
-    else if (editor.isActive('heading', { level: 2 })) return 'h2'
-    else if (editor.isActive('heading', { level: 3 })) return 'h3'
-    else if (editor.isActive('heading', { level: 4 })) return 'h4'
-    else if (editor.isActive('heading', { level: 5 })) return 'h5'
-    else if (editor.isActive('heading', { level: 6 })) return 'h6'
-    return 'normal'
+  const getBlockType = (editor: Editor) => {
+    const { doc, selection } = editor.state
+    const blockTypes = new Set<string>()
+
+    // isActive() fails for select-all (Cmd+A), so inspect the textblocks in the selection directly.
+    doc.nodesBetween(selection.from, selection.to, (node, pos) => {
+      if (!node.isTextblock) return true
+      const $pos = doc.resolve(pos)
+      const inBlockquote = Array.from({ length: $pos.depth + 1 }, (_, depth) =>
+        $pos.node(depth)
+      ).some((ancestor) => ancestor.type.name === 'blockquote')
+
+      if (inBlockquote) blockTypes.add('blockquote')
+      else if (node.type.name === 'codeBlock') blockTypes.add('codeBlock')
+      else if (node.type.name === 'heading') blockTypes.add(`h${node.attrs.level}`)
+      else blockTypes.add('normal')
+      return false
+    })
+
+    if (blockTypes.size === 0) return 'normal'
+    return blockTypes.size === 1 ? [...blockTypes][0] : 'mixed'
   }
-  const currentBlockType = getBlockType()
+
+  const editorState = useEditorState({
+    editor,
+    selector: ({ editor }) => ({
+      blockType: getBlockType(editor),
+      isBold: editor.isActive('bold'),
+      isItalic: editor.isActive('italic'),
+      isUnderline: editor.isActive('underline'),
+      isBulletList: editor.isActive('bulletList'),
+      isOrderedList: editor.isActive('orderedList'),
+      isLink: editor.isActive('link'),
+      canUndo: editor.can().undo(),
+      canRedo: editor.can().redo(),
+    }),
+  })
+  const currentBlockType = editorState.blockType
 
   const setBlockType = (value: string) => {
-    const chain = editor.chain().focus()
+    const chain = editor
+      .chain()
+      .focus()
+      .command(({ tr }) => {
+        // Block types apply to whole textblocks, so move a partial selection into its own block first.
+        const { from, to, $from, $to, empty } = tr.selection
+        if (empty || !$from.sameParent($to) || !$from.parent.isTextblock) return true
+
+        const splitAtStart = from > $from.start()
+        const splitAtEnd = to < $to.end()
+        if (splitAtEnd) tr.split(to)
+        if (splitAtStart) tr.split(from)
+
+        const offset = splitAtStart ? 2 : 0
+        tr.setSelection(TextSelection.create(tr.doc, from + offset, to + offset))
+        return true
+      })
+
     if (value === 'normal') {
       chain.setParagraph().run()
     } else if (value === 'blockquote') {
@@ -155,14 +200,14 @@ export const Toolbar = ({
       <div className='rdw-inline-wrapper' role='group' aria-label='Tekststil'>
         <ToolbarButton
           label='Bold'
-          active={editor.isActive('bold')}
+          active={editorState.isBold}
           onClick={() => editor.chain().focus().toggleBold().run()}
         >
           <b>B</b>
         </ToolbarButton>
         <ToolbarButton
           label='Italic'
-          active={editor.isActive('italic')}
+          active={editorState.isItalic}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         >
           <i>I</i>
@@ -170,7 +215,7 @@ export const Toolbar = ({
         {withUnderline && (
           <ToolbarButton
             label='Underline'
-            active={editor.isActive('underline')}
+            active={editorState.isUnderline}
             onClick={() => editor.chain().focus().toggleUnderline().run()}
           >
             <u>U</u>
@@ -185,6 +230,9 @@ export const Toolbar = ({
           onChange={(event) => setBlockType(event.target.value)}
           className='rdw-dropdown-wrapper'
         >
+          <option value='mixed' disabled hidden>
+            Blandet
+          </option>
           <option value='normal'>Normal</option>
           <option value='h2'>H2</option>
           <option value='h3'>H3</option>
@@ -199,14 +247,14 @@ export const Toolbar = ({
       <div className='rdw-list-wrapper' role='group' aria-label='List'>
         <ToolbarButton
           label='Unordered'
-          active={editor.isActive('bulletList')}
+          active={editorState.isBulletList}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
           •
         </ToolbarButton>
         <ToolbarButton
           label='Ordered'
-          active={editor.isActive('orderedList')}
+          active={editorState.isOrderedList}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >
           1.
@@ -216,13 +264,13 @@ export const Toolbar = ({
       <div className='rdw-link-wrapper' role='group' aria-label='Link' ref={linkFormRef}>
         <ToolbarButton
           label='Link'
-          active={editor.isActive('link')}
+          active={editorState.isLink}
           expanded={showLinkForm}
           onClick={openLinkForm}
         >
           <LinkIcon aria-hidden />
         </ToolbarButton>
-        {editor.isActive('link') && (
+        {editorState.isLink && (
           <ToolbarButton label='Unlink' onClick={removeLink}>
             Fjern lenke
           </ToolbarButton>
@@ -252,14 +300,14 @@ export const Toolbar = ({
         <div className='rdw-history-wrapper'>
           <ToolbarButton
             label='Undo'
-            disabled={!editor.can().undo()}
+            disabled={!editorState.canUndo}
             onClick={() => editor.chain().focus().undo().run()}
           >
             ↶
           </ToolbarButton>
           <ToolbarButton
             label='Redo'
-            disabled={!editor.can().redo()}
+            disabled={!editorState.canRedo}
             onClick={() => editor.chain().focus().redo().run()}
           >
             ↷

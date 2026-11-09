@@ -103,18 +103,17 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
                 </InfoCard>
               </div>
 
-              {relevantMeldingTilPvo.length !== 0 &&
-                ['', null].includes(relevantMeldingTilPvo[0].sendtTilPvoDato) && (
-                  <InfoCard data-color='info' className='my-5'>
-                    <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
-                      <InfoCard.Title>Innsending trukket</InfoCard.Title>
-                    </InfoCard.Header>
-                    <InfoCard.Content>
-                      Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en
-                      blir deretter behandlet som en ny innsending
-                    </InfoCard.Content>
-                  </InfoCard>
-                )}
+              {pvkDokument.innsendingTrukket && (
+                <InfoCard data-color='info' className='my-5'>
+                  <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
+                    <InfoCard.Title>Innsending trukket</InfoCard.Title>
+                  </InfoCard.Header>
+                  <InfoCard.Content>
+                    Etter at dere blir ferdig med endringer, må dere sende inn på nytt. PVK-en blir
+                    deretter behandlet som en ny innsending
+                  </InfoCard.Content>
+                </InfoCard>
+              )}
 
               {errorSummaryComponent}
 
@@ -149,6 +148,7 @@ const VurdertAvPvoOgTrengerMerArbeidFields: FunctionComponent<TProps> = ({
                       'antallInnsendingTilPvo',
                       pvkDokument.antallInnsendingTilPvo + 1
                     )
+                    await setFieldValue('innsendingTrukket', false)
                     await submitForm()
                   }}
                 >

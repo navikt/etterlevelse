@@ -67,6 +67,7 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
     UNDER_REDIGERING: true,
     FERDIG_DOKUMENTERT: true,
     OPPFYLLES_SENERE: true,
+    IKKE_BEHOV_FOR_REVURDERING: true,
   })
 
   const [suksesskriterieStatusFilter, setSuksesskriterieStatusFilter] =
@@ -117,6 +118,7 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
     let utgaattStatusListe: TKravQL[] = utgaattStats.filter(
       (krav: TKravQL) => !relevantKravnummer.has(krav.kravNummer)
     )
+
     if (Object.values(kravNivaaStatusFilter).some((value) => value !== true)) {
       relevanteStatusListe = filterKravEtterlevelseStatus(
         kravNivaaStatusFilter,

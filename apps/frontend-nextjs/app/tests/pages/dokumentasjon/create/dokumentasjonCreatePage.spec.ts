@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test'
+import { EEtterlevelseDokumentSchemaMelding } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -134,9 +135,12 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await context.route(
       `**/nom/seksjon/avdeling/${oppretteEtterlevelsesdokument.departmentId}`,
       async (route) => {
-        await route.fulfill({ json: [] })
+        await route.fulfill({ json: [{ id: 'seksjon-1', navn: 'Seksjon 1' }] })
       }
     )
+    await context.route('**/nom/enhet/seksjon/seksjon-1', async (route) => {
+      await route.fulfill({ json: [] })
+    })
     await context.route('**/etterlevelsedokumentasjon', async (route) => {
       expect(route.request().method()).toBe('POST')
       expect(route.request().postDataJSON()).toMatchObject({
@@ -145,6 +149,8 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         nomOrganisering: {
           nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
           avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
+          seksjoner: [{ nomSeksjonId: 'seksjon-1', nomSeksjonName: 'Seksjon 1' }],
+          forEtterlevelseILinje: false,
         },
         resources: [mockIdent],
         varslingsadresser: [{ type: 'EPOST', adresse: oppretteEtterlevelsesdokument.email }],
@@ -178,6 +184,24 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByLabel('Avdeling').selectOption(oppretteEtterlevelsesdokument.departmentId)
 
     await expect(titleField).toHaveValue(oppretteEtterlevelsesdokument.title)
+    await page.getByRole('button', { name: 'Opprett', exact: true }).click()
+
+    const lineCompliance = page.getByRole('radiogroup', {
+      name: 'Hvem har ansvar for etterlevelsen?',
+    })
+    await expect(
+      lineCompliance.getByText(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE, {
+        exact: true,
+      })
+    ).toBeVisible()
+    await expect(
+      page.getByRole('link', {
+        name: EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE,
+      })
+    ).toHaveAttribute('href', '#forEtterlevelseILinje')
+    await expect(page.locator('#forEtterlevelseILinje')).toBeVisible()
+    await lineCompliance.getByRole('radio', { name: 'Seksjon', exact: true }).check()
+    await page.getByRole('combobox', { name: 'Seksjon', exact: true }).selectOption('seksjon-1')
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()
 
     await expect(page).toHaveURL(

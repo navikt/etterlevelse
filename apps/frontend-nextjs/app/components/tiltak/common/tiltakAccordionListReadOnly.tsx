@@ -33,7 +33,7 @@ const TiltakAccordionListReadOnly = (props: IProps) => {
           moment(tiltak.changeStamp.lastModifiedDate).isAfter(nyttInnholdBaseline)
         return (
           <Accordion.Item key={tiltak.id}>
-            <Accordion.Header>
+            <Accordion.Header className='sticky top-0 z-1 bg-white'>
               {tiltak.navn}&nbsp;&nbsp;{isChangesMade && <NyttInnholdTag />}
               <div className='flex gap-2'>
                 {!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name && (

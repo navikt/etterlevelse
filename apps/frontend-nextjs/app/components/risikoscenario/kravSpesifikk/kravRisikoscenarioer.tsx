@@ -232,6 +232,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                         <Accordion.Header
                           id={risikoscenario.id}
                           ref={expanded ? accordionHeaderRef : undefined}
+                          className={expanded ? 'sticky top-0 z-10 bg-white' : undefined}
                         >
                           <div className='flex items-center gap-2'>{risikoscenario.navn}</div>
                           {(isIkkeFerdigUtfylt(risikoscenario) ||

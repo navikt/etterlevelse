@@ -51,10 +51,10 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
     @Query(value="delete from risikoscenario_tiltak_relation", nativeQuery = true)
     int deleteAllTiltakRisikoscenarioRelations();
 
-    @Query(value = "select * from tiltak where (data ->> 'frist')::date = cast(?1 as date) + 3 and data ->> 'iverksatt' = 'false'", nativeQuery = true)
+    @Query(value = "select * from tiltak where NULLIF(data ->> 'frist', '')::date = cast(?1 as date) + 3 and data ->> 'iverksatt' = 'false'", nativeQuery = true)
     List<Tiltak> findTiltakMedFristOm3Dager(LocalDate timestamp);
 
-    @Query(value = "select * from tiltak where (data ->> 'frist')::date + 1 = cast(?1 as date) and data ->> 'iverksatt' = 'false'", nativeQuery = true)
+    @Query(value = "select * from tiltak where NULLIF(data ->> 'frist', '')::date + 1 = cast(?1 as date) and data ->> 'iverksatt' = 'false'", nativeQuery = true)
     List<Tiltak> findTiltakMedFristPassert1Dag(LocalDate timestamp);
 
     @Query(value = "select * from (" +
@@ -63,5 +63,3 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
             ") latest where date_trunc('month', last_modified_date) <= date_trunc('month', now() - interval '6 months')", nativeQuery = true)
     List<Tiltak> findOnePerDokumentasjonMedLastModifiedEldreEnn6mnd();
 }
-
-

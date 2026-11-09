@@ -10,7 +10,7 @@ import {
   TextField,
   useDatepicker,
 } from '@navikt/ds-react'
-import { Field, FieldArray, FieldArrayRenderProps, FieldProps } from 'formik'
+import { Field, FieldArray, FieldArrayRenderProps, FieldProps, getIn } from 'formik'
 import React, { ChangeEvent, ReactNode, useContext, useRef, useState } from 'react'
 import { Error } from '@/components/common/modalSchema/ModalSchema'
 import { TOption, TOr } from '@/constants/commonConstants'
@@ -110,7 +110,7 @@ export const BoolField = (props: IPropsBoolField) => {
               onChange={(value) => {
                 fieldProps.form.setFieldValue(name, radioToBool(value))
               }}
-              error={fieldProps.form.errors[name] && <FormError fieldName={name} />}
+              error={getIn(fieldProps.form.errors, name) && <FormError fieldName={name} />}
             >
               <Stack
                 gap='space-0 space-6'

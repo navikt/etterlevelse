@@ -24,7 +24,10 @@ import {
   mapEtterlevelseToFormValue,
 } from '@/api/etterlevelse/etterlevelseApi'
 import { DateField } from '@/components/common/inputs'
-import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
+import {
+  UnsavedChangesGuard,
+  bypassUnsavedGuard,
+} from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
 import EtterlevelseCard from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
 import {
   ERelationType,
@@ -36,7 +39,7 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { EKravStatus, TKravQL } from '@/constants/krav/kravConstants'
+import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { sporInnblikkHendelse } from '@/util/analytics/innblikk'
 import { env } from '@/util/env/env'
@@ -66,6 +69,7 @@ type TEditProps = {
   forrigeTema?: TKravNavigationTarget
   nesteTema?: TKravNavigationTarget
   kravGrupper?: TKravNavigationGroup[]
+  forrigeSuksesskriterier?: ISuksesskriterie[]
 }
 
 const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
@@ -85,6 +89,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   forrigeTema,
   nesteTema,
   kravGrupper,
+  forrigeSuksesskriterier,
 }) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
@@ -166,7 +171,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
             _.sortBy(initialValues.suksesskriterieBegrunnelser, 'suksesskriterieId'),
             _.sortBy(values.suksesskriterieBegrunnelser, 'suksesskriterieId')
           )
-          submit({
+          return submit({
             ...values,
             ikkeBehovForRevurdering: suksesskriterieBegrunnelserUnchanged
               ? values.ikkeBehovForRevurdering
@@ -204,6 +209,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
           setFieldError,
           setFieldValue,
           resetForm,
+          validateForm,
           dirty,
         }: FormikProps<IEtterlevelse>) => (
           <div className='w-full'>
@@ -282,6 +288,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                       suksesskriterie={krav.suksesskriterier}
                       forGjenbruk={etterlevelseDokumentasjon?.forGjenbruk}
                       morEtterlevelse={morEtterlevelse}
+                      forrigeSuksesskriterier={forrigeSuksesskriterier}
                     />
                   </div>
 
@@ -508,16 +515,39 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                       <Modal
                         onClose={() => setPendingNavUrl(undefined)}
                         header={{
-                          heading: 'Vil du gå videre uten å lagre endringene dine?',
+                          heading: 'Vil du lagre endringene dine før du går videre?',
                           closeButton: false,
                         }}
                         open={!!pendingNavUrl}
                       >
-                        <Modal.Body>
-                          Du har endringer som ikke er lagret. Hvis du går videre nå, blir de ikke
-                          lagret.
-                        </Modal.Body>
                         <Modal.Footer>
+                          <Button
+                            type='button'
+                            disabled={isSubmitting}
+                            onClick={async () => {
+                              const url = pendingNavUrl
+                              if (!url) return
+                              await setFieldValue(
+                                'status',
+                                values.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT ||
+                                  !isOppfylesSenere
+                                  ? EEtterlevelseStatus.UNDER_REDIGERING
+                                  : EEtterlevelseStatus.OPPFYLLES_SENERE
+                              )
+                              const formErrors = await validateForm()
+                              if (Object.keys(formErrors).length > 0) {
+                                setPendingNavUrl(undefined)
+                                setSubmitClick(!submitClick)
+                                return
+                              }
+                              await submitForm()
+                              bypassUnsavedGuard()
+                              // Hard navigation skips the "changes saved" modal opened after submit
+                              window.location.assign(url)
+                            }}
+                          >
+                            Lagre og fortsett
+                          </Button>
                           <Button
                             type='button'
                             variant='secondary'
@@ -588,6 +618,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                 etterlevelse={values}
                 suksesskriterier={krav.suksesskriterier}
                 tidligereEtterlevelser={tidligereEtterlevelser}
+                forrigeSuksesskriterier={forrigeSuksesskriterier}
               />
             )}
           </div>

@@ -1,7 +1,7 @@
 # Etterlevelse – UML Architecture & Domain Model
 
 **Date created:** 26 March 2026
-**Last updated:** 15 April 2026
+**Last updated:** 3 November 2026
 
 ---
 
@@ -17,7 +17,8 @@
 8. [Action Menu Button State Machines](#action-menu-button-state-machines)
 9. [Dashboard Traffic Light Colors](#dashboard-traffic-light-colors)
 10. [Dashboard Vis Figurer – Status & Count Logic](#dashboard-vis-figurer--status--count-logic)
-11. [Sequence Diagrams](#sequence-diagrams)
+11. [Krav Page Side Panel – Svarhistorikk](#krav-page-side-panel--svarhistorikk)
+12. [Sequence Diagrams](#sequence-diagrams)
 
 ---
 
@@ -46,7 +47,7 @@ Alternatively, both platforms: click the **split preview** icon (📄 with magni
 
 ```mermaid
 graph TD
-    subgraph FrontendNext["Frontend-NextJS (Next.js 14)"]
+    subgraph FrontendNext["Frontend-NextJS (Next.js 16)"]
         NX_Pages["App Router Pages\n(Etterlevelse, Krav, PVK, PVO)"]
         NX_API["API Layer\n(axios + Apollo Client)"]
         NX_Pages --> NX_API
@@ -65,6 +66,10 @@ graph TD
             C_AOO["BehandlingensArtOgOmfangController"]
             C_BL["BehandlingensLivslopController"]
             C_TB["TilbakemeldingController"]
+            C_EM["EtterlevelseMetadataController"]
+            C_DR["DocumentRelationController"]
+            C_DB["DashboardController"]
+            C_P360["P360Controller"]
         end
 
         subgraph GQL["GraphQL Controllers"]
@@ -93,6 +98,7 @@ graph TD
             INT_S["SlackClient"]
             INT_NOM["NOM API"]
             INT_A["ArdoqClient"]
+            INT_P360["P360 (arkiv)"]
         end
 
         REST --> Services
@@ -121,18 +127,19 @@ graph TD
 
 ## System Architecture Overview
 
-| Layer                    | Technology                                        | Role                                                                      |
-| ------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------- |
-| **Frontend**             | Next.js 14 (App Router), TypeScript, Tailwind CSS | UI — pages, forms, navigation                                             |
-| **API Client**           | axios (REST), Apollo Client (GraphQL)             | Communicates with backend                                                 |
-| **Backend**              | Spring Boot 3, Java, Spring GraphQL               | REST + GraphQL API, business logic                                        |
-| **Auth**                 | NAV SSO / cookie-based                            | Authenticates users via `withCredentials`                                 |
-| **Database**             | PostgreSQL                                        | Stores all domain data as rows + JSONB                                    |
-| **Teamcat**              | External NAV service                              | Resolves team and resource (person) data                                  |
-| **Behandlingskatalogen** | External NAV service                              | Resolves `Behandling` and `DpBehandling`                                  |
-| **NOM**                  | External NAV service                              | Resolves organisational units (avdelinger)                                |
-| **Slack**                | External Slack API                                | Resolves Slack channels and users for varslingsadresser                   |
-| **Ardoq**                | External Ardoq API                                | Resolves system metadata (`ardoqSystemIds`) for EtterlevelseDokumentasjon |
+| Layer                    | Technology                                                                                | Role                                                                      |
+| ------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Frontend**             | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Aksel (`@navikt/ds-react`) | UI — pages, forms, navigation                                             |
+| **API Client**           | axios (REST), Apollo Client 4 (GraphQL)                                                   | Communicates with backend                                                 |
+| **Backend**              | Spring Boot 4, Java 25, Spring GraphQL                                                    | REST + GraphQL API, business logic                                        |
+| **Auth**                 | NAV SSO / cookie-based                                                                    | Authenticates users via `withCredentials`                                 |
+| **Database**             | PostgreSQL                                                                                | Stores all domain data as rows + JSONB                                    |
+| **Teamcat**              | External NAV service                                                                      | Resolves team and resource (person) data                                  |
+| **Behandlingskatalogen** | External NAV service                                                                      | Resolves `Behandling` and `DpBehandling`                                  |
+| **NOM**                  | External NAV service                                                                      | Resolves organisational units (avdelinger)                                |
+| **Slack**                | External Slack API                                                                        | Resolves Slack channels and users for varslingsadresser                   |
+| **Ardoq**                | External Ardoq API                                                                        | Resolves system metadata (`ardoqSystemIds`) for EtterlevelseDokumentasjon |
+| **P360**                 | External NAV archive (Public 360)                                                         | Archives etterlevelsesdokumentasjon and looks up cases/documents          |
 
 ---
 
@@ -161,10 +168,28 @@ classDiagram
         +String navn
         +String beskrivelse
         +String hensikt
+        +String versjonEndringer
+        +LocalDateTime aktivertDato
         +KravStatus status
         +List~Regelverk~ regelverk
         +List~Suksesskriterium~ suksesskriterier
         +List~Varslingsadresse~ varslingsadresser
+    }
+
+    class Suksesskriterium {
+        +int id
+        +String navn
+        +String beskrivelse
+        +Boolean behovForBegrunnelse
+    }
+
+    class SuksesskriteriumBegrunnelse {
+        +int suksesskriterieId
+        +String begrunnelse
+        +SuksesskriterieStatus suksesskriterieStatus
+        +Boolean veiledning
+        +String veiledningsTekst
+        +String veiledningsTekst2
     }
 
     class Etterlevelse {
@@ -174,6 +199,8 @@ classDiagram
         +Integer kravVersjon
         +EtterlevelseStatus status
         +Boolean etterleves
+        +Boolean ikkeBehovForRevurdering
+        +LocalDateTime endretInnholdDato
         +List~SuksesskriteriumBegrunnelse~ suksesskriterieBegrunnelser
     }
 
@@ -273,6 +300,9 @@ classDiagram
     Risikoscenario "0..*" <--> "0..*" Tiltak : tilknyttes
     Risikoscenario "0..*" --> "0..*" Krav : relevant for
     Krav "1" --> "0..*" Etterlevelse : etterlevd i
+    Krav "1" *-- "1..*" Suksesskriterium : har
+    Etterlevelse "1" *-- "0..*" SuksesskriteriumBegrunnelse : besvarer
+    SuksesskriteriumBegrunnelse "0..*" --> "1" Suksesskriterium : suksesskriterieId
     Krav "1" --> "0..*" Tilbakemelding : mottar
     Krav "0..*" --> "0..1" KravPriorityList : prioritert i
 ```
@@ -295,6 +325,16 @@ classDiagram
 | `/behandlingens-art-og-omfang`             | GET, POST, PUT, DELETE |
 | `/behandlingenslivslop`                    | GET, POST, PUT, DELETE |
 | `/tilbakemelding`                          | GET, POST, DELETE      |
+| `/etterlevelsemetadata`                    | GET, POST, PUT, DELETE |
+| `/documentrelation`                        | GET, POST, PUT, DELETE |
+| `/kravprioritylist`                        | GET, POST, PUT, DELETE |
+| `/dashboard`                               | GET                    |
+| `/statistikk`                              | GET                    |
+| `/export`                                  | GET                    |
+| `/ardoq`                                   | GET                    |
+| `/p360`                                    | GET, POST              |
+| `/dpbehandling`                            | GET                    |
+| `/begrep`                                  | GET                    |
 | `/team`                                    | GET                    |
 | `/behandling`                              | GET                    |
 | `/codelist`                                | GET, POST, PUT, DELETE |
@@ -639,6 +679,75 @@ computed identically; only the input document list and active krav list differ.
 
 ---
 
+## Krav Page Side Panel – Svarhistorikk
+
+On the krav page (`/dokumentasjon/:id/:tema/krav/:kravNummer/:kravVersjon`) the right-hand side
+panel (`etterlevelseSidePanel.tsx`) has the tabs **Mer om kravet**, **PVK-dokumentasjon** (when
+relevant), **Svarhistorikk** and **Notat**. Svarhistorikk (`svarhistorikk.tsx`) shows how the
+etterlever answered an earlier version of the same krav, so answers can be compared or reused after
+the kraveier publishes a new version. No backend changes were needed — everything is derived from
+existing `Krav` versions and `Etterlevelse` records.
+
+### Which earlier version is used (`forrigeKrav`)
+
+Computed in `etterlevelseKravView.tsx`:
+
+1. The highest `kravVersjon` below the current one that has an `Etterlevelse` for this
+   etterlevelsesdokumentasjon (from `tidligereEtterlevelser`).
+2. If none exists, fall back to the nearest earlier non-`UTKAST` krav version (used only for the
+   change tags on the current version — the tab itself is hidden).
+
+```mermaid
+flowchart TD
+    A[Open krav K.n] --> B{Earlier krav versions exist?}
+    B -- No --> Z[No Svarhistorikk tab, no change tags]
+    B -- Yes --> C{Etterlevelse saved on any earlier version?}
+    C -- No --> D[forrigeKrav = version directly before<br/>Tab hidden<br/>Change tags shown on current version]
+    C -- Yes --> E[forrigeKrav = latest documented earlier version<br/>Tab shown]
+    E --> F{Skipped versions without etterlevelse?}
+    F -- Yes --> G[Show explanation text:<br/>'Det finnes ingen dokumentasjon på K.x ...']
+    F -- No --> H[No explanation text]
+```
+
+### Tab content
+
+- Grey tag with `K{kravNummer}.{forrigeKrav.kravVersjon}` and "Sist endret {dato} av {navn}" from
+  the earlier etterlevelse's `changeStamp`.
+- One card per suksesskriterium **from the earlier version** ("Suksesskriterium X av Y" uses the
+  earlier numbering), inside a grey container:
+  - Name, and "Utfyllende om kriteriet" (`ReadMore`, closed by default).
+  - Status tag from `SuksesskriterieStatus`:
+
+| Status                     | Tag colour (`data-color`) |
+| -------------------------- | ------------------------- |
+| `IKKE_PAABEGYNT` / not set | `neutral`                 |
+| `UNDER_ARBEID`             | `info`                    |
+| `OPPFYLT`                  | `success`                 |
+| `IKKE_OPPFYLT`             | `danger`                  |
+| `IKKE_RELEVANT`            | `brand-beige`             |
+
+- Begrunnelse block, based on `behovForBegrunnelse` on the **earlier** suksesskriterium:
+
+| Case                                                  | Shown                                                                            |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Not required                                          | InfoCard (info): "Suksesskriteriet krevde ingen begrunnelse."                    |
+| Required, no status (or `IKKE_PAABEGYNT`) and no text | InfoCard (info): "Suksesskriteriet ble ikke besvart."                            |
+| Required, text written (any status)                   | Status-specific label + the answer + "Kopier teksten" (`CopyButton`)             |
+| Required, status set but no text                      | Status-specific label + Inline (info): "Etterleveren skrev ikke en begrunnelse." |
+
+### Change tags between versions (`suksesskriterieEndringTag.tsx`)
+
+Suksesskriterier are matched across versions by `id`. A suksesskriterium counts as changed when
+`navn`, `beskrivelse` or `behovForBegrunnelse` differ (leading/trailing whitespace ignored).
+
+| Where                                                  | Condition                  | Tag (outline)                                                                                                  |
+| ------------------------------------------------------ | -------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Current version (edit form and read-only/preview view) | `id` not in `forrigeKrav`  | Nytt suksesskriterium                                                                                          |
+| Current version and Svarhistorikk                      | Same `id`, content changed | Endringer i suksesskriterium                                                                                   |
+| Svarhistorikk                                          | `id` not in current krav   | Utgått suksesskriterium + Inline (warning): "Dette suksesskriteriet har blitt slettet i nåværende kravversjon" |
+
+---
+
 ## Sequence Diagrams
 
 ### 1. User loads an Etterlevelse documentation page
@@ -741,4 +850,28 @@ sequenceDiagram
     Backend->>DB: SELECT all tiltak for pvk_dokument
     Backend-->>NextJS: PvkDokumentResponse (hasPvkDocumentBeenUpdatedAfterApproval=false)
     NextJS-->>Risikoeier: Show approved state
+```
+
+### 6. Etterlever opens a krav with Svarhistorikk
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant NextJS as Frontend-NextJS
+    participant Backend as Backend (Spring Boot)
+    participant DB as PostgreSQL
+
+    User->>NextJS: Navigate to /dokumentasjon/:id/:tema/krav/:kravNummer/:kravVersjon
+    NextJS->>Backend: GET /etterlevelse/etterlevelseDokumentasjon/:id/:kravNummer
+    Backend->>DB: SELECT etterlevelse (all krav versions)
+    DB-->>Backend: Etterlevelse rows
+    Backend-->>NextJS: Current + tidligereEtterlevelser
+    NextJS->>Backend: GraphQL kravById (current version)
+    NextJS->>Backend: GET /krav/kravnummer/:kravNummer
+    Backend-->>NextJS: All krav versions (alleKravVersjoner)
+    NextJS->>NextJS: Pick forrigeKrav version (latest documented, else previous)
+    NextJS->>Backend: GET /krav/kravnummer/:kravNummer/:forrigeVersjon
+    Backend-->>NextJS: forrigeKrav (with suksesskriterier)
+    NextJS-->>User: Change tags on current suksesskriterier
+    NextJS-->>User: Svarhistorikk tab (only if forrige etterlevelse exists)
 ```

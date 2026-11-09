@@ -33,6 +33,10 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
 
   const nomSeksjoner = etterlevelseDokumentasjon.nomOrganisering.seksjoner
   const nomEnheter = etterlevelseDokumentasjon.nomOrganisering.enheter
+  const nomLinjer = etterlevelseDokumentasjon.nomOrganisering.linjer
+  const nomLinjeenheter = etterlevelseDokumentasjon.nomOrganisering.linjeEnheter
+  const nomLinjeFylker = etterlevelseDokumentasjon.nomOrganisering.linjeFylker
+  const nomFylkeKontorer = etterlevelseDokumentasjon.nomOrganisering.fylkeKontorer
   const nomAvdelingId = etterlevelseDokumentasjon.nomOrganisering.nomAvdelingId
   const avdelingNavn = etterlevelseDokumentasjon.nomOrganisering.avdelingNavn
 
@@ -168,37 +172,106 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               </BodyLong>
             </div>
 
-            <div className='flex items-start gap-2 mb-2.5'>
+            {etterlevelseDokumentasjon.nomOrganisering.forEtterlevelseILinje === false && (
               <div>
-                <Label size='medium'>Seksjon:</Label>
-              </div>
-              <BodyLong as='div' size='medium'>
-                {nomSeksjoner.length !== 0 && (
-                  <div className='flex flex-wrap tri'>
-                    <BodyLong size='medium'>
-                      {nomSeksjoner.map((seksjon) => seksjon.nomSeksjonName).join(', ')}
+                <div className='flex items-start gap-2 mb-2.5'>
+                  <div>
+                    <Label size='medium'>Seksjon:</Label>
+                  </div>
+                  <BodyLong as='div' size='medium'>
+                    {nomSeksjoner.length !== 0 && (
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {nomSeksjoner.map((seksjon) => seksjon.nomSeksjonName).join(', ')}
+                        </BodyLong>
+                      </div>
+                    )}
+                    {nomSeksjoner.length === 0 && 'Ikke angitt'}
+                  </BodyLong>
+                </div>
+
+                {seksjonerHaveEnheter && (
+                  <div className='flex items-start gap-2 mb-2.5'>
+                    <div>
+                      <Label size='medium'>Enhet:</Label>
+                    </div>
+                    <BodyLong as='div' size='medium'>
+                      {nomEnheter.length > 0 && (
+                        <div className='flex flex-wrap tri'>
+                          <BodyLong size='medium'>
+                            {nomEnheter.map((enhet) => enhet.nomEnhetName).join(', ')}
+                          </BodyLong>
+                        </div>
+                      )}
+                      {nomEnheter.length === 0 && 'Ikke angitt'}
                     </BodyLong>
                   </div>
                 )}
-                {nomSeksjoner.length === 0 && 'Ikke angitt'}
-              </BodyLong>
-            </div>
+              </div>
+            )}
 
-            {seksjonerHaveEnheter && (
-              <div className='flex items-start gap-2 mb-2.5'>
-                <div>
-                  <Label size='medium'>Enhet:</Label>
+            {etterlevelseDokumentasjon.nomOrganisering.forEtterlevelseILinje === true && (
+              <div>
+                <div className='flex items-start gap-2 mb-2.5'>
+                  <div>
+                    <Label size='medium'>Linje:</Label>
+                  </div>
+                  <BodyLong as='div' size='medium'>
+                    {nomLinjer.length !== 0 && (
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {nomLinjer.map((linje) => linje.nomEnhetName).join(', ')}
+                        </BodyLong>
+                      </div>
+                    )}
+                    {nomLinjer.length === 0 && 'Ikke angitt'}
+                  </BodyLong>
                 </div>
-                <BodyLong as='div' size='medium'>
-                  {nomEnheter.length > 0 && (
-                    <div className='flex flex-wrap tri'>
-                      <BodyLong size='medium'>
-                        {nomEnheter.map((enhet) => enhet.nomEnhetName).join(', ')}
-                      </BodyLong>
+
+                {nomLinjeenheter.length !== 0 && (
+                  <div className='flex items-start gap-2 mb-2.5'>
+                    <div>
+                      <Label size='medium'>Linjeenhet:</Label>
                     </div>
-                  )}
-                  {nomEnheter.length === 0 && 'Ikke angitt'}
-                </BodyLong>
+                    <BodyLong as='div' size='medium'>
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {nomLinjeenheter.map((enhet) => enhet.nomEnhetName).join(', ')}
+                        </BodyLong>
+                      </div>
+                    </BodyLong>
+                  </div>
+                )}
+
+                {nomLinjeFylker.length !== 0 && (
+                  <div className='flex items-start gap-2 mb-2.5'>
+                    <div>
+                      <Label size='medium'>Fylke:</Label>
+                    </div>
+                    <BodyLong as='div' size='medium'>
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {nomLinjeFylker.map((enhet) => enhet.nomEnhetName).join(', ')}
+                        </BodyLong>
+                      </div>
+                    </BodyLong>
+                  </div>
+                )}
+
+                {nomFylkeKontorer.length !== 0 && (
+                  <div className='flex items-start gap-2 mb-2.5'>
+                    <div>
+                      <Label size='medium'>Kontor:</Label>
+                    </div>
+                    <BodyLong as='div' size='medium'>
+                      <div className='flex flex-wrap tri'>
+                        <BodyLong size='medium'>
+                          {nomFylkeKontorer.map((enhet) => enhet.nomEnhetName).join(', ')}
+                        </BodyLong>
+                      </div>
+                    </BodyLong>
+                  </div>
+                )}
               </div>
             )}
 
@@ -209,9 +282,9 @@ export const EtterlevelseDokumentasjonExpansionCard: FunctionComponent<TProps> =
               <BodyLong size='medium'>
                 {etterlevelseDokumentasjon.risikoeiere.length > 0 &&
                   etterlevelseDokumentasjon.risikoeiereData !== undefined &&
-                  etterlevelseDokumentasjon.risikoeiereData.map(
-                    (risikoeier) => risikoeier.fullName
-                  )}
+                  etterlevelseDokumentasjon.risikoeiereData
+                    .map((risikoeier) => risikoeier.fullName)
+                    .join(', ')}
                 {etterlevelseDokumentasjon.risikoeiere.length === 0 &&
                   etterlevelseDokumentasjon.risikoeiereData?.length === 0 &&
                   'Ikke angitt'}

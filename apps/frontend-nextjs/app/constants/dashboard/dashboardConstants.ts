@@ -83,6 +83,7 @@ export interface IDashboardTable {
   oppfyltKravProsent?: number
   antallSuksesskriterierOppfylt?: number
   antallSuksesskriterierIkkeOppfylt?: number
+  suksesskriterier?: IAvdelingDashboardStats['suksesskriterier']
   ikkePaabegynt?: boolean
   sistOppdatertEtterlevelse: string
   sistGodkjentEtterlevelse?: string

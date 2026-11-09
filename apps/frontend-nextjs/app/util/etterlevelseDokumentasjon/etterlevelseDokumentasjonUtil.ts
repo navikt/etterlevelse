@@ -179,6 +179,20 @@ export const filterKravEtterlevelseStatus = (
     )
   }
 
+  if (activeStatusFilters.includes('IKKE_BEHOV_FOR_REVURDERING')) {
+    filteredData.push(
+      ...dataToFilter.filter(
+        (krav) => krav.etterlevelser.length !== 0 && krav.etterlevelser[0].ikkeBehovForRevurdering
+      )
+    )
+  } else if (!activeStatusFilters.includes('IKKE_BEHOV_FOR_REVURDERING')) {
+    return filteredData.filter(
+      (krav) =>
+        (krav.etterlevelser.length !== 0 && !krav.etterlevelser[0].ikkeBehovForRevurdering) ||
+        krav.etterlevelser.length === 0
+    )
+  }
+
   return filteredData
 }
 

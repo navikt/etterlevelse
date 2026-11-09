@@ -139,6 +139,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
               ...mockNomOrganisering,
               nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
               avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
+              forEtterlevelseILinje: false,
               seksjoner: [
                 {
                   nomSeksjonId: 'seksjon-1',

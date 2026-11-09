@@ -123,6 +123,7 @@ const TrengerRisikoeierGodkjenningFields: FunctionComponent<TProps> = ({
                         ? EPvkDokumentStatus.UNDERARBEID
                         : EPvkDokumentStatus.VURDERT_AV_PVO
                     )
+                    await setFieldValue('innsendingTrukket', true)
                     await submitForm()
                   }}
                 >

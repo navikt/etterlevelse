@@ -13,6 +13,7 @@ import no.nav.data.etterlevelse.krav.domain.KravStatus;
 import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.integration.ardoq.domain.ArdoqExportEtterlevelseDokumentField;
 import no.nav.data.integration.ardoq.domain.ArdoqSystemRelationField;
+import no.nav.data.integration.ardoq.domain.ArdoqTeamRelation;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -59,7 +60,7 @@ public class ArdoqExportService {
                 ardoqSystemRelationFields.add(
                         ArdoqSystemRelationField.builder()
                                 .ardoqId(ardoqSystems.stream().filter(s -> s.getArdoqID().equals(ardoqSystemId)).findFirst().map(ArdoqSystemResponse::getArdoqUrlId).orElse(null))
-                                .etterlevelseDokumentId(dokumentasjon.getId())
+                                .etterlevelseDokumentId(String.valueOf(dokumentasjon.getId()))
                                 .build()
                 );
             });
@@ -106,12 +107,12 @@ public class ArdoqExportService {
             ardoqExportEtterlevelseDokumentFields.add(
                     ArdoqExportEtterlevelseDokumentField.builder()
                             .etterlevelseDokumentNummer("E" + dokumentasjon.getEtterlevelseNummer())
-                            .etterlevelseDokumentId(dokumentasjon.getId())
+                            .etterlevelseDokumentId(String.valueOf(dokumentasjon.getId()))
                             .etterlevelseDokumentNavn(dokumentasjon.getTitle())
-                            .antallKrav(totalKravForEdok)
-                            .kravIkkeStartet(antallKravIkkeStartet)
-                            .kravUnderArbeid(underArbeidEtterlevelseList.size())
-                            .kravFerdig(oppfyltEtterlevelseList.size())
+                            .antallKrav(String.valueOf(totalKravForEdok))
+                            .kravIkkeStartet(String.valueOf(antallKravIkkeStartet))
+                            .kravUnderArbeid(String.valueOf(underArbeidEtterlevelseList.size()))
+                            .kravFerdig(String.valueOf(oppfyltEtterlevelseList.size()))
                             .linkTilEtterlevelsesDokument(frontendUrl + "/dokumentasjon/" + dokumentasjon.getId())
                             .teams(Optional.ofNullable(dokumentasjon.getEtterlevelseDokumentasjonData().getTeams()).orElseGet(List::of))
                             .build()
@@ -166,10 +167,11 @@ public class ArdoqExportService {
 
             int rowIndex = 1;
             int rowTeamIndex = 1;
+            List<ArdoqTeamRelation> ardoqTeamRelations = new ArrayList<>();
             for (ArdoqExportEtterlevelseDokumentField ardoqExportEtterlevelseDokumentField : ardoqExportEtterlevelseDokumentFields) {
                 var row = sheet.createRow(rowIndex++);
                 row.createCell(0).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentNummer());
-                row.createCell(1).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentId().toString());
+                row.createCell(1).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentId());
                 row.createCell(2).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentNavn());
                 row.createCell(3).setCellValue(ardoqExportEtterlevelseDokumentField.getAntallKrav());
                 row.createCell(4).setCellValue(ardoqExportEtterlevelseDokumentField.getKravIkkeStartet());
@@ -180,11 +182,19 @@ public class ArdoqExportService {
                 List<String> teams = ardoqExportEtterlevelseDokumentField.getTeams();
                 if (teams != null) {
                     for (String teamId : teams) {
-                        var teamRow = teamSheet.createRow(rowTeamIndex++);
-                        teamRow.createCell(0).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentId().toString());
-                        teamRow.createCell(1).setCellValue(teamId);
+                        ardoqTeamRelations.add(ArdoqTeamRelation.builder()
+                                .etterlevelseDokumentId(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentId())
+                                .teamId(teamId)
+                                .build());
+
                     }
                 }
+            }
+
+            for (ArdoqTeamRelation ardoqTeamRelation : ardoqTeamRelations) {
+                var teamRow = teamSheet.createRow(rowTeamIndex++);
+                teamRow.createCell(0).setCellValue(ardoqTeamRelation.getEtterlevelseDokumentId());
+                teamRow.createCell(1).setCellValue(ardoqTeamRelation.getTeamId());
             }
 
             for (int i = 0; i < headers.length; i++) {

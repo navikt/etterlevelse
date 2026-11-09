@@ -34,6 +34,7 @@ import {
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
+import { DashboardCopyLinkButton } from './DashboardCopyLinkButton'
 import { TemaDashboardHowToReadmore } from './DashboardReadmore/TemaDashboardHowToReadmore'
 import { TemaDashboardReadmore } from './DashboardReadmore/TemaDashboardReadmore'
 import { RechartsStackedBar } from './RechartsStackedBar'
@@ -492,7 +493,7 @@ const TemaDashboardPage = () => {
     searchParams.getAll('team').map((id) => ({ id, name: '' }))
   )
 
-  useUrlFilterSync({
+  const shareUrl = useUrlFilterSync({
     tema: selectedTema,
     avdeling: selectedAvdeling,
     seksjon: selectedSeksjon,
@@ -684,7 +685,16 @@ const TemaDashboardPage = () => {
                 styles={selectOverrides}
               />
             </div>
-
+          </div>
+          <RenderTagList
+            list={selectedTeams.map((team) => team.name || teamName(team.id)[0])}
+            onRemove={(index) => {
+              setIsLoading(true)
+              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
+            }}
+          />
+          <div className='flex flex-row flex-wrap items-center gap-4 mt-5 mb-8'>
+            <DashboardCopyLinkButton url={shareUrl} />
             <Button
               variant='tertiary'
               size='small'
@@ -710,13 +720,6 @@ const TemaDashboardPage = () => {
               Last ned nøkkeltall som CSV
             </Button>
           </div>
-          <RenderTagList
-            list={selectedTeams.map((team) => team.name || teamName(team.id)[0])}
-            onRemove={(index) => {
-              setIsLoading(true)
-              setSelectedTeams((prev) => prev.filter((_, i) => i !== index))
-            }}
-          />
         </div>
 
         {isLoading && (

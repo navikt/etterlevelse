@@ -18,30 +18,30 @@
         <java.version>25</java.version>
         <lombok.version>1.18.48</lombok.version>
 
-        <springdoc-openapi-starter-webmvc-ui.version>3.1.1</springdoc-openapi-starter-webmvc-ui.version>
+        <springdoc-openapi-starter-webmvc-ui.version>3.2.0</springdoc-openapi-starter-webmvc-ui.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <shedlock.version>7.10.1</shedlock.version>
         <commons-collections4.version>4.6.0</commons-collections4.version>
         <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
         <graphql.version>24.0</graphql.version>
         <flexmark.version>0.64.8</flexmark.version>
-        <microsoft-graph.version>6.71.0</microsoft-graph.version>
-        <microsoft-kiota.version>1.10.2</microsoft-kiota.version>
+        <microsoft-graph.version>6.72.0</microsoft-graph.version>
+        <microsoft-kiota.version>1.10.4</microsoft-kiota.version>
         <msal4j.version>1.26.0</msal4j.version>
         <flyway-database-postgresql.version>10.16.0</flyway-database-postgresql.version>
-        <azure-core.version>1.60.0</azure-core.version>
+        <azure-core.version>1.61.0</azure-core.version>
 
         <!-- transitive versions -->
         <commons-compress.version>1.28.0</commons-compress.version>
         <commons-io.version>2.22.0</commons-io.version>
-        <guava.version>33.7.2-jre</guava.version>
+        <guava.version>33.8.0-jre</guava.version>
         <jna.version>5.19.1</jna.version>
         <jetbrains.annotation.version>26.1.0</jetbrains.annotation.version>
 
         <!-- Test -->
         <testcontainers.version>2.0.5</testcontainers.version>
         <wiremock.version>3.0.1</wiremock.version>
-        <docx4j.version>17.3.4</docx4j.version>
+        <docx4j.version>17.3.5</docx4j.version>
     </properties>
 
     <dependencies>
@@ -107,7 +107,7 @@
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>jwks-rsa</artifactId>
-            <version>0.24.1</version>
+            <version>0.24.2</version>
         </dependency>
         <!-- ZipFile -->
         <dependency>

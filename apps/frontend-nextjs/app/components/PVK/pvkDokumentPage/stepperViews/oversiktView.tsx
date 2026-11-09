@@ -238,7 +238,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
               {kravSenario.length} kravspesifikke risikoscenario
             </Tag>
             <Tag variant={generelSenario.length === 0 ? 'neutral' : 'success'} size='xsmall'>
-              {generelSenario.length} øvrige risikoscenario
+              {generelSenario.length} ikke krav-spesifikt risikoscenario
             </Tag>
             <Tag variant={allTiltak.length === 0 ? 'neutral' : 'success'} size='xsmall'>
               {allTiltak.length} tiltak

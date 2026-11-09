@@ -59,6 +59,7 @@ const SendTilRisikoeier: FunctionComponent<TProps> = ({
           type='button'
           onClick={async () => {
             await fieldProps.form.setFieldValue('status', EPvkDokumentStatus.TRENGER_GODKJENNING)
+            await fieldProps.form.setFieldValue('innsendingTrukket', false)
             await fieldProps.form.submitForm()
           }}
         >

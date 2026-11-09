@@ -118,6 +118,7 @@ const SendTilPvo: FunctionComponent<TProps> = ({
                     'antallInnsendingTilPvo',
                     pvkDokument.antallInnsendingTilPvo + 1
                   )
+                  await fieldProps.form.setFieldValue('innsendingTrukket', false)
                   await fieldProps.form.submitForm()
                 }
               }}

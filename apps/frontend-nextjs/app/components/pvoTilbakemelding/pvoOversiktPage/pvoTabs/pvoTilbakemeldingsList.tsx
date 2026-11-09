@@ -37,7 +37,8 @@ export const PvoTilbakemeldingsList = () => {
       setIsLoading(true)
       await getAllPvkDokumentListItem().then((response: IPvkDokumentListItem[]) => {
         const filteredPvkDokument: IPvkDokumentListItem[] = response.filter(
-          (pvkDok: IPvkDokumentListItem) => pvkDok.status !== EPvkDokumentStatus.UNDERARBEID
+          (pvkDok: IPvkDokumentListItem) =>
+            pvkDok.status !== EPvkDokumentStatus.UNDERARBEID && pvkDok.antallInnsendingTilPvo > 0
         )
         setAllPvkDocumentListItem(filteredPvkDokument)
       })

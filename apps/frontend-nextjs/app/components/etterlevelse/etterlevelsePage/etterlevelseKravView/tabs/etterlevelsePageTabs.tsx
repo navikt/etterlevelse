@@ -37,7 +37,7 @@ import {
   EPvkDokumentStatus,
   IPvkDokument,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { EKravTab, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
+import { EKravTab, IKrav, IKravVersjon, TKravQL } from '@/constants/krav/kravConstants'
 import { IVurdering } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
@@ -77,6 +77,7 @@ type TProps = {
   pvkDokument?: IPvkDokument
   previousVurdering?: IVurdering
   kravGrupper: TKravNavigationGroup[]
+  forrigeKrav?: IKrav
 }
 
 const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
@@ -105,6 +106,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   previousVurdering,
   kravGrupper,
+  forrigeKrav,
 }) => {
   const params: Readonly<
     Partial<{
@@ -373,6 +375,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   forrigeTema={forrigeTema}
                   nesteTema={nesteTema}
                   kravGrupper={kravGrupper}
+                  forrigeSuksesskriterier={forrigeKrav?.suksesskriterier}
                 />
               </div>
             )}
@@ -386,6 +389,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                 suksesskriterier={krav.suksesskriterier}
                 tidligereEtterlevelser={tidligereEtterlevelser}
                 previousVurdering={previousVurdering}
+                forrigeSuksesskriterier={forrigeKrav?.suksesskriterier}
               />
               <KravNavigationButtons
                 forrigeKravUrl={forrigeKravUrl}

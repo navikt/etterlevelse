@@ -313,6 +313,7 @@ type NomEnhet {
 type NomOrganisering {
     nomAvdelingId: String
     avdelingNavn: String
+    forEtterlevelseILinje: Boolean
     seksjoner: [NomSeksjon!]!
     enheter: [NomEnhet!]!
     linjer: [NomEnhet!]!

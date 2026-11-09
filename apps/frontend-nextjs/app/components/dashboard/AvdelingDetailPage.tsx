@@ -51,6 +51,7 @@ import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentas
 import { handleSort } from '@/util/handleTableSort'
 import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
+import { DashboardCopyLinkButton } from './DashboardCopyLinkButton'
 import { AvdelingDetailReadMore } from './DashboardReadmore/AvdelingDetailReadMore'
 import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
 
@@ -117,7 +118,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
   const [searchFilters, setSearchFilters] = useState<string[]>(() => searchParams.getAll('sok'))
   const [searchValue, setSearchValue] = useState<string>('')
 
-  useUrlFilterSync({
+  const shareUrl = useUrlFilterSync({
     seksjon: selectedSeksjon,
     enhet: selectedEnhet,
     sok: searchFilters,
@@ -419,6 +420,19 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
 
     const baseStats = getCurrentStats()
 
+    const sk = doks.reduce(
+      (acc, d) => ({
+        total: acc.total + (d.suksesskriterier?.total ?? 0),
+        ikkePaabegynt: acc.ikkePaabegynt + (d.suksesskriterier?.ikkePaabegyntAntall ?? 0),
+        underArbeid: acc.underArbeid + (d.suksesskriterier?.underArbeidAntall ?? 0),
+        oppfylt: acc.oppfylt + (d.suksesskriterier?.oppfyltAntall ?? 0),
+        ikkeOppfylt: acc.ikkeOppfylt + (d.suksesskriterier?.ikkeOppfyltAntall ?? 0),
+        ikkeRelevant: acc.ikkeRelevant + (d.suksesskriterier?.ikkeRelevantAntall ?? 0),
+      }),
+      { total: 0, ikkePaabegynt: 0, underArbeid: 0, oppfylt: 0, ikkeOppfylt: 0, ikkeRelevant: 0 }
+    )
+    const skProsent = (antall: number) => (sk.total > 0 ? Math.round((antall / sk.total) * 100) : 0)
+
     return {
       ...baseStats,
       dokumenter: {
@@ -429,17 +443,17 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         godkjentAvRisikoeier: godkjent,
       },
       suksesskriterier: {
-        total: 0,
-        ikkePaabegyntAntall: 0,
-        underArbeidAntall: 0,
-        oppfyltAntall: 0,
-        ikkeOppfyltAntall: 0,
-        ikkeRelevantAntall: 0,
-        ikkePaabegyntProsent: 0,
-        underArbeidProsent: 0,
-        oppfyltProsent: 0,
-        ikkeOppfyltProsent: 0,
-        ikkeRelevantProsent: 0,
+        total: sk.total,
+        ikkePaabegyntAntall: sk.ikkePaabegynt,
+        underArbeidAntall: sk.underArbeid,
+        oppfyltAntall: sk.oppfylt,
+        ikkeOppfyltAntall: sk.ikkeOppfylt,
+        ikkeRelevantAntall: sk.ikkeRelevant,
+        ikkePaabegyntProsent: skProsent(sk.ikkePaabegynt),
+        underArbeidProsent: skProsent(sk.underArbeid),
+        oppfyltProsent: skProsent(sk.oppfylt),
+        ikkeOppfyltProsent: skProsent(sk.ikkeOppfylt),
+        ikkeRelevantProsent: skProsent(sk.ikkeRelevant),
       },
       behovForPvk: {
         totalMedPersonopplysninger: medPersonopplysninger.length,
@@ -536,56 +550,57 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       )}
 
       <div className='rounded-lg px-6 py-4' style={{ backgroundColor: '#e3eff7' }}>
-        <div className='flex gap-4 flex-wrap items-end'>
-          {data.seksjoner && data.seksjoner.length > 0 && (
-            <>
-              <Select
-                label='Velg seksjon'
-                className='mt-4 w-fit min-w-64'
-                value={selectedSeksjon}
-                onChange={(e) => {
-                  setSelectedSeksjon(e.target.value)
-                  setSelectedEnhet('')
-                }}
-              >
-                <option value=''>Alle seksjoner</option>
-                {data.seksjoner
-                  .filter((s) => s.navn !== data.avdelingNavn)
-                  .map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.navn}
-                    </option>
-                  ))}
-              </Select>
+        <div className='flex justify-between items-start gap-4'>
+          <div className='flex gap-4 flex-wrap items-end'>
+            {data.seksjoner && data.seksjoner.length > 0 && (
+              <>
+                <Select
+                  label='Velg seksjon'
+                  className='mt-4 w-fit min-w-64'
+                  value={selectedSeksjon}
+                  onChange={(e) => {
+                    setSelectedSeksjon(e.target.value)
+                    setSelectedEnhet('')
+                  }}
+                >
+                  <option value=''>Alle seksjoner</option>
+                  {data.seksjoner
+                    .filter((s) => s.navn !== data.avdelingNavn)
+                    .map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.navn}
+                      </option>
+                    ))}
+                </Select>
 
-              {selectedSeksjon &&
-                selectedSeksjon !== 'ingen-seksjon' &&
-                enhetOptions.length > 0 && (
-                  <Select
-                    label='Velg enhet'
-                    className='mt-4 w-fit min-w-64'
-                    value={selectedEnhet}
-                    onChange={(e) => setSelectedEnhet(e.target.value)}
-                  >
-                    <option value=''>Alle enheter</option>
-                    {[...enhetOptions]
-                      .sort((a, b) => a.navn.localeCompare(b.navn))
-                      .map((e) => (
-                        <option key={e.id} value={e.id}>
-                          {e.navn}
-                        </option>
-                      ))}
-                    <option value='ingen-enhet'>Ikke valgt enhet</option>
-                  </Select>
-                )}
-            </>
-          )}
+                {selectedSeksjon &&
+                  selectedSeksjon !== 'ingen-seksjon' &&
+                  enhetOptions.length > 0 && (
+                    <Select
+                      label='Velg enhet'
+                      className='mt-4 w-fit min-w-64'
+                      value={selectedEnhet}
+                      onChange={(e) => setSelectedEnhet(e.target.value)}
+                    >
+                      <option value=''>Alle enheter</option>
+                      {[...enhetOptions]
+                        .sort((a, b) => a.navn.localeCompare(b.navn))
+                        .map((e) => (
+                          <option key={e.id} value={e.id}>
+                            {e.navn}
+                          </option>
+                        ))}
+                      <option value='ingen-enhet'>Ikke valgt enhet</option>
+                    </Select>
+                  )}
+              </>
+            )}
+          </div>
         </div>
 
-        <div className='flex flex-col md:flex-row md:items-end gap-4 mt-4'>
+        <div className='mt-4'>
           <form
             role='search'
-            className='flex-1'
             onSubmit={(e) => {
               e.preventDefault()
               addSearchFilter(searchValue)
@@ -602,6 +617,20 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
               onClear={() => setSearchValue('')}
             />
           </form>
+        </div>
+
+        {searchFilters.length > 0 && (
+          <Chips className='mt-4'>
+            {searchFilters.map((filter) => (
+              <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
+                {filter}
+              </Chips.Removable>
+            ))}
+          </Chips>
+        )}
+
+        <div className='flex flex-row flex-wrap items-center gap-4 mt-5'>
+          <DashboardCopyLinkButton url={shareUrl} />
           <Button
             variant='tertiary'
             size='small'
@@ -687,16 +716,6 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
             Last ned nøkkeltallutvalg som CSV
           </Button>
         </div>
-
-        {searchFilters.length > 0 && (
-          <Chips className='mt-4'>
-            {searchFilters.map((filter) => (
-              <Chips.Removable key={filter} onDelete={() => removeSearchFilter(filter)}>
-                {filter}
-              </Chips.Removable>
-            ))}
-          </Chips>
-        )}
 
         {!isTableLoading &&
           sortedDoks.length === 0 &&
