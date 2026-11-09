@@ -80,9 +80,11 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await expect(page.getByRole('button', { name: 'Nytt etterlevelsesdokument' })).toBeVisible()
     await page.getByRole('button', { name: 'Nytt etterlevelsesdokument' }).click()
 
+    // The dev server may compile the create route on first navigation
+    await expect(page).toHaveURL(/\/dokumentasjon\/create$/, { timeout: 15000 })
     await expect(
       page.getByRole('heading', { name: 'Opprett nytt etterlevelsesdokument' })
-    ).toBeVisible()
+    ).toBeVisible({ timeout: 15000 })
   })
 
   test('fylle ut miniumskriteriene for «Opprett nytt etterlevelsesdokument» skjemaet og deretter opprette det', async ({

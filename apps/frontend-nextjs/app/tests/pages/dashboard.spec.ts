@@ -159,7 +159,8 @@ for (const path of [
     })
 
     try {
-      await page.goto(`http://localhost:3000${path}`)
+      // WebKit delays the load event while the held fetch is pending
+      await page.goto(`http://localhost:3000${path}`, { waitUntil: 'domcontentloaded' })
       const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
       await expect(table).toHaveAttribute('aria-busy', 'true')
       const skeletonRows = table.locator('tbody tr[aria-hidden="true"]')
