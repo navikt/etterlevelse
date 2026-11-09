@@ -582,6 +582,10 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
             </div>
 
+            <Heading level='2' size='small' className='mt-7'>
+              Ansvar for etterlevelsen
+            </Heading>
+
             <EtterlevelseDokumentNomOrganiseringForm
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               formValues={values}

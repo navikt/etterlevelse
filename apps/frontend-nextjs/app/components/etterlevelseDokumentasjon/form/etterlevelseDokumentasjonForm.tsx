@@ -789,7 +789,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
               {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
             </div>
 
-            <Heading level='2' size='small' className='mt-5' spacing>
+            <Heading level='2' size='small' className='mt-7'>
               Ansvar for etterlevelsen
             </Heading>
 

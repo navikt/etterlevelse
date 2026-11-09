@@ -6,6 +6,7 @@ import {
   getAvdelingOptions,
   getEnheterBySeksjonId,
   getSeksjonOptionsByAvdelingId,
+  getUnderenheter,
 } from '@/api/nom/nomApi'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { OptionList } from '@/components/common/inputs'
@@ -69,6 +70,27 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
       })
     }
   }, [etterlevelseDokumentasjon?.nomOrganisering.seksjoner])
+
+  useEffect(() => {
+    if (etterlevelseDokumentasjon?.nomOrganisering.linjer.length) {
+      etterlevelseDokumentasjon.nomOrganisering.linjer.forEach((linje) => {
+        getUnderenheter(linje.nomEnhetId)
+          .then((enheter) => {
+            if (enheter.length > 0) {
+              setEnheterBySeksjon((prev) => {
+                const next = new Map(prev)
+                next.set(
+                  linje.nomEnhetId,
+                  enheter.map((e) => ({ value: e.id, label: e.navn }))
+                )
+                return next
+              })
+            }
+          })
+          .catch(() => {})
+      })
+    }
+  }, [etterlevelseDokumentasjon?.nomOrganisering.linjer])
 
   return (
     <div className='mb-7'>
