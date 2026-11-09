@@ -1286,21 +1286,23 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
           Enkelte krav tilknyttet {temaName}
         </Heading>
         <div className='grid grid-cols-1 sm:flex sm:flex-row sm:flex-wrap gap-4 mt-4 sm:items-end'>
-          <Select
-            label='Filtrer etter krav'
-            className='sm:w-fit sm:min-w-64'
-            style={{ width: '100%' }}
-            value={selectedKrav}
-            onChange={(e) => setSelectedKrav(e.target.value)}
-          >
-            <option value=''>Alle krav</option>
-            {kravStats.map((k) => (
-              <option key={k.kravId} value={k.kravId}>
-                K{k.kravNummer}.{k.kravVersjon}{' '}
-                {k.kravStatus === 'UTGAATT' ? '  (Utgått uten ny versjon)' : ''} {k.kravNavn}
-              </option>
-            ))}
-          </Select>
+          <div className='sm:basis-full'>
+            <Select
+              label='Filtrer etter krav'
+              className='w-full'
+              style={{ width: '100%' }}
+              value={selectedKrav}
+              onChange={(e) => setSelectedKrav(e.target.value)}
+            >
+              <option value=''>Alle krav</option>
+              {kravStats.map((k) => (
+                <option key={k.kravId} value={k.kravId}>
+                  K{k.kravNummer}.{k.kravVersjon}{' '}
+                  {k.kravStatus === 'UTGAATT' ? '  (Utgått uten ny versjon)' : ''} {k.kravNavn}
+                </option>
+              ))}
+            </Select>
+          </div>
 
           <Select
             label='Filtrer etter avdeling'
@@ -1378,31 +1380,34 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               </Select>
             )}
 
-          <Button
-            variant='tertiary'
-            size='small'
-            icon={<DownloadIcon aria-hidden />}
-            onClick={() =>
-              exportKravToCsv(filteredKrav, temaName, {
-                avdeling: avdelinger.find((a) => a.avdelingId === selectedKravAvdeling)
-                  ?.avdelingNavn,
-                seksjon:
-                  selectedKravSeksjon === 'ingen-seksjon'
-                    ? 'Ikke valgt seksjon'
-                    : kravSeksjoner.find((s) => s.id === selectedKravSeksjon)?.navn,
-                enhet:
-                  selectedKravEnhet === 'ingen-enhet'
-                    ? 'Ikke valgt enhet'
-                    : kravEnheter.find((e) => e.id === selectedKravEnhet)?.navn,
-                krav: kravStats.find((k) => k.kravId === selectedKrav)?.kravNavn,
-                hasEnheter: kravEnheter.length > 0,
-              })
-            }
-            disabled={isKravLoading || filteredKrav.length === 0}
-            className='pr-4'
-          >
-            Last ned nøkkeltall som CSV
-          </Button>
+          <div className='flex flex-row flex-wrap items-center gap-4 sm:basis-full'>
+            <DashboardCopyLinkButton url={shareUrl} />
+            <Button
+              variant='tertiary'
+              size='small'
+              icon={<DownloadIcon aria-hidden />}
+              onClick={() =>
+                exportKravToCsv(filteredKrav, temaName, {
+                  avdeling: avdelinger.find((a) => a.avdelingId === selectedKravAvdeling)
+                    ?.avdelingNavn,
+                  seksjon:
+                    selectedKravSeksjon === 'ingen-seksjon'
+                      ? 'Ikke valgt seksjon'
+                      : kravSeksjoner.find((s) => s.id === selectedKravSeksjon)?.navn,
+                  enhet:
+                    selectedKravEnhet === 'ingen-enhet'
+                      ? 'Ikke valgt enhet'
+                      : kravEnheter.find((e) => e.id === selectedKravEnhet)?.navn,
+                  krav: kravStats.find((k) => k.kravId === selectedKrav)?.kravNavn,
+                  hasEnheter: kravEnheter.length > 0,
+                })
+              }
+              disabled={isKravLoading || filteredKrav.length === 0}
+              className='pr-4'
+            >
+              Last ned nøkkeltall som CSV
+            </Button>
+          </div>
         </div>
 
         {isKravLoading && <CenteredLoader />}
