@@ -102,7 +102,8 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
   behandlingsLivslop,
 }) => {
   const erEtterlevelseLast: boolean =
-    etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER
+    etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER &&
+    !etterlevelseDokumentasjon.hasCurrentUserAccess
 
   return (
     <ActionMenu>
