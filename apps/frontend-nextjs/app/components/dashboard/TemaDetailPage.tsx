@@ -13,10 +13,10 @@ import {
   ReadMore,
   Select,
   SortState,
-  Table,
   Tabs,
   Tag,
 } from '@navikt/ds-react'
+import { DataGrid } from '@navikt/ds-react/PREVIEW/DataGrid'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import AsyncSelect from 'react-select/async'
@@ -41,16 +41,15 @@ import {
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
-import { handleSort } from '@/util/handleTableSort'
 import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 import { DashboardCopyLinkButton } from './DashboardCopyLinkButton'
+import { DashboardDataGrid } from './DashboardDataGrid'
 import { TemaDashboardDetailHowToReadmore } from './DashboardReadmore/TemaDashboardDetailHowToReadmore'
 import { TemaDashboardDetailKravReadmore } from './DashboardReadmore/TemaDashboardDetailKravReadmore'
 import { TemaDashboardDetailReadmore } from './DashboardReadmore/TemaDashboardDetailReadmore'
 import { OppfyltCell, TrafficDot, getKravTrafficColor } from './DashboardTableCells'
 import { RechartsStackedBar } from './RechartsStackedBar'
-import { StickyHorizontalScroll } from './StickyHorizontalScroll'
 import {
   FERDIG_SUKSESS_COLORS,
   IBarSegment,
@@ -530,6 +529,112 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
       return String(aVal).localeCompare(String(bVal)) * dir
     })
   }, [dokTableData, tableSort])
+
+  const dokColumns = useMemo<DataGrid.Columns<IDashboardTable>>(
+    () => [
+      {
+        id: 'dok',
+        header: 'Etterlevelsesdokument',
+        headerCell: (
+          <>
+            <span className='flex flex-col'>
+              <span>Etterlevelsesdokument</span>
+              <span className='font-normal'>(Lenker åpnes i ny fane)</span>
+            </span>
+          </>
+        ),
+        isSortable: true,
+        isRowHeader: true,
+
+        bodyCell: (dok) => (
+          <div className='whitespace-normal min-w-[75ch] max-w-[75ch] wrap-break-word'>
+            <AkselLink href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`} target='_blank'>
+              E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
+              {dok.etterlevelseDokumentasjonTittel}
+            </AkselLink>
+          </div>
+        ),
+      },
+      {
+        id: 'krav',
+        header: 'Antall krav ferdig utfylt',
+
+        isSortable: true,
+
+        align: 'center',
+        bodyCell: (dok) => (
+          <div className='whitespace-nowrap'>
+            <TrafficDot
+              color={getKravTrafficColor(dok.antallOppfyltKrav || 0, dok.antallKrav || 0)}
+            />
+            {dok.antallOppfyltKrav} av {dok.antallKrav}
+          </div>
+        ),
+      },
+      {
+        id: 'oppfylt',
+        header: 'Oppfylt',
+
+        isSortable: true,
+
+        align: 'center',
+        bodyCell: (dok) => (
+          <div className='whitespace-nowrap'>
+            <OppfyltCell dok={dok} />
+          </div>
+        ),
+      },
+      {
+        id: 'risikoeier',
+        header: 'Risikoeier',
+
+        isSortable: true,
+
+        bodyCell: (dok) => (
+          <div className='whitespace-nowrap'>
+            {dok.risikoeiereData && dok.risikoeiereData.length > 0
+              ? dok.risikoeiereData.map((risikoeier, index) => (
+                  <div key={`${risikoeier.navIdent}-${index}`}>{risikoeier.fullName}</div>
+                ))
+              : '-'}
+          </div>
+        ),
+      },
+      {
+        id: 'team',
+        header: 'Team',
+
+        isSortable: true,
+
+        bodyCell: (dok) => (
+          <div className='whitespace-nowrap'>
+            {dok.teamsData && dok.teamsData.length > 0
+              ? dok.teamsData.map((team, index) => (
+                  <div key={`${team.id}-${index}`}>{team.name}</div>
+                ))
+              : '-'}
+          </div>
+        ),
+      },
+      {
+        id: 'person',
+        header: 'Person',
+
+        isSortable: true,
+
+        bodyCell: (dok) => (
+          <div className='whitespace-nowrap'>
+            {dok.resourcesData && dok.resourcesData.length > 0
+              ? dok.resourcesData.map((resource, index) => (
+                  <div key={`${resource.navIdent}-${index}`}>{resource.fullName}</div>
+                ))
+              : '-'}
+          </div>
+        ),
+      },
+    ],
+    []
+  )
 
   if (isLoading && !temaStats) {
     return (
@@ -1163,105 +1268,13 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
                   </ReadMore>
                 </div>
 
-                {isTableLoading && <CenteredLoader />}
-
-                {!isTableLoading && (
-                  <>
-                    <StickyHorizontalScroll>
-                      <Table
-                        className='mt-4 dashboard-table'
-                        size='small'
-                        zebraStripes
-                        stickyHeader
-                        sort={tableSort}
-                        onSortChange={(sortKey) => handleSort(tableSort, setTableSort, sortKey)}
-                      >
-                        <Table.Header>
-                          <Table.Row>
-                            <Table.ColumnHeader sortable sortKey='dok'>
-                              <span className='flex flex-col'>
-                                <span>Etterlevelsesdokument</span>
-                                <span className='font-normal'>(Lenker åpnes i ny fane)</span>
-                              </span>
-                            </Table.ColumnHeader>
-                            <Table.ColumnHeader sortable sortKey='krav' align='center'>
-                              Antall krav ferdig utfylt
-                            </Table.ColumnHeader>
-                            <Table.ColumnHeader sortable sortKey='oppfylt' align='center'>
-                              Oppfylt
-                            </Table.ColumnHeader>
-                            <Table.ColumnHeader sortable sortKey='risikoeier'>
-                              Risikoeier
-                            </Table.ColumnHeader>
-                            <Table.ColumnHeader sortable sortKey='team'>
-                              Team
-                            </Table.ColumnHeader>
-                            <Table.ColumnHeader sortable sortKey='person'>
-                              Person
-                            </Table.ColumnHeader>
-                          </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                          {sortedTableDoks.map((dok) => (
-                            <Table.Row key={dok.etterlevelseDokumentasjonId}>
-                              <Table.DataCell className='dashboard-cell-wide'>
-                                <AkselLink
-                                  href={`/dokumentasjon/${dok.etterlevelseDokumentasjonId}`}
-                                  target='_blank'
-                                >
-                                  E{dok.etterlevelseNummer}.{dok.etterlevelseDokumentVersjon}{' '}
-                                  {dok.etterlevelseDokumentasjonTittel}
-                                </AkselLink>
-                              </Table.DataCell>
-                              <Table.DataCell align='center'>
-                                <TrafficDot
-                                  color={getKravTrafficColor(
-                                    dok.antallOppfyltKrav || 0,
-                                    dok.antallKrav || 0
-                                  )}
-                                />
-                                {dok.antallOppfyltKrav} av {dok.antallKrav}
-                              </Table.DataCell>
-                              <Table.DataCell align='center'>
-                                <OppfyltCell dok={dok} />
-                              </Table.DataCell>
-                              <Table.DataCell>
-                                {dok.risikoeiereData && dok.risikoeiereData.length > 0
-                                  ? dok.risikoeiereData.map((risikoeier, index) => (
-                                      <div key={`${risikoeier.navIdent}-${index}`}>
-                                        {risikoeier.fullName}
-                                      </div>
-                                    ))
-                                  : '-'}
-                              </Table.DataCell>
-                              <Table.DataCell>
-                                {dok.teamsData && dok.teamsData.length > 0
-                                  ? dok.teamsData.map((team, index) => (
-                                      <div key={`${team.id}-${index}`}>{team.name}</div>
-                                    ))
-                                  : '-'}
-                              </Table.DataCell>
-                              <Table.DataCell>
-                                {dok.resourcesData && dok.resourcesData.length > 0
-                                  ? dok.resourcesData.map((resource, index) => (
-                                      <div key={`${resource.navIdent}-${index}`}>
-                                        {resource.fullName}
-                                      </div>
-                                    ))
-                                  : '-'}
-                              </Table.DataCell>
-                            </Table.Row>
-                          ))}
-                        </Table.Body>
-                      </Table>
-                    </StickyHorizontalScroll>
-                    {sortedTableDoks.length === 0 && (
-                      <BodyShort className='mt-4 text-gray-500'>
-                        Ingen treff på valgte filtre
-                      </BodyShort>
-                    )}
-                  </>
-                )}
+                <DashboardDataGrid
+                  columns={dokColumns}
+                  data={sortedTableDoks}
+                  isLoading={isTableLoading}
+                  sort={tableSort}
+                  onSortChange={setTableSort}
+                />
               </div>
             </Tabs.Panel>
           </Tabs>
