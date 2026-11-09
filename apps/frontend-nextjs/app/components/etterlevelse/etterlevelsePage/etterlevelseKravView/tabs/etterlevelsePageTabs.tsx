@@ -56,7 +56,6 @@ type TProps = {
   etterlevelse: IEtterlevelse
   setEtterlevelse: Dispatch<SetStateAction<IEtterlevelse | undefined>>
   alleKravVersjoner: IKravVersjon[]
-  tidligereEtterlevelser: IEtterlevelse[] | undefined
   disableEdit: boolean
   nextKravToDocument: string
   forrigeKravUrl: string
@@ -86,7 +85,6 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   etterlevelse,
   setEtterlevelse,
   alleKravVersjoner,
-  tidligereEtterlevelser,
   disableEdit,
   nextKravToDocument,
   forrigeKravUrl,
@@ -366,7 +364,6 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   formRef={etterlevelseFormRef}
                   disableEdit={disableEdit}
                   editedEtterlevelse={editedEtterlevelse}
-                  tidligereEtterlevelser={tidligereEtterlevelser}
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   etterlevelseDokStatusAlert={etterlevelseDokStatusAlert}
                   setEtterlevelseDokStatusAlert={setEtterlevelseDokStatusAlert}
@@ -387,7 +384,6 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
               <EtterlevelseViewFields
                 etterlevelse={etterlevelse}
                 suksesskriterier={krav.suksesskriterier}
-                tidligereEtterlevelser={tidligereEtterlevelser}
                 previousVurdering={previousVurdering}
                 forrigeSuksesskriterier={forrigeKrav?.suksesskriterier}
               />

@@ -21,13 +21,11 @@ import {
   getLabelForSuksessKriterie,
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
-import EtterlevelseCard from '../../etterlevelseModal/etterlevelseCard'
 import SuksesskriterieEndringTag from '../suksesskriterieEndringTag'
 
 type TProps = {
   etterlevelse: IEtterlevelse
   suksesskriterier: ISuksesskriterie[]
-  tidligereEtterlevelser?: IEtterlevelse[]
   isBortfiltrert?: boolean
   previousVurdering?: IVurdering
   forrigeSuksesskriterier?: ISuksesskriterie[]
@@ -36,7 +34,6 @@ type TProps = {
 export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
   etterlevelse,
   suksesskriterier,
-  tidligereEtterlevelser,
   isBortfiltrert,
   previousVurdering,
   forrigeSuksesskriterier,
@@ -75,11 +72,6 @@ export const EtterlevelseViewFields: FunctionComponent<TProps> = ({
 
       <div className='flex w-full items-center mb-4'>
         <Label className='min-w-fit mt-3'>Hvilke suksesskriterier er oppfylt?</Label>
-        {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
-          <div className='flex w-full justify-end'>
-            <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
-          </div>
-        )}
       </div>
 
       {suksesskriterier.map((suksesskriterium, index) => {

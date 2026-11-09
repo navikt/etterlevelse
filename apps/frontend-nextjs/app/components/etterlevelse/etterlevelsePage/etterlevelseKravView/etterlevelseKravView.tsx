@@ -333,7 +333,6 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 etterlevelse={etterlevelse}
                 setEtterlevelse={setEtterlevelse}
                 alleKravVersjoner={alleKravVersjoner}
-                tidligereEtterlevelser={tidligereEtterlevelser}
                 disableEdit={disableEdit}
                 nextKravToDocument={nextKravToDocument}
                 forrigeKravUrl={forrigeKravUrl}

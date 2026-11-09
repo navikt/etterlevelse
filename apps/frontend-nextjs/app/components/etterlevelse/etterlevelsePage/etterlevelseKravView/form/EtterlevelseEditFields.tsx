@@ -27,7 +27,6 @@ import {
   UnsavedChangesGuard,
   bypassUnsavedGuard,
 } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
-import EtterlevelseCard from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
 import {
   ERelationType,
   IDocumentRelation,
@@ -58,7 +57,6 @@ type TEditProps = {
   varsleMelding?: string
   disableEdit: boolean
   editedEtterlevelse?: IEtterlevelse
-  tidligereEtterlevelser?: IEtterlevelse[]
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   isPreview: boolean
   etterlevelseDokStatusAlert: boolean
@@ -78,7 +76,6 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   formRef,
   disableEdit,
   editedEtterlevelse,
-  tidligereEtterlevelser,
   etterlevelseDokumentasjon,
   isPreview,
   etterlevelseDokStatusAlert,
@@ -274,13 +271,6 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
                       </div>
                     )}
-                    <div className='flex w-full items-center mb-4'>
-                      {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
-                        <div className='flex w-full justify-end'>
-                          <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
-                        </div>
-                      )}
-                    </div>
 
                     <SuksesskriterierBegrunnelseEdit
                       disableEdit={disableEdit}
@@ -617,7 +607,6 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
               <EtterlevelseViewFields
                 etterlevelse={values}
                 suksesskriterier={krav.suksesskriterier}
-                tidligereEtterlevelser={tidligereEtterlevelser}
                 forrigeSuksesskriterier={forrigeSuksesskriterier}
               />
             )}
