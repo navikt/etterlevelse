@@ -35,7 +35,7 @@ export const KravSlettKnapp: FunctionComponent<TProps> = ({
         onClose={() => setOpen(false)}
         header={{ heading: 'Bekreft slett', closeButton: false }}
       >
-        <Modal.Body>
+        <Modal.Body className='min-w-172.25'>
           Er du sikker på at du vil slette?
           <Textarea
             label='Begrunnelse for sletting (påkrevd)'

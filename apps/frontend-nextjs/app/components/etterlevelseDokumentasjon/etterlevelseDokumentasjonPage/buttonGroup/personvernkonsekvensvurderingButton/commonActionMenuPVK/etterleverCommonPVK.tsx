@@ -1,5 +1,5 @@
 import { ActionMenu } from '@navikt/ds-react'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useContext } from 'react'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -7,6 +7,7 @@ import {
   IEtterlevelseDokumentasjon,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { UserContext } from '@/provider/user/userProvider'
 import {
   ArtOgOmfangActionMenuItem,
   BehandlingensLivslopActionMenuItem,
@@ -101,9 +102,11 @@ export const PvkGodkjentAvRisikoeierActionMenuVariant: FunctionComponent<TProps>
   behandlingensArtOgOmfang,
   behandlingsLivslop,
 }) => {
+  const user = useContext(UserContext)
   const erEtterlevelseLast: boolean =
     etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER &&
-    !etterlevelseDokumentasjon.hasCurrentUserAccess
+    !etterlevelseDokumentasjon.hasCurrentUserAccess &&
+    !user.isAdmin()
 
   return (
     <ActionMenu>
