@@ -55,7 +55,7 @@
     "@tiptap/extension-list": "^3.32.2",
     "@tiptap/extension-ordered-list": "^3.32.2",
     "@tiptap/extension-underline": "^3.32.2",
-    "@tiptap/pm": "^3.32.2",
+    "@tiptap/pm": "^3.33.0",
     "@tiptap/react": "^3.32.2",
     "@tiptap/starter-kit": "^3.32.2",
     "axios": "^1.21.0",
