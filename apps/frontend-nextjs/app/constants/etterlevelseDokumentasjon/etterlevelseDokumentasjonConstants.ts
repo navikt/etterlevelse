@@ -10,6 +10,8 @@ import {
 } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 
+export const tjenestelinjeId = 'ry630r'
+
 export interface IEtterlevelseDokumentasjon {
   id: string
   changeStamp: IChangeStamp

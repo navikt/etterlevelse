@@ -10,7 +10,10 @@ import {
   etterlevelseDokumentasjonSchema,
   etterlevelseDokumentasjonWithRelationSchema,
 } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
-import { INomOrganisering } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import {
+  INomOrganisering,
+  tjenestelinjeId,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 
 const nomOrganisering: INomOrganisering = {
   nomAvdelingId: 'avdeling-1',
@@ -108,6 +111,102 @@ for (const [name, schema] of [
     await expect(
       schema.validateAt('nomOrganisering.nomAvdelingId', { ...values, nomOrganisering })
     ).resolves.toBe('avdeling-1')
+  })
+
+  test(`${name} requires counties only when the service line is selected for line compliance`, async () => {
+    const tjenestelinje = {
+      nomEnhetId: tjenestelinjeId,
+      nomEnhetName: 'Arbeids- og tjenestelinjen',
+    }
+
+    for (const linjer of [[tjenestelinje], [...nomOrganisering.linjer, tjenestelinje]]) {
+      for (const linjeFylker of [[], undefined, null]) {
+        await expect(
+          schema.validateAt('nomOrganisering.linjeFylker', {
+            nomOrganisering: {
+              ...nomOrganisering,
+              forEtterlevelseILinje: true,
+              linjer,
+              linjeFylker,
+            },
+          })
+        ).rejects.toThrow(EEtterlevelseDokumentSchemaMelding.NOM_FYLKE)
+      }
+
+      await expect(
+        schema.validateAt('nomOrganisering.linjeFylker', {
+          nomOrganisering: { ...nomOrganisering, forEtterlevelseILinje: true, linjer },
+        })
+      ).resolves.toEqual(nomOrganisering.linjeFylker)
+    }
+
+    for (const [forEtterlevelseILinje, linjer] of [
+      [true, nomOrganisering.linjer],
+      [true, []],
+      [true, undefined],
+      [false, [tjenestelinje]],
+    ] as const) {
+      for (const linjeFylker of [[], undefined]) {
+        await expect(
+          schema.validateAt('nomOrganisering.linjeFylker', {
+            nomOrganisering: {
+              ...nomOrganisering,
+              forEtterlevelseILinje,
+              linjer,
+              linjeFylker,
+            },
+          })
+        ).resolves.toEqual(linjeFylker)
+      }
+    }
+  })
+
+  test(`${name} requires line units only when a non-service line is selected for line compliance`, async () => {
+    const tjenestelinje = {
+      nomEnhetId: tjenestelinjeId,
+      nomEnhetName: 'Arbeids- og tjenestelinjen',
+    }
+
+    for (const linjer of [nomOrganisering.linjer, [...nomOrganisering.linjer, tjenestelinje]]) {
+      for (const linjeEnheter of [[], undefined, null]) {
+        await expect(
+          schema.validateAt('nomOrganisering.linjeEnheter', {
+            nomOrganisering: {
+              ...nomOrganisering,
+              forEtterlevelseILinje: true,
+              linjer,
+              linjeEnheter,
+            },
+          })
+        ).rejects.toThrow(EEtterlevelseDokumentSchemaMelding.NOM_LINJEENHET)
+      }
+
+      await expect(
+        schema.validateAt('nomOrganisering.linjeEnheter', {
+          nomOrganisering: { ...nomOrganisering, forEtterlevelseILinje: true, linjer },
+        })
+      ).resolves.toEqual(nomOrganisering.linjeEnheter)
+    }
+
+    for (const [forEtterlevelseILinje, linjer] of [
+      [true, [tjenestelinje]],
+      [true, []],
+      [true, undefined],
+      [false, nomOrganisering.linjer],
+    ] as const) {
+      for (const linjeEnheter of [[], undefined]) {
+        await expect(
+          schema.validateAt('nomOrganisering.linjeEnheter', {
+            nomOrganisering: {
+              ...nomOrganisering,
+              forEtterlevelseILinje,
+              linjer,
+              linjeEnheter,
+            },
+          })
+        ).resolves.toEqual(linjeEnheter)
+      }
+    }
   })
 
   for (const [forEtterlevelseILinje, requiredField, otherField, message] of [

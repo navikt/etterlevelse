@@ -10,6 +10,7 @@ import { TOption } from '@/constants/commonConstants'
 import {
   INomEnhet,
   TEtterlevelseDokumentasjonQL,
+  tjenestelinjeId,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import EtterlevelseDokumentFylkeForm from './etterlevelseDokumentFylkeForm'
 import EtterlevelseDokumentFylkeKontorForm from './etterlevelseDokumentFylkeKontorForm'
@@ -25,8 +26,6 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
   etterlevelseDokumentasjon,
   formValues,
 }) => {
-  const tjenestelinjeId = 'ry630r'
-
   const [alleLinjeOptions, setAlleLinjeOptions] = useState<TOption[]>([])
   const [alleFylkeOptions, setAlleFylkeOptions] = useState<TOption[]>([])
   const [linjeEnheterByLinje, setLinjeEnheterByLinje] = useState<Map<string, TOption[]>>(new Map())

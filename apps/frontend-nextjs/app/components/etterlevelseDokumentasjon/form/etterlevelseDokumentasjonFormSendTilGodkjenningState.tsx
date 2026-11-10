@@ -694,6 +694,8 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                   seksjon: getIn(errors, 'nomOrganisering.seksjoner'),
                   linje: getIn(errors, 'nomOrganisering.linjer'),
                   forEtterlevelseILinje: getIn(errors, 'nomOrganisering.forEtterlevelseILinje'),
+                  linjeEnhet: getIn(errors, 'nomOrganisering.linjeEnheter'),
+                  fylke: getIn(errors, 'nomOrganisering.linjeFylker'),
                 })
                   .filter(([, error]) => error)
                   .map(([key, error]) => (
