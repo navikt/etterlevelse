@@ -175,6 +175,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               <Field name='relationType'>
                 {(fp: FieldProps) => (
                   <RadioGroup
+                    id='relationType'
                     legend='Hvordan ønsker du å gjenbruke dette dokumentet?'
                     onChange={(value) => fp.form.setFieldValue('relationType', value)}
                     description={
