@@ -57,13 +57,21 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
     risikoscenarioName: string
     kravRefs: IKravReference[]
   } | null>(null)
+  const [isAnnouncementReady, setIsAnnouncementReady] = useState(false)
 
   const handleMovedToKrav = (payload: {
     risikoscenarioName: string
     kravRefs: IKravReference[]
   }) => {
+    setIsAnnouncementReady(false)
     setMovedRisikoscenarioAlert(payload)
   }
+
+  useEffect(() => {
+    if (!movedRisikoscenarioAlert || movedRisikoscenarioAlert.kravRefs.length === 0) return
+    const timeout = setTimeout(() => setIsAnnouncementReady(true), 100)
+    return () => clearTimeout(timeout)
+  }, [movedRisikoscenarioAlert])
 
   useEffect(() => {
     // One-shot success message set by the edit flow when a ovrig scenario is connected to a pvk related krav and moved out of this list.
@@ -76,7 +84,7 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
           kravRefs: IKravReference[]
         }
         if (parsed?.kravRefs?.length) {
-          setMovedRisikoscenarioAlert(parsed)
+          handleMovedToKrav(parsed)
         }
       } finally {
         window.sessionStorage.removeItem(storageKey)
@@ -179,13 +187,23 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       />
 
       {movedRisikoscenarioAlert && movedRisikoscenarioAlert.kravRefs.length > 0 && (
-        <LocalAlert status='success' className='mt-5 w-full max-w-[75ch] mx-auto'>
+        <LocalAlert
+          status='success'
+          role='region'
+          aria-label='Flytting av risikoscenario'
+          className='mt-5 w-full max-w-[75ch] mx-auto'
+        >
           <LocalAlert.Header>
             <LocalAlert.Title>
               Risikoscenariet &quot;{movedRisikoscenarioAlert.risikoscenarioName}&quot; er flyttet
               til følgende etterlevelseskrav:
             </LocalAlert.Title>
-            <LocalAlert.CloseButton onClick={() => setMovedRisikoscenarioAlert(null)} />
+            <LocalAlert.CloseButton
+              onClick={() => {
+                setIsAnnouncementReady(false)
+                setMovedRisikoscenarioAlert(null)
+              }}
+            />
           </LocalAlert.Header>
           <LocalAlert.Content>
             <List as='ul'>
@@ -214,6 +232,19 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
           </LocalAlert.Content>
         </LocalAlert>
       )}
+      <div role='status' aria-atomic='true' className='sr-only'>
+        {isAnnouncementReady &&
+          movedRisikoscenarioAlert &&
+          movedRisikoscenarioAlert.kravRefs.length > 0 && (
+            <>
+              Risikoscenariet &quot;{movedRisikoscenarioAlert.risikoscenarioName}&quot; er flyttet
+              til følgende etterlevelseskrav:{' '}
+              {movedRisikoscenarioAlert.kravRefs
+                .map((krav) => `K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`)
+                .join(', ')}
+            </>
+          )}
+      </div>
     </div>
   )
 }

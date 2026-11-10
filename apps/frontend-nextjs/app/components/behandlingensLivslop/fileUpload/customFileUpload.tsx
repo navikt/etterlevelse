@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Alert,
   FileObject,
   FileRejected,
   FileRejectionReason,
@@ -10,7 +9,7 @@ import {
   LocalAlert,
   VStack,
 } from '@navikt/ds-react'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useId, useRef, useState } from 'react'
 
 const MAX_FILES = 10
 const MAX_SIZE_MB = 5
@@ -29,60 +28,62 @@ interface IProps {
 }
 
 const CustomFileUpload = (props: IProps) => {
-  const ref = useRef<HTMLInputElement>(null)
+  const fileSelectButtonId = useId()
+  const restoreFocus = useRef(false)
   const { initialValues, rejectedFiles, setRejectedFiles, setFilesToUpload } = props
   const [files, setFiles] = useState<FileObject[]>([])
   const acceptedFiles = files.filter((file) => !file.error)
-  const [fileUploadAlert, setFileUploadAlert] = useState<boolean>(false)
-  const [fileUploadError, setFileUploadError] = useState<boolean>(false)
-  const [fileDeleteAlert, setFileDeleteAlert] = useState<boolean>(false)
+  const [fileAlert, setFileAlert] = useState<{ message: string; isError: boolean }>()
+  const [announcement, setAnnouncement] = useState('')
 
   useEffect(() => {
-    ;(async () => {
-      if (initialValues) {
-        const initialFiles: FileObject[] = []
-        initialValues.forEach((initialFile) => {
-          initialFiles.push({ file: initialFile, error: false })
-        })
-        setFiles(initialFiles)
-        setFilesToUpload(initialValues)
-      }
-    })()
+    if (initialValues) {
+      const initialFiles: FileObject[] = []
+      initialValues.forEach((initialFile) => {
+        initialFiles.push({ file: initialFile, error: false })
+      })
+      setFiles(initialFiles)
+      setFilesToUpload(initialValues)
+    }
   }, [initialValues])
 
   useEffect(() => {
-    ;(async () => {
-      setRejectedFiles(files.filter((f): f is FileRejected => f.error))
-      if (files.filter((f): f is FileRejected => f.error).length !== 0) {
-        setFileUploadError(true)
-      }
-    })()
+    setRejectedFiles(files.filter((f): f is FileRejected => f.error))
   }, [files])
 
-  const removeFile = (fileToRemove: FileObject) => {
-    setFiles(files.filter((file) => file !== fileToRemove))
-    setFilesToUpload(files.filter((file) => file !== fileToRemove).map((file) => file.file))
-    setFileDeleteAlert(true)
+  useEffect(() => {
+    const timeout = setTimeout(() => setAnnouncement(fileAlert?.message ?? ''), 100)
+    return () => clearTimeout(timeout)
+  }, [fileAlert])
+
+  const removeFile = (fileToRemove: FileObject, button: HTMLButtonElement) => {
+    restoreFocus.current = button === document.activeElement
+    const remainingFiles = files.filter((file) => file !== fileToRemove)
+    setFiles(remainingFiles)
+    setFilesToUpload(remainingFiles.map((file) => file.file))
+    setAnnouncement('')
+    setFileAlert({ message: 'Filen er fjernet fra listen.', isError: false })
   }
 
   const getErrorMessage = (message: string): string => {
     if (message === 'fileType' || message === 'fileSize') {
-      return errors[message as FileRejectionReason]
+      return errors[message]
     } else {
       return message
     }
   }
 
   useEffect(() => {
-    if (ref && ref.current) {
-      ref.current.focus()
+    if (restoreFocus.current) {
+      document.getElementById(fileSelectButtonId)?.focus()
+      restoreFocus.current = false
     }
-  }, [files])
+  }, [files, fileSelectButtonId])
 
   return (
     <VStack gap='space-6'>
       <FileUpload.Dropzone
-        ref={ref}
+        id={fileSelectButtonId}
         label='Last opp behandlingens livsløp'
         description={`Følgende filformater er tillatt: PDF, PNG, JPG og JPEG. Du kan laste opp maks 4 filer. Filstørrelse pr. fil må være mindre enn ${MAX_SIZE_MB} MB.`}
         accept='.png,.jpeg,.pdf,.jpg'
@@ -98,40 +99,48 @@ const CustomFileUpload = (props: IProps) => {
           return true
         }}
         onSelect={(newFiles: FileObject[]) => {
-          setFileUploadAlert(false)
+          if (newFiles.length === 0) {
+            return
+          }
+          const isError = newFiles.some((file) => file.error)
+          const message = isError
+            ? 'Filopplasting har feilet.'
+            : 'Valgte filer er lagt til. Velg Lagre for å lagre endringene.'
+
           setFiles([...files, ...newFiles])
           setFilesToUpload([
             ...files.map((file) => file.file),
             ...newFiles.map((newFile) => newFile.file),
           ])
-          setFileUploadAlert(true)
+          setAnnouncement('')
+          setFileAlert({ isError, message })
         }}
       />
 
-      {fileUploadAlert && (
-        <Alert
-          role='status'
-          variant={fileUploadError ? 'error' : 'success'}
-          closeButton
-          onClose={() => {
-            setFileUploadAlert(false)
-            setFileUploadError(false)
-          }}
+      {fileAlert && (
+        <LocalAlert
+          status={fileAlert.isError ? 'error' : 'success'}
+          role='region'
+          aria-label='Filvedlegg'
         >
-          {fileUploadError
-            ? 'Filopplasting har feilet. Sjekk at du har riktig filformat og prøv igjen. Passende filformater er PNG, PDF, JPG eller JPG.'
-            : 'Filen din er lastet opp.'}
-        </Alert>
-      )}
-
-      {fileDeleteAlert && (
-        <LocalAlert status='success'>
           <LocalAlert.Header>
-            <LocalAlert.Title>Filen din ble slettet.</LocalAlert.Title>
-            <LocalAlert.CloseButton onClick={() => setFileDeleteAlert(false)} />
+            <LocalAlert.Title>{fileAlert.message}</LocalAlert.Title>
+            <LocalAlert.CloseButton
+              onClick={() => {
+                setAnnouncement('')
+                setFileAlert(undefined)
+              }}
+            />
           </LocalAlert.Header>
         </LocalAlert>
       )}
+
+      <div role='alert' aria-atomic='true' className='sr-only'>
+        {fileAlert?.isError ? announcement : ''}
+      </div>
+      <div role='status' aria-atomic='true' className='sr-only'>
+        {fileAlert && !fileAlert.isError ? announcement : ''}
+      </div>
 
       {acceptedFiles.length > 0 && (
         <VStack gap='space-2'>
@@ -146,8 +155,8 @@ const CustomFileUpload = (props: IProps) => {
                 file={file.file}
                 button={{
                   action: 'delete',
-                  onClick: () => {
-                    removeFile(file)
+                  onClick: (event) => {
+                    removeFile(file, event.currentTarget)
                   },
                 }}
               />
@@ -168,8 +177,8 @@ const CustomFileUpload = (props: IProps) => {
                 file={rejected.file}
                 button={{
                   action: 'delete',
-                  onClick: () => {
-                    removeFile(rejected)
+                  onClick: (event) => {
+                    removeFile(rejected, event.currentTarget)
                   },
                 }}
                 error={getErrorMessage(rejected.reasons[0])}

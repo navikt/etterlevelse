@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Button, Loader, Modal, Radio, RadioGroup } from '@navikt/ds-react'
+import { Button, Loader, LocalAlert, Modal, Radio, RadioGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
@@ -29,6 +29,8 @@ export const AddSlackUserModal = (props: IProps) => {
   const [error, setError] = useState('')
   const [loadingSlackId, setLoadingSlackId] = useState(false)
   const [radioValue, setRadioValue] = useState('meg')
+  const slackSearchSectionId = 'add-slack-user-search-section'
+  const isSlackSectionVisible = radioValue === 'slack'
 
   const addEmail = (email: string) => {
     setLoadingSlackId(true)
@@ -52,11 +54,12 @@ export const AddSlackUserModal = (props: IProps) => {
       header={{ heading: 'Legg til Slack-bruker', closeButton: false }}
       width='medium'
     >
-      <Modal.Body className='min-h-[31rem]'>
+      <Modal.Body className='min-h-124'>
         <RadioGroup
           legend='Hvem skal varsles på Slack?'
           value={radioValue}
           onChange={(val) => {
+            setError('')
             if (val === 'meg') {
               setVal(user.getEmail())
             } else {
@@ -67,10 +70,21 @@ export const AddSlackUserModal = (props: IProps) => {
           className='w-full'
         >
           <Radio value='meg'>Meg ({user.getName()})</Radio>
-          <Radio value='slack'>Noen andre</Radio>
+          <Radio
+            value='slack'
+            aria-expanded={isSlackSectionVisible}
+            aria-controls={isSlackSectionVisible ? slackSearchSectionId : undefined}
+          >
+            Noen andre
+          </Radio>
         </RadioGroup>
-        {radioValue === 'slack' && (
-          <div className='pl-8 w-full'>
+        {isSlackSectionVisible && (
+          <div
+            id={slackSearchSectionId}
+            className='pl-8 w-full'
+            role='region'
+            aria-label='Søk etter Slack-bruker'
+          >
             <div className='flex flex-col'>
               <ContentLayout>
                 <div className='w-full'>
@@ -103,13 +117,26 @@ export const AddSlackUserModal = (props: IProps) => {
               </ContentLayout>
               {loadingSlackId && <Loader size='large' className='flex justify-self-center' />}
               {error && (
-                <Alert className='mt-2.5' variant='error'>
-                  {error}
-                </Alert>
+                <LocalAlert
+                  className='mt-2.5'
+                  status='error'
+                  role='region'
+                  aria-label='Feil ved oppslag av Slack-bruker'
+                >
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>{error}</LocalAlert.Title>
+                  </LocalAlert.Header>
+                </LocalAlert>
               )}
             </div>
           </div>
         )}
+        <div role='status' aria-atomic='true' className='sr-only'>
+          {isSlackSectionVisible && 'Søk etter Slack-bruker. Skriv minst 3 tegn.'}
+        </div>
+        <div role='alert' aria-atomic='true' className='sr-only'>
+          {isSlackSectionVisible && error}
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button type='button' onClick={() => addEmail(val)} className='ml-2.5'>
