@@ -30,6 +30,19 @@ const documents: IDashboardTable[] = [
     oppfyltKravProsent: 75,
     antallSuksesskriterierOppfylt: 3,
     antallSuksesskriterierIkkeOppfylt: 1,
+    suksesskriterier: {
+      total: 10,
+      ikkePaabegyntAntall: 1,
+      underArbeidAntall: 1,
+      oppfyltAntall: 3,
+      ikkeOppfyltAntall: 1,
+      ikkeRelevantAntall: 4,
+      ikkePaabegyntProsent: 10,
+      underArbeidProsent: 10,
+      oppfyltProsent: 30,
+      ikkeOppfyltProsent: 10,
+      ikkeRelevantProsent: 40,
+    },
     sistOppdatertEtterlevelse: '2026-01-01',
     hasPvkDocumentationStarted: true,
     pvkVurdering: EPvkVurdering.SKAL_UTFORE,
@@ -298,13 +311,25 @@ test('theme document DataGrid preserves numeric sorting, row headers and popover
   await expect(table).toHaveClass(/aksel-data-table/)
   await expect(table.getByRole('columnheader')).toHaveCount(6)
   await expect(table.getByRole('rowheader', { name: 'E100.1 Alpha' })).toBeVisible()
-  const oppfyltHeader = table.getByRole('columnheader', { name: 'Oppfylt', exact: true })
+  const oppfyltHeader = table.getByRole('columnheader', {
+    name: 'Oppfylte suksesskriterier',
+    exact: true,
+  })
   await oppfyltHeader.getByRole('button').click()
   await expect(table.locator('tbody tr').first()).toContainText('Beta')
   await oppfyltHeader.getByRole('button').click()
   await expect(table.locator('tbody tr').first()).toContainText('Alpha')
   await table.getByRole('button', { name: '75%', exact: true }).click()
   await expect(page.getByText('Oppfylt der kravet er ferdig vurdert: 75%')).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Suksesskriterier (etterlevelseskrav)', level: 3 })
+  ).toBeVisible()
+  await expect(page.getByText('Ikke relevant 40%')).toBeVisible()
+  await expect(
+    page.getByText(
+      'Denne prosenten viser alle suksesskriterier som er oppfylt, i forhold til ikke-oppfylte suksesskriterier.'
+    )
+  ).toBeVisible()
   await page.keyboard.press('Escape')
   await expect(table.getByRole('link', { name: 'E200.2 Beta' })).toHaveAttribute('target', '_blank')
 })

@@ -1,8 +1,10 @@
 'use client'
 
-import { BodyShort, Popover } from '@navikt/ds-react'
+import { BodyShort, Heading, Popover, Portal } from '@navikt/ds-react'
 import { useState } from 'react'
 import { IDashboardTable } from '@/constants/dashboard/dashboardConstants'
+import { OverviewStackedBar } from './DashboardOverviewCard'
+import { buildSuksesskriterierSegments } from './chartUtils'
 
 export const getKravTrafficColor = (ferdig: number, total: number): string => {
   if (total === 0) return '#C6C2BF'
@@ -29,9 +31,15 @@ export const TrafficDot = ({ color }: { color: string }) => (
 export const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
   const [open, setOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const oppfylt = dok.antallSuksesskriterierOppfylt ?? 0
-  const ikkeOppfylt = dok.antallSuksesskriterierIkkeOppfylt ?? 0
-  const totSuksess = oppfylt + ikkeOppfylt
+  const suksesskriterier = dok.suksesskriterier
+  const suksessData = buildSuksesskriterierSegments({
+    ikkePaabegynt: suksesskriterier?.ikkePaabegyntAntall ?? 0,
+    underArbeid: suksesskriterier?.underArbeidAntall ?? 0,
+    oppfylt: suksesskriterier?.oppfyltAntall ?? 0,
+    ikkeOppfylt: suksesskriterier?.ikkeOppfyltAntall ?? 0,
+    ikkeRelevant: suksesskriterier?.ikkeRelevantAntall ?? 0,
+  })
+  const suksessTotal = suksessData.reduce((sum, d) => sum + (d.rawValue ?? 0), 0)
   const oppfyltPct = dok.oppfyltKravProsent
 
   return (
@@ -48,58 +56,44 @@ export const OppfyltCell = ({ dok }: { dok: IDashboardTable }) => {
           fontWeight: 700,
           fontSize: '1rem',
           cursor: 'pointer',
-          minWidth: '52px',
+          display: 'inline-grid',
+          justifyItems: 'center',
         }}
       >
-        {oppfyltPct != null ? `${oppfyltPct}%` : '-'}
+        <span aria-hidden style={{ gridArea: '1 / 1', visibility: 'hidden' }}>
+          100%
+        </span>
+        <span style={{ gridArea: '1 / 1' }}>{oppfyltPct != null ? `${oppfyltPct}%` : '-'}</span>
       </button>
-      <Popover open={open} onClose={() => setOpen(false)} anchorEl={anchorEl} placement='bottom'>
-        <Popover.Content>
-          <div style={{ width: '340px' }}>
-            {totSuksess > 0 ? (
-              <>
-                <div className='flex w-full h-6 mb-4 overflow-hidden'>
-                  <div style={{ flex: oppfylt, backgroundColor: '#005B4B' }} />
-                  <div style={{ flex: ikkeOppfylt, backgroundColor: '#C30000' }} />
-                </div>
-                <div className='flex items-center gap-2 mb-2'>
-                  <span
-                    className='inline-block w-4 h-4 rounded-full'
-                    style={{ backgroundColor: '#005B4B' }}
-                  />
-                  <BodyShort>
-                    Oppfylt <strong>{oppfylt} suksesskriterier</strong>
+      <Portal>
+        <Popover open={open} onClose={() => setOpen(false)} anchorEl={anchorEl} placement='bottom'>
+          <Popover.Content>
+            <div style={{ width: '340px' }}>
+              {suksessTotal > 0 ? (
+                <>
+                  <Heading size='small' level='3'>
+                    Suksesskriterier (etterlevelseskrav)
+                  </Heading>
+                  <OverviewStackedBar data={suksessData} isPercentage />
+                  <hr className='my-4' />
+                  <BodyShort className='mt-6 mb-2' style={{ textAlign: 'left' }}>
+                    <strong>Oppfylt der kravet er ferdig vurdert: {oppfyltPct}%</strong>
                   </BodyShort>
-                </div>
-                <div className='flex items-center gap-2 mb-6'>
-                  <span
-                    className='inline-block w-4 h-4 rounded-full'
-                    style={{ backgroundColor: '#C30000' }}
-                  />
-                  <BodyShort>
-                    Ikke oppfylt <strong>{ikkeOppfylt} suksesskriterier</strong>
+                  <BodyShort
+                    size='small'
+                    style={{ textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word' }}
+                  >
+                    Denne prosenten viser alle suksesskriterier som er oppfylt, i forhold til
+                    ikke-oppfylte suksesskriterier.
                   </BodyShort>
-                </div>
-                <hr className='my-4' />
-                <BodyShort className='mb-2' style={{ textAlign: 'left' }}>
-                  <strong>Oppfylt der kravet er ferdig vurdert: {oppfyltPct}%</strong>
-                </BodyShort>
-                <BodyShort
-                  size='small'
-                  style={{ textAlign: 'left', whiteSpace: 'normal', wordBreak: 'break-word' }}
-                >
-                  Etterleveren må først ha markert hele kravet som ferdig utfylt for at tallene
-                  vises her. Prosentandelen er beregnet basert på forholdet mellom suksesskriterier
-                  vurdert som oppfylt, og suksesskriterier vurdert som ikke oppfylt. Det tas ikke
-                  med suksesskriterier som ble vurdert som ikke relevant.
-                </BodyShort>
-              </>
-            ) : (
-              <BodyShort>Ingen suksesskriterier ferdig vurdert ennå.</BodyShort>
-            )}
-          </div>
-        </Popover.Content>
-      </Popover>
+                </>
+              ) : (
+                <BodyShort>Ingen suksesskriterier vurdert ennå.</BodyShort>
+              )}
+            </div>
+          </Popover.Content>
+        </Popover>
+      </Portal>
     </>
   )
 }
