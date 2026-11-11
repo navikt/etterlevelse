@@ -37,14 +37,16 @@ const CustomFileUpload = (props: IProps) => {
   const [announcement, setAnnouncement] = useState('')
 
   useEffect(() => {
-    if (initialValues) {
-      const initialFiles: FileObject[] = []
-      initialValues.forEach((initialFile) => {
-        initialFiles.push({ file: initialFile, error: false })
-      })
-      setFiles(initialFiles)
-      setFilesToUpload(initialValues)
-    }
+    ;(async () => {
+      if (initialValues) {
+        const initialFiles: FileObject[] = []
+        initialValues.forEach((initialFile) => {
+          initialFiles.push({ file: initialFile, error: false })
+        })
+        setFiles(initialFiles)
+        setFilesToUpload(initialValues)
+      }
+    })()
   }, [initialValues])
 
   useEffect(() => {
