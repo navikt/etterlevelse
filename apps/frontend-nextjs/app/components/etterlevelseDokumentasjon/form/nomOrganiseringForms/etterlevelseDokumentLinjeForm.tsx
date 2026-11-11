@@ -132,48 +132,33 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
                     fieldProps.remove(index)
 
                     if (removedLinje.nomEnhetId !== tjenestelinjeId) {
-                      const removedLinjeEnheter: INomEnhet[] =
+                      const linjeEnhetIds = (
+                        linjeEnheterByLinje.get(removedLinje.nomEnhetId) ?? []
+                      ).map((opt) => String(opt.value))
+                      const lokalEnhetIds = linjeEnhetIds.flatMap((linjeEnhetId) =>
+                        (lokalEnheterByLinje.get(linjeEnhetId) ?? []).map((opt) =>
+                          String(opt.value)
+                        )
+                      )
+
+                      fieldProps.form.setFieldValue(
+                        'nomOrganisering.linjeEnheter',
                         fieldProps.form.values.nomOrganisering.linjeEnheter.filter(
-                          (e: INomEnhet) => {
-                            const enhetOptions = linjeEnheterByLinje.get(removedLinje.nomEnhetId)
-                            return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
-                          }
+                          (e: INomEnhet) => !linjeEnhetIds.includes(e.nomEnhetId)
                         )
-                      if (removedLinjeEnheter.length > 0) {
-                        fieldProps.form.setFieldValue(
-                          'nomOrganisering.linjeEnheter',
-                          fieldProps.form.values.nomOrganisering.linjeEnheter.filter(
-                            (e: INomEnhet) => !removedLinjeEnheter.includes(e)
-                          )
+                      )
+                      fieldProps.form.setFieldValue(
+                        'nomOrganisering.lokalEnheter',
+                        fieldProps.form.values.nomOrganisering.lokalEnheter.filter(
+                          (e: INomEnhet) => !lokalEnhetIds.includes(e.nomEnhetId)
                         )
+                      )
 
-                        removedLinjeEnheter.forEach((removedLinjeenhet: INomEnhet) => {
-                          const removedLokalEnheter =
-                            fieldProps.form.values.nomOrganisering.lokalEnheter.filter(
-                              (e: INomEnhet) => {
-                                const enhetOptions = lokalEnheterByLinje.get(
-                                  removedLinjeenhet.nomEnhetId
-                                )
-                                return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
-                              }
-                            )
-
-                          if (removedLokalEnheter.length > 0) {
-                            fieldProps.form.setFieldValue(
-                              'nomOrganisering.lokalEnheter',
-                              fieldProps.form.values.nomOrganisering.lokalEnheter.filter(
-                                (e: INomEnhet) => !removedLokalEnheter.includes(e)
-                              )
-                            )
-                          }
-
-                          setLokalEnheterByLinje((prev) => {
-                            const next = new Map(prev)
-                            next.delete(removedLinjeenhet.nomEnhetId)
-                            return next
-                          })
-                        })
-                      }
+                      setLokalEnheterByLinje((prev) => {
+                        const next = new Map(prev)
+                        linjeEnhetIds.forEach((linjeEnhetId) => next.delete(linjeEnhetId))
+                        return next
+                      })
                       setLinjeEnheterByLinje((prev) => {
                         const next = new Map(prev)
                         next.delete(removedLinje.nomEnhetId)
