@@ -13,7 +13,7 @@ const erEndret = (a: ISuksesskriterie, b: ISuksesskriterie): boolean =>
   (a.beskrivelse ?? '').trim() !== (b.beskrivelse ?? '').trim() ||
   a.behovForBegrunnelse !== b.behovForBegrunnelse
 
-export const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
+const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
   suksesskriterie,
   sammenlignMed,
   versjon,
