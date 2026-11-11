@@ -12,6 +12,15 @@ import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 
 export const tjenestelinjeId = 'ry630r'
 
+export const avdelingerUtenSeksjoner = [
+  'vu258m',
+  'vu140n',
+  'ga846n',
+  'arbeids_og_velferdsdirektor',
+  'internrevisjon',
+  'sekretariatet',
+]
+
 export interface IEtterlevelseDokumentasjon {
   id: string
   changeStamp: IChangeStamp

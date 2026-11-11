@@ -76,7 +76,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
           <Field name='nomOrganisering.nomAvdelingId'>
             {(fieldProps: FieldProps) => (
               <div>
-                <LabelWithDescription label='Angi hvilken avdeling i direktoratet som er ansvarlig for etterlevelsen' />
+                <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
                 <OptionList
                   label='Avdeling'
                   options={alleAvdelingOptions}
@@ -152,27 +152,23 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
 
           {formValues.nomOrganisering.forEtterlevelseILinje === false && (
             <div>
-              <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-                <EtterlevelseDokumentSeksjonForm
-                  seksjonerByAvdeling={seksjonerByAvdeling}
-                  selectedAvdeling={selectedAvdeling}
-                  enheterBySeksjon={enheterBySeksjon}
-                  setEnheterBySeksjon={setEnheterBySeksjon}
-                />
+              <EtterlevelseDokumentSeksjonForm
+                seksjonerByAvdeling={seksjonerByAvdeling}
+                selectedAvdeling={selectedAvdeling}
+                enheterBySeksjon={enheterBySeksjon}
+                setEnheterBySeksjon={setEnheterBySeksjon}
+              />
 
-                <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
-              </div>
+              <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
             </div>
           )}
 
           {formValues.nomOrganisering.forEtterlevelseILinje === true && (
             <div>
-              <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-                <EtterlevelseDokumentLinjeForm
-                  etterlevelseDokumentasjon={etterlevelseDokumentasjon}
-                  formValues={formValues}
-                />
-              </div>
+              <EtterlevelseDokumentLinjeForm
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                formValues={formValues}
+              />
             </div>
           )}
         </div>

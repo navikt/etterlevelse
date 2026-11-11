@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 import {
   INomEnhet,
+  avdelingerUtenSeksjoner,
   tjenestelinjeId,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 
@@ -66,8 +67,9 @@ export const nomOrganiseringCheck = yup.object({
     .strict()
     .typeError(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE)
     .required(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE),
-  seksjoner: yup.array().when('forEtterlevelseILinje', {
-    is: false,
+  seksjoner: yup.array().when(['forEtterlevelseILinje', 'nomAvdelingId'], {
+    is: (forEtterlevelseILinje: boolean, nomAvdelingId: string) =>
+      forEtterlevelseILinje === false && !avdelingerUtenSeksjoner.includes(nomAvdelingId),
     then: (schema) =>
       schema
         .required(EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON)
