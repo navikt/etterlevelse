@@ -28,7 +28,11 @@ const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({
   const alleLinjeEnhter = Array.from(linjeEnheterByLinje.values()).flat()
 
   useEffect(() => {
-    if (etterlevelseDokumentasjon?.nomOrganisering.linjeEnheter.length) {
+    if (
+      etterlevelseDokumentasjon &&
+      etterlevelseDokumentasjon.nomOrganisering.linjeEnheter.length !== 0
+    ) {
+      console.debug('TRIGGER')
       etterlevelseDokumentasjon.nomOrganisering.linjeEnheter.forEach((linjeenhet) => {
         getUnderenheter(linjeenhet.nomEnhetId)
           .then((enheter) => {
@@ -66,7 +70,7 @@ const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({
                   if (selectedLinjeenhet) {
                     const ikkeFinnesAlleredeIListe =
                       fieldProps.form.values.nomOrganisering.linjeEnheter.filter(
-                        (linjeFylke: INomEnhet) => linjeFylke.nomEnhetId === value
+                        (linjeenhet: INomEnhet) => linjeenhet.nomEnhetId === value
                       ).length === 0
 
                     if (ikkeFinnesAlleredeIListe) {

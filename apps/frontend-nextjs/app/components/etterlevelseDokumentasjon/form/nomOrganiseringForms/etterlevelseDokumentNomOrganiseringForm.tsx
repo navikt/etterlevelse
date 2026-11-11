@@ -1,5 +1,4 @@
-import { InformationSquareIcon } from '@navikt/aksel-icons'
-import { Heading, InfoCard, Radio, RadioGroup, Stack } from '@navikt/ds-react'
+import { Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, getIn } from 'formik'
 import { FunctionComponent, useEffect, useState } from 'react'
 import {
@@ -118,12 +117,6 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
 
       {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
         <div>
-          <InfoCard data-color='info' className='max-w-155.5 w-full'>
-            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-              Dere må velge minst én av direktoratet eller linje.
-            </InfoCard.Message>
-          </InfoCard>
-
           <FieldWrapper id='forEtterlevelseILinje'>
             <Field name='nomOrganisering.forEtterlevelseILinje'>
               {(fieldProps: FieldProps) => (
@@ -148,7 +141,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
                       }}
                       wrap={false}
                     >
-                      <Radio value={false}>Seksjon</Radio>
+                      <Radio value={false}>Direktoratet</Radio>
                       <Radio value={true}>Linje</Radio>
                     </Stack>
                   </RadioGroup>
@@ -159,10 +152,6 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
 
           {formValues.nomOrganisering.forEtterlevelseILinje === false && (
             <div>
-              <Heading level='3' size='xsmall' className='mt-7 mb-5'>
-                Velg ansvar for etterlevelsen i direktoratet
-              </Heading>
-
               <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
                 <EtterlevelseDokumentSeksjonForm
                   seksjonerByAvdeling={seksjonerByAvdeling}
@@ -178,10 +167,6 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
 
           {formValues.nomOrganisering.forEtterlevelseILinje === true && (
             <div>
-              <Heading level='3' size='xsmall' className='mt-7 mb-5'>
-                Velg ansvar for etterlevelsen i linjen
-              </Heading>
-
               <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
                 <EtterlevelseDokumentLinjeForm
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}

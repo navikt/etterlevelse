@@ -132,7 +132,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
                     fieldProps.remove(index)
 
                     if (removedLinje.nomEnhetId !== tjenestelinjeId) {
-                      const removedLinjeEnheter =
+                      const removedLinjeEnheter: INomEnhet[] =
                         fieldProps.form.values.nomOrganisering.linjeEnheter.filter(
                           (e: INomEnhet) => {
                             const enhetOptions = linjeEnheterByLinje.get(removedLinje.nomEnhetId)
@@ -146,6 +146,33 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
                             (e: INomEnhet) => !removedLinjeEnheter.includes(e)
                           )
                         )
+
+                        removedLinjeEnheter.forEach((removedLinjeenhet: INomEnhet) => {
+                          const removedLokalEnheter =
+                            fieldProps.form.values.nomOrganisering.lokalEnheter.filter(
+                              (e: INomEnhet) => {
+                                const enhetOptions = lokalEnheterByLinje.get(
+                                  removedLinjeenhet.nomEnhetId
+                                )
+                                return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
+                              }
+                            )
+
+                          if (removedLokalEnheter.length > 0) {
+                            fieldProps.form.setFieldValue(
+                              'nomOrganisering.lokalEnheter',
+                              fieldProps.form.values.nomOrganisering.lokalEnheter.filter(
+                                (e: INomEnhet) => !removedLokalEnheter.includes(e)
+                              )
+                            )
+                          }
+
+                          setLokalEnheterByLinje((prev) => {
+                            const next = new Map(prev)
+                            next.delete(removedLinjeenhet.nomEnhetId)
+                            return next
+                          })
+                        })
                       }
                       setLinjeEnheterByLinje((prev) => {
                         const next = new Map(prev)

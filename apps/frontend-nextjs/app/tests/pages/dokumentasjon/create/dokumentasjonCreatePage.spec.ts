@@ -1,5 +1,4 @@
 import test, { expect } from '@playwright/test'
-import { EEtterlevelseDokumentSchemaMelding } from '@/components/etterlevelseDokumentasjon/form/etterlevelseDokumentasjonSchema'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -186,23 +185,13 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByLabel('Avdeling').selectOption(oppretteEtterlevelsesdokument.departmentId)
 
     await expect(titleField).toHaveValue(oppretteEtterlevelsesdokument.title)
-    await page.getByRole('button', { name: 'Opprett', exact: true }).click()
 
     const lineCompliance = page.getByRole('radiogroup', {
       name: 'Hvem har ansvar for etterlevelsen?',
     })
     await expect(
-      lineCompliance.getByText(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE, {
-        exact: true,
-      })
-    ).toBeVisible()
-    await expect(
-      page.getByRole('link', {
-        name: EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE,
-      })
-    ).toHaveAttribute('href', '#forEtterlevelseILinje')
-    await expect(page.locator('#forEtterlevelseILinje')).toBeVisible()
-    await lineCompliance.getByRole('radio', { name: 'Seksjon', exact: true }).check()
+      lineCompliance.getByRole('radio', { name: 'Direktoratet', exact: true })
+    ).toBeChecked()
     await page.getByRole('combobox', { name: 'Seksjon', exact: true }).selectOption('seksjon-1')
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()
 
