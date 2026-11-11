@@ -541,7 +541,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       },
       {
         id: 'oppfylt',
-        header: 'Oppfylt',
+        header: 'Oppfylte suksesskriterier',
 
         isSortable: true,
 

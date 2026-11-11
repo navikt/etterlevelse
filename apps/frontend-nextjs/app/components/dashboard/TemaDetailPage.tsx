@@ -573,7 +573,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
       },
       {
         id: 'oppfylt',
-        header: 'Oppfylt',
+        header: 'Oppfylte suksesskriterier',
 
         isSortable: true,
 

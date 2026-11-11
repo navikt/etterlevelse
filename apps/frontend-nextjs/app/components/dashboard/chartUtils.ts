@@ -45,5 +45,28 @@ export const formatPct = (pct: number, value: number): string => {
 
 export const DOK_COLORS = ['#9f1853', '#1192e8', '#005d5d']
 export const AVDELING_SUKSESS_COLORS = ['#9f1853', '#1192e8', '#005d5d', '#fa4d56', '#6929c4']
+export const buildSuksesskriterierSegments = (counts: {
+  ikkePaabegynt: number
+  underArbeid: number
+  oppfylt: number
+  ikkeOppfylt: number
+  ikkeRelevant: number
+}): IBarSegment[] => {
+  const entries: [string, number][] = [
+    ['Ikke påbegynt', counts.ikkePaabegynt],
+    ['Under arbeid', counts.underArbeid],
+    ['Oppfylt', counts.oppfylt],
+    ['Ikke oppfylt', counts.ikkeOppfylt],
+    ['Ikke relevant', counts.ikkeRelevant],
+  ]
+  const pcts = roundedPercentages(entries.map(([, value]) => value))
+  return entries.map(([name, rawValue], index) => ({
+    name,
+    value: pcts[index],
+    rawValue,
+    color: AVDELING_SUKSESS_COLORS[index],
+  }))
+}
+
 export const BEHOV_COLORS = ['#fa4d56', '#9f1853', '#1192e8', '#005d5d', '#ee538b']
 export const PVK_COLORS = ['#fa4d56', '#9f1853', '#1192e8', '#005d5d', '#ee538b', '#6929c4']

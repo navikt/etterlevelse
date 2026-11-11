@@ -4,16 +4,15 @@ import { BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
 import {
-  AVDELING_SUKSESS_COLORS,
   BEHOV_COLORS,
   DOK_COLORS,
   IBarSegment,
   PVK_COLORS,
+  buildSuksesskriterierSegments,
   formatPct,
-  roundedPercentages,
 } from './chartUtils'
 
-const OverviewStackedBar = ({
+export const OverviewStackedBar = ({
   data,
   isPercentage,
 }: {
@@ -181,55 +180,7 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
     { name: 'Godkjent av risikoeier', value: agg.dok.godkjentAvRisikoeier, color: DOK_COLORS[2] },
   ]
 
-  const suksessTotal =
-    agg.suksess.ikkePaabegynt +
-    agg.suksess.underArbeid +
-    agg.suksess.oppfylt +
-    agg.suksess.ikkeOppfylt +
-    agg.suksess.ikkeRelevant
-  const suksessPcts =
-    suksessTotal > 0
-      ? roundedPercentages([
-          agg.suksess.ikkePaabegynt,
-          agg.suksess.underArbeid,
-          agg.suksess.oppfylt,
-          agg.suksess.ikkeOppfylt,
-          agg.suksess.ikkeRelevant,
-        ])
-      : [0, 0, 0, 0, 0]
-
-  const suksessData: IBarSegment[] = [
-    {
-      name: 'Ikke påbegynt',
-      value: suksessPcts[0],
-      rawValue: agg.suksess.ikkePaabegynt,
-      color: AVDELING_SUKSESS_COLORS[0],
-    },
-    {
-      name: 'Under arbeid',
-      value: suksessPcts[1],
-      rawValue: agg.suksess.underArbeid,
-      color: AVDELING_SUKSESS_COLORS[1],
-    },
-    {
-      name: 'Oppfylt',
-      value: suksessPcts[2],
-      rawValue: agg.suksess.oppfylt,
-      color: AVDELING_SUKSESS_COLORS[2],
-    },
-    {
-      name: 'Ikke oppfylt',
-      value: suksessPcts[3],
-      rawValue: agg.suksess.ikkeOppfylt,
-      color: AVDELING_SUKSESS_COLORS[3],
-    },
-    {
-      name: 'Ikke relevant',
-      value: suksessPcts[4],
-      rawValue: agg.suksess.ikkeRelevant,
-      color: AVDELING_SUKSESS_COLORS[4],
-    },
-  ]
+  const suksessData = buildSuksesskriterierSegments(agg.suksess)
 
   const behovData: IBarSegment[] = [
     { name: 'Ikke vurdert behov', value: agg.behov.ikkeVurdertBehov, color: BEHOV_COLORS[0] },
