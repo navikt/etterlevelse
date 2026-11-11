@@ -1125,7 +1125,9 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
       <div className='rounded-lg px-6 py-4' style={{ backgroundColor: '#e3eff7' }}>
         <div className='flex justify-between items-start gap-4'>
           <div className='flex gap-4 flex-wrap items-end'>
-            {data.seksjoner && data.seksjoner.length > 0 && (
+            {data.seksjoner?.some(
+              (s) => s.id !== 'ingen-seksjon' && s.navn !== data.avdelingNavn
+            ) && (
               <>
                 <Select
                   label='Velg seksjon'

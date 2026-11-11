@@ -802,7 +802,7 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               (a) => a.avdelingId === selectedAvdeling
             )?.avdelingNavn
             const filteredSeksjoner = seksjoner.filter((s) => s.navn !== avdelingNavn)
-            return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+            return selectedAvdeling && filteredSeksjoner.some((s) => s.id !== 'ingen-seksjon') ? (
               <Select
                 label='Filtrer etter seksjon'
                 className='sm:w-fit sm:min-w-64'
@@ -1333,7 +1333,8 @@ const TemaDetailPage = ({ temaCode }: IProps) => {
               (a) => a.avdelingId === selectedKravAvdeling
             )?.avdelingNavn
             const filteredSeksjoner = kravSeksjoner.filter((s) => s.navn !== avdelingNavn)
-            return selectedKravAvdeling && filteredSeksjoner.length > 0 ? (
+            return selectedKravAvdeling &&
+              filteredSeksjoner.some((s) => s.id !== 'ingen-seksjon') ? (
               <Select
                 label='Filtrer etter seksjon'
                 className='sm:w-fit sm:min-w-64'

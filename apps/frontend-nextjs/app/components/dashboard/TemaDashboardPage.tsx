@@ -613,7 +613,7 @@ const TemaDashboardPage = () => {
               (a) => a.avdelingId === selectedAvdeling
             )?.avdelingNavn
             const filteredSeksjoner = seksjoner.filter((s) => s.navn !== avdelingNavn)
-            return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+            return selectedAvdeling && filteredSeksjoner.some((s) => s.id !== 'ingen-seksjon') ? (
               <Select
                 label='Filtrer etter seksjon'
                 style={{ width: 350 }}
