@@ -15,7 +15,6 @@ import {
   behandlingsKatalogLink,
   datajegerSlackLink,
   githubRepo,
-  omEtterlevelsePaNavet,
   teamInfoLink,
   veilederEtterlevelseskrav,
 } from '@/util/footer/footerUtil'
@@ -84,9 +83,6 @@ export const Footer = () => {
           <Spacer />
           <div className='flex flex-col gap-4 px-2'>
             <BodyShort>Nyttige lenker</BodyShort>
-            <Link className='text-white' href={omEtterlevelsePaNavet}>
-              Om etterlevelse på Navet
-            </Link>
             <Link className='text-white' href={behandlingsKatalogLink}>
               Behandlingskatalogen
             </Link>

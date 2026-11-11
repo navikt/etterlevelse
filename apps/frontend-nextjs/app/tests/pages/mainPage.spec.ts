@@ -30,8 +30,9 @@ test.describe('etterlevelse main page tests', () => {
     await expect(page.getByRole('link', { name: 'Se alle etterlevelsesdokumenter' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Forstå kravene' })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Status i organisasjonen' })).toBeVisible()
+
     const footer = page.getByRole('contentinfo')
-    await expect(footer.getByRole('link', { name: 'Om etterlevelse på Navet' })).toBeVisible()
+
     await expect(
       footer.getByRole('link', { name: 'Behandlingskatalogen', exact: true })
     ).toBeVisible()
