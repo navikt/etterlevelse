@@ -29,6 +29,7 @@ const EtterlevelseDokumentFylkeForm: FunctionComponent<TProps> = ({
               <LabelWithDescription label='Angi fylke' />
               <OptionList
                 label='Fylke'
+                value=''
                 options={alleFylkeOptions}
                 onChange={async (value: any) => {
                   const selectedFylke = alleFylkeOptions.find((fylke) => fylke.value === value)

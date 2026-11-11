@@ -28,6 +28,7 @@ const EtterlevelseDokumentEnheterForm: FunctionComponent<TProps> = ({ enheterByS
               <LabelWithDescription label='Angi enhet' />
               <OptionList
                 label='Enhet'
+                value=''
                 options={allEnhetOptions}
                 onChange={async (value: any) => {
                   if (value) {

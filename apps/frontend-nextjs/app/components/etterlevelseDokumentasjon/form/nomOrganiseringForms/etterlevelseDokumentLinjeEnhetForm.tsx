@@ -63,6 +63,7 @@ const EtterlevelseDokumentLinjeEnhetForm: FunctionComponent<TProps> = ({
               <LabelWithDescription label='Angi linjeenhet' />
               <OptionList
                 label='Linje enhet'
+                value=''
                 options={alleLinjeEnhter}
                 onChange={async (value: any) => {
                   const selectedLinjeenhet = alleLinjeEnhter.find((enhet) => enhet.value === value)

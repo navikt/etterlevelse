@@ -27,6 +27,7 @@ const EtterlevelseDokumentLokalEnheterForm: FunctionComponent<TProps> = ({
               <LabelWithDescription label='Angi lokal enhet' />
               <OptionList
                 label='lokal enhet'
+                value=''
                 options={alleLokalEnheter}
                 onChange={async (value: any) => {
                   const selectedLokalEnhet = alleLokalEnheter.find((enhet) => enhet.value === value)

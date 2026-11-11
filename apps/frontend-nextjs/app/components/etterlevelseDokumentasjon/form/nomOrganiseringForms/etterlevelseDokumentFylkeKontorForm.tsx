@@ -24,6 +24,7 @@ const EtterlevelseDokumentFylkeKontorForm: FunctionComponent<TProps> = ({ kontor
             <div>
               <LabelWithDescription label='Angi kontor' />
               <OptionList
+                value=''
                 label='Kontor'
                 options={alleFylkeKontorer}
                 onChange={async (value: any) => {

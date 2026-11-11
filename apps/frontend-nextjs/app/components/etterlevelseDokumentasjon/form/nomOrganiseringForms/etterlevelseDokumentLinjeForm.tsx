@@ -78,6 +78,7 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
                 <LabelWithDescription label='Angi linje' />
                 <OptionList
                   label='Linje'
+                  value=''
                   options={alleLinjeOptions}
                   onChange={async (value: any) => {
                     const selectedLinje = alleLinjeOptions.find((linje) => linje.value === value)

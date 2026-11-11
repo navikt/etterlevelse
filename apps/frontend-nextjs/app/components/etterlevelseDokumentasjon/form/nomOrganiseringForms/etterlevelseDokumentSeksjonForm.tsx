@@ -55,6 +55,7 @@ const EtterlevelseDokumentSeksjonForm: FunctionComponent<TProps> = ({
               <OptionList
                 label='Seksjon'
                 options={filteredSeksjoner}
+                value=''
                 onChange={async (value: any) => {
                   if (value) {
                     const selectedSeksjon = filteredSeksjoner.find(
