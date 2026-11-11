@@ -14,21 +14,13 @@ import no.nav.data.etterlevelse.krav.domain.dto.KravFilter;
 import no.nav.data.integration.ardoq.domain.ArdoqExportEtterlevelseDokumentField;
 import no.nav.data.integration.ardoq.domain.ArdoqSystemRelationField;
 import no.nav.data.integration.ardoq.domain.ArdoqTeamRelation;
+import no.nav.data.integration.ardoq.dto.ArdoqPostPayload;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -135,50 +127,14 @@ public class ArdoqExportService {
         return result;
     }
 
-    public ByteArrayOutputStream ardoqExportEtterlevelseDokumentDataToExcel(List<ArdoqExportEtterlevelseDokumentField> ardoqExportEtterlevelseDokumentFields) {
-        try (Workbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+    public void ardoqExportEtterlevelseDokumentDataToExcel(List<ArdoqExportEtterlevelseDokumentField> ardoqExportEtterlevelseDokumentFields) {
+            // config id for referanse mellom Etterlevelse og system
+            //ikke sensitiv data
+            final String configIdEtterlevelse = "cd645f7f3589042edfc50ce0";
+            final String configIdTeam = "1a2fd08cbcb9ddd8b0b815cf";
 
-            var sheet = workbook.createSheet("Etterlevelse dokumentasjon data");
-            var teamSheet = workbook.createSheet("Etterlevelse dokumentasjon relation med team");
-
-            CellStyle headerStyle = workbook.createCellStyle();
-            Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
-            headerStyle.setFont(headerFont);
-            headerStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
-            String[] headers = {"Etterlevelsesdokument nummer", "EtterlevelsesDokumentId","Dokumentnavn", "Antall krav", "Krav ikke startet", "Krav under arbeid", "Krav ferdig", "Link til etterlevelsesdokument"};
-            String[] teamHeaders = {"EtterlevelsesDokumentId", "TeamId"};
-            var headerRow = sheet.createRow(0);
-            for (int i = 0; i < headers.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(headers[i]);
-                cell.setCellStyle(headerStyle);
-            }
-
-            var teamHeaderRow = teamSheet.createRow(0);
-            for (int i = 0; i < teamHeaders.length; i++) {
-                Cell cell = teamHeaderRow.createCell(i);
-                cell.setCellValue(teamHeaders[i]);
-                cell.setCellStyle(headerStyle);
-            }
-
-            int rowIndex = 1;
-            int rowTeamIndex = 1;
             List<ArdoqTeamRelation> ardoqTeamRelations = new ArrayList<>();
             for (ArdoqExportEtterlevelseDokumentField ardoqExportEtterlevelseDokumentField : ardoqExportEtterlevelseDokumentFields) {
-                var row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentNummer());
-                row.createCell(1).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentId());
-                row.createCell(2).setCellValue(ardoqExportEtterlevelseDokumentField.getEtterlevelseDokumentNavn());
-                row.createCell(3).setCellValue(ardoqExportEtterlevelseDokumentField.getAntallKrav());
-                row.createCell(4).setCellValue(ardoqExportEtterlevelseDokumentField.getKravIkkeStartet());
-                row.createCell(5).setCellValue(ardoqExportEtterlevelseDokumentField.getKravUnderArbeid());
-                row.createCell(6).setCellValue(ardoqExportEtterlevelseDokumentField.getKravFerdig());
-                row.createCell(7).setCellValue(ardoqExportEtterlevelseDokumentField.getLinkTilEtterlevelsesDokument());
-
                 List<String> teams = ardoqExportEtterlevelseDokumentField.getTeams();
                 if (teams != null) {
                     for (String teamId : teams) {
@@ -191,65 +147,64 @@ public class ArdoqExportService {
                 }
             }
 
-            for (ArdoqTeamRelation ardoqTeamRelation : ardoqTeamRelations) {
-                var teamRow = teamSheet.createRow(rowTeamIndex++);
-                teamRow.createCell(0).setCellValue(ardoqTeamRelation.getEtterlevelseDokumentId());
-                teamRow.createCell(1).setCellValue(ardoqTeamRelation.getTeamId());
-            }
+        ArdoqPostPayload<ArdoqExportEtterlevelseDokumentField> payload = ArdoqPostPayload.<ArdoqExportEtterlevelseDokumentField>builder()
+                .config(
+                        ArdoqPostPayload.ArdoqConfig.builder()
+                                .id(configIdEtterlevelse)
+                                .name("API Import component Etterlevelsesdokument.xlsx")
+                                .build()
+                ).tables(
+                        List.of(
+                                ArdoqPostPayload.ArdoqTable.<ArdoqExportEtterlevelseDokumentField>builder()
+                                        .id("1")
+                                        .rows(ardoqExportEtterlevelseDokumentFields)
+                                        .build()
+                        )
+                ).build();
 
-            for (int i = 0; i < headers.length; i++) {
-                sheet.autoSizeColumn(i);
-                teamSheet.autoSizeColumn(i);
-            }
+        ardoqClient.postArdoqData(payload);
 
-            workbook.write(out);
-            log.info("Excel file generated successfully!");
-            return out;
-        } catch (IOException e) {
-            log.error("Error creating Excel file: {}", e.getMessage());
-        }
-        return null;
+        ArdoqPostPayload<ArdoqTeamRelation> teamPayload = ArdoqPostPayload.<ArdoqTeamRelation>builder()
+                .config(
+                        ArdoqPostPayload.ArdoqConfig.builder()
+                                .id(configIdTeam)
+                                .name("API Import relasjon etterlevelse mot team.xlsx")
+                                .build()
+                ).tables(
+                        List.of(
+                                ArdoqPostPayload.ArdoqTable.<ArdoqTeamRelation>builder()
+                                        .id("1")
+                                        .rows(ardoqTeamRelations)
+                                        .build()
+                        )
+                ).build();
+
+        ardoqClient.postArdoqData(teamPayload);
+
+
     }
 
-    public ByteArrayOutputStream ardoqExportSystemRelationDataToExcel(List<ArdoqSystemRelationField> ardoqExportSystemRelationFields) {
-        try (Workbook workbook = new XSSFWorkbook();
-             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+    public void ardoqExportSystemRelationDataToExcel(List<ArdoqSystemRelationField> ardoqExportSystemRelationFields) {
+        // config id for referanse mellom Etterlevelse og system
+        //ikke sensitiv data
+        final String configId = "6d60048160a5309117c13f4f";
 
-            var sheet = workbook.createSheet("Ardoq System relation med Etterlevelse dokumentasjon");
+        ArdoqPostPayload<ArdoqSystemRelationField> payload = ArdoqPostPayload.<ArdoqSystemRelationField>builder()
+                .config(
+                        ArdoqPostPayload.ArdoqConfig.builder()
+                                .id(configId)
+                                .name("API import referanse Etterlevelse mot system")
+                                .build()
+                    ).tables(
+                            List.of(
+                                    ArdoqPostPayload.ArdoqTable.<ArdoqSystemRelationField>builder()
+                                            .id("1")
+                                            .rows(ardoqExportSystemRelationFields)
+                                            .build()
+                            )
+                    ).build();
 
-            CellStyle headerStyle = workbook.createCellStyle();
-            Font headerFont = workbook.createFont();
-            headerFont.setBold(true);
-            headerStyle.setFont(headerFont);
-            headerStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
-            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        ardoqClient.postArdoqData(payload);
 
-            String[] headers = {"System id", "EtterlevelsesDokumentId"};
-
-            var headerRow = sheet.createRow(0);
-            for (int i = 0; i < headers.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(headers[i]);
-                cell.setCellStyle(headerStyle);
-            }
-
-            int rowIndex = 1;
-            for (ArdoqSystemRelationField ardoqSystemRelationField : ardoqExportSystemRelationFields) {
-                var row = sheet.createRow(rowIndex++);
-                row.createCell(0).setCellValue(ardoqSystemRelationField.getArdoqId());
-                row.createCell(1).setCellValue(ardoqSystemRelationField.getEtterlevelseDokumentId().toString());
-            }
-
-            for (int i = 0; i < headers.length; i++) {
-                sheet.autoSizeColumn(i);
-            }
-
-            workbook.write(out);
-            log.info("Excel file generated successfully!");
-            return out;
-        } catch (IOException e) {
-            log.error("Error creating Excel file: {}", e.getMessage());
-        }
-        return null;
     }
 }

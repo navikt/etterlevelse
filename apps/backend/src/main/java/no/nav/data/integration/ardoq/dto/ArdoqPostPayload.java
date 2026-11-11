@@ -21,7 +21,7 @@ public class ArdoqPostPayload<T> {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    private static class ArdoqConfig {
+    public static class ArdoqConfig {
         private String id;
         private String name;
     }
@@ -30,7 +30,7 @@ public class ArdoqPostPayload<T> {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    private static class ArdoqTable<T> {
+    public static class ArdoqTable<T> {
         private String id;
         private List<T> rows;
     }

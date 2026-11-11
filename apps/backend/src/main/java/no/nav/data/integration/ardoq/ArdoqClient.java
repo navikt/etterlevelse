@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.utils.MetricUtils;
+import no.nav.data.integration.ardoq.dto.ArdoqPostPayload;
 import no.nav.data.integration.ardoq.dto.ArdoqSystem;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemData;
 import no.nav.data.integration.ardoq.dto.ArdoqSystemResponse;
@@ -18,7 +19,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -85,6 +90,22 @@ public class ArdoqClient {
 
         return safeStream(ardoqSystems)
                 .collect(Collectors.toMap(ArdoqSystemResponse::getArdoqID, Function.identity()));
+    }
+
+    public void postArdoqData(ArdoqPostPayload<?> payload) {
+        try {
+            var url = properties.getBaseUrl() + "/api/integrations/tabular/import";
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    new HttpEntity<>(payload, createHeadersWithAuth()),
+                    String.class,
+                    properties.getReportId()
+            );
+            log.info("Successfully posted data to Ardoq, response: {}", response.getBody());
+        } catch (RestClientException e) {
+            log.error("Unable to post data to Ardoq, error: {}", String.valueOf(e));
+        }
     }
 
     @SchedulerLock(name = "ArdoqTokenRefresh")
