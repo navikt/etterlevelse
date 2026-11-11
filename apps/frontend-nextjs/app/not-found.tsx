@@ -19,6 +19,7 @@ const NotFound = () => {
         </Heading>
         <Image
           src={notFound}
+          loading='lazy'
           alt='Oida 404! Fant ikke den siden der nei'
           style={{ maxWidth: '65%' }}
         />
