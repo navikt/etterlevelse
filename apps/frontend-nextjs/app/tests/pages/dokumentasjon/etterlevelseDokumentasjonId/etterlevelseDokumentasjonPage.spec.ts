@@ -499,8 +499,68 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
           })
         }
       )
+      await context.route('**/api/krav/kravnummer/*', async (route) => {
+        await route.fulfill({ json: { content: [] } })
+      })
+
+      await context.route('**/api/melding/type/SYSTEM', async (route) => {
+        await route.fulfill({ json: [] })
+      })
+
+      await context.route(
+        `**/api/behandlingens-art-og-omfang/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+
       await context.route('**/graphql', async (route) => {
-        const requestBody = route.request().postDataJSON() as { operationName?: string }
+        const requestBody = route.request().postDataJSON() as {
+          operationName?: string
+          variables?: { kravNummer?: number; kravVersjon?: number }
+        }
+
+        if (requestBody.operationName === 'getKravWithEtterlevelse') {
+          const requirement = requirementLinks.find(
+            ({ number, version }) =>
+              number === requestBody.variables?.kravNummer &&
+              version === requestBody.variables?.kravVersjon
+          )
+          if (!requirement) {
+            throw new Error('The requested requirement must exist in the fixture')
+          }
+          await route.fulfill({
+            json: {
+              data: {
+                kravById: {
+                  id: `krav-${requirement.number}-${requirement.version}`,
+                  kravNummer: requirement.number,
+                  kravVersjon: requirement.version,
+                  navn: requirement.name,
+                  status: requirement.number === expiredRequirement.number ? 'UTGAATT' : 'AKTIV',
+                  changeStamp: {
+                    lastModifiedDate: '2025-01-01T00:00:00Z',
+                    lastModifiedBy: mockIdent,
+                  },
+                  aktivertDato: '2025-01-01T00:00:00Z',
+                  hensikt: 'Hensikten med testkravet',
+                  beskrivelse: '',
+                  dokumentasjon: [],
+                  tagger: [],
+                  suksesskriterier: [],
+                  etterlevelser: [],
+                  regelverk: [],
+                  relevansFor: [],
+                  begreper: [],
+                  begrepIder: [],
+                  kravRelasjoner: [],
+                  varslingsadresserQl: [],
+                },
+              },
+            },
+          })
+          return
+        }
 
         if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
           const mockRequirement = (
@@ -669,6 +729,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         await expect(requirementLink).toHaveAttribute('href', requirementUrl)
         await requirementLink.click()
         await expect(page).toHaveURL(`http://localhost:3000${requirementUrl}`)
+        await expect(
+          page.getByRole('heading', { name: requirement.name, exact: false })
+        ).toBeVisible()
         await page.goBack({ waitUntil: 'domcontentloaded' })
         await expect(page).toHaveURL(documentOverviewUrl)
         await expect(expandAllThemes).toBeChecked()
