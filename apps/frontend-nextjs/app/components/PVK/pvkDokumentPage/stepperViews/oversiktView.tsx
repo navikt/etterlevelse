@@ -70,6 +70,7 @@ type TProps = {
       }
     | undefined
   pvoTilbakemelding?: IPvoTilbakemelding
+  isReadOnly?: boolean
 }
 
 export const getFormStatus = (
@@ -191,6 +192,7 @@ export const OversiktView: FunctionComponent<TProps> = ({
   setSelectedStep,
   updateTitleUrlAndStep,
   pvkKrav,
+  isReadOnly,
 }) => {
   const user = useContext(UserContext)
   const pathName = usePathname()
@@ -406,7 +408,8 @@ export const OversiktView: FunctionComponent<TProps> = ({
 
         {(user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) &&
           etterlevelseDokumentasjon.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
-          pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER && (
+          pvkDokument.status === EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
+          !isReadOnly && (
             <div className='my-5'>
               <Button
                 type='button'
