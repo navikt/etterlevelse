@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
+import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.web.TraceHeaderFilter;
 import no.nav.data.integration.begrep.BegrepService;
@@ -38,8 +39,10 @@ public class BkatClient implements BegrepService {
 
     private final Cache<String, BegrepResponse> termCache;
     private final Cache<String, List<BegrepResponse>> termSearchCache;
+    private final SecurityProperties securityProperties;
 
-    public BkatClient(WebClient.Builder webClientBuilder, BkatProperties properties) {
+    public BkatClient(WebClient.Builder webClientBuilder, BkatProperties properties, SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
         this.client = webClientBuilder
                 .baseUrl(properties.getBaseUrl())
                 .filter(new TraceHeaderFilter(true))
@@ -112,6 +115,9 @@ public class BkatClient implements BegrepService {
     }
 
     private BkatProcessor getProcessor0(String id) {
+        if ( securityProperties.isDev()) {
+            return get("/databehandler/{id}", BkatProcessor.class, id);
+        }
         return get("/processor/{id}", BkatProcessor.class, id);
     }
 
