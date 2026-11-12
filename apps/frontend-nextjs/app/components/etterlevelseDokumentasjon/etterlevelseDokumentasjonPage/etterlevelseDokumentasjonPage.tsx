@@ -61,6 +61,7 @@ export const EtterlevelseDokumentasjonPage = () => {
   }>(getEtterlevelseDokumentasjonStatsQuery, {
     variables,
     skip: !params.etterlevelseDokumentasjonId,
+    notifyOnNetworkStatusChange: false,
   })
 
   const [relevanteStats, utgaattStats] = filterEtterlevelseDokumentasjonStatsData(relevanteData)

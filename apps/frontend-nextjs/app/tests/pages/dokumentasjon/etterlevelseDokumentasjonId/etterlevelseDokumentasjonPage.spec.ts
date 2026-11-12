@@ -529,6 +529,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
                     status: 'FERDIG_DOKUMENTERT',
                     etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
                     fristForFerdigstillelse: '',
+                    ikkeBehovForRevurdering: false,
                     suksesskriterieBegrunnelser: [],
                     changeStamp: {
                       createdDate: '2025-01-01T00:00:00Z',
@@ -538,7 +539,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
                   },
                 ]
               : [],
-            regelverk: [{ lov: { code: lawCode } }],
+            regelverk: [{ lov: { code: lawCode, shortName: lawCode } }],
           })
 
           await route.fulfill({
@@ -569,6 +570,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
                             'INTERNKONTROLLFORSKRIFTEN'
                           ),
                         ],
+                        irrelevantKrav: [],
                         utgaattKrav: [
                           {
                             ...mockRequirement(

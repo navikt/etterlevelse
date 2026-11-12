@@ -3,6 +3,7 @@
 import { BodyLong, Detail, LinkPanel, Tag } from '@navikt/ds-react'
 import moment from 'moment'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import { getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber } from '@/api/etterlevelse/etterlevelseApi'
 import {
@@ -152,6 +153,7 @@ export const KravCard = (props: IProps) => {
 
   return (
     <LinkPanel
+      as={Link}
       href={etterlevelseDokumentasjonTemaCodeKravStatusFilterUrl(
         etterlevelseDokumentasjon.id,
         temaCode,

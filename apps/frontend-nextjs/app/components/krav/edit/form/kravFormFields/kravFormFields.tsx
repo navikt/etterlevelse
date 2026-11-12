@@ -143,12 +143,6 @@ export const KravFormFields: FunctionComponent<TProps> = ({
             </div>
           )}
 
-          <div className='mb-8'>
-            <Heading level='2' size='medium'>
-              Egenskaper
-            </Heading>
-          </div>
-
           <div id='varslingsadresserQl'>
             <VarslingsadresserEdit fieldName='varslingsadresserQl' />
           </div>
