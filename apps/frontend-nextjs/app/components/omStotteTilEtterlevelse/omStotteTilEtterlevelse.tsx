@@ -146,6 +146,7 @@ const OmStotteTilEtterlevelse = () => {
             Forsiden i Støtte til etterlevelse
           </Heading>
           <Image
+            loading='lazy'
             className='mr-2.5 mt-6 mb-12'
             src={ForsidenIStotteTilEtterlevelse}
             alt='Skjermbilde fra forsiden til Støtte til etterlevelse'
