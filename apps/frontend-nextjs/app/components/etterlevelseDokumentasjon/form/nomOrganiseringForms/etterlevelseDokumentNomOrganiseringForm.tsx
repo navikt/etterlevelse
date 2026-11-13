@@ -49,7 +49,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
   }, [selectedAvdeling])
 
   useEffect(() => {
-    if (etterlevelseDokumentasjon?.nomOrganisering.linjer.length) {
+    if (etterlevelseDokumentasjon?.nomOrganisering.seksjoner.length) {
       etterlevelseDokumentasjon.nomOrganisering.seksjoner.forEach((seksjon) => {
         getEnheterBySeksjonId(seksjon.nomSeksjonId)
           .then((enheter) => {
