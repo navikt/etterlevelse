@@ -726,6 +726,12 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
           name: new RegExp(`K${requirement.number}\\.${requirement.version}.*${requirement.name}`),
         })
 
+        if (requirement.theme === 'PERSONVERN') {
+          await expect(
+            page.getByRole('heading', { name: /Fordi dere behandler personopplysninger/ })
+          ).toBeVisible()
+        }
+
         await expect(requirementLink).toHaveAttribute('href', requirementUrl)
         await requirementLink.click()
         await expect(page).toHaveURL(`http://localhost:3000${requirementUrl}`)
