@@ -54,7 +54,10 @@ type TProps = {
   isCreateMode?: boolean
   noCopyButton?: boolean
   formRef: RefObject<any>
-  onRemovedFromThisKrav?: (payload: { risikoscenarioName: string }) => void
+  onRemovedFromThisKrav?: (payload: {
+    risikoscenarioName: string
+    risikoscenarioId: string
+  }) => void
 }
 
 const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
@@ -150,7 +153,10 @@ const KravRisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
     const isNowLinkedToThisKrav = isLinkedToThisKrav(refreshed)
     if (wasLinkedToThisKrav && !isNowLinkedToThisKrav) {
       const storageKey = `pvk:removed-risikoscenario-from-krav:${etterlevelseDokumentasjonId}:${kravnummer}:${kravversjon}`
-      const payload = { risikoscenarioName: refreshed.navn || 'Risikoscenario' }
+      const payload = {
+        risikoscenarioName: refreshed.navn || 'Risikoscenario',
+        risikoscenarioId: refreshed.id || '',
+      }
       window.sessionStorage.setItem(storageKey, JSON.stringify(payload))
       onRemovedFromThisKrav?.(payload)
     }

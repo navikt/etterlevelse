@@ -66,10 +66,14 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   const accordionHeaderRef = useRef<HTMLButtonElement>(null)
   const [removedRisikoscenarioAlert, setRemovedRisikoscenarioAlert] = useState<{
     risikoscenarioName: string
+    risikoscenarioId: string
   } | null>(null)
   const [isAnnouncementReady, setIsAnnouncementReady] = useState(false)
 
-  const handleRemovedFromThisKrav = (payload: { risikoscenarioName: string }) => {
+  const handleRemovedFromThisKrav = (payload: {
+    risikoscenarioName: string
+    risikoscenarioId: string
+  }) => {
     setIsAnnouncementReady(false)
     setRemovedRisikoscenarioAlert(payload)
   }
@@ -149,7 +153,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
     const raw = window.sessionStorage.getItem(storageKey)
     if (raw) {
       try {
-        const parsed = JSON.parse(raw) as { risikoscenarioName: string }
+        const parsed = JSON.parse(raw) as { risikoscenarioName: string; risikoscenarioId: string }
         if (parsed?.risikoscenarioName) {
           handleRemovedFromThisKrav(parsed)
         }
@@ -316,7 +320,8 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                     href={pvkDokumentasjonStepUrl(
                       pvkDokument.etterlevelseDokumentId,
                       pvkDokument.id,
-                      6
+                      6,
+                      `&risikoscenario=${removedRisikoscenarioAlert.risikoscenarioId}`
                     )}
                   >
                     Identifisering av risikoscenarioer og tiltak
