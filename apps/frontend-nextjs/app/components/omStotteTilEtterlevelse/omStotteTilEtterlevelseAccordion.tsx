@@ -792,8 +792,10 @@ const OmStotteTilEtterlevelseAccordion = () => {
           <BodyLong spacing>Under Dette må du vite om gjenbruk, velg “Gjenbruk dokument”.</BodyLong>
           <BodyLong className='mb-3'>
             Fyll ut skjemaet i tråd med{' '}
-            <ExternalLink href='/'>Redigere dokumentegenskaper og filtrere krav </ExternalLink>{' '}
-            Fordi dere gjenbruker, vil det være noen forskjeller fra oppretting av et vanlig
+            <ExternalLink href={redigereDokumentegenskaperUrl}>
+              Redigere dokumentegenskaper og filtrere krav{' '}
+            </ExternalLink>
+            . Fordi dere gjenbruker, vil det være noen forskjeller fra oppretting av et vanlig
             etterlevelsesdokument:
           </BodyLong>
           <List as='ul' className='mb-6'>
