@@ -4,6 +4,7 @@ import { BarChartIcon, LightBulbIcon, ParagraphIcon } from '@navikt/aksel-icons'
 import { Heading, LinkCard } from '@navikt/ds-react'
 import { ReactNode } from 'react'
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 
 type TCard = {
   href: string
@@ -21,7 +22,7 @@ const cards: TCard[] = [
       'Hvilke krav må vi etterleve i Nav? Få oversikt over overordnede temaer og alle etterlevelseskrav.',
   },
   {
-    href: '/omstottetiletterlevelse',
+    href: `${omStotteTilEtterlevelseUrl}`,
     icon: <LightBulbIcon aria-hidden fontSize='1.5rem' />,
     title: 'Slik dokumenterer du',
     description:

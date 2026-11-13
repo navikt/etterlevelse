@@ -8,6 +8,20 @@ import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import OmStotteTilEtterlevelseAccordion from '@/components/omStotteTilEtterlevelse/omStotteTilEtterlevelseAccordion'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { omPVKUrl, oversiktOverLosningeneUrl } from '@/routes/omSidene/omSideneUrl'
+import {
+  detteInneholderEtEtterlevelseKravId,
+  detteInneholderEtEtterlevelseKravUrl,
+  formaaletMedStotteTilEtterlevelseId,
+  formaaletMedStotteTilEtterlevelseUrl,
+  forsidenIStotteTilEtterlevelseId,
+  forsidenIStotteTilEtterlevelseUrl,
+  hvordanDokumentereEtterlevelseId,
+  hvordanDokumentereEtterlevelseUrl,
+  taKontaktId,
+  taKontaktUrl,
+  temainndelingOgTemaoversiktId,
+  temainndelingOgTemaoversiktUrl,
+} from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import ForsidenIStotteTilEtterlevelse from './images/ForsidenIStotteTilEtterlevelse.png'
 import TemainndelingOgTemaoversiktReadmore from './images/TemainndelingOgTemaoversiktReadmore.png'
 import VisMegHvordanEnKravsideSerUt from './images/VisMegHvordanEnKravsideSerUt.png'
@@ -26,22 +40,22 @@ const OmStotteTilEtterlevelse = () => {
               activeStep={activeStep}
               onStepChange={setActiveStep}
             >
-              <Stepper.Step href='#formaalet-med-stotte-til-etterlevelse'>
+              <Stepper.Step href={formaaletMedStotteTilEtterlevelseUrl}>
                 Hva er formålet med Støtte til etterlevelse?
               </Stepper.Step>
-              <Stepper.Step href='#forsiden-i-stotte-til-etterlevelse'>
+              <Stepper.Step href={forsidenIStotteTilEtterlevelseUrl}>
                 Forsiden i Støtte til etterlevelse
               </Stepper.Step>
-              <Stepper.Step href='#temainndeling-og-temaoversikt'>
+              <Stepper.Step href={temainndelingOgTemaoversiktUrl}>
                 Temainndeling og temaoversikt
               </Stepper.Step>
-              <Stepper.Step href='#dette-inneholder-et-etterlevelseskrav'>
+              <Stepper.Step href={detteInneholderEtEtterlevelseKravUrl}>
                 Dette inneholder et etterlevelseskrav
               </Stepper.Step>
-              <Stepper.Step href='#hvordan-dokumentere-etterlevelse'>
+              <Stepper.Step href={hvordanDokumentereEtterlevelseUrl}>
                 Hvordan dokumentere etterlevelse
               </Stepper.Step>
-              <Stepper.Step href='#ta-kontakt'>Ta kontakt</Stepper.Step>
+              <Stepper.Step href={taKontaktUrl}>Ta kontakt</Stepper.Step>
             </Stepper>
           </div>
         </div>
@@ -52,29 +66,29 @@ const OmStotteTilEtterlevelse = () => {
               totalSteps={6}
               onStepChange={(step) => setActiveStep(step - 1)}
             >
-              <FormProgress.Step href='#formaalet-med-stotte-til-etterlevelse'>
+              <FormProgress.Step href={formaaletMedStotteTilEtterlevelseUrl}>
                 Hva er formålet med Støtte til etterlevelse?
               </FormProgress.Step>
-              <FormProgress.Step href='#forsiden-i-stotte-til-etterlevelse'>
+              <FormProgress.Step href={forsidenIStotteTilEtterlevelseUrl}>
                 Forsiden i Støtte til etterlevelse
               </FormProgress.Step>
-              <FormProgress.Step href='#temainndeling-og-temaoversikt'>
+              <FormProgress.Step href={temainndelingOgTemaoversiktUrl}>
                 Temainndeling og temaoversikt
               </FormProgress.Step>
-              <FormProgress.Step href='#dette-inneholder-et-etterlevelseskrav'>
+              <FormProgress.Step href={detteInneholderEtEtterlevelseKravUrl}>
                 Dette inneholder et etterlevelseskrav
               </FormProgress.Step>
-              <FormProgress.Step href='#hvordan-dokumentere-etterlevelse'>
+              <FormProgress.Step href={hvordanDokumentereEtterlevelseUrl}>
                 Hvordan dokumentere etterlevelse
               </FormProgress.Step>
-              <FormProgress.Step href='#ta-kontakt'>Ta kontakt</FormProgress.Step>
+              <FormProgress.Step href={taKontaktUrl}>Ta kontakt</FormProgress.Step>
             </FormProgress>
           </div>
           <Heading id='stepper-heading' spacing size='large' level='1'>
             Om Støtte til etterlevelse
           </Heading>
 
-          <Heading size='medium' level='2' spacing id='formaalet-med-stotte-til-etterlevelse'>
+          <Heading size='medium' level='2' spacing id={formaaletMedStotteTilEtterlevelseId}>
             Hva er formålet med Støtte til etterlevelse?
           </Heading>
           <div className='my-6'>
@@ -128,7 +142,7 @@ const OmStotteTilEtterlevelse = () => {
             korrekt og oppdatert innenfor sine områder.{' '}
           </BodyLong>
 
-          <Heading size='medium' level='2' spacing id='forsiden-i-stotte-til-etterlevelse'>
+          <Heading size='medium' level='2' spacing id={forsidenIStotteTilEtterlevelseId}>
             Forsiden i Støtte til etterlevelse
           </Heading>
           <Image
@@ -168,7 +182,7 @@ const OmStotteTilEtterlevelse = () => {
             forsiden.
           </BodyLong>
 
-          <Heading size='medium' level='2' spacing id='temainndeling-og-temaoversikt'>
+          <Heading size='medium' level='2' spacing id={temainndelingOgTemaoversiktId}>
             Temainndeling og temaoversikt
           </Heading>
           <ReadMore className='mt-3 mb-6' header='Vis meg hvordan kravene inndeles i temaer'>
@@ -189,7 +203,7 @@ const OmStotteTilEtterlevelse = () => {
             ansvarlig.
           </BodyLong>
 
-          <Heading size='medium' level='2' spacing id='dette-inneholder-et-etterlevelseskrav'>
+          <Heading size='medium' level='2' spacing id={detteInneholderEtEtterlevelseKravId}>
             Dette inneholder et etterlevelseskrav
           </Heading>
           <ReadMore className='mt-3 mb-6' header='Vis meg hvordan en kravside ser ut'>
@@ -241,12 +255,12 @@ const OmStotteTilEtterlevelse = () => {
             <List.Item title='Ansvarlig'>Her finner dere hvilken enhet som er kraveier.</List.Item>
           </List>
 
-          <Heading size='medium' level='2' spacing id='hvordan-dokumentere-etterlevelse'>
+          <Heading size='medium' level='2' spacing id={hvordanDokumentereEtterlevelseId}>
             Hvordan dokumentere etterlevelse
           </Heading>
           <OmStotteTilEtterlevelseAccordion />
 
-          <Heading size='medium' level='2' spacing id='ta-kontakt'>
+          <Heading size='medium' level='2' spacing id={taKontaktId}>
             Ta kontakt
           </Heading>
           <BodyLong spacing>
@@ -272,9 +286,9 @@ const OmStotteTilEtterlevelse = () => {
       <OmNavigering
         router={router}
         forrigeLenke={oversiktOverLosningeneUrl}
-        forrigeLenkeTekst={'Oversikt over løsningene'}
+        forrigeLenkeTekst='Oversikt over løsningene'
         nesteLenke={omPVKUrl}
-        nesteLenkeTekst={'Om Digital PVK'}
+        nesteLenkeTekst='Om Digital PVK'
       />
     </PageLayout>
   )

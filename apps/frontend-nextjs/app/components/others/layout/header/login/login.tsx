@@ -32,6 +32,7 @@ import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasj
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 import { loginUrl } from '@/routes/login/loginRoutes'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
@@ -136,7 +137,7 @@ export const LoggedInHeader = () => {
           [
             {
               label: 'Mer om etterlevelse i Nav',
-              href: '/omstottetiletterlevelse',
+              href: `${omStotteTilEtterlevelseUrl}`,
               icon: <InformationIcon aria-label='' aria-hidden />,
             },
           ],

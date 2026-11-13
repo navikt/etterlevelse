@@ -43,6 +43,10 @@ import {
   EPvkVurdering,
 } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
+import {
+  faEtterlevelsenGodkjentAvRisikoeierUrl,
+  omStotteTilEtterlevelseUrl,
+} from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { sporInnblikkHendelse } from '@/util/analytics/innblikk'
 import { getPollyBaseUrl } from '@/util/behandling/behandlingUtil'
 import { getEtterlevelseDokumentStatusText } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
@@ -1085,7 +1089,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
         </List>
         <p className='mt-4'>
           For mer detaljer anbefaler vi informasjonssidene{' '}
-          <Link href='/omstottetiletterlevelse' target='_blank'>
+          <Link href={omStotteTilEtterlevelseUrl} target='_blank'>
             Om Støtte til etterlevelse
           </Link>
           ,{' '}
@@ -1492,7 +1496,7 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         godkjenning gjennomføres digitalt i Støtte til etterlevelse at denne
                         statusen vil endre seg.{' '}
                         <Link
-                          href='/omstottetiletterlevelse#fa-etterlevelsen-godkjent-av-risikoeier'
+                          href={faEtterlevelsenGodkjentAvRisikoeierUrl}
                           target='_blank'
                           style={{ display: 'inline' }}
                         >

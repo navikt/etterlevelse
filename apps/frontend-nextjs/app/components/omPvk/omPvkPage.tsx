@@ -7,10 +7,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
-import {
-  omBehandlingskatalogenUrl,
-  omStotteTilEtterlevelseUrl,
-} from '@/routes/omSidene/omSideneUrl'
+import { omBehandlingskatalogenUrl } from '@/routes/omSidene/omSideneUrl'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { PageLayout } from '../others/scaffold/scaffold'
 import SkjermbildePVK from './images/SkjermbildePVK.png'
 import VisMegHvorJegFinnerDigitalPVK from './images/VisMegHvorJegFinnerDigitalPVK.png'
@@ -313,9 +311,9 @@ const OmPvkPage = () => {
       <OmNavigering
         router={router}
         forrigeLenke={omStotteTilEtterlevelseUrl}
-        forrigeLenkeTekst={'Støtte til etterlevelse'}
+        forrigeLenkeTekst='Støtte til etterlevelse'
         nesteLenke={omBehandlingskatalogenUrl}
-        nesteLenkeTekst={'Behandlingskatalogen'}
+        nesteLenkeTekst='Behandlingskatalogen'
       />
     </PageLayout>
   )

@@ -16,6 +16,21 @@ import { useContext, useEffect, useState } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { EKravTab } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import {
+  behandlerPersonopplysningerId,
+  besvareEtterlevelseskravId,
+  faEtterlevelsenGodkjentId,
+  forRisikoeiereId,
+  gjenbrukId,
+  jobbeITemaoversiktenId,
+  omStotteTilEtterlevelseUrl,
+  oppdatereEtterGodkjenningId,
+  oppretteEllerOppdatereId,
+  redigereDokumentegenskaperId,
+  redigereDokumentegenskaperUrl,
+  slikGjenbrukerDuId,
+  tilretteleggeForGjenbrukId,
+} from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import VisMegHvorJegFinnerDigitalPVK from '../omPvk/images/VisMegHvorJegFinnerDigitalPVK.png'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
@@ -36,18 +51,17 @@ const OmStotteTilEtterlevelseAccordion = () => {
   } as const
 
   const accordionId = {
-    oppretteEllerOppdatere: 'opprette-eller-oppdatere-et-etterlevelsesdokument',
-    redigereDokumentegenskaper: 'redigere-dokumentegenskaper-og-filtrere-krav',
-    jobbeITemaoversikten: 'jobbe-i-temaoversikten',
-    besvareEtterlevelseskrav: 'besvare-etterlevelseskrav',
-    behandlerPersonopplysninger: 'etterlevelse-nar-dere-behandler-personopplysninger',
-    faEtterlevelsenGodkjent: 'fa-etterlevelsen-godkjent-av-risikoeier',
-    forRisikoeiere: 'for-risikoeiere-slik-godkjenner-du-etterlevelsen',
-    oppdatereEtterGodkjenning: 'oppdatere-etterlevelsesdokumentasjon-etter-godkjenning',
-    gjenbruk: 'gjenbruk-av-etterlevelsesdokumentasjon',
-    tilretteleggeForGjenbruk:
-      'slik-tilrettelegger-dere-for-gjenbruk-av-deres-eget-etterlevelsesdokument',
-    slikGjenbrukerDu: 'slik-gjenbruker-du-et-etterlevelsesdokument',
+    oppretteEllerOppdatere: `${oppretteEllerOppdatereId}`,
+    redigereDokumentegenskaper: `${redigereDokumentegenskaperId}`,
+    jobbeITemaoversikten: `${jobbeITemaoversiktenId}`,
+    besvareEtterlevelseskrav: `${besvareEtterlevelseskravId}`,
+    behandlerPersonopplysninger: `${behandlerPersonopplysningerId}`,
+    faEtterlevelsenGodkjent: `${faEtterlevelsenGodkjentId}`,
+    forRisikoeiere: `${forRisikoeiereId}`,
+    oppdatereEtterGodkjenning: `${oppdatereEtterGodkjenningId}`,
+    gjenbruk: `${gjenbrukId}`,
+    tilretteleggeForGjenbruk: `${tilretteleggeForGjenbrukId}`,
+    slikGjenbrukerDu: `${slikGjenbrukerDuId}`,
   } as const
 
   const allItemIds = new Set<string>(Object.values(accordionId))
@@ -326,7 +340,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
               Behandlingens art og omfang
             </ExternalLink>
           </BodyLong>
-          <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene  ' className='mb-6'>
+          <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene' className='mb-6'>
             <Image
               className='mr-2.5 mt-6 mb-12'
               src={VisMegHvorJegFinnerDigitalPVK}
@@ -351,7 +365,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
-            header={'Vis meg hvordan jeg får etterlevelsen godkjent av risikoeier'}
+            header='Vis meg hvordan jeg får etterlevelsen godkjent av risikoeier'
             className='mb-6'
           >
             <div className='my-6'>
@@ -896,7 +910,7 @@ const CopyAccordionLinkButton = ({ id }: { id: string }) => {
       className='ml-3'
       data-color='accent'
       size='xsmall'
-      copyText={`${window.location.origin}/omstottetiletterlevelse#${id}`}
+      copyText={`${window.location.origin}${omStotteTilEtterlevelseUrl}#${id}`}
       text='Kopier lenke'
       // Prevent toggling the accordion when clicking the copy button.
       onClick={(e) => e.stopPropagation()}

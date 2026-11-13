@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
-import { omStotteTilEtterlevelseUrl } from '@/routes/omSidene/omSideneUrl'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { ExternalLink } from '../common/externalLink/externalLink'
 import KortOmLosningeneBehandlingskatalogen from './images/KortOmLosningeneBehandlingskatalogen.png'
 import KortOmLosningenDigitalPVK from './images/KortOmLosningeneDigitalPVK.png'
@@ -63,7 +63,7 @@ export const OversiktOverLosningene = () => {
               <BodyLong spacing>
                 Dokumentere hvordan vi etterlever generelt regelverk, og vurdere behov for PVK.
               </BodyLong>
-              <ExternalLink href='/omstottetiletterlevelse' className='gap-1 flex  break-all'>
+              <ExternalLink href={omStotteTilEtterlevelseUrl} className='gap-1 flex  break-all'>
                 Les mer om Støtte til etterlevelse
               </ExternalLink>
             </div>
@@ -221,10 +221,10 @@ export const OversiktOverLosningene = () => {
       </div>
       <OmNavigering
         router={router}
-        forrigeLenke={'/'}
-        forrigeLenkeTekst={'Forsiden'}
+        forrigeLenke='/'
+        forrigeLenkeTekst='Forsiden'
         nesteLenke={omStotteTilEtterlevelseUrl}
-        nesteLenkeTekst={'Om Støtte til etterlevelse'}
+        nesteLenkeTekst='Om Støtte til etterlevelse'
       />
     </PageLayout>
   )

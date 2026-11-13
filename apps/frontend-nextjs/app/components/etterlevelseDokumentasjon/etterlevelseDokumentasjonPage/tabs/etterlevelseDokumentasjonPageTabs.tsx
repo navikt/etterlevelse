@@ -17,6 +17,7 @@ import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekv
 import { TTemaCode } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { IKravPriorityList } from '@/constants/krav/kravPriorityList/kravPriorityListConstants'
+import { tilretteleggeForGjenbrukUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { skalHaPvkDokument } from '@/util/etterlevelseDokumentasjon/pvkDokument/pvkDokumentUtils'
 import EtterlevelseDokumentasjonKravListe from './kravListe/etterlevelseDokumentasjonKravListe'
 import PvkKravListeTab from './pvkKravListe/pvkKravListeTab'
@@ -148,7 +149,9 @@ const EtterlevelseDokumentasjonPageTabs: FunctionComponent<TProps> = ({
               </List>
               Dokumenteierne velger også om de vil samle slike tilpassede krav her, under
               Prioriterte krav.{' '}
-              <ExternalLink href='https://etterlevelse.ansatt.nav.no/omstottetiletterlevelse#slik-gjenbruker-du-et-etterlevelsesdokument'>
+              <ExternalLink
+                href={`https://etterlevelse.ansatt.nav.no/${tilretteleggeForGjenbrukUrl}`}
+              >
                 Les mer om hvordan gjenbruke et etterlevelsesdokument.
               </ExternalLink>
               <InfoCard data-color='warning' className='my-5'>

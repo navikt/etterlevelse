@@ -8,9 +8,9 @@ import {
   omBehandlingskatalogenUrl,
   omPVKUrl,
   omPersonvernerklaeringUrl,
-  omStotteTilEtterlevelseUrl,
   oversiktOverLosningeneUrl,
 } from '@/routes/omSidene/omSideneUrl'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import {
   behandlingsKatalogLink,
   datajegerSlackLink,
