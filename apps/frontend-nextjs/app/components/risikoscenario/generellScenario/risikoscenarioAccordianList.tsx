@@ -55,12 +55,14 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   const [navigateUrl, setNavigateUrl] = useState<string>('')
   const [movedRisikoscenarioAlert, setMovedRisikoscenarioAlert] = useState<{
     risikoscenarioName: string
+    risikoscenarioId: string
     kravRefs: IKravReference[]
   } | null>(null)
   const [isAnnouncementReady, setIsAnnouncementReady] = useState(false)
 
   const handleMovedToKrav = (payload: {
     risikoscenarioName: string
+    risikoscenarioId: string
     kravRefs: IKravReference[]
   }) => {
     setIsAnnouncementReady(false)
@@ -81,6 +83,7 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       try {
         const parsed = JSON.parse(raw) as {
           risikoscenarioName: string
+          risikoscenarioId: string
           kravRefs: IKravReference[]
         }
         if (parsed?.kravRefs?.length) {
@@ -209,12 +212,15 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
             <List as='ul'>
               {movedRisikoscenarioAlert.kravRefs.map(
                 (relevantKrav: IKravReference, index: number) => {
-                  const kravHref: string = risikoDokumentasjonTemaKravNummerVersjonUrl(
-                    etterlevelseDokumentasjonId,
-                    relevantKrav.temaCode || 'PVK',
-                    relevantKrav.kravNummer,
-                    relevantKrav.kravVersjon
-                  )
+                  const kravHref: string =
+                    risikoDokumentasjonTemaKravNummerVersjonUrl(
+                      etterlevelseDokumentasjonId,
+                      relevantKrav.temaCode || 'PVK',
+                      relevantKrav.kravNummer,
+                      relevantKrav.kravVersjon
+                    ) +
+                    '?risikoscenario=' +
+                    movedRisikoscenarioAlert.risikoscenarioId
 
                   return (
                     <List.Item
