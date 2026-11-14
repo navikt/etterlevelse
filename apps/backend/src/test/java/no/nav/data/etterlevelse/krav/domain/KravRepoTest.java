@@ -13,11 +13,11 @@ class KravRepoTest extends IntegrationTestBase {
 
     @Test
     void saveKrav() {
-        var krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(0).build());
+        var krav = kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(0).build());
         assertThat(krav.getVersion()).isEqualTo(0);
 
         krav.setNavn("krav 1");
-        krav = kravService.save(krav);
+        krav = kravRepo.save(krav);
         assertThat(krav.getVersion()).isEqualTo(1);
 
         var audits = auditVersionRepository.findByTableIdOrderByTimeDesc(krav.getId().toString());
@@ -79,7 +79,7 @@ class KravRepoTest extends IntegrationTestBase {
     }
 
     private void saveKrav(int kravNummer, int kravVersjon, KravStatus status, List<String> relevansFor, String lov) {
-        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(kravNummer).kravVersjon(kravVersjon)
+        kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(kravNummer).kravVersjon(kravVersjon)
                 .data(KravData.builder()
                         .navn("Krav " + kravNummer)
                         .status(status)

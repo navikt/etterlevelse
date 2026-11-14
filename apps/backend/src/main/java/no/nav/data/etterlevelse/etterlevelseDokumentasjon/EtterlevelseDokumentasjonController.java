@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.TechnicalException;
+import no.nav.data.common.exceptions.UnauthorizedException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
@@ -150,12 +152,11 @@ public class EtterlevelseDokumentasjonController {
 
         if (edok.getEtterlevelseDokumentasjonData().getStatus() == EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER && request.getStatus() == EtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER) {
             if (!edok.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent()) && !SecurityUtils.isAdmin()) {
-                throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+                throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
             }
         } else if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
         }
-
 
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.save(request));
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
@@ -185,6 +186,7 @@ public class EtterlevelseDokumentasjonController {
     @PutMapping("/godkjenning/{id}")
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<EtterlevelseDokumentasjonResponse> updateEtterlevelseDokumentasjonApproveAndArchive(@PathVariable UUID id, @Valid @RequestBody EtterlevelseDokumentasjonGodkjenningsRequest request) {
+        // TODO: Tjenestelogikk og @Transactional bør flyttes til serviceklassen
         log.debug("Godkjenning av Etterlevelse Dokumentasjon id={}", id);
         if (!Objects.equals(id, request.getEtterlevelseDokumentasjonRequest().getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getEtterlevelseDokumentasjonRequest().getId(), id));
@@ -196,7 +198,7 @@ public class EtterlevelseDokumentasjonController {
             p360ArkiveringService.archive(saved.getId(), request.isOnlyActiveKrav(), false, false, true, null);
         } catch (Exception e) {
             log.error("Failed to archive etterlevelse dokumentasjon with id {}", saved.getId(), e);
-            throw new ValidationException("Failed to archive etterlevelse dokumentasjon with id " + saved.getId() + " error stack: " + e);
+            throw new TechnicalException("Failed to archive etterlevelse dokumentasjon with id " + saved.getId() + " error stack: " + e);
         }
 
         etterlevelseDokumentasjonService.addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(response);
@@ -217,7 +219,7 @@ public class EtterlevelseDokumentasjonController {
         var edok = etterlevelseDokumentasjonService.get(id);
 
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         var response = EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjonService.updateKravPriority(request));
@@ -227,14 +229,13 @@ public class EtterlevelseDokumentasjonController {
         return ResponseEntity.ok(response);
     }
 
-
     @Operation(summary = "Create Etterlevelse Dokumentasjon with relation")
     @ApiResponse(description = "Created Etterlevelse Dokumentasjon with relation")
     @PostMapping("/relation/{fromDocumentId}")
     public ResponseEntity<EtterlevelseDokumentasjonResponse> createEtterlevelseDokumentasjonWithRelation(@PathVariable UUID fromDocumentId, @Valid @RequestBody EtterlevelseDokumentasjonWithRelationRequest request) {
         log.debug("Create Etterlevelse Dokumentasjon with relation to id={}", fromDocumentId);
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonService.get(fromDocumentId);
-        if(!etterlevelseDokumentasjon.isTilgjengeligForGjenbruk()) {
+        if (!etterlevelseDokumentasjon.isTilgjengeligForGjenbruk()) {
             throw new ValidationException(String.format("Cannot create relation with etterlevelse dokumentasjon with id %s, Etterlevelse dokumentasjo is not available for relations", fromDocumentId.toString()));
         }
 
@@ -249,10 +250,10 @@ public class EtterlevelseDokumentasjonController {
     @Operation(summary = "Delete Etterlevelse Dokumentasjon", parameters = {@Parameter(name = "comment", description = "Reason for deleting the etterlevelse dokumentasjon", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Etterlevelse deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<EtterlevelseDokumentasjonResponse> deleteEtterlevelseById(@PathVariable UUID id) {
+    public ResponseEntity<EtterlevelseDokumentasjonResponse> deleteEtterlevelseById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete Etterlevelse Dokumentasjon By Id={}", id);
         try {
-            var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.deleteEtterlevelseDokumentasjonAndAllChildren(id);
+            var etterlevelseDokumentasjon = etterlevelseDokumentasjonService.deleteEtterlevelseDokumentasjonAndAllChildren(id, version);
             return ResponseEntity.ok(EtterlevelseDokumentasjonResponse.buildFrom(etterlevelseDokumentasjon));
         } catch (DataIntegrityViolationException e) {
             log.warn("Requested to delete referenced EtterlevelseDokumentasjon with id {}", id, e);

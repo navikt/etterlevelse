@@ -58,6 +58,7 @@ public class Codelist extends Auditable {
                 .shortName(shortName)
                 .description(description)
                 .data(data)
+                .version(version)
                 .build();
     }
 
@@ -71,8 +72,8 @@ public class Codelist extends Auditable {
 
     public String getValueFromKeyData(String dataKey){
         JsonNode value = data.findValue(dataKey);
-        if(value != null && value.isTextual()){
-            return value.asText();
+        if(value != null && value.isString()){
+            return value.asString();
         } else {
             return null;
         }

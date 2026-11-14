@@ -83,11 +83,11 @@ public class KravPriorityListController {
 
         int kravPriority = 0;
 
-        if(!kravPriorityList.get().getPriorityList().isEmpty()) {
+        if (!kravPriorityList.get().getPriorityList().isEmpty()) {
             kravPriority = kravPriorityList.get().getPriorityList().indexOf(kravnummer) + 1;
         }
 
-        if(kravPriority == 0) {
+        if (kravPriority == 0) {
             return ResponseEntity.notFound().build();
         }
 
@@ -107,6 +107,9 @@ public class KravPriorityListController {
     @PostMapping
     public ResponseEntity<KravPriorityListResponse> createKravPriorityList(@RequestBody KravPriorityListRequest request) {
         log.info("Create krav priority list");
+        if (request.isUpdate()) {
+            throw new ValidationException("Requested to create new KravPriorityList, but request.isUpdate is true.");
+        }
         var kravPriorityList = service.save(request);
         return new ResponseEntity<>(kravPriorityList.toResponse(), HttpStatus.CREATED);
     }
@@ -117,6 +120,9 @@ public class KravPriorityListController {
     public ResponseEntity<KravPriorityListResponse> updateKravPriorityList(@PathVariable UUID id,@Valid @RequestBody KravPriorityListRequest request) {
         log.info("Update krav priority list id={}", id);
 
+        if (!request.isUpdate()) {
+            throw new ValidationException("Requested to update existing KravPriorityList, but request.isUpdate is false.");
+        }
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
@@ -128,9 +134,9 @@ public class KravPriorityListController {
     @Operation(summary = "Delete krav prioritering", parameters = {@Parameter(name = "comment", description = "Reason for deleting the krav prioritering", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "ok")
     @DeleteMapping("/{id}")
-    public ResponseEntity<KravPriorityListResponse> deleteKravPriorityList(@PathVariable UUID id) {
+    public ResponseEntity<KravPriorityListResponse> deleteKravPriorityList(@PathVariable UUID id, @org.springframework.web.bind.annotation.RequestParam(required = false) Integer version) {
         log.info("Delete krav priority list id={}", id);
-        var kravPriorityList = service.delete(id);
+        var kravPriorityList = service.delete(id, version);
         return ResponseEntity.ok(kravPriorityList.toResponse());
     }
 }

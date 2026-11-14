@@ -1,4 +1,5 @@
 import { FunctionComponent, ReactNode, Suspense } from 'react'
+import { registerOptimisticLockingInterceptor } from './api/optimisticLocking/optimisticLockingApi'
 import CookieConsentBanner from './components/common/cookieConsent/CookieConsentBanner'
 import InnblikkSporing from './components/common/cookieConsent/InnblikkSporing'
 import { Footer } from './components/others/layout/footer/footer'
@@ -13,6 +14,9 @@ type TProps = {
 }
 
 const Main: FunctionComponent<TProps> = async ({ children }) => {
+  // HTTP 409 ved versjonskonflikt: vis melding og last data på nytt
+  registerOptimisticLockingInterceptor()
+
   return (
     <html lang='no'>
       <head>

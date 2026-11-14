@@ -7,8 +7,8 @@ import java.util.UUID;
 
 public interface TilbakemeldingRepo extends JpaRepository<Tilbakemelding, UUID> {
 
-    List<Tilbakemelding> findByKravNummer(int nummer);
+    List<Tilbakemelding> findByKravNummer(int kravNummer);
 
-    List<Tilbakemelding> findByKravNummerAndKravVersjon(int nummer, int versjon);
+    List<Tilbakemelding> findByKravNummerAndKravVersjon(int kravNummer, int kravVersjon);
 
 }

@@ -138,7 +138,10 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
     // Mark the form clean after a successful save so the unsaved-changes guard
     // does not block the navigation modal's hard navigation/reload
     if (etterlevelseFormRef.current) {
-      etterlevelseFormRef.current.resetForm({ values: etterlevelseFormRef.current.values })
+      // Ta med id og ny versjon fra serveren, slik at neste lagring ikke gir versjonskonflikt (409)
+      etterlevelseFormRef.current.resetForm({
+        values: { ...etterlevelseFormRef.current.values, id: res.id, version: res.version },
+      })
     }
     setStatustext(res.status)
     setHasNextKrav(nextKravToDocument !== '')

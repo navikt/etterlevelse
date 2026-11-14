@@ -30,7 +30,7 @@ export const kravPrioritingMapToFormValue = (
   temaId: kravprioritylist.temaId || '',
   priorityList: kravprioritylist.priorityList || [],
   changeStamp: kravprioritylist.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  version: -1,
+  version: kravprioritylist.version ?? -1,
 })
 
 export const getAllKravPriorityList = async () => {
@@ -88,7 +88,6 @@ function kravPrioriteringToDto(kravPrioriteringToDto: IKravPriorityList): IKravP
     ...kravPrioriteringToDto,
   } as any
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 

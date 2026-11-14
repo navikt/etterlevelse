@@ -26,6 +26,7 @@ public class BehandlingensLivslopResponse {
     private List<BehandlingensLivslopFil> filer;
 
     private ChangeStampResponse changeStamp;
+
     private Integer version;
     
     public static BehandlingensLivslopResponse buildFrom(BehandlingensLivslop bl) {

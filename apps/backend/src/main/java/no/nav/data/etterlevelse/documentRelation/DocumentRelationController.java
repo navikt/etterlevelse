@@ -17,7 +17,6 @@ import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationRequest;
 import no.nav.data.etterlevelse.documentRelation.dto.DocumentRelationResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.dto.EtterlevelseDokumentasjonResponse;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -129,18 +128,11 @@ public class DocumentRelationController {
     @ApiResponse(responseCode = "201", description = "Document relation created")
     @PostMapping
     public ResponseEntity<DocumentRelationResponse> createDocumentRelation(@RequestBody DocumentRelationRequest request) {
+        // Merk: Ignorerer request.isUpdate() og request.version, forutsetter at dette er en ny DocumentRelation. 
         log.info("Create Document relation");
 
-        var existingDocumentRelation = service.findByFromDocumentAndToDocumentAndRelationType(request.getFromDocument(), request.getToDocument(), request.getRelationType());
-
-        if (existingDocumentRelation != null) {
-            throw new ValidationException("Document relation already exist");
-        }
-        
         var documentRelation = request.toDocumentRelation();
-        documentRelation.setId(UUID.randomUUID());
-        documentRelation = service.save(documentRelation, request.isUpdate()); // Will cause DataIntegrityViolationException on fk violations
-
+        documentRelation = service.create(documentRelation);
         return new ResponseEntity<>(DocumentRelationResponse.buildFrom(documentRelation), HttpStatus.CREATED);
     }
 
@@ -155,23 +147,21 @@ public class DocumentRelationController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-        
-        var documentRelation = request.toDocumentRelation();
-        try {
-            documentRelation = service.save(documentRelation, request.isUpdate()); // Will cause DataIntegrityViolationException on fk or uq violations
-            return ResponseEntity.ok(DocumentRelationResponse.buildFrom(documentRelation));
-        } catch (DataIntegrityViolationException e) {
-            log.warn("Redquested to update a relation to a duplicate of existing relation or to include non-existing documents", e);
-            throw new ValidationException("Can not update document relation: will cause duplicate relation or non-existing documents");
+        if (!request.isUpdate()) {
+            throw new ValidationException("update must be true when updating existing DocumentRelation");
         }
+
+        DocumentRelation documentRelation = request.toDocumentRelation();
+        documentRelation = service.update(documentRelation, request.getVersion());
+        return ResponseEntity.ok(DocumentRelationResponse.buildFrom(documentRelation));
     }
 
     @Operation(summary = "Delete Document relation", parameters = {@Parameter(name = "comment", description = "Reason for deleting the document relation", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Document relation deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<DocumentRelationResponse> deleteDocumentRelationById(@PathVariable UUID id) {
+    public ResponseEntity<DocumentRelationResponse> deleteDocumentRelationById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete Document relation id={}", id);
-        var deletedDocumentRelation = service.deleteById(id);
+        var deletedDocumentRelation = service.deleteById(id, version);
         return ResponseEntity.ok(DocumentRelationResponse.buildFrom(deletedDocumentRelation));
     }
 

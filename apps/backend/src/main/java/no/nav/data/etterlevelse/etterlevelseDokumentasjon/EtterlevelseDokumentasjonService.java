@@ -3,7 +3,9 @@ package no.nav.data.etterlevelse.etterlevelseDokumentasjon;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.exceptions.ForbiddenException;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.security.SecurityUtils;
 import no.nav.data.etterlevelse.behandlingensLivslop.BehandlingensLivslopService;
@@ -69,8 +71,6 @@ import static no.nav.data.etterlevelse.varsel.domain.Varsel.Paragraph.VarselUrl.
 @RequiredArgsConstructor
 public class EtterlevelseDokumentasjonService {
 
-    // TODO: Flere avhengighet i denne serviceklassen til controller
-
     private final EtterlevelseDokumentasjonRepo etterlevelseDokumentasjonRepo;
     private final EtterlevelseDokumentasjonRepoCustom etterlevelseDokumentasjonRepoCustom;
 
@@ -88,7 +88,6 @@ public class EtterlevelseDokumentasjonService {
     private final VarselService varselService;
     private final UrlGenerator urlGenerator;
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon get(UUID uuid) {
         if (uuid == null) {
             return null;
@@ -169,7 +168,7 @@ public class EtterlevelseDokumentasjonService {
             }
         }
 
-        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+        return etterlevelseDokumentasjonRepo.saveAndFlush(etterlevelseDokumentasjon);
     }
 
     public void varsleRisikoEier(EtterlevelseDokumentasjonRequest etterlevelseDokumentasjon) {
@@ -213,6 +212,7 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon approvedOfRisikoeierAndSave(EtterlevelseDokumentasjonGodkjenningsRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getEtterlevelseDokumentasjonRequest().getId());
+        OptimisticLockUtil.checkVersion(EtterlevelseDokumentasjon.class, etterlevelseDokumentasjon.getId(), etterlevelseDokumentasjon.getVersion(), request.getEtterlevelseDokumentasjonRequest().getVersion());
         Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getEtterlevelseDokumentasjonRequest().getId());
 
         if (!etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getRisikoeiere().contains(SecurityUtils.getCurrentIdent())) {
@@ -251,7 +251,7 @@ public class EtterlevelseDokumentasjonService {
             historikk.setGodkjentAvRisikoierDato(LocalDateTime.now());
             historikk.setKravTilstandHistorikk(request.getKravTilstandHistorikk());
         }
-        var savedEtterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+        var savedEtterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.saveAndFlush(etterlevelseDokumentasjon);
         varsleEtterleverOmGodkjentDokument(request.getEtterlevelseDokumentasjonRequest());
         return savedEtterlevelseDokumentasjon;
     }
@@ -260,7 +260,8 @@ public class EtterlevelseDokumentasjonService {
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updateAndIncreaseVersion(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
-            Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
+        OptimisticLockUtil.checkVersion(EtterlevelseDokumentasjon.class, request.getId(), etterlevelseDokumentasjon.getVersion(), request.getVersion());
+        Optional<PvkDokument> pvkDokument = pvkDokumentService.getByEtterlevelseDokumentasjon(request.getId());
 
         List<String> teamMembers = new ArrayList<>();
         etterlevelseDokumentasjon.getEtterlevelseDokumentasjonData().getTeams().forEach(teamId -> {
@@ -323,12 +324,13 @@ public class EtterlevelseDokumentasjonService {
                         .build()
         );
 
-        return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
+        return etterlevelseDokumentasjonRepo.saveAndFlush(etterlevelseDokumentasjon);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon updateKravPriority(EtterlevelseDokumentasjonRequest request) {
         EtterlevelseDokumentasjon etterlevelseDokumentasjon = etterlevelseDokumentasjonRepo.getReferenceById(request.getId());
+        OptimisticLockUtil.checkVersion(EtterlevelseDokumentasjon.class, request.getId(), etterlevelseDokumentasjon.getVersion(), request.getVersion());
         etterlevelseDokumentasjon.setPrioritertKravNummer(request.getPrioritertKravNummer());
         return etterlevelseDokumentasjonRepo.save(etterlevelseDokumentasjon);
     }
@@ -345,12 +347,12 @@ public class EtterlevelseDokumentasjonService {
 
         behandlingensLivslopService.copyBehandlingenslivslop(fromDocumentId, newEtterlevelseDokumentasjon.getId());
 
-        var newDocumentRelation = documentRelationService.save(
+        var newDocumentRelation = documentRelationService.create(
                 DocumentRelation.builder()
                         .fromDocument(fromDocumentId)
                         .toDocument(newEtterlevelseDokumentasjon.getId())
                         .relationType(request.getRelationType())
-                        .build(), false);
+                        .build());
 
         log.info("Created new relation with fromId = {}, toId = {} with relation type = {}", newDocumentRelation.getFromDocument(), newDocumentRelation.getToDocument(), newDocumentRelation.getRelationType().name());
 
@@ -359,6 +361,20 @@ public class EtterlevelseDokumentasjonService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon deleteEtterlevelseDokumentasjonAndAllChildren(UUID id) {
+        return deleteEtterlevelseDokumentasjonAndAllChildren(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes (før noe slettes) hvis oppgitt.
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseDokumentasjon deleteEtterlevelseDokumentasjonAndAllChildren(UUID id, Integer version) {
+        if (version != null) {
+            var edok = get(id);
+            if (edok != null) {
+                OptimisticLockUtil.checkVersionIfPresent(EtterlevelseDokumentasjon.class, id, edok.getVersion(), version);
+            }
+        }
 
         if (!documentRelationService.findByFromDocument(id).isEmpty() || !documentRelationService.findByToDocument(id).isEmpty()) {
             log.info("Requested to delete etterlevelses dokumentasjon id={} with relation.", id);
@@ -391,9 +407,9 @@ public class EtterlevelseDokumentasjonService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseDokumentasjon delete(UUID id) {
-        var eDokToDelete = etterlevelseDokumentasjonRepo.findById(id);
+        var eDokToDelete = etterlevelseDokumentasjonRepo.findById(id).orElse(null);
         etterlevelseDokumentasjonRepo.deleteById(id);
-        return eDokToDelete.orElse(null);
+        return eDokToDelete;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -442,7 +458,6 @@ public class EtterlevelseDokumentasjonService {
     }
 
     // Does not update DB
-    // TODO: Skal ikke være avhengighet til dto i service
     public void addBehandlingAndDpBehandlingAndTeamsDataAndResourceDataAndRisikoeiereData(EtterlevelseDokumentasjonResponse etterlevelseDokumentasjonResponse) {
         etterlevelseDokumentasjonResponse.setBehandlinger(getBehandlingData(etterlevelseDokumentasjonResponse.getBehandlingIds()));
         etterlevelseDokumentasjonResponse.setDpBehandlinger(getDpBehandlingData(etterlevelseDokumentasjonResponse.getDpBehandlingIds()));
@@ -543,7 +558,6 @@ public class EtterlevelseDokumentasjonService {
                 return false;
             }
         }
-
     }
 
     public List<TeamResponse> getTeamsData(List<String> teams) {

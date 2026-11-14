@@ -91,6 +91,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
                 .kravNummer(krav.getKravNummer())
                 .kravVersjon(krav.getKravVersjon())
                 .id(etterlevelse.getId())
+                .version(etterlevelse.getVersion())
                 .prioritised(false)
                 .build();
         var resp = restTemplate.exchange("/etterlevelse/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseResponse.class, etterlevelse.getId());
@@ -98,6 +99,62 @@ public class EtterlevelseIT extends IntegrationTestBase {
         EtterlevelseResponse etterlevelseResp = resp.getBody();
         assertThat(etterlevelseResp).isNotNull();
         assertThat(etterlevelseResp.getEtterlevelseDokumentasjonId()).isEqualTo(eDok2.getId());
+    }
+
+    @Test
+    void updateEtterlevelse_twoUpdatesWithSameVersion_secondGivesConflict() {
+        var krav = createKrav();
+        var eDok = createEtterlevelseDokumentasjon();
+        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok.getId()).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        Integer readVersion = etterlevelse.getVersion();
+
+        var firstReq = EtterlevelseRequest.builder()
+                .id(etterlevelse.getId())
+                .version(readVersion)
+                .etterlevelseDokumentasjonId(eDok.getId())
+                .kravNummer(krav.getKravNummer())
+                .kravVersjon(krav.getKravVersjon())
+                .statusBegrunnelse("første")
+                .build();
+        var firstResp = restTemplate.exchange("/etterlevelse/{id}", HttpMethod.PUT, new HttpEntity<>(firstReq), EtterlevelseResponse.class, etterlevelse.getId());
+        assertThat(firstResp.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(firstResp.getBody()).isNotNull();
+        assertThat(firstResp.getBody().getVersion()).isGreaterThan(readVersion);
+
+        // Samme (nå utdaterte) versjon som første oppdatering
+        var secondReq = EtterlevelseRequest.builder()
+                .id(etterlevelse.getId())
+                .version(readVersion)
+                .etterlevelseDokumentasjonId(eDok.getId())
+                .kravNummer(krav.getKravNummer())
+                .kravVersjon(krav.getKravVersjon())
+                .statusBegrunnelse("andre")
+                .build();
+        var secondResp = restTemplate.exchange("/etterlevelse/{id}", HttpMethod.PUT, new HttpEntity<>(secondReq), String.class, etterlevelse.getId());
+        assertThat(secondResp.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+
+        // Første oppdatering skal ikke være overskrevet
+        assertThat(etterlevelseService.get(etterlevelse.getId()).getStatusBegrunnelse()).isEqualTo("første");
+
+        // Sletting med utdatert versjon gir også 409
+        var deleteResp = restTemplate.exchange("/etterlevelse/{id}?comment=test&version={version}", HttpMethod.DELETE, null, String.class, etterlevelse.getId(), readVersion);
+        assertThat(deleteResp.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(etterlevelseRepo.count()).isEqualTo(1);
+    }
+
+    @Test
+    void updateEtterlevelse_withoutVersion_givesBadRequest() {
+        var krav = createKrav();
+        var eDok = createEtterlevelseDokumentasjon();
+        var etterlevelse = etterlevelseService.save(Etterlevelse.builder().etterlevelseDokumentasjonId(eDok.getId()).kravNummer(krav.getKravNummer()).kravVersjon(krav.getKravVersjon()).build());
+        var req = EtterlevelseRequest.builder()
+                .id(etterlevelse.getId())
+                .etterlevelseDokumentasjonId(eDok.getId())
+                .kravNummer(krav.getKravNummer())
+                .kravVersjon(krav.getKravVersjon())
+                .build();
+        var resp = restTemplate.exchange("/etterlevelse/{id}", HttpMethod.PUT, new HttpEntity<>(req), String.class, etterlevelse.getId());
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
@@ -269,7 +326,7 @@ public class EtterlevelseIT extends IntegrationTestBase {
         @EnumSource(value = KravStatus.class, names = {"UTKAST", "UTGAATT"})
         void wrongKravStatus(KravStatus status) {
             var etterlevelseDokumentasjon = createEtterlevelseDokumentasjon();
-            var krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).data(KravData.builder().status(status).build()).build());
+            var krav = kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).data(KravData.builder().status(status).build()).build());
             var req = EtterlevelseRequest.builder()
                     .kravNummer(krav.getKravNummer())
                     .kravVersjon(krav.getKravVersjon())

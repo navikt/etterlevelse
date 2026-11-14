@@ -29,6 +29,8 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
     private List<String> tildeltMed;
     private Boolean update;
     private String notater;
+    
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
 
     @Override
     public void format() {
@@ -47,6 +49,7 @@ public class EtterlevelseMetadataRequest implements RequestElement, KravId {
         emd.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         emd.setTildeltMed(copyOf(tildeltMed));
         emd.setNotater(notater);
+        // Version skal aldri kopieres fra request til entity.
     }
 
 }

@@ -45,6 +45,9 @@ public class EtterlevelseRequest implements RequestElement, KravId {
     private LocalDateTime endretInnholdDato;
 
     private Boolean update;
+
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (for optimistisk låsing).
+
     private boolean prioritised;
 
     @Override
@@ -72,7 +75,6 @@ public class EtterlevelseRequest implements RequestElement, KravId {
         etterlevelse.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         etterlevelse.setKravNummer(kravNummer);
         etterlevelse.setKravVersjon(kravVersjon);
-
         etterlevelse.setEtterleves(etterleves);
         etterlevelse.setStatusBegrunnelse(statusBegrunnelse);
         etterlevelse.setDokumentasjon(copyOf(dokumentasjon));
@@ -81,6 +83,8 @@ public class EtterlevelseRequest implements RequestElement, KravId {
         etterlevelse.setIkkeBehovForRevurdering(ikkeBehovForRevurdering);
         etterlevelse.setEndretInnholdDato(endretInnholdDato);
         etterlevelse.setSuksesskriterieBegrunnelser(StreamUtils.convert(suksesskriterieBegrunnelser, SuksesskriterieBegrunnelseRequest::convertTo));
+        // Merk: version skal aldri kopieres fra request til entity
+
         return etterlevelse;
     }
 
