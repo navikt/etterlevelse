@@ -51,7 +51,7 @@
     "@navikt/ds-tailwind": "^8.22.1",
     "@tailwindcss/postcss": "^4.3.5",
     "@tiptap/core": "^3.33.0",
-    "@tiptap/extension-image": "^3.33.0",
+    "@tiptap/extension-image": "^3.33.1",
     "@tiptap/extension-link": "^3.33.0",
     "@tiptap/extension-list": "^3.33.0",
     "@tiptap/extension-ordered-list": "^3.33.0",

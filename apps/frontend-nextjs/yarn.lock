@@ -1837,12 +1837,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tiptap/extension-image@npm:^3.33.0":
-  version: 3.33.0
-  resolution: "@tiptap/extension-image@npm:3.33.0"
+"@tiptap/extension-image@npm:^3.33.1":
+  version: 3.33.1
+  resolution: "@tiptap/extension-image@npm:3.33.1"
   peerDependencies:
-    "@tiptap/core": 3.33.0
-  checksum: 10c0/bd9281043f05dda88737dc8f66cdf156fc6c48726398dfa6468af9895150d909c689de7d4516e724d07c4f86c0243ac228022a313893d4333f6b4e5946304451
+    "@tiptap/core": 3.33.1
+  checksum: 10c0/6f7404a85e3efa71c51a08826c5cd6cea8b42f03e293820c1c4c18688aaf69c45ed4e6d3b6376c1d6129b73b399159236eaeb56bb21586302e454e31f8b89c1f
   languageName: node
   linkType: hard
 
@@ -3932,7 +3932,7 @@ __metadata:
     "@playwright/test": "npm:^1.65.0"
     "@tailwindcss/postcss": "npm:^4.3.5"
     "@tiptap/core": "npm:^3.33.0"
-    "@tiptap/extension-image": "npm:^3.33.0"
+    "@tiptap/extension-image": "npm:^3.33.1"
     "@tiptap/extension-link": "npm:^3.33.0"
     "@tiptap/extension-list": "npm:^3.33.0"
     "@tiptap/extension-ordered-list": "npm:^3.33.0"
