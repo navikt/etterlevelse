@@ -354,7 +354,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
             {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && (
               <div className='flex gap-2 mt-8 lg:flex-row flex-col'>
                 <Button
-                  size='small'
+                  size='medium'
                   type='button'
                   onClick={async () =>
                     await activateFormButton(() => {
@@ -370,7 +370,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                 </Button>
                 {risikoscenarioer.length !== 0 && (
                   <Button
-                    size='small'
+                    size='medium'
                     variant='secondary'
                     type='button'
                     onClick={async () =>

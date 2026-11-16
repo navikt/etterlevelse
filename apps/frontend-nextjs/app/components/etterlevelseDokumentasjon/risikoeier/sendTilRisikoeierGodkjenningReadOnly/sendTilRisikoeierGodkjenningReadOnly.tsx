@@ -1,4 +1,4 @@
-import { Alert, BodyLong, Button, Label } from '@navikt/ds-react'
+import { BodyLong, Button, Label, LocalAlert } from '@navikt/ds-react'
 import { Dispatch, FunctionComponent, SetStateAction } from 'react'
 import DataTextWrapper from '@/components/common/DataTextWrapper/DataTextWrapper'
 import { Markdown } from '@/components/common/markdown/markdown'
@@ -46,9 +46,12 @@ export const SendTilRisikoeierGodkjenningReadOnly: FunctionComponent<TProp> = ({
 
     {saveSuccessful && (
       <div className='my-5 max-w-[75ch]'>
-        <Alert size='small' variant='success' closeButton onClose={() => setSaveSuccessful(false)}>
-          Sendt til godkjenning
-        </Alert>
+        <LocalAlert status='success' role='region' aria-label='Godkjenningsstatus'>
+          <LocalAlert.Header>
+            <LocalAlert.Title>Sendt til godkjenning</LocalAlert.Title>
+            <LocalAlert.CloseButton onClick={() => setSaveSuccessful(false)} />
+          </LocalAlert.Header>
+        </LocalAlert>
       </div>
     )}
 
@@ -57,18 +60,16 @@ export const SendTilRisikoeierGodkjenningReadOnly: FunctionComponent<TProp> = ({
         EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER && (
         <div>
           {submitAlert !== '' && (
-            <Alert
-              variant='error'
-              className='my-5'
-              closeButton={true}
-              onClose={() => setSubmitAlert('')}
-            >
-              {submitAlert}
-            </Alert>
+            <LocalAlert status='error' className='my-5'>
+              <LocalAlert.Header>
+                <LocalAlert.Title>{submitAlert}</LocalAlert.Title>
+                <LocalAlert.CloseButton onClick={() => setSubmitAlert('')} />
+              </LocalAlert.Header>
+            </LocalAlert>
           )}
           <Button
             className='mt-5'
-            variant='primary'
+            variant='secondary'
             type='button'
             onClick={async () => {
               await submit(
