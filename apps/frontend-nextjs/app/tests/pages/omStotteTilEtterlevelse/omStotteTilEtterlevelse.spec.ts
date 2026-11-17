@@ -21,7 +21,7 @@ import {
   temainndelingOgTemaoversiktUrl,
   tilretteleggeForGjenbrukId,
 } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
-import { mockAdmin, mockRead } from '../../utils/roller'
+import { mockAdmin, mockIdent, mockRead } from '../../utils/roller'
 
 const baseUrl = 'http://localhost:3000'
 const pageUrl = `${baseUrl}${omStotteTilEtterlevelseUrl}`
@@ -154,6 +154,7 @@ test.describe('Om Støtte til etterlevelse', () => {
     await expect(
       page.getByRole('heading', { name: 'Om Støtte til etterlevelse', exact: true })
     ).toBeVisible()
+    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
   })
 
   test('Som en bruker vil jeg se innhold, overskrifter, illustrasjon og introduksjonsvideo', async ({
@@ -226,8 +227,8 @@ test.describe('Om Støtte til etterlevelse', () => {
     ['Vis meg hvordan en kravside ser ut', 'Skjermbilde som viser en kravside'],
   ]) {
     test(`Som en bruker vil jeg vise og skjule «${name}»`, async ({ page }) => {
-      const main = page.getByRole('main')
-      const button = main.getByRole('button', { name, exact: true })
+      const main: Locator = page.getByRole('main')
+      const button: Locator = main.getByRole('button', { name, exact: true })
       await toggleExample(button)
       await button.click()
       await expect(main.getByRole('img', { name: image, exact: true })).toBeVisible()
@@ -238,9 +239,9 @@ test.describe('Om Støtte til etterlevelse', () => {
     test(`Som en bruker vil jeg åpne «${item.title}», se eksemplene og lukke avsnittet`, async ({
       page,
     }) => {
-      const main = page.getByRole('main')
-      const accordion = main.locator(`[id="${item.id}"]`)
-      const header = accordion.getByRole('button').filter({ hasText: item.title }).first()
+      const main: Locator = page.getByRole('main')
+      const accordion: Locator = main.locator(`[id="${item.id}"]`)
+      const header: Locator = accordion.getByRole('button').filter({ hasText: item.title }).first()
       await expect(header).toHaveAttribute('aria-expanded', 'false')
       await expect(accordion.getByText(item.content, { exact: false })).toBeHidden()
       await header.getByRole('heading', { name: item.title, exact: true }).click()
@@ -276,6 +277,7 @@ test.describe('Om Støtte til etterlevelse', () => {
       const accordion = page.getByRole('main').locator(`[id="${item.id}"]`)
       const header = accordion.getByRole('button').filter({ hasText: item.title }).first()
       const copyButton = accordion.getByRole('button', { name: 'Kopier lenke', exact: true })
+      await expect(header).toHaveAttribute('aria-expanded', 'false')
       await copyButton.click()
       await expect
         .poll(() => page.evaluate(() => sessionStorage.getItem('copiedAccordionLink')))
@@ -289,12 +291,12 @@ test.describe('Om Støtte til etterlevelse', () => {
   }
 
   test('Som en bruker vil jeg kunne ha flere avsnitt åpne samtidig', async ({ page }) => {
-    const first = page
+    const first: Locator = page
       .getByRole('main')
       .locator(`[id="${accordionItems[0].id}"]`)
       .getByRole('button')
       .first()
-    const second = page
+    const second: Locator = page
       .getByRole('main')
       .locator(`[id="${accordionItems[1].id}"]`)
       .getByRole('button')
@@ -312,6 +314,7 @@ test.describe('Om Støtte til etterlevelse', () => {
   }) => {
     await mockRead(page)
     await page.reload()
+    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
     const main = page.getByRole('main')
     await expect(main.getByRole('button', { name: 'Kopier lenke', exact: true })).toHaveCount(0)
     for (const item of accordionItems) {
