@@ -81,7 +81,7 @@ public class ArdoqImportService {
                     count.incrementAndGet();
                 }
             });
-
+            log.info("Successfully synced {} ardoq system relations with etterlevelses document", count.get());
             return String.format("Successfully synced %s ardoq system relations with etterlevelses document", count.get());
         }
     }
