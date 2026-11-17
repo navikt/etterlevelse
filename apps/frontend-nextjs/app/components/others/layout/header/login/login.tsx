@@ -15,6 +15,7 @@ import { useContext } from 'react'
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
+  adminArdoqUrl,
   adminArkiveringUrl,
   adminAuditUrl,
   adminCodelistUrl,
@@ -89,6 +90,7 @@ export const LoggedInHeader = () => {
         { label: 'Spørsmål og svar', href: adminMessagesLogUrl },
         { label: 'Varslinger', href: adminVarselUrl },
         { label: 'Sendt e-post log', href: adminMaillog },
+        { label: 'Administrere ardoq data', href: adminArdoqUrl },
         // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []

@@ -13,6 +13,8 @@ export const adminMessagesLogUrl: string = `${adminUrl}/messageslog`
 export const adminVarselUrl: string = `${adminUrl}/varsel`
 export const adminPvkUrl: string = `${adminUrl}/pvk`
 export const adminArkiveringUrl: string = `${adminUrl}/arkivering`
+export const adminArdoqUrl: string = `${adminUrl}/ardoq`
+
 export const adminMaillog = `${adminUrl}/maillog`
 export const adminGjenopprettUrl: string = `${adminUrl}/gjenopprett`
 

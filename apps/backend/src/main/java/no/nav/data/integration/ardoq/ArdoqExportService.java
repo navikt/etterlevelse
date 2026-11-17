@@ -1,6 +1,8 @@
 package no.nav.data.integration.ardoq;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.etterlevelse.etterlevelse.EtterlevelseService;
 import no.nav.data.etterlevelse.etterlevelse.domain.Etterlevelse;
 import no.nav.data.etterlevelse.etterlevelse.domain.EtterlevelseStatus;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ArdoqExportService {
 
@@ -35,6 +38,7 @@ public class ArdoqExportService {
     private final KravService kravService;
     private final EtterlevelseService etterlevelseService;
     private final ArdoqClient ardoqClient;
+    private final SecurityProperties securityProperties;
 
     @Value("${etterlev.frontend.url}")
     private String frontendUrl;
@@ -126,6 +130,10 @@ public class ArdoqExportService {
     }
 
     public void ardoqExportEtterlevelseDokumentDataToExcel(List<ArdoqExportEtterlevelseDokumentField> ardoqExportEtterlevelseDokumentFields) {
+        if (securityProperties.isDev()) {
+            log.info("Ignoring request to export ardoq data in dev environment");
+            return;
+        } else {
             // config id for referanse mellom Etterlevelse og system
             //ikke sensitiv data
             final String configIdEtterlevelse = "cd645f7f3589042edfc50ce0";
@@ -145,44 +153,49 @@ public class ArdoqExportService {
                 }
             }
 
-        ArdoqPostPayload<ArdoqExportEtterlevelseDokumentField> payload = ArdoqPostPayload.<ArdoqExportEtterlevelseDokumentField>builder()
-                .config(
-                        ArdoqPostPayload.ArdoqConfig.builder()
-                                .id(configIdEtterlevelse)
-                                .name("API Import component Etterlevelsesdokument.xlsx")
-                                .build()
-                ).tables(
-                        List.of(
-                                ArdoqPostPayload.ArdoqTable.<ArdoqExportEtterlevelseDokumentField>builder()
-                                        .id("1")
-                                        .rows(ardoqExportEtterlevelseDokumentFields)
-                                        .build()
-                        )
-                ).build();
+            ArdoqPostPayload<ArdoqExportEtterlevelseDokumentField> payload = ArdoqPostPayload.<ArdoqExportEtterlevelseDokumentField>builder()
+                    .config(
+                            ArdoqPostPayload.ArdoqConfig.builder()
+                                    .id(configIdEtterlevelse)
+                                    .name("API Import component Etterlevelsesdokument.xlsx")
+                                    .build()
+                    ).tables(
+                            List.of(
+                                    ArdoqPostPayload.ArdoqTable.<ArdoqExportEtterlevelseDokumentField>builder()
+                                            .id("1")
+                                            .rows(ardoqExportEtterlevelseDokumentFields)
+                                            .build()
+                            )
+                    ).build();
 
-        ardoqClient.postArdoqData(payload);
+            ardoqClient.postArdoqData(payload);
 
-        ArdoqPostPayload<ArdoqTeamRelation> teamPayload = ArdoqPostPayload.<ArdoqTeamRelation>builder()
-                .config(
-                        ArdoqPostPayload.ArdoqConfig.builder()
-                                .id(configIdTeam)
-                                .name("API Import relasjon etterlevelse mot team.xlsx")
-                                .build()
-                ).tables(
-                        List.of(
-                                ArdoqPostPayload.ArdoqTable.<ArdoqTeamRelation>builder()
-                                        .id("1")
-                                        .rows(ardoqTeamRelations)
-                                        .build()
-                        )
-                ).build();
+            ArdoqPostPayload<ArdoqTeamRelation> teamPayload = ArdoqPostPayload.<ArdoqTeamRelation>builder()
+                    .config(
+                            ArdoqPostPayload.ArdoqConfig.builder()
+                                    .id(configIdTeam)
+                                    .name("API Import relasjon etterlevelse mot team.xlsx")
+                                    .build()
+                    ).tables(
+                            List.of(
+                                    ArdoqPostPayload.ArdoqTable.<ArdoqTeamRelation>builder()
+                                            .id("1")
+                                            .rows(ardoqTeamRelations)
+                                            .build()
+                            )
+                    ).build();
 
-        ardoqClient.postArdoqData(teamPayload);
+            ardoqClient.postArdoqData(teamPayload);
 
-
+        }
     }
 
     public void ardoqExportSystemRelationDataToExcel(List<ArdoqSystemRelationField> ardoqExportSystemRelationFields) {
+
+        if (securityProperties.isDev()) {
+            log.info("Ignoring request to export ardoq data in dev environment");
+            return;
+        } else {
         // config id for referanse mellom Etterlevelse og system
         //ikke sensitiv data
         final String configId = "6d60048160a5309117c13f4f";
@@ -204,5 +217,5 @@ public class ArdoqExportService {
 
         ardoqClient.postArdoqData(payload);
 
-    }
+    }}
 }
