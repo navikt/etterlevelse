@@ -617,7 +617,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
               </FieldArray>
             </ReadMore>
 
-            {env.isDev && (
+            {user.isAdmin() && (
               <div id='ardoqSystemData' className='flex flex-col lg:flex-row gap-5 my-5'>
                 <FieldArray name='ardoqSystemData'>
                   {(fieldArrayRenderProps: FieldArrayRenderProps) => (
