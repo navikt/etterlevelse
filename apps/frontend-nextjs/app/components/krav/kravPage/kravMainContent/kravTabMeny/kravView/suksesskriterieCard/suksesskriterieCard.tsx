@@ -16,10 +16,10 @@ export const SuksesskriterieCard: FunctionComponent<TProps> = ({
 }) => (
   <div className='border-b-2 border-gray-200 py-5'>
     <Box>
-      <Label>
-        Suksesskriterium {number} av {totalt}
-      </Label>
       <Heading size='small' level='2'>
+        <Label className='block'>
+          Suksesskriterium {number} av {totalt}
+        </Label>
         {suksesskriterie.navn}
       </Heading>
       <Markdown source={suksesskriterie.beskrivelse} />
