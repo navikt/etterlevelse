@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,10 +41,6 @@ public class ArdoqImportService {
                     return;
                 }
                 List<String> ardoqSystemIds = etterlevelseDokument.getEtterlevelseDokumentasjonData().getArdoqSystemIds();
-                if (ardoqSystemIds == null) {
-                    ardoqSystemIds = new ArrayList<>();
-                    etterlevelseDokument.getEtterlevelseDokumentasjonData().setArdoqSystemIds(ardoqSystemIds);
-                }
                 if (!ardoqSystemIds.contains(ardoqSystemRelationField.getArdoqId())) {
                     ardoqSystemIds.add(ardoqSystemRelationField.getArdoqId());
                     EtterlevelseDokumentasjonRequest newRequest = EtterlevelseDokumentasjonRequest.builder()
