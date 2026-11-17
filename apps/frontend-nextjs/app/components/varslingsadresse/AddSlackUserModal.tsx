@@ -5,6 +5,7 @@ import { AxiosError } from 'axios'
 import { useContext, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import {
   EAdresseType,
@@ -97,7 +98,7 @@ export const AddSlackUserModal = (props: IProps) => {
                     placeholder=''
                     tabSelectsValue={false}
                     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-                    loadingMessage={() => 'Søker...'}
+                    loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                     isClearable={false}
                     loadOptions={usePersonSearch}
                     components={{ DropdownIndicator }}

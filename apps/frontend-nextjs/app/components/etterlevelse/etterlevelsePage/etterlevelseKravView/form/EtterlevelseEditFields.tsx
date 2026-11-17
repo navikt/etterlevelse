@@ -38,6 +38,7 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
 import { sporInnblikkHendelse } from '@/util/analytics/innblikk'
@@ -324,7 +325,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                     {!_.isEmpty(errors) && (
                       <ErrorSummary
                         ref={errorSummaryRef}
-                        heading='Du må rette disse feilene før du kan fortsette'
+                        heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
                         onClick={() => console.debug(errors)}
                       >
                         {errors.suksesskriterieBegrunnelser && (

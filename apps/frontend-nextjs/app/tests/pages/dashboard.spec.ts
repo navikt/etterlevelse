@@ -165,9 +165,12 @@ for (const path of [
   '/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter',
 ]) {
   test(`loading skeleton is replaced by documents on ${path}`, async ({ page }) => {
-    const responseReady = Promise.withResolvers<void>()
+    let resolveResponse!: () => void
+    const responseReady = new Promise<void>((resolve) => {
+      resolveResponse = resolve
+    })
     await page.route('**/dashboard/table/**', async (route) => {
-      await responseReady.promise
+      await responseReady
       await route.fulfill({ json: documents })
     })
 
@@ -184,13 +187,13 @@ for (const path of [
       await expect(table.getByRole('columnheader').first().getByRole('button')).toBeDisabled()
       await expect(table.getByRole('link')).toHaveCount(0)
 
-      responseReady.resolve()
+      resolveResponse()
       await expect(table).not.toHaveAttribute('aria-busy', 'true')
       await expect(skeletonRows).toHaveCount(0)
       await expect(table.getByRole('link', { name: 'E100.1 Alpha' })).toBeVisible()
       await expect(table.getByRole('columnheader').first().getByRole('button')).toBeEnabled()
     } finally {
-      responseReady.resolve()
+      resolveResponse()
     }
   })
 
@@ -215,9 +218,12 @@ test('theme document DataGrid shows a skeleton while refreshing filtered documen
   await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter')
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table.getByRole('link', { name: 'E100.1 Alpha' })).toBeVisible()
-  const responseReady = Promise.withResolvers<void>()
+  let resolveResponse!: () => void
+  const responseReady = new Promise<void>((resolve) => {
+    resolveResponse = resolve
+  })
   await page.route('**/dashboard/table/tema/**', async (route) => {
-    await responseReady.promise
+    await responseReady
     await route.fulfill({ json: [documents[1]] })
   })
 
@@ -229,13 +235,13 @@ test('theme document DataGrid shows a skeleton while refreshing filtered documen
     await expect(table).toHaveAttribute('aria-busy', 'true')
     await expect(table.locator('tbody tr[aria-hidden="true"]')).toHaveCount(5)
     await expect(table.getByRole('link', { name: 'E100.1 Alpha' })).toHaveCount(0)
-    responseReady.resolve()
+    resolveResponse()
     await expect(table).not.toHaveAttribute('aria-busy', 'true')
     await expect(table.getByRole('link', { name: 'E200.2 Beta' })).toBeVisible()
     await expect(table.getByRole('link', { name: 'E100.1 Alpha' })).toHaveCount(0)
     await expect(page).toHaveURL(new RegExp(`avdeling=${avdelingId}`))
   } finally {
-    responseReady.resolve()
+    resolveResponse()
   }
 })
 

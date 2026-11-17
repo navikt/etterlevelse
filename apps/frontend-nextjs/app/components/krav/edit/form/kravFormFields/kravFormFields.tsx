@@ -8,6 +8,7 @@ import { InputField } from '@/components/common/inputs'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { VarslingsadresserEdit } from '@/components/varslingsadresse/VarslingsadresserEdit'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { EListName } from '@/constants/kodeverk/kodeverkConstants'
 import { TKravQL } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
@@ -153,7 +154,7 @@ export const KravFormFields: FunctionComponent<TProps> = ({
             {!_.isEmpty(errors) && (
               <ErrorSummary
                 ref={errorSummaryRef}
-                heading='Du må rette disse feilene før du kan fortsette'
+                heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
                 className='mt-5'
               >
                 {Object.entries(errors)

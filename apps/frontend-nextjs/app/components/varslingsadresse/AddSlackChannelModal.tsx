@@ -2,6 +2,7 @@ import { Button, Modal } from '@navikt/ds-react'
 import { FunctionComponent, useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import {
   EAdresseType,
@@ -48,7 +49,7 @@ export const AddSlackChannelModal: FunctionComponent<TProps> = ({ isOpen, close,
           placeholder=''
           tabSelectsValue={false}
           noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
-          loadingMessage={() => 'Søker...'}
+          loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
           isClearable={false}
           components={{ DropdownIndicator }}
           loadOptions={useSlackChannelSearch}

@@ -14,6 +14,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { EKravTab } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
@@ -756,8 +757,8 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
           <BodyLong spacing>
             Etterlevelsesdokumenter hvor det er tillatt gjenbruk, har en egen seksjon på temaside
-            som heter “Du kan gjenbruke dette etterlevelsesdokumentet”. Her finner dere veiledning
-            om hvilke tilfeller som kan gjøre gjenbruk aktuell, samt mulighet for å opprette
+            som heter “{EEtterlevelseDokumentFormConstants.GJENBRUK}”. Her finner dere veiledning om
+            hvilke tilfeller som kan gjøre gjenbruk aktuell, samt mulighet for å opprette
             gjenbrukskopi.
           </BodyLong>
           <InfoCard size='small' data-color='success' className='mb-6'>

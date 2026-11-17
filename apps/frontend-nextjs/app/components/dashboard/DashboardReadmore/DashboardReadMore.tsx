@@ -1,4 +1,5 @@
 import { Link, List, ReadMore } from '@navikt/ds-react'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   hvordanDokumentereEtterlevelseUrl,
   omStotteTilEtterlevelseDetteInneholderEtEtterlevelseKravUrl,
@@ -59,9 +60,9 @@ export const DashboardReadMore = () => (
           <strong>Hva vil det si å vurdere behov for PVK?</strong>
           <br />I Støtte til etterlevelse er det mulig å gå inn og registrere at man har vurdert
           behov for PVK, og hva som ble konklusjonen. Muligheten vises for alle etterlevere som har
-          valgt &quot;Behandler personopplysninger&quot; som egenskap i etterlevelsesdokumentet
-          sitt. Det er viktig at vurderingen om behov for PVK registreres, uansett konklusjon, slik
-          at Nav har oversikt.{' '}
+          valgt &quot;{EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER}&quot; som
+          egenskap i etterlevelsesdokumentet sitt. Det er viktig at vurderingen om behov for PVK
+          registreres, uansett konklusjon, slik at Nav har oversikt.{' '}
           <Link href='/om-pvk#beslutningsstotte' target='_blank'>
             Les mer om beslutningsstøtte ved vurdering av behov for PVK (åpner i en ny fane)
           </Link>

@@ -2,6 +2,7 @@ import { FunctionComponent } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useSlackChannelSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { ISlackChannel } from '@/constants/teamkatalogen/slack/slackConstants'
 import {
   EAdresseType,
@@ -22,7 +23,7 @@ export const SlackChannelSearch: FunctionComponent<TProps> = ({ add, close }) =>
     tabSelectsValue={false}
     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
     controlShouldRenderValue={false}
-    loadingMessage={() => 'Søker...'}
+    loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
     isClearable={false}
     components={{ DropdownIndicator }}
     loadOptions={useSlackChannelSearch}

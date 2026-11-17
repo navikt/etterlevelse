@@ -4,6 +4,7 @@ import _ from 'lodash'
 import { FunctionComponent, RefObject, useEffect, useId, useRef, useState } from 'react'
 import { mapRisikoscenarioToFormValue } from '@/api/risikoscenario/risikoscenarioApi'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { OvrigToKravSpesifikkRisikoscenarioField } from './field/ovrigToKravSpesifikkRisikoscenarioField'
 import RisikoscenarioKonsekvensnivaaField from './field/risikoscenarioKonsekvensnivaaField'
@@ -106,7 +107,7 @@ const RisikoscenarioModalForm: FunctionComponent<TProps> = ({
                   <div className='mt-5'>
                     <ErrorSummary
                       ref={errorSummaryRef}
-                      heading='Du må rette disse feilene før du kan fortsette'
+                      heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
                     >
                       {Object.entries(errors)
                         .filter(([, error]) => error)

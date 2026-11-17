@@ -7,6 +7,7 @@ import {
   EEtterlevelseDokumentasjonStatus,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import GjenbrukAlert from '../alert/GjenbrukAlert'
 import { EtterlevelseDokumentasjonExpansionCard } from '../expantionCard/etterlevelseDokumentasjonExpansionCard'
 import { TilgjengeligForGjenbruk } from '../tilgjengeligForGjenbruk/tilgjengeligForGjenbruk'
@@ -96,7 +97,7 @@ export const EtterlevelseDokumentasjonReadmore: FunctionComponent<TProps> = ({
             EReadmoreTilstand.GJENBRUK_PA && (
             <div className='mt-5'>
               <ReadMore
-                header='Du kan gjenbruke dette etterlevelsesdokumentet'
+                header={EEtterlevelseDokumentFormConstants.GJENBRUK}
                 open={gjenbrukReadmoreOpen}
                 onOpenChange={setGjenbrukReadmoreOpen}
               >

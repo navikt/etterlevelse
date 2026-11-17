@@ -17,6 +17,7 @@ import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdow
 import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { bypassUnsavedGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -176,7 +177,7 @@ export const PvoTilbakemeldingAnsvarligForm: FunctionComponent<TProps> = ({
                           return noOptionMessage(inputValue)
                         }}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchResourceByNameOptions}
                         onChange={(value: any) => {

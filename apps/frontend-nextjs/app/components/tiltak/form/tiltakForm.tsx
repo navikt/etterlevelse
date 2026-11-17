@@ -26,6 +26,7 @@ import LabelWithTooltip, {
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { env } from '@/util/env/env'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
@@ -115,13 +116,13 @@ const TiltakForm: FunctionComponent<TProps> = ({
                 <LabelWithDescription label='Søk etter tiltaksansvarlig team' />
                 <div className='w-full'>
                   <AsyncSelect
-                    aria-label='Søk etter team'
+                    aria-label={EEtterlevelseDokumentFormConstants.SOK_TEAM}
                     placeholder=''
                     tabSelectsValue={false}
                     components={{ DropdownIndicator }}
                     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                     controlShouldRenderValue={false}
-                    loadingMessage={() => 'Søker...'}
+                    loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                     isClearable={false}
                     loadOptions={useSearchTeamOptions}
                     onChange={(value: any) => {
@@ -156,7 +157,7 @@ const TiltakForm: FunctionComponent<TProps> = ({
                       return noOptionMessage(inputValue)
                     }}
                     controlShouldRenderValue={false}
-                    loadingMessage={() => 'Søker...'}
+                    loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                     isClearable={false}
                     loadOptions={searchResourceByNameOptions}
                     onChange={(value: any) => {
@@ -261,7 +262,7 @@ const TiltakForm: FunctionComponent<TProps> = ({
           {!_.isEmpty(errors) && (
             <ErrorSummary
               ref={errorSummaryRef}
-              heading='Du må rette disse feilene før du kan fortsette'
+              heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
             >
               {Object.entries(errors)
                 .filter(([, error]) => error)

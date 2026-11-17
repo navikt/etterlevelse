@@ -3,6 +3,7 @@
 import { BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   BEHOV_COLORS,
   DOK_COLORS,
@@ -177,7 +178,11 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
     { name: 'Ikke påbegynt', value: agg.dok.ikkePaabegynt, color: '#fa4d56' },
     { name: 'Under arbeid', value: agg.dok.underArbeid, color: DOK_COLORS[0] },
     { name: 'Sendt til godkjenning', value: agg.dok.sendtTilGodkjenning, color: DOK_COLORS[1] },
-    { name: 'Godkjent av risikoeier', value: agg.dok.godkjentAvRisikoeier, color: DOK_COLORS[2] },
+    {
+      name: EEtterlevelseDokumentFormConstants.GODKJENT_AV_RISIKOEIER,
+      value: agg.dok.godkjentAvRisikoeier,
+      color: DOK_COLORS[2],
+    },
   ]
 
   const suksessData = buildSuksesskriterierSegments(agg.suksess)
@@ -217,7 +222,7 @@ export const DashboardOverviewCard = ({ stats, view }: IProps) => {
       color: PVK_COLORS[4],
     },
     {
-      name: 'Godkjent av risikoeier',
+      name: EEtterlevelseDokumentFormConstants.GODKJENT_AV_RISIKOEIER,
       value: agg.pvk.godkjentAvRisikoeier,
       color: PVK_COLORS[5],
     },

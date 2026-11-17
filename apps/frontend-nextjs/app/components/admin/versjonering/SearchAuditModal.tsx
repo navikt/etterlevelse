@@ -5,6 +5,7 @@ import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { searchAuditsByTableAndSearchTerm } from '@/api/audit/auditApi'
 import { ESearchDataType, IAuditItem } from '@/constants/admin/audit/auditConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { searchDataTypeToOptions } from '@/util/auditUtils/auditUtils'
 
 const SearchAuditModal = () => {
@@ -51,7 +52,7 @@ const SearchAuditModal = () => {
               hideLabel
               disabled={[null, undefined, ''].includes(selectedDataType)}
               value={searchTerm}
-              placeholder='Skriv minst 3 tegn'
+              placeholder={EEtterlevelseDokumentFormConstants.SOK}
               onChange={(e) => setSearchTerm((e.target as HTMLInputElement).value)}
               className='w-72'
             />
@@ -60,7 +61,7 @@ const SearchAuditModal = () => {
               disabled={[null, undefined, ''].includes(selectedDataType)}
               onClick={async () => {
                 if (searchTerm.length < 3) {
-                  setError('Skriv minst 3 tegn for å søke')
+                  setError(EEtterlevelseDokumentFormConstants.SOK)
                 } else {
                   await searchAuditsByTableAndSearchTerm(
                     searchTerm,

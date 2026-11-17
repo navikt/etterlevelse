@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { mockIdent } from '@/tests/utils/roller'
 
@@ -182,7 +183,7 @@ test('valideringsfeil lenker til hvert enkelt risikoscenario', async ({ page, co
   await sendButton.click()
 
   const errorSummary = page.getByRole('heading', {
-    name: 'Du må rette disse feilene før du kan fortsette',
+    name: EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING,
   })
   await expect(errorSummary).toBeVisible()
 

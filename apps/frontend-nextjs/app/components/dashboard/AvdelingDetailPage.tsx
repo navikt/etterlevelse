@@ -38,6 +38,7 @@ import {
   IDashboardTable,
 } from '@/constants/dashboard/dashboardConstants'
 import { EEtterlevelseDokumentasjonStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   EPvkDokumentStatus,
   EPvkVurdering,
@@ -1551,9 +1552,10 @@ const AvdelingDetailPage = ({ avdelingId }: IProps) => {
                         <strong>Hva vil det si å vurdere behov for PVK?</strong>
                         <br />I Støtte til etterlevelse er det mulig å gå inn og registrere at man
                         har vurdert behov for PVK, og hva som ble konklusjonen. Muligheten vises for
-                        alle etterlevere som har valgt “Behandler personopplysninger” som egenskap i
-                        etterlevelsesdokumentet sitt. Det er viktig at vurderingen om behov for PVK
-                        registreres, uansett konklusjon, slik at Nav har oversikt.{' '}
+                        alle etterlevere som har valgt “
+                        {EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER}” som
+                        egenskap i etterlevelsesdokumentet sitt. Det er viktig at vurderingen om
+                        behov for PVK registreres, uansett konklusjon, slik at Nav har oversikt.{' '}
                         <Link
                           href='/om-pvk#beslutningsstotte'
                           target='_blank'

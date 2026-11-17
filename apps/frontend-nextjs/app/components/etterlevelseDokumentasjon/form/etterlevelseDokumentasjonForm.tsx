@@ -78,6 +78,7 @@ import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -140,8 +141,8 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
     useState<boolean>(false)
 
   const labelNavngiDokument: string = isForRedigering
-    ? 'Navngi dokumentet ditt'
-    : 'Navngi det nye dokumentet ditt'
+    ? EEtterlevelseDokumentFormConstants.NAVNGI_DOKUMENT_LABEL_ONE
+    : EEtterlevelseDokumentFormConstants.NAVNGI_DOKUMENT_LABEL_TWO
 
   useEffect(() => {
     ;(async () => {
@@ -289,7 +290,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
             </Heading>
             {dokumentRelasjon && (
               <Alert contentMaxWidth={false} variant='info' className='mb-5'>
-                <Label>Du kan gjenbruke dette etterlevelsesdokumentet</Label>
+                <Label>{EEtterlevelseDokumentFormConstants.GJENBRUK}</Label>
 
                 <div className='mb-5'>
                   <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
@@ -300,14 +301,14 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
               rows={2}
               noPlaceholder
               label={labelNavngiDokument}
-              caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+              caption={EEtterlevelseDokumentFormConstants.NAVNGI_DOKUMENT_CAPTION}
               name='title'
             />
             <div className='mt-5'>
               <TextAreaField
                 height='150px'
                 noPlaceholder
-                label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+                label={EEtterlevelseDokumentFormConstants.ETTERLEVELSENS_KONTEKST_LABEL}
                 name='beskrivelse'
                 markdown
               />
@@ -317,12 +318,12 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='h-full pt-5 w-[calc(100% - 1rem)]'>
                     <Heading size='small' level='2' spacing>
-                      Velg egenskaper
+                      {EEtterlevelseDokumentFormConstants.VELG_EGENSKAPER}
                     </Heading>
                     <CheckboxGroup
                       id='irrelevansFor'
-                      legend='Hvilke egenskaper gjelder for etterlevelsen?'
-                      description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
+                      legend={EEtterlevelseDokumentFormConstants.VELG_EGENSKAPER_LEGEND}
+                      description={EEtterlevelseDokumentFormConstants.VELG_EGENSKAPER_BESKRIVELSE}
                       value={selectedFilter}
                       error={errors.irrelevansFor as string | undefined}
                       onChange={(selected: number[]) => {
@@ -333,7 +334,10 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
 
                         const behandlerPvkIndex = relevansOptions
                           .map((_irrelevans: IGetParsedOptionsProps, index: number) => {
-                            if (_irrelevans.label === 'Behandler personopplysninger') {
+                            if (
+                              _irrelevans.label ===
+                              EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER
+                            ) {
                               return index
                             }
                           })
@@ -375,7 +379,8 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                     >
                       {relevansOptions.map((relevans: IGetParsedOptionsProps, index: number) => {
                         const isBehandlerPersonopplysninger =
-                          relevans.label === 'Behandler personopplysninger'
+                          relevans.label ===
+                          EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER
 
                         const isBehandlerPersonopplysningerLocked =
                           pvkDokument?.hasPvkDocumentationStarted === true &&
@@ -408,7 +413,10 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                               >
                                 <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                                   <InfoCard.Title as='div'>
-                                    Fordi dere har en PVK, kan ikke “Behandler personopplysninger”
+                                    Fordi dere har en PVK, kan ikke{' '}
+                                    {
+                                      EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER
+                                    }
                                     fjernes som egenskap.
                                   </InfoCard.Title>
                                 </InfoCard.Header>
@@ -442,9 +450,11 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                                     </List>
                                     <BodyLong className='my-7'>
                                       Dette innholdet har vært skjult fordi det ble valgt bort
-                                      “Behandler personopplysninger”. Nå som dere har valgt
-                                      egenskapen på nytt, vil innholdet synes og kunne redigeres på
-                                      gjeldende sider.
+                                      {
+                                        EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER
+                                      }
+                                      ”. Nå som dere har valgt egenskapen på nytt, vil innholdet
+                                      synes og kunne redigeres på gjeldende sider.
                                     </BodyLong>
                                   </InfoCard.Content>
                                 </InfoCard>
@@ -458,12 +468,15 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                       <Modal
                         open={isPvkAlertModalOpen}
                         onClose={() => setIsPvkAlertModalOpen(false)}
-                        header={{ heading: 'Vil dere fjerne “Behandler personopplysninger?' }}
+                        header={{
+                          heading: `Vil dere fjerne ${EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER}?`,
+                        }}
                       >
                         <Modal.Body>
                           <BodyLong className='mb-7'>
-                            Hvis dere fjerner egenskapen “Behandler personopplysninger”, vil dere
-                            ikke lenger kunne se eller redigere
+                            Hvis dere fjerner egenskapen “
+                            {EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER}”, vil
+                            dere ikke lenger kunne se eller redigere
                           </BodyLong>
                           <List as='ul'>
                             <List.Item>“Tegn Behandlingens livsløp”</List.Item>
@@ -477,9 +490,10 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                             sidene, vil fortsatt være lagret, bare skjult.
                           </BodyLong>
                           <BodyLong>
-                            Hvis dere senere velger “Behandler personopplysninger” på nytt, vil
-                            disse sidene, og innhold som dere har lagret der, vises og kunne
-                            redigeres som før.
+                            Hvis dere senere velger “
+                            {EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER}” på
+                            nytt, vil disse sidene, og innhold som dere har lagret der, vises og
+                            kunne redigeres som før.
                           </BodyLong>
                         </Modal.Body>
                         <Modal.Footer>
@@ -498,7 +512,8 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                               setIsPvkAlertModalOpen(false)
                             }}
                           >
-                            Fjern “Behandler personopplysninger”
+                            Fjern “{EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER}
+                            ”
                           </Button>
                           <Button
                             type='button'
@@ -521,25 +536,25 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
             {/* DONT REMOVE */}
             {/* )} */}
             <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
-              Velg behandlinger og systemer
+              {EEtterlevelseDokumentFormConstants.VELG_BEHANDLINGER_OG_SYSTEMER}
             </Heading>
             <FieldWrapper>
               <FieldArray name='behandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='my-3'>
                     <LabelWithDescription
-                      label='Legg til behandlinger fra Behandlingskatalogen'
-                      description='Skriv minst 3 tegn for å søke'
+                      label={EEtterlevelseDokumentFormConstants.VELG_BEHANDLINGER_OG_SYSTEMER_LABEL}
+                      description={EEtterlevelseDokumentFormConstants.SOK}
                     />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter behandlinger'
+                        aria-label={EEtterlevelseDokumentFormConstants.SOK_BEHANDLINGER}
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchBehandlingOptions}
                         onChange={(value: any) => {
@@ -562,25 +577,25 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
             </FieldWrapper>
 
             <ReadMore
-              header='Dersom Nav er databehandler'
+              header={EEtterlevelseDokumentFormConstants.DATABEHANDLER}
               defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
             >
               <FieldArray name='dpBehandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='my-3'>
                     <LabelWithDescription
-                      label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen'
-                      description='Skriv minst 3 tegn for å søke'
+                      label={EEtterlevelseDokumentFormConstants.DATABEHANDLER_LABEL}
+                      description={EEtterlevelseDokumentFormConstants.SOK}
                     />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter behandlinger'
+                        aria-label={EEtterlevelseDokumentFormConstants.SOK_BEHANDLINGER}
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchDpBehandlingOptions}
                         onChange={(value: any) => {
@@ -607,10 +622,10 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                 <FieldArray name='ardoqSystemData'>
                   {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                     <div className='flex-1'>
-                      <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                      <LabelWithDescription label={EEtterlevelseDokumentFormConstants.SYSTEMER} />
                       <div className='w-full'>
                         <AsyncSelect
-                          aria-label='Søk etter system'
+                          aria-label={EEtterlevelseDokumentFormConstants.SOK_SYSTEMER}
                           placeholder=''
                           tabSelectsValue={false}
                           components={{ DropdownIndicator }}
@@ -618,7 +633,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                             return noOptionMessage(inputValue)
                           }}
                           controlShouldRenderValue={false}
-                          loadingMessage={() => 'Søker...'}
+                          loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                           isClearable={false}
                           loadOptions={useArdoqSearch}
                           onChange={(value: any) => {
@@ -649,13 +664,12 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
 
             <ROSEdit />
             <Heading level='2' size='small' spacing>
-              Hvem skal ha redigeringstilgang til dokumentet?
+              {EEtterlevelseDokumentFormConstants.REDIGERINGSTILGANG}
             </Heading>
             <InfoCard data-color='info' className='my-5 max-w-[70ch]' size='small'>
               <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                 <InfoCard.Title>
-                  Hvis du velger team, trenger du ikke legge inn teammedlemmene som enkeltpersoner.
-                  Er du i tvil på hvem som er med i teamet,{' '}
+                  {EEtterlevelseDokumentFormConstants.REDIGERINGSTILGANG_TITTEL}{' '}
                   <ExternalLink href='https://teamkatalogen.nav.no/'>
                     sjekk Teamkatalogen
                   </ExternalLink>
@@ -667,16 +681,19 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
               <FieldArray name='teamsData'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='flex-1'>
-                    <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                    <LabelWithTooltip
+                      label={EEtterlevelseDokumentFormConstants.SOK_TEAMKATALOG}
+                      tooltip=''
+                    />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter team'
+                        aria-label={EEtterlevelseDokumentFormConstants.SOK_TEAM}
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={useSearchTeamOptions}
                         onChange={(value: any) => {
@@ -718,7 +735,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                           return noOptionMessage(inputValue)
                         }}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchResourceByNameOptions}
                         onChange={(value: any) => {
@@ -831,7 +848,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                               return noOptionMessage(inputValue)
                             }}
                             controlShouldRenderValue={false}
-                            loadingMessage={() => 'Søker...'}
+                            loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                             isClearable={false}
                             loadOptions={searchResourceByNameOptions}
                             onChange={(value: any) => {
@@ -860,7 +877,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                         <div>
                           <DataTextWrapper>
                             {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
-                              'Ingen risikoeier satt'}
+                              EEtterlevelseDokumentFormConstants.INGEN_RISIKOEIER}
 
                             {fieldArrayRenderProps.form.values.risikoeiereData.length !== 0 && (
                               <List as='ul'>
@@ -878,10 +895,12 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                       )}
 
                       {env.isDev && !isRisikoeiereFieldLocked && (
-                        <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
+                        <ReadMore
+                          header={EEtterlevelseDokumentFormConstants.INGEN_RISIKOEIER_READMORE}
+                        >
                           <div className='flex gap-2 items-end my-2'>
                             <TextField
-                              label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
+                              label={EEtterlevelseDokumentFormConstants.INGEN_RISIKOEIER_LABEL}
                               value={customRisikoeierForDev}
                               onChange={(event: ChangeEvent<HTMLInputElement>) =>
                                 setCustomRisikoeierForDev(event.target.value)
@@ -958,10 +977,10 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
                           EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
                         }
                       >
-                        Sendt til godkjenning til risikoeier
+                        {EEtterlevelseDokumentFormConstants.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER}
                       </option>
                       <option value={EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER}>
-                        Godkjent av risikoeier
+                        {EEtterlevelseDokumentFormConstants.GODKJENT_AV_RISIKOEIER}
                       </option>
                     </Select>
                   </div>
@@ -987,7 +1006,7 @@ const EtterlevelseDokumentasjonForm: FunctionComponent<
             {!_.isEmpty(errors) && (
               <ErrorSummary
                 ref={errorSummaryRef}
-                heading='Du må rette disse feilene før du kan fortsette'
+                heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
               >
                 {Object.entries({
                   ...errors,

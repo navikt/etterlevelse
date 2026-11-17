@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -100,7 +101,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
               {
                 list: 'RELEVANS',
                 code: 'BEHANDLER_PERSONOPPLYSNINGER',
-                shortName: 'Behandler personopplysninger',
+                shortName: EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER,
                 description: 'Etterlevelsen behandler personopplysninger',
               },
             ],
@@ -164,7 +165,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
     const titleField = page.getByLabel('Navngi det nye dokumentet ditt')
     const relevanceCheckbox = page.getByRole('checkbox', {
-      name: 'Behandler personopplysninger',
+      name: EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER,
     })
 
     await expect(relevanceCheckbox).toBeVisible()

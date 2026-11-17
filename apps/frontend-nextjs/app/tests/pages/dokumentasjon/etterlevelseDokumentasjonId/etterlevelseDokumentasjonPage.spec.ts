@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -77,7 +78,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
               {
                 list: 'RELEVANS',
                 code: 'BEHANDLER_PERSONOPPLYSNINGER',
-                shortName: 'Behandler personopplysninger',
+                shortName: EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER,
                 description: 'Etterlevelsen behandler personopplysninger',
               },
             ],
@@ -286,7 +287,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByRole('button', { name: 'Les mer om dette dokumentet' }).click()
 
     await expect(page.getByText(oppretteEtterlevelsesdokument.description)).toBeVisible()
-    await expect(page.getByText('Behandler personopplysninger')).toBeVisible()
+    await expect(
+      page.getByText(EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER)
+    ).toBeVisible()
     await expect(
       page.getByRole('link', { name: oppretteEtterlevelsesdokument.treatmentName })
     ).toBeVisible()
@@ -318,11 +321,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     ).toBeVisible()
 
     await expect(
-      page.getByRole('button', { name: 'Du kan gjenbruke dette etterlevelsesdokumentet' })
+      page.getByRole('button', { name: EEtterlevelseDokumentFormConstants.GJENBRUK })
     ).toBeVisible()
-    await page
-      .getByRole('button', { name: 'Du kan gjenbruke dette etterlevelsesdokumentet' })
-      .click()
+    await page.getByRole('button', { name: EEtterlevelseDokumentFormConstants.GJENBRUK }).click()
     await expect(page.getByText(oppretteEtterlevelsesdokument.reuseDescription)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Gjenbruk dokumentet' })).toBeVisible()
     await expect(

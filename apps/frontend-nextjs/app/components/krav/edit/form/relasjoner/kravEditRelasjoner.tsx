@@ -6,6 +6,7 @@ import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdow
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 
 export const KravEditRelasjoner = () => (
@@ -24,7 +25,7 @@ export const KravEditRelasjoner = () => (
             components={{ DropdownIndicator }}
             noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}
-            loadingMessage={() => 'Søker...'}
+            loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
             isClearable={false}
             loadOptions={useSearchKrav}
             onChange={(krav) => {

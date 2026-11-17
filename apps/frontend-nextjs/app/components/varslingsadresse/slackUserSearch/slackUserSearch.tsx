@@ -7,6 +7,7 @@ import AsyncSelect from 'react-select/async'
 import { getSlackUserByEmail, usePersonSearch } from '@/api/teamkatalogen/teamkatalogenApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { ContentLayout } from '@/components/others/layout/content/content'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { ISlackUser } from '@/constants/teamkatalogen/slack/slackConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import {
@@ -55,7 +56,7 @@ export const SlackUserSearch: FunctionComponent<TProps> = ({ add, close }) => {
             tabSelectsValue={false}
             noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}
-            loadingMessage={() => 'Søker...'}
+            loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
             isClearable={false}
             loadOptions={usePersonSearch}
             components={{ DropdownIndicator }}

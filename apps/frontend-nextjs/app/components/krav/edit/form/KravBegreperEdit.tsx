@@ -7,6 +7,7 @@ import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWith
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
 
 export const EditBegreper = () => (
@@ -25,7 +26,7 @@ export const EditBegreper = () => (
             components={{ DropdownIndicator }}
             noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
             controlShouldRenderValue={false}
-            loadingMessage={() => 'Søker...'}
+            loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
             isClearable={false}
             loadOptions={useBegrepSearch}
             onChange={(begrep) => {
