@@ -37,6 +37,10 @@ public class ArdoqImportService {
 
             request.forEach(ardoqSystemRelationField -> {
                 EtterlevelseDokumentasjon etterlevelseDokument = etterlevelseDokumentasjonService.get(UUID.fromString(ardoqSystemRelationField.getEtterlevelseDokumentId()));
+                if (etterlevelseDokument == null) {
+                    log.warn("EtterlevelseDokumentasjon with id {} not found", ardoqSystemRelationField.getEtterlevelseDokumentId());
+                    return;
+                }
                 List<String> ardoqSystemIds = etterlevelseDokument.getEtterlevelseDokumentasjonData().getArdoqSystemIds();
                 if (ardoqSystemIds == null) {
                     ardoqSystemIds = new ArrayList<>();
