@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +39,7 @@ public class ArdoqController {
 
     private final ArdoqClient ardoqClient;
     private final ArdoqExportService ardoqExportService;
+    private final ArdoqImportService ardoqImportService;
 
 
     @Operation(summary = "Get all ardoq system")
@@ -86,13 +89,21 @@ public class ArdoqController {
     @Operation(summary = "Export etterlevelses document")
     @ApiResponse(description = "test endpoint for exporting etterlevelses document data for ardoq")
     @GetMapping("/export/dokument")
-    public void ExportDokument() {
+    public void exportDokument() {
         log.info("Exporting etterlevelses document for ardoq");
         List<ArdoqExportEtterlevelseDokumentField> edocs= ardoqExportService.getEtterlevelseDocData();
         log.info("Successfully created export data");
         log.info("Sending export data to ardoq");
         ardoqExportService.ardoqExportEtterlevelseDokumentDataToExcel(edocs);
     }
+
+    @Operation(summary = "Sync ardoq data")
+    @ApiResponse(description = "Sync system relations from ardoq with etterlevelses document")
+    @PostMapping("/data/sync")
+    public ResponseEntity<String> ardoqDataSync(@RequestBody List<ArdoqSystemRelationField> request) {
+        return ResponseEntity.ok(ardoqImportService.syncArdoqData(request));
+    }
+
 
 
     private void validateLen(String name) {
