@@ -3960,7 +3960,7 @@ __metadata:
     graphql: "npm:17.1.0"
     husky: "npm:^9.1.7"
     json-diff-kit: "npm:^1.0.35"
-    knip: "npm:^6.44.2"
+    knip: "npm:^6.45.1"
     lint-staged: "npm:17.6.0"
     lodash: "npm:^4.18.1"
     marked: "npm:^18.1.3"
@@ -4927,9 +4927,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knip@npm:^6.44.2":
-  version: 6.44.2
-  resolution: "knip@npm:6.44.2"
+"knip@npm:^6.45.1":
+  version: 6.45.1
+  resolution: "knip@npm:6.45.1"
   dependencies:
     formatly: "npm:^0.11.4"
     get-tsconfig: "npm:4.14.3"
@@ -4937,16 +4937,15 @@ __metadata:
     oxc-parser: "npm:^0.156.0"
     oxc-resolver: "npm:11.24.2"
     picomatch: "npm:^4.0.7"
-    smol-toml: "npm:^1.9.0"
+    smol-toml: "npm:^1.9.1"
     strip-json-comments: "npm:5.0.3"
     tinyglobby: "npm:^0.2.17"
-    unbash: "npm:^6.0.1"
+    unbash: "npm:^6.0.4"
     yaml: "npm:^2.9.1"
-    zod: "npm:^4.6.5"
   bin:
     knip: bin/knip.js
     knip-bun: bin/knip-bun.js
-  checksum: 10c0/ea45e0df7d5bbd05c6b233a5896f865b318ae2f50e5766441a60274f4067a0f5d56bd1d41e49955504a79f86896acc66aa5bb979cc69ed3fc975636ab893a892
+  checksum: 10c0/22ead3ad1f50f35b83e67e26f9e4624fe849e840146c03954dec6a062fcda520e2311daec6f7326f46a55f3e6cb06f1243e6a2f3fb0fadd14dbc04b94a268320
   languageName: node
   linkType: hard
 
@@ -7384,7 +7383,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smol-toml@npm:^1.9.0":
+"smol-toml@npm:^1.9.1":
   version: 1.9.1
   resolution: "smol-toml@npm:1.9.1"
   checksum: 10c0/8acccf7bbc063f29405f58f5014ab39bf4eb9d7f0e000e5e3f140f7d4d6ead5696681a7c15260d1f2910213012c0af43b31a05bf94f704b0bdf39989fba08c02
@@ -7827,10 +7826,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unbash@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "unbash@npm:6.0.1"
-  checksum: 10c0/d87ba3d042474ae8bb474845144ae21695758f2d8d99ec64e99aa11498c93b37ddc9b2958f17732f3f4d245fe295f3798fb3b45c6f04f52e394035c7d3d3c2a8
+"unbash@npm:^6.0.4":
+  version: 6.0.4
+  resolution: "unbash@npm:6.0.4"
+  checksum: 10c0/833344431b42fe4461a278358b813fe63563f40f4cd0511f8bbe85d57575b3769add1ab051e4948c8514f520b9ce21a9f0f6db1b163f20e16f8fba1081fa971d
   languageName: node
   linkType: hard
 
@@ -8170,7 +8169,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.0 || ^4.0.0, zod@npm:^4.6.5":
+"zod@npm:^3.25.0 || ^4.0.0":
   version: 4.6.7
   resolution: "zod@npm:4.6.7"
   checksum: 10c0/4ce2eb14034317b7254e347ca37b5ad591cf8333147030cf05b9b5d31692d45073f7f2747aa50cf8c6b29012194d2b22978cecc89969cf34a0d18e89d0ee7d7b
