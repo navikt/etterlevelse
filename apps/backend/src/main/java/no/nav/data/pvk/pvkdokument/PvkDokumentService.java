@@ -81,9 +81,17 @@ public class PvkDokumentService {
             }
         }
 
-        if (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING)) {
+
+        // viktig at vi sjekker at eksisterende pvk dokument har status "under arbeid" eller "vurdert av pvo trenger mer arbeid",
+        // og ny status er "sendt til pvo" eller "sendt til pvo for revurdering", for å kun varsle pvo ved første innsending av pvk dokumentet til pvo for vurdering.
+        // dette vil for eksempel hindre at vi sender varsel til pvo dersom de kun har satt en ansvar person eller endret status på tilbakemeldingen
+        if (
+                existingPvkDokument.isPresent() &&
+                (existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.UNDERARBEID) || existingPvkDokument.get().getStatus().equals(PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID)) &&
+                (pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO) || pvkDokument.getStatus().equals(PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING))) {
             sendVarselToPvo(pvkDokument);
         }
+
         //viktig at vi sjekker at eksisterende pvk dokument har status sendt til pvo eller sendt til pvo for revurdering,
         // ellers vil vi sende varsel hver gang vi oppdaterer pvk dokumentet etter vurdering fra pvo
         // eller når vi oppretter ny versjon av etterlevelsesdokumentasjon
