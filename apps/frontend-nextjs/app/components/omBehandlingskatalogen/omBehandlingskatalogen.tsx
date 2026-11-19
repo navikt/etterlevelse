@@ -8,6 +8,7 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { omPVKUrl, omPersonvernerklaeringUrl } from '@/routes/omSidene/omSideneUrl'
+import { behandlingskatalogSlackLink } from '@/util/footer/footerUtil'
 import OmBehandlingskatalogenImage from './images/OmBehandlingskatalogenImage.png'
 
 const HvordanBrukeBK = '/videos/HvordanBrukeBK.mov'
@@ -110,7 +111,12 @@ export const OmBehandlingskatalogen = () => {
             Team Datajegerne:
           </BodyLong>
           <List as='ul'>
-            <List.Item>Bli med på #behandlingskatalogen på Slack </List.Item>
+            <List.Item>
+              Bli med på{' '}
+              <ExternalLink href={behandlingskatalogSlackLink} noNewTabLabel>
+                #behandlingskatalogen på Slack
+              </ExternalLink>
+            </List.Item>
             <List.Item>Send mail til: teamdatajegerne@nav.no </List.Item>
           </List>
         </div>

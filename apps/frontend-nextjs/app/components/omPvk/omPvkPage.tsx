@@ -9,6 +9,7 @@ import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import { omBehandlingskatalogenUrl } from '@/routes/omSidene/omSideneUrl'
 import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
+import { datajegerSlackLink } from '@/util/footer/footerUtil'
 import { PageLayout } from '../others/scaffold/scaffold'
 import SkjermbildePVK from './images/SkjermbildePVK.png'
 import VisMegHvorJegFinnerDigitalPVK from './images/VisMegHvorJegFinnerDigitalPVK.png'
@@ -303,7 +304,12 @@ const OmPvkPage = () => {
             Team Datajegerne:
           </BodyLong>
           <List>
-            <List.Item>Bli med på #etterlevelse på Slack</List.Item>
+            <List.Item>
+              Bli med på{' '}
+              <ExternalLink href={datajegerSlackLink} noNewTabLabel>
+                #etterlevelse på Slack
+              </ExternalLink>
+            </List.Item>
             <List.Item>Send mail til: teamdatajegerne@nav.no</List.Item>
           </List>
         </div>
