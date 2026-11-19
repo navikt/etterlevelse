@@ -129,10 +129,10 @@ public class CodeUsageControllerIT extends IntegrationTestBase {
 
     private void createTestData() {
         createCodelistsByRequests();
-        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+        kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
                 .data(KravData.builder().avdeling("AVD1").status(KravStatus.AKTIV).relevansFor(List.of("REL1")).build())
                 .build());
-        kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(51).kravVersjon(1)
+        kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(51).kravVersjon(1)
                 .data(KravData.builder().underavdeling("UNDAVD1").status(KravStatus.AKTIV).relevansFor(List.of("REL3"))
                         .regelverk(List.of(Regelverk.builder().lov("ARKIV").build())).build())
                 .build());

@@ -17,6 +17,7 @@ import no.nav.data.etterlevelse.melding.dto.MeldingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,7 +101,9 @@ public class MeldingController {
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-
+        if (!request.isUpdate() ) {
+            throw new ValidationException("Requested to update Melding, but request.isUpdate is false.");
+        }
         var melding = service.save(request);
         return ResponseEntity.ok(melding.toResponse());
     }
@@ -108,9 +111,9 @@ public class MeldingController {
     @Operation(summary = "Delete melding", parameters = {@Parameter(name = "comment", description = "Reason for deleting the melding", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "ok")
     @DeleteMapping("/{id}")
-    public ResponseEntity<MeldingResponse> deleteMelding(@PathVariable UUID id) {
+    public ResponseEntity<MeldingResponse> deleteMelding(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete melding id={}", id);
-        var melding = service.delete(id);
+        var melding = service.delete(id, version);
         return ResponseEntity.ok(melding.toResponse());
     }
 

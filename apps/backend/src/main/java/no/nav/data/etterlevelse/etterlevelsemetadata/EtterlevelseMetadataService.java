@@ -2,12 +2,14 @@ package no.nav.data.etterlevelse.etterlevelsemetadata;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadata;
 import no.nav.data.etterlevelse.etterlevelsemetadata.domain.EtterlevelseMetadataRepo;
 import no.nav.data.etterlevelse.etterlevelsemetadata.dto.EtterlevelseMetadataRequest;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,11 +60,16 @@ public class EtterlevelseMetadataService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseMetadata save(EtterlevelseMetadataRequest request) {
-
         var etterlevelseMetadata = request.isUpdate() ? get(request.getId()) : new EtterlevelseMetadata();
+        if (request.isUpdate()) {
+            if (etterlevelseMetadata == null) {
+                throw new NotFoundException("Couldn't find etterlevelse metadata with id " + request.getId());
+            }
+            OptimisticLockUtil.checkVersion(EtterlevelseMetadata.class, etterlevelseMetadata.getId(), etterlevelseMetadata.getVersion(), request.getVersion());
+        }
         request.mergeInto(etterlevelseMetadata);
 
-        return repo.save(etterlevelseMetadata);
+        return repo.saveAndFlush(etterlevelseMetadata);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -74,7 +81,18 @@ public class EtterlevelseMetadataService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public EtterlevelseMetadata delete(UUID id) {
+        return delete(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes hvis oppgitt.
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public EtterlevelseMetadata delete(UUID id, Integer version) {
         var ettMetDelete = get(id);
+        if (ettMetDelete != null) {
+            OptimisticLockUtil.checkVersionIfPresent(EtterlevelseMetadata.class, id, ettMetDelete.getVersion(), version);
+        }
         repo.deleteById(id);
         return ettMetDelete;
     }

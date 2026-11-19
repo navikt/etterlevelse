@@ -5,10 +5,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.NotFoundException;
 import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.UtcDateTimeUtil;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -121,16 +125,20 @@ public class PvoTilbakemeldingController {
     @Operation(summary = "Create PVO tilbakemelding")
     @ApiResponse(responseCode = "201", description = "PVO tilbakemelding created")
     @PostMapping
+    @Transactional
     public ResponseEntity<PvoTilbakemeldingResponse> createPvoTilbakemelding(@RequestBody PvoTilbakemedlingRequest request) {
         log.info("Create PVO tilbakemelding");
-        // kan kaste et data integrity violation exception(1 til 1 kobling mot pvk dokument)
+        if (request.isUpdate()) {
+            throw new ValidationException("Requested to create new PvoTilbakemelding, but request.isUpdate is true.");
+        }
+        // kan kaste et data integrity violation exception (1 til 1 kobling mot pvk dokument)
         var pvoTilbakemelding = pvoTilbakemeldingService.save(request.convertToPvoTilbakemelding(), request.isUpdate());
-        updatePvkDokumentStatus(pvoTilbakemelding);
+        // TODO: updatePDS kan kaste ValidationException. La på @Transactional som plaster, men all forretningslogikk må flyttes til service.
+        updatePvkDokumentStatus(pvoTilbakemelding); 
         var response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding);
         response.getVurderinger().forEach(vurdering -> {
-                vurdering.setAnsvarligData(
-                        getResourceData(vurdering.getAnsvarlig()));
-            });
+                vurdering.setAnsvarligData(getResourceData(vurdering.getAnsvarlig()));
+        });
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -138,22 +146,27 @@ public class PvoTilbakemeldingController {
     @Operation(summary = "Update PVO tilbakemelding")
     @ApiResponse(description = "PVO tilbakemelding updated")
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<PvoTilbakemeldingResponse> updatePvoTilbakemelding(@PathVariable UUID id, @Valid @RequestBody PvoTilbakemedlingRequest request) {
         log.info("Update PVO tilbakemelding id={}", id);
 
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-
-        var pvoTilbakemeldingToUpdate = pvoTilbakemeldingService.get(id);
-
-        if (pvoTilbakemeldingToUpdate == null) {
-            throw new ValidationException(String.format("Could not find pvo tilbakemelding to be updated with id = %s ", id));
+        if (!request.isUpdate()) {
+            throw new ValidationException("Requested to update existing PvoTilbakemelding, but request.isUpdate is false.");
         }
 
+        var pvoTilbakemeldingToUpdate = pvoTilbakemeldingService.get(id);
+        if (pvoTilbakemeldingToUpdate == null) {
+            throw new NotFoundException(String.format("Could not find pvo tilbakemelding to be updated with id = %s ", id));
+        }
+
+        OptimisticLockUtil.checkVersion(PvoTilbakemelding.class, id, pvoTilbakemeldingToUpdate.getVersion(), request.getVersion());
         request.mergeInto(pvoTilbakemeldingToUpdate);
         var pvoTilbakemelding = pvoTilbakemeldingService.save(pvoTilbakemeldingToUpdate, request.isUpdate());
 
+        // TODO: updatePDS kan kaste ValidationException. La på @Transactional som plaster, men all forretningslogikk må flyttes til service.
         updatePvkDokumentStatus(pvoTilbakemelding);
 
         var response = PvoTilbakemeldingResponse.buildFrom(pvoTilbakemelding);
@@ -168,9 +181,9 @@ public class PvoTilbakemeldingController {
     @Operation(summary = "Delete PVO tilbakemelding", parameters = {@Parameter(name = "comment", description = "Reason for deleting the PVO tilbakemelding", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "PVO tilbakemelding deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<PvoTilbakemeldingResponse> deletePvoTilbakemeldingById(@PathVariable UUID id) {
+    public ResponseEntity<PvoTilbakemeldingResponse> deletePvoTilbakemeldingById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete PVO tilbakemelding id={}", id);
-        var pvoTilbakemelding = pvoTilbakemeldingService.delete(id);
+        var pvoTilbakemelding = pvoTilbakemeldingService.delete(id, version);
         if (pvoTilbakemelding == null) {
             log.warn("Could not find PVO tilbakemelding with id = {} to delete", id);
             return ResponseEntity.ok(null);

@@ -325,7 +325,7 @@ public abstract class IntegrationTestBase {
         Krav krav = Krav.builder().id(UUID.randomUUID()).kravNummer(kravNummer).kravVersjon(kravVersjon)
                 .data(KravData.builder().navn(navn).status(KravStatus.AKTIV).build())
                 .build();
-        return kravService.save(krav);
+        return kravRepo.save(krav);
     }
 
     protected Krav createKrav() {
@@ -334,7 +334,7 @@ public abstract class IntegrationTestBase {
 
     protected Risikoscenario insertRisikoscenario() {
         PvkDokument pvkDokument = createPvkDokument();
-        Krav krav = kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
+        Krav krav = kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
                 .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder()
                         .lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build())
                 .build());

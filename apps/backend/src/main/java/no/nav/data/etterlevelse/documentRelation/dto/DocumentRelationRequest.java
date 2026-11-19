@@ -34,6 +34,8 @@ public class DocumentRelationRequest implements RequestElement {
     // TODO: Ser ikke ut til at update brukes noe annet sted enn i test
     private Boolean update;
 
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
+
     @Override
     public void format(){
     };

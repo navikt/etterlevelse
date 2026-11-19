@@ -36,7 +36,6 @@ public class EtterlevelseDokumentasjonResponse {
 
     private UUID id;
     private ChangeStampResponse changeStamp;
-    private Integer version;
     private Integer etterlevelseNummer;
     private String title;
     private List<String> behandlingIds;
@@ -78,9 +77,12 @@ public class EtterlevelseDokumentasjonResponse {
     private Integer P360Recno;
     private String P360CaseNumber;
 
-    //versjonering
+    // versjonering
     private int etterlevelseDokumentVersjon;
     private List<EtterlevelseVersjonHistorikk> versjonHistorikk;
+    
+    private Integer version; // Kun for opptimistisk låsing.
+
     
     public static EtterlevelseDokumentasjonResponse buildFrom(EtterlevelseDokumentasjon eDok) {
         EtterlevelseDokumentasjonData eDokData = eDok.getEtterlevelseDokumentasjonData();

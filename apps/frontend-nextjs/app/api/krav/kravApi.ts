@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
+
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -31,8 +33,12 @@ const getKravPage = async (pageNumber: number, pageSize: number) => {
   ).data
 }
 
-export const deleteKrav = async (id: string, reason: string) => {
-  return (await axios.delete<IKrav>(`${env.backendBaseUrl}/krav/${id}?comment=${reason}`)).data
+export const deleteKrav = async (id: string, reason: string, version?: number) => {
+  return (
+    await axios.delete<IKrav>(
+      `${env.backendBaseUrl}/krav/${id}?comment=${reason}${versionParam(version)}`
+    )
+  ).data
 }
 
 const searchKrav = async (name: string): Promise<IKrav[]> => {
@@ -96,7 +102,6 @@ function kravToKravDomainObject(krav: TKravQL): IKrav {
     }),
   } as any
   delete domainToObject.changeStamp
-  delete domainToObject.version
   delete domainToObject.begreper
   delete domainToObject.kravRelasjoner
   return domainToObject
@@ -143,7 +148,7 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
   kravNummer: krav.kravNummer || 0,
   kravVersjon: krav.kravVersjon || 0,
   changeStamp: krav.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-  version: -1,
+  version: krav.version ?? -1,
   beskrivelse: krav.beskrivelse || '',
   utdypendeBeskrivelse: krav.utdypendeBeskrivelse || '',
   versjonEndringer: krav.versjonEndringer || '',

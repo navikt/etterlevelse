@@ -171,7 +171,6 @@ const behandlingensLivslopToBehandlingensLivslopDto = (
     filer: [],
   } as any
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 
@@ -181,7 +180,7 @@ export const mapBehandlingensLivslopToFormValue = (
   return {
     id: behandlingensLivslop.id || '',
     changeStamp: behandlingensLivslop.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: behandlingensLivslop.version ?? -1,
     etterlevelseDokumentasjonId: behandlingensLivslop.etterlevelseDokumentasjonId || '',
     beskrivelse: behandlingensLivslop.beskrivelse || '',
     filer: behandlingensLivslop.filer || [],
@@ -209,7 +208,7 @@ export const mapBehandlingensLivslopRequestToFormValue = (
   return {
     id: behandlingensLivslop.id || '',
     changeStamp: behandlingensLivslop.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: behandlingensLivslop.version ?? -1,
     etterlevelseDokumentasjonId: behandlingensLivslop.etterlevelseDokumentasjonId || '',
     beskrivelse: behandlingensLivslop.beskrivelse || '',
     filer: filer,
