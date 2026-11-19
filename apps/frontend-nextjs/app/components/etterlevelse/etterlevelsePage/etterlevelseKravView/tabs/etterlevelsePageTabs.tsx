@@ -122,6 +122,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   const [isPvoAlertModalOpen, setIsPvoAlertModalOpen] = useState<boolean>(false)
   const [isPvoUnderarbeidWarningActive, setIsPvoUnderarbeidWarningActive] = useState<boolean>(false)
   const [etterlevelseDokStatusAlert, setEtterlevelseDokStatusAlert] = useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = useState<string>('')
 
   const handleChange = (value: string[]) => setIsPrioritised(value.includes('check'))
 
@@ -222,12 +223,18 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
           ) {
             setIsPvoAlertModalOpen(true)
           } else {
-            await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
+            await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse).catch(
+              (error: AxiosError<{ message?: string }>) =>
+                setErrorMessage(error.response?.data.message || '')
+            )
           }
         })
-        .catch(async (error: AxiosError) => {
+        .catch(async (error: AxiosError<{ message?: string }>) => {
           if (error.status === 404) {
-            await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse)
+            await upsertEtterlevelse(existingEtterlevelseId, mutatedEtterlevelse).catch(
+              (error: AxiosError<{ message?: string }>) =>
+                setErrorMessage(error.response?.data.message || '')
+            )
           }
         })
     }
@@ -376,6 +383,8 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   nesteTema={nesteTema}
                   kravGrupper={kravGrupper}
                   forrigeSuksesskriterier={forrigeKrav?.suksesskriterier}
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
                 />
               </div>
             )}

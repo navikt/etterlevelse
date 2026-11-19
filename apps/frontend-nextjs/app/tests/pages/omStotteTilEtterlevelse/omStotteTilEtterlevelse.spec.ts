@@ -150,7 +150,7 @@ const toggleExample = async (button: Locator) => {
 test.describe('Om Støtte til etterlevelse', () => {
   test.beforeEach(async ({ page }) => {
     await mockAdmin(page)
-    await page.goto(pageUrl)
+    await page.goto(pageUrl, { waitUntil: 'domcontentloaded' })
     await expect(
       page.getByRole('heading', { name: 'Om Støtte til etterlevelse', exact: true })
     ).toBeVisible()
@@ -313,7 +313,7 @@ test.describe('Om Støtte til etterlevelse', () => {
     page,
   }) => {
     await mockRead(page)
-    await page.reload()
+    await page.reload({ waitUntil: 'domcontentloaded' })
     await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
     const main = page.getByRole('main')
     await expect(main.getByRole('button', { name: 'Kopier lenke', exact: true })).toHaveCount(0)
@@ -353,6 +353,7 @@ test.describe('Om Støtte til etterlevelse', () => {
       const link = accordion.getByRole('link', { name, exact: false })
       await expect(link).toHaveAttribute('href', path)
       await expect(link).toHaveAttribute('target', '_blank')
+      await mockAdmin(page.context())
       const popupPromise = page.waitForEvent('popup')
       await link.click()
       const popup = await popupPromise

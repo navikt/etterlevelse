@@ -69,6 +69,8 @@ type TEditProps = {
   nesteTema?: TKravNavigationTarget
   kravGrupper?: TKravNavigationGroup[]
   forrigeSuksesskriterier?: ISuksesskriterie[]
+  errorMessage: string
+  setErrorMessage: (value: string) => void
 }
 
 const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
@@ -88,6 +90,8 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   nesteTema,
   kravGrupper,
   forrigeSuksesskriterier,
+  errorMessage,
+  setErrorMessage,
 }) => {
   const [etterlevelseStatus] = useState<string>(
     editedEtterlevelse
@@ -355,6 +359,15 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           <LocalAlert.CloseButton
                             onClick={() => setEtterlevelseDokStatusAlert(false)}
                           />
+                        </LocalAlert.Header>
+                      </LocalAlert>
+                    )}
+
+                    {errorMessage !== '' && (
+                      <LocalAlert status='error'>
+                        <LocalAlert.Header>
+                          <LocalAlert.Title>{errorMessage}</LocalAlert.Title>
+                          <LocalAlert.CloseButton onClick={() => setErrorMessage('')} />
                         </LocalAlert.Header>
                       </LocalAlert>
                     )}
