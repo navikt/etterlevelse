@@ -310,7 +310,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
 
                       {isOppfylesSenere && (
                         <div className='w-full' id='fristForFerdigstillelse'>
-                          <div className='w-full max-w-[10.625rem]'>
+                          <div className='w-full max-w-42.5'>
                             <DateField name='fristForFerdigstillelse' />
                           </div>
                           {errors.fristForFerdigstillelse && (
