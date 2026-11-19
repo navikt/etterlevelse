@@ -20,7 +20,6 @@ import no.nav.data.etterlevelse.codelist.dto.AllCodelistResponse;
 import no.nav.data.etterlevelse.codelist.dto.CodelistRequest;
 import no.nav.data.etterlevelse.codelist.dto.CodelistResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -104,12 +103,11 @@ public class CodelistController {
     @Operation(summary = "Delete Codelist", parameters = {@Parameter(name = "comment", description = "Reason for deleting the codelist entry", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Codelist deleted")
     @DeleteMapping("/{listName}/{code}")
-    @Transactional
-    public void delete(@PathVariable String listName, @PathVariable String code) {
+    public void delete(@PathVariable String listName, @PathVariable String code, @RequestParam(required = false) Integer version) {
         listName = toUpperCaseAndTrim(listName);
         code = toUpperCaseAndTrim(code);
         log.info("Received a request to delete code={} in the list={}", code, listName);
-        service.delete(ListName.valueOf(listName), code);
+        service.delete(ListName.valueOf(listName), code, version);
         log.info("Deleted code={} in the list={}", code, listName);
     }
 

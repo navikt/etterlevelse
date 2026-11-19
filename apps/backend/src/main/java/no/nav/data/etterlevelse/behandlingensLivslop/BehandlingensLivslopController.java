@@ -8,7 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.UnauthorizedException;
 import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.UtcDateTimeUtil;
@@ -16,8 +18,6 @@ import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopRequest;
 import no.nav.data.etterlevelse.behandlingensLivslop.dto.BehandlingensLivslopResponse;
 import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
-import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
-import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,7 +71,7 @@ public class BehandlingensLivslopController {
     @Operation(summary = "Get Behandlingens Livsløp by etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}")
-    public ResponseEntity<BehandlingensLivslopResponse> getPvkDokumentByEtterlevelseDokumentId(@PathVariable UUID etterlevelseDokumentId) {
+    public ResponseEntity<BehandlingensLivslopResponse> getBehandlingensLivslopByEtterlevelseDokumentId(@PathVariable UUID etterlevelseDokumentId) {
         log.info("Get Behandlingens Livsløp by etterlevelseDokument id={}", etterlevelseDokumentId);
         Optional<BehandlingensLivslop> behandlingensLivslop = service.getByEtterlevelseDokumentasjon(etterlevelseDokumentId);
         if (behandlingensLivslop.isPresent()) {
@@ -96,8 +97,9 @@ public class BehandlingensLivslopController {
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
             throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
         }
-
-        var behandlingensLivslop = service.save(request.convertToBehandlingensLivslop(), request.isUpdate());
+        
+        BehandlingensLivslop behandlingensLivslop = request.mergeInto(new BehandlingensLivslop());
+        service.save(behandlingensLivslop, request.isUpdate());
         return new ResponseEntity<>(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop), HttpStatus.CREATED);
     }
 
@@ -114,21 +116,18 @@ public class BehandlingensLivslopController {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
-        var behandlingensLivslopToUpdate = service.get(id);
-
-        if (behandlingensLivslopToUpdate == null) {
-            throw new ValidationException(String.format("Could not find behandlingens livsløp to be updated with id = %s ", request.getId()));
-        }
+        var behandlingensLivslopToUpdate = service.getBehandlingensLivslop(id);
 
         var edok = etterlevelseDokumentasjonService.get(behandlingensLivslopToUpdate.getEtterlevelseDokumentasjonId());
 
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
-        if(filer != null && !filer.isEmpty()) {
+        if (filer != null && !filer.isEmpty()) {
             request.setFiler(filer);
         }
+        OptimisticLockUtil.checkVersion(BehandlingensLivslop.class, id, behandlingensLivslopToUpdate.getVersion(), request.getVersion());
         request.mergeInto(behandlingensLivslopToUpdate);
         var behandlingensLivslop = service.save(behandlingensLivslopToUpdate, request.isUpdate());
         return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
@@ -137,16 +136,22 @@ public class BehandlingensLivslopController {
      @Operation(summary = "Delete Behandlingens Livsløp", parameters = {@Parameter(name = "comment", description = "Reason for deleting the behandlingens livsløp", required = true, in = ParameterIn.QUERY)})
      @ApiResponse(description = "Behandlingens Livsløp deleted")
      @DeleteMapping("/{id}")
-     public ResponseEntity<BehandlingensLivslopResponse> deleteBehandlingensLivslopById(@PathVariable UUID id) {
+     public ResponseEntity<BehandlingensLivslopResponse> deleteBehandlingensLivslopById(
+             @PathVariable UUID id, 
+             @RequestParam(required = false) Integer version
+     ) {
          log.info("Delete Behandlingens Livslop id={}", id);
-         var behandlingensLivslop = service.delete(id);
+         var behandlingensLivslop = service.delete(id, version);
          return ResponseEntity.ok(BehandlingensLivslopResponse.buildFrom(behandlingensLivslop));
      }
 
     @Operation(summary = "Get Behandlingenslivsløp by timestamp and etterlevelsedokument id")
     @ApiResponse(description = "ok")
     @GetMapping("/etterlevelsedokument/{etterlevelseDokumentId}/timestamp/{timestamp}")
-    public ResponseEntity<BehandlingensLivslopResponse> getBehandlingensLivslopByIdAndTimestamp(@PathVariable String etterlevelseDokumentId, @PathVariable String timestamp) {
+    public ResponseEntity<BehandlingensLivslopResponse> getBehandlingensLivslopByIdAndTimestamp(
+            @PathVariable String etterlevelseDokumentId, 
+            @PathVariable String timestamp
+    ) {
         log.info("Get Behandlingens livsløp by etterlevelse dokumentasjon id {} and timestamp={}", etterlevelseDokumentId, timestamp);
         BehandlingensLivslop livslop = service.getBehandlingensLivslopByEtterlevelseDokumentasjonIdAndTimestamp(etterlevelseDokumentId, LocalDateTime.parse(UtcDateTimeUtil.stripTrailingZ(timestamp)));
         if (livslop != null) {

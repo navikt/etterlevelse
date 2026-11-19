@@ -1,6 +1,8 @@
 package no.nav.data.etterlevelse.kravprioritylist;
 
 import lombok.RequiredArgsConstructor;
+import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.etterlevelse.common.domain.DomainService;
@@ -29,12 +31,23 @@ public class KravPriorityListService extends DomainService<KravPriorityList>  {
         return repo.findByTema(tema).map(GenericStorage::getDomainObjectData);
     }
 
+    @Transactional
     public KravPriorityList save(KravPriorityListRequest request) {
-
         var kravPriorityList = request.isUpdate() ? storage.get(request.getId()) : new KravPriorityList();
+        if (request.isUpdate()) {
+            if (kravPriorityList == null) {
+                throw new NotFoundException("Couldn't find krav priority list with id " + request.getId());
+            }
+            OptimisticLockUtil.checkVersion(KravPriorityList.class, kravPriorityList.getId(), kravPriorityList.getVersion(), request.getVersion());
+        }
         kravPriorityList.convert(request);
 
         return storage.save(kravPriorityList);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public KravPriorityList delete(UUID id, Integer version) {
+        return storage.delete(id, version);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

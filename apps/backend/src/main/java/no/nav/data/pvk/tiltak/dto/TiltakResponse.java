@@ -47,7 +47,6 @@ public class TiltakResponse {
                         .lastModifiedBy(tiltak.getLastModifiedBy())
                         .lastModifiedDate(tiltak.getLastModifiedDate() == null ? LocalDateTime.now() : tiltak.getLastModifiedDate())
                         .build())
-                .version(tiltak.getVersion())
                 .pvkDokumentId(tiltak.getPvkDokumentId().toString())
                 .navn(td.getNavn())
                 .beskrivelse(td.getBeskrivelse())
@@ -57,6 +56,7 @@ public class TiltakResponse {
                 .iverksatt(td.isIverksatt())
                 .iverksattDato(td.getIverksattDato())
                 .iverksettingsKommentar(td.getIverksettingsKommentar())
+                .version(tiltak.getVersion())
                 .build();
     }
     

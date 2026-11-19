@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.TechnicalException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.storage.StorageService;
 import no.nav.data.common.storage.domain.GenericStorage;
 import no.nav.data.common.utils.JsonUtils;
@@ -132,14 +135,14 @@ public class KravService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Krav save(Krav krav) {
-        return repo.save(krav);
-    }
-    
-    // TODO: Avhengighet til DTO
-    @Transactional(propagation = Propagation.REQUIRED)
     public Krav save(KravRequest request) {
-        Krav krav = request.isUpdate() ? repo.findById(request.getId()).get() : new Krav();
+        Krav krav = request.isUpdate() ? get(request.getId()) : new Krav();
+        if (request.isUpdate()) {
+            if (krav == null) {
+                throw new NotFoundException("Krav with id %s not found".formatted(request.getId()));
+            }
+            OptimisticLockUtil.checkVersion(Krav.class, krav.getId(), krav.getVersion(), request.getVersion());
+        }
         krav.merge(request);
 
         if (request.isNyKravVersjon()) {
@@ -164,15 +167,14 @@ public class KravService {
         if (krav.getStatus() == KravStatus.AKTIV) {
             if (krav.getKravVersjon() > 1) {
                 int olderKravVersjon = krav.getKravVersjon() - 1;
-                repo.updateKravToUtgaatt(krav.getKravNummer(), olderKravVersjon);
+                repo.findByKravNummerAndKravVersjon(krav.getKravNummer(), olderKravVersjon).ifPresent(olderKrav -> {
+                    int updated = repo.updateKravToUtgaatt(olderKrav.getKravNummer(), olderKravVersjon, olderKrav.getVersion());
+                    OptimisticLockUtil.checkRowCount(Krav.class, olderKrav.getId(), 1, updated);
+                });
             }
         }
         
-        if (krav.getId() == null) {
-            krav.setId(UUID.randomUUID());
-        }
-        
-        return repo.save(krav);
+        return repo.saveAndFlush(krav);
     }
 
     private KravStatus getKravStatus(AuditVersion auditVersion) {
@@ -183,16 +185,25 @@ public class KravService {
             return KravStatus.valueOf(statusText);
         } catch (JacksonException e) {
             log.error("Could not extract Krav.status from json");
-            throw new RuntimeException("Could not extract Krav.status from json", e);
+            throw new TechnicalException("Could not extract Krav.status from json", e);
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Krav delete(UUID id) {
+        return delete(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes hvis oppgitt.
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Krav delete(UUID id, Integer version) {
         var kravDelete = get(id);
         if (kravDelete == null) {
             return null;
         }
+        OptimisticLockUtil.checkVersionIfPresent(Krav.class, id, kravDelete.getVersion(), version);
         repo.deleteById(id);
         return kravDelete;
     }

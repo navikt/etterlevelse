@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -34,15 +36,24 @@ public class ArdoqImportService {
         } else {
             AtomicInteger count = new AtomicInteger(0);
 
-            request.forEach(ardoqSystemRelationField -> {
-                EtterlevelseDokumentasjon etterlevelseDokument = etterlevelseDokumentasjonService.get(UUID.fromString(ardoqSystemRelationField.getEtterlevelseDokumentId()));
+
+            Map<String, List<String>> systemIdsByDokumentId = request.stream()
+                    .collect(Collectors.groupingBy(ArdoqSystemRelationField::getEtterlevelseDokumentId,
+                            Collectors.mapping(ArdoqSystemRelationField::getArdoqId, Collectors.toList())));
+            log.info("Found {} ardoq system relations to sync with etterlevelses document", systemIdsByDokumentId.size());
+            systemIdsByDokumentId.forEach((dokumentId, systemIds) -> {
+                EtterlevelseDokumentasjon etterlevelseDokument = etterlevelseDokumentasjonService.get(UUID.fromString(dokumentId));
                 if (etterlevelseDokument == null) {
-                    log.warn("EtterlevelseDokumentasjon with id {} not found", ardoqSystemRelationField.getEtterlevelseDokumentId());
+                    log.warn("EtterlevelseDokumentasjon with id {} not found", dokumentId);
                     return;
                 }
                 List<String> ardoqSystemIds = etterlevelseDokument.getEtterlevelseDokumentasjonData().getArdoqSystemIds();
-                if (!ardoqSystemIds.contains(ardoqSystemRelationField.getArdoqId())) {
-                    ardoqSystemIds.add(ardoqSystemRelationField.getArdoqId());
+                List<String> newSystemIds = systemIds.stream()
+                        .distinct()
+                        .filter(systemId -> !ardoqSystemIds.contains(systemId))
+                        .toList();
+                if (!newSystemIds.isEmpty()) {
+                    ardoqSystemIds.addAll(newSystemIds);
                     EtterlevelseDokumentasjonRequest newRequest = EtterlevelseDokumentasjonRequest.builder()
                             .id(etterlevelseDokument.getId())
                             .update(true)
@@ -71,9 +82,10 @@ public class ArdoqImportService {
                             .varslingsadresser(etterlevelseDokument.getEtterlevelseDokumentasjonData().getVarslingsadresser())
                             .etterlevelseDokumentVersjon(etterlevelseDokument.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
                             .versjonHistorikk(etterlevelseDokument.getEtterlevelseDokumentasjonData().getVersjonHistorikk())
+                            .version(etterlevelseDokument.getVersion())
                             .build();
                     etterlevelseDokumentasjonService.save(newRequest);
-                    count.incrementAndGet();
+                    count.addAndGet(newSystemIds.size());
                 }
             });
             log.info("Successfully synced {} ardoq system relations with etterlevelses document", count.get());

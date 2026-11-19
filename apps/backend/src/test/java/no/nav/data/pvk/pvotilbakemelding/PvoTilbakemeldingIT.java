@@ -71,6 +71,7 @@ public class PvoTilbakemeldingIT  extends IntegrationTestBase {
 
         var request = PvoTilbakemedlingRequest.builder()
                 .id(pvoTilbakemelding.getId())
+                .version(pvoTilbakemelding.getVersion())
                 .pvkDokumentId(pvoTilbakemelding.getPvkDokumentId().toString())
                 .status(PvoTilbakemeldingStatus.FERDIG)
                 .vurderinger(List.of(VurderingRequest.builder().innsendingId(1).build()))

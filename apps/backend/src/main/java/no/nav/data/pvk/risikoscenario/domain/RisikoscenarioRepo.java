@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public interface RisikoscenarioRepo extends JpaRepository<Risikoscenario, UUID> {
 
+     // FIXME: Fjern 
     @Query(value = "select * from risikoscenario where pvk_dokument_id = ?1", nativeQuery = true)
     List<Risikoscenario> findByPvkDokumentId(UUID pvkDokumentId);
 

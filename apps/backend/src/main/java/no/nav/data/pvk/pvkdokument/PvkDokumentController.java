@@ -1,5 +1,6 @@
 package no.nav.data.pvk.pvkdokument;
 
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.UnauthorizedException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
@@ -33,6 +35,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -177,11 +180,13 @@ public class PvkDokumentController {
     @PostMapping
     public ResponseEntity<PvkDokumentResponse> createPvkDokumente(@RequestBody PvkDokumentRequest request) {
         log.info("Create PvkDokument");
+        if (request.isUpdate()) {
+            throw new ValidationException("Requested to createnew PvkDokument, but request.isUpdate is true");
+        }
 
         var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
-
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         var pvkDokument = pvkDokumentService.save(request.convertToPvkDokument(), request.isUpdate());
@@ -196,28 +201,31 @@ public class PvkDokumentController {
     @Operation(summary = "Update Pvk Document")
     @ApiResponse(description = "Pvk Document updated")
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<PvkDokumentResponse> updatePvkDokument(@PathVariable UUID id, @Valid @RequestBody PvkDokumentRequest request) {
+        // TODO: Veldig mye forretningslogikk her, derfor @Transactional. Alt dette bør flyttes til Service.
         log.info("Update Pvk Document id={}", id);
-
+        if (!request.isUpdate()) {
+            throw new ValidationException("Requested to update existing PvkDokument, but request.isUpdate is false");
+        }
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
 
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
-
-        if(pvkDokumentToUpdate == null) {
+        if (pvkDokumentToUpdate == null) {
             throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
         }
 
         var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentId());
-
         if (!hasPvkDokumentWriteAccess(edok, pvkDokumentToUpdate, request)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
+        OptimisticLockUtil.checkVersion(PvkDokument.class, id, pvkDokumentToUpdate.getVersion(), request.getVersion());
         request.mergeInto(pvkDokumentToUpdate);
         var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
-        updatePvoTilbakemeldingStatus(pvkDokument);
+        updatePvoTilbakemeldingStatus(pvkDokument); // Denne kan kaste exception. La på @Transaction som plaster, men alt dette må flyttes til service.
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
         addEtterlevelseDokumentasjonVersjon(response);
         checkIfPvkDocumentationHasStarted(response);
@@ -228,9 +236,9 @@ public class PvkDokumentController {
     @Operation(summary = "Delete Pvk Document", parameters = {@Parameter(name = "comment", description = "Reason for deleting the PVK document", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Pvk Document deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id) {
+    public ResponseEntity<PvkDokumentResponse> deletePvkDokumentById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete Pvk Document id={}", id);
-        var pvkDokument = pvkDokumentService.deletePvkAndAllChildren(id);
+        var pvkDokument = pvkDokumentService.deletePvkAndAllChildren(id, version);
         if (pvkDokument == null) {
             log.warn("Could not delete pvk dokument with id = {}: Non-existing og related to other resources", id);
             throw new ValidationException("Could not delete pvk dokument: Non-existing og related to other resources");
@@ -248,6 +256,7 @@ public class PvkDokumentController {
     @PutMapping("/godkjenning/{id}")
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<PvkDokumentResponse> risikoeierApproveAndArchivePvkDokument(@PathVariable UUID id, @Valid @RequestBody PvkDokumentRequest request) {
+        // TODO: Veldig mye forretningslogikk her, derfor @Transactional. Alt dette bør flyttes til Service.
         log.info("Approving and archiving Pvk Document id={}", id);
 
         if (!Objects.equals(id, request.getId())) {
@@ -256,7 +265,7 @@ public class PvkDokumentController {
 
         var pvkDokumentToUpdate = pvkDokumentService.get(id);
 
-        if(pvkDokumentToUpdate == null) {
+        if (pvkDokumentToUpdate == null) {
             throw new ValidationException(String.format("Could not find pvk dokument to be updated with id = %s ", id));
         }
 
@@ -266,7 +275,9 @@ public class PvkDokumentController {
             throw new ValidationException(String.format("Kan ikke godkjenne pvk dokument med id: %s fordi brukeren ikke er en risikoeier", request.getId()));
         }
 
+        OptimisticLockUtil.checkVersion(PvkDokument.class, id, pvkDokumentToUpdate.getVersion(), request.getVersion());
         request.mergeInto(pvkDokumentToUpdate);
+
         var pvkDokument = pvkDokumentService.save(pvkDokumentToUpdate, request.isUpdate());
         updatePvoTilbakemeldingStatus(pvkDokument);
 
@@ -276,7 +287,6 @@ public class PvkDokumentController {
             log.error("Failed to archive etterlevelse dokumentasjon with id {}", pvkDokument.getEtterlevelseDokumentId(), e);
             throw new ValidationException("Failed to archive etterlevelse dokumentasjon with id " + pvkDokument.getEtterlevelseDokumentId() + " error stack: " + e);
         }
-
 
         var response = PvkDokumentResponse.buildFrom(pvkDokument);
         addEtterlevelseDokumentasjonVersjon(response);
@@ -299,23 +309,23 @@ public class PvkDokumentController {
 
     private void updatePvoTilbakemeldingStatus(PvkDokument pvkDokument) {
         log.info("Updating PVO tilbakemelding status with id = {}", pvkDokument.getId());
-        if (pvkDokument.getStatus()  != PvkDokumentStatus.UNDERARBEID && pvkDokument.getStatus() != PvkDokumentStatus.SENDT_TIL_PVO) {
-        var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
+        if (pvkDokument.getStatus() != PvkDokumentStatus.UNDERARBEID && pvkDokument.getStatus() != PvkDokumentStatus.SENDT_TIL_PVO) {
+            var pvoTilbakmelding = pvoTilbakemeldingService.getByPvkDokumentId(pvkDokument.getId()).orElse(null);
 
-        if (pvoTilbakmelding != null) {
-            if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
+            if (pvoTilbakmelding != null) {
+                if (pvkDokument.getStatus() == PvkDokumentStatus.SENDT_TIL_PVO_FOR_REVURDERING) {
                     pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.TRENGER_REVURDERING);
-                pvoTilbakemeldingService.save(pvoTilbakmelding, true);
-            } else if (pvoTilbakmelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING &&
-                    (pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID ||
-                            pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO)) {
-                pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.FERDIG);
-                pvoTilbakemeldingService.save(pvoTilbakmelding, true);
+                    pvoTilbakemeldingService.save(pvoTilbakmelding, true);
+                } else if (pvoTilbakmelding.getStatus() == PvoTilbakemeldingStatus.TRENGER_REVURDERING &&
+                        (pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO_TRENGER_MER_ARBEID ||
+                        pvkDokument.getStatus() == PvkDokumentStatus.VURDERT_AV_PVO)) {
+                    pvoTilbakmelding.setStatus(PvoTilbakemeldingStatus.FERDIG);
+                    pvoTilbakemeldingService.save(pvoTilbakmelding, true);
+                }
+            } else if (pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo() > 0) {
+                throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
             }
-        } else if (pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo() > 0) {
-            throw new ValidationException("No pvo tilbakemelding found for id = " + pvkDokument.getId());
         }
-    }
     }
 
     private void addEtterlevelseDokumentasjonVersjon(PvkDokumentResponse pvkDokument) {

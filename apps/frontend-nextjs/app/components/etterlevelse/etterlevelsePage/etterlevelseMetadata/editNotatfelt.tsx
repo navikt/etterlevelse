@@ -36,7 +36,12 @@ const EditNotatfelt = ({
         setEtterlevelseMetadata(resp)
       })
     } else {
-      updateEtterlevelseMetadata({ ...values, notater: notater }).then((resp) => {
+      // Bruk sist kjente versjon (kan være endret av f.eks. tildeling etter at skjemaet ble åpnet)
+      updateEtterlevelseMetadata({
+        ...values,
+        notater: notater,
+        version: etterlevelseMetadata.version,
+      }).then((resp) => {
         setEtterlevelseMetadata(resp)
       })
     }

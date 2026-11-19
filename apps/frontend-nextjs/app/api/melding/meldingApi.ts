@@ -24,7 +24,6 @@ function MeldingToMeldingDto(melding: IMelding): IMelding {
     ...melding,
   } as any
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 
@@ -32,7 +31,7 @@ export const mapMeldingToFormValue = (melding: Partial<IMelding>): IMelding => {
   return {
     id: melding.id || '',
     changeStamp: melding.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: melding.version ?? -1,
     meldingStatus: melding.meldingStatus || EMeldingStatus.DEACTIVE,
     meldingType: melding.meldingType || EMeldingType.FORSIDE,
     melding: melding.melding || '',

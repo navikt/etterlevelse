@@ -9,7 +9,6 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.RequestElement;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslop;
-import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopData;
 import no.nav.data.etterlevelse.behandlingensLivslop.domain.BehandlingensLivslopFil;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,18 +31,9 @@ public class BehandlingensLivslopRequest implements RequestElement {
     private List<MultipartFile> filer;
     
     private Boolean update;
-    
-    public BehandlingensLivslop convertToBehandlingensLivslop() {
-        return BehandlingensLivslop.builder()
-                .id(id)
-                .etterlevelseDokumentasjonId(etterlevelseDokumentasjonId)
-                .behandlingensLivslopData(BehandlingensLivslopData.builder()
-                        .beskrivelse(beskrivelse)
-                        .filer(filer.stream().map(this::fileToBehandlingsLivlopFil).toList())
-                        .build())
-                .build();
-    }
 
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (for optimistisk låsing).
+    
     private BehandlingensLivslopFil fileToBehandlingsLivlopFil(MultipartFile multipartFile){
             return BehandlingensLivslopFil.builder()
                     .filnavn(multipartFile.getOriginalFilename())
@@ -61,10 +51,12 @@ public class BehandlingensLivslopRequest implements RequestElement {
         validator.checkId(this);
     }
 
-    public void mergeInto(BehandlingensLivslop bl) {
+    public BehandlingensLivslop mergeInto(BehandlingensLivslop bl) {
         bl.setEtterlevelseDokumentasjonId(etterlevelseDokumentasjonId);
         bl.getBehandlingensLivslopData().setBeskrivelse(beskrivelse);
         bl.getBehandlingensLivslopData().setFiler(filer.stream().map(this::fileToBehandlingsLivlopFil).toList());
+        // Merk: version skal aldri kopieres fra request til entity
+        return bl;
     }
 
 }

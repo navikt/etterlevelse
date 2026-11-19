@@ -4,6 +4,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.codelist.codeusage.CodeUsageService;
@@ -58,7 +59,7 @@ public class CodelistService implements InitializingBean {
         }
         Codelist codelist = getCodelist(listName, code);
         if (codelist == null) {
-            return new CodelistResponse(listName, code, null, null, null);
+            return new CodelistResponse(listName, code, null, null, null, null);
         }
         return codelist.toResponse();
     }
@@ -87,29 +88,34 @@ public class CodelistService implements InitializingBean {
         CodelistCache.init(cache -> allCodelists.forEach(cache::setCode));
     }
 
+    @Transactional
     public List<Codelist> save(List<CodelistRequest> requests) {
         List<Codelist> codelists = requests.stream()
                 .map(CodelistRequest::convert)
                 .collect(Collectors.toList());
         List<Codelist> saved = codelistRepository.saveAll(codelists);
+        codelistRepository.flush();
         saved.forEach(CodelistCache::set);
         return saved;
     }
 
+    @Transactional
     public List<Codelist> update(List<CodelistRequest> requests) {
         List<Codelist> codelists = requests.stream()
                 .map(this::updateDescriptionInRepository)
                 .collect(Collectors.toList());
 
         List<Codelist> saved = codelistRepository.saveAll(codelists);
+        codelistRepository.flush();
         saved.forEach(CodelistCache::set);
         return saved;
     }
 
+    @Transactional
     public void replaceDataField(Codelist codelist, String fieldName, String oldVal, String newVal) {
         var fresh = codelistRepository.findByListAndCode(codelist.getList(), codelist.getCode()).orElseThrow();
         var field = fresh.getData().get(fieldName);
-        if (field == null || !oldVal.equals(field.asText())) {
+        if (field == null || !oldVal.equals(field.asString())) {
             return;
         }
         ((ObjectNode) fresh.getData()).put(fieldName, newVal);
@@ -120,6 +126,7 @@ public class CodelistService implements InitializingBean {
         Optional<Codelist> byListAndCode = codelistRepository.findByListAndCode(request.getListAsListName(), request.getCode());
         Assert.isTrue(byListAndCode.isPresent(), "item not found, should be validated");
         Codelist codelist = byListAndCode.get(); // All request are validated at this point
+        OptimisticLockUtil.checkVersion(Codelist.class, request.getKey(), codelist.getVersion(), request.getVersion());
         codelist.setShortName(request.getShortName());
         codelist.setDescription(request.getDescription());
         codelist.setData(request.getData());
@@ -129,12 +136,18 @@ public class CodelistService implements InitializingBean {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public void delete(ListName name, String code) {
+        delete(name, code, null);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void delete(ListName name, String code, Integer version) {
         Optional<Codelist> toDelete = codelistRepository.findByListAndCode(name, code);
         if (toDelete.isEmpty()) {
             log.warn("Cannot find a codelist to delete with code={} and listName={}", code, name);
             throw new CodelistNotFoundException(
                     String.format("Cannot find a codelist to delete with code=%s and listName=%s", code, name));
         }
+        OptimisticLockUtil.checkVersionIfPresent(Codelist.class, name + "-" + code, toDelete.get().getVersion(), version);
         validateNonImmutableTypeOfCodelist(name);
         validateCodelistIsNotInUse(name, code);
         codelistRepository.delete(toDelete.get());
@@ -159,7 +172,7 @@ public class CodelistService implements InitializingBean {
 
     public void validateListNameAndCodes(String listName, List<String> code) {
         for (String c : code) {
-            new CodeUsageRequest(listName, c).validate();
+            validateListNameAndCode(listName, c);
         }
     }
 

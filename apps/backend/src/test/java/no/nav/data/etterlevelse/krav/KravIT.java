@@ -198,6 +198,7 @@ public class KravIT extends IntegrationTestBase {
         var req = KravRequest.builder()
                 .navn("Krav 2")
                 .id(krav.getId())
+                .version(krav.getVersion())
                 .build();
         var resp = restTemplate.exchange("/krav/{id}", HttpMethod.PUT, new HttpEntity<>(req), KravResponse.class, krav.getId());
         assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -290,7 +291,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(imageResized.getBody()).isNotNull();
 
         krav.setHensikt(id1);
-        kravService.save(krav);
+        kravRepo.save(krav);
 
         jdbcTemplate.update("update generic_storage set last_modified_date = now() - interval '65 minute' where type = 'KravImage'");
         assertThat(kravImageStorageService.getAll(KravImage.class)).hasSize(2);

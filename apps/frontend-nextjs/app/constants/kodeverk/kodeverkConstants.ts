@@ -18,6 +18,8 @@ export interface ICode {
   description: string
   data: any
   invalidCode?: boolean
+  // Optimistisk låsing: versjonen som sist ble lest
+  version?: number
 }
 
 export type TLovCode = TReplace<ICode, { data?: ILovCodeData }>
@@ -43,7 +45,10 @@ export interface ICodeListFormValues {
   shortName?: string
   description?: string
   data?: ILovCodeData | ITemaCodeData
+  // Optimistisk låsing: versjonen som sist ble lest
+  version?: number
 }
+
 export interface ICodeUsage {
   listName: EListName
   code: string
@@ -62,14 +67,6 @@ interface IUse {
 export interface IRegelverk {
   lov: TLovCode
   spesifisering?: string
-}
-
-export interface ICodeListFormValues {
-  list: string
-  code: string
-  shortName?: string
-  description?: string
-  data?: ILovCodeData | ITemaCodeData
 }
 
 export interface ILovCodeData {

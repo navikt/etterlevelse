@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.nav.data.common.exceptions.UnauthorizedException;
 import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -108,10 +110,13 @@ public class EtterlevelseMetadataController {
     @PostMapping
     public ResponseEntity<EtterlevelseMetadataResponse> createEtterlevelseMetadata(@RequestBody EtterlevelseMetadataRequest request) {
         log.info("Create etterlevelsemetadata");
-        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
+        if (request.isUpdate()) {
+            throw new ValidationException("Request to create new EtterlevelseMetadata, but request.isUpdate is true.");
+        }
 
+        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
         }
         var etterlevelseMetadata = service.save(request);
         return new ResponseEntity<>(EtterlevelseMetadataResponse.buildFrom(etterlevelseMetadata), HttpStatus.CREATED);
@@ -125,15 +130,17 @@ public class EtterlevelseMetadataController {
             @Valid @RequestBody EtterlevelseMetadataRequest request
     ) {
         log.info("Update EtterlevelseMetadataResponseid={}", id);
-
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
+        }
+        if (!request.isUpdate()) {
+            throw new ValidationException("Request to update EtterlevelseMetadata, but request.isUpdate is false.");
         }
 
         var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
 
         if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+            throw new UnauthorizedException(String.format("User has no write access for this dokument %s", request.getId()));
         }
 
         var etterlevelseMetadata = service.save(request);
@@ -143,9 +150,9 @@ public class EtterlevelseMetadataController {
     @Operation(summary = "Delete etterlevelsemetadata", parameters = {@Parameter(name = "comment", description = "Reason for deleting the etterlevelse metadata", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "ok")
     @DeleteMapping("/{id}")
-    public ResponseEntity<EtterlevelseMetadataResponse> deleteEtterlevelseMetadata(@PathVariable UUID id) {
+    public ResponseEntity<EtterlevelseMetadataResponse> deleteEtterlevelseMetadata(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete EtterlevelseMetadataResponse id={}", id);
-        var etterlevelseMetadata = service.delete(id);
+        var etterlevelseMetadata = service.delete(id, version);
         return ResponseEntity.ok(EtterlevelseMetadataResponse.buildFrom(etterlevelseMetadata));
     }
 

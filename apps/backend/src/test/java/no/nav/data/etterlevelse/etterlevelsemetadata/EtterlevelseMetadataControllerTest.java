@@ -219,6 +219,7 @@ class EtterlevelseMetadataControllerTest extends IntegrationTestBase {
                 .kravVersjon(1)
                 .tildeltMed(List.of("Y123456 - Rogan, Joe"))
                 .id(em.getId())
+                .version(em.getVersion())
                 .build();
 
         var resp = restTemplate.exchange("/etterlevelsemetadata/{id}", HttpMethod.PUT, new HttpEntity<>(req), EtterlevelseMetadataResponse.class, em.getId());

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
 import no.nav.data.common.exceptions.NotFoundException;
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.utils.JsonUtils;
 import no.nav.data.pvk.pvotilbakemelding.domain.PvoTilbakemelding;
@@ -105,18 +107,28 @@ public class PvoTilbakemeldingService {
             var existingPvoTilbakemelding = getByPvkDokumentId(pvoTilbakemelding.getPvkDokumentId());
             if (existingPvoTilbakemelding.isPresent()) {
                 log.warn("Found existing pvo tilbakemelding when trying to create for pvk dokument id: {}", pvoTilbakemelding.getPvkDokumentId());
-                pvoTilbakemelding.setId(existingPvoTilbakemelding.get().getId());
+                throw new ValidationException("PvoTilbakemelding already exists for pvk dokument id: " + pvoTilbakemelding.getPvkDokumentId());
             } else {
                 pvoTilbakemelding.setId(UUID.randomUUID());
             }
         }
-
-        return pvoTilbakemeldingRepo.save(pvoTilbakemelding);
+        
+        // Merk: Omsluttende @Transactional i Controller.
+        return pvoTilbakemeldingRepo.saveAndFlush(pvoTilbakemelding);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public PvoTilbakemelding delete(UUID id) {
+        return delete(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes hvis oppgitt.
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public PvoTilbakemelding delete(UUID id, Integer version) {
         var pvoTilbakemeldingToDelete = pvoTilbakemeldingRepo.findById(id);
+        pvoTilbakemeldingToDelete.ifPresent(p -> OptimisticLockUtil.checkVersionIfPresent(PvoTilbakemelding.class, id, p.getVersion(), version));
         pvoTilbakemeldingRepo.deleteById(id);
         return pvoTilbakemeldingToDelete.orElse(null);
     }

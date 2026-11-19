@@ -85,7 +85,7 @@ public class EtterlevelseDokumentasjonGraphQIIT extends GraphQLTestBase {
     }
     
     private Krav createKrav(String navn, int nummer) {
-        return kravService.save(Krav.builder().id(UUID.randomUUID()).kravNummer(nummer).kravVersjon(1)
+        return kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(nummer).kravVersjon(1)
                 .data(KravData.builder().navn(navn).status(KravStatus.AKTIV).relevansFor(List.of("SAK")).build())
                 .build());
     }
