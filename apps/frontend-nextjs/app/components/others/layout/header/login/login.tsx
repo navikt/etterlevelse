@@ -15,6 +15,7 @@ import { useContext } from 'react'
 import { EPVO } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernombudetsTilbakemelding/personvernombudetsTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
 import {
+  adminArdoqUrl,
   adminArkiveringUrl,
   adminAuditUrl,
   adminCodelistUrl,
@@ -32,6 +33,7 @@ import { etterlevelseDokumentasjonerUrl } from '@/routes/etterlevelseDokumentasj
 import { temaUrl } from '@/routes/kodeverk/tema/kodeverkTemaRoutes'
 import { kravlisteQueryUrl } from '@/routes/krav/kravRoutes'
 import { loginUrl } from '@/routes/login/loginRoutes'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { pvoOversiktUrl } from '@/routes/personvernombud/personvernombudetsRoutes'
 import { Menu } from '../menu/menu'
 import { ToggleActiveRole } from '../user/toggleActiveRole/toggleActiveRole'
@@ -88,6 +90,7 @@ export const LoggedInHeader = () => {
         { label: 'Spørsmål og svar', href: adminMessagesLogUrl },
         { label: 'Varslinger', href: adminVarselUrl },
         { label: 'Sendt e-post log', href: adminMaillog },
+        { label: 'Administrere ardoq data', href: adminArdoqUrl },
         // { label: intl.settings, href: '/admin/settings', disabled: true },
       ]
     : []
@@ -136,7 +139,7 @@ export const LoggedInHeader = () => {
           [
             {
               label: 'Mer om etterlevelse i Nav',
-              href: '/omstottetiletterlevelse',
+              href: `${omStotteTilEtterlevelseUrl}`,
               icon: <InformationIcon aria-label='' aria-hidden />,
             },
           ],

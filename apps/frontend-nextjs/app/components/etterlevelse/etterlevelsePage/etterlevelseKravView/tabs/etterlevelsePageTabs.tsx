@@ -56,7 +56,6 @@ type TProps = {
   etterlevelse: IEtterlevelse
   setEtterlevelse: Dispatch<SetStateAction<IEtterlevelse | undefined>>
   alleKravVersjoner: IKravVersjon[]
-  tidligereEtterlevelser: IEtterlevelse[] | undefined
   disableEdit: boolean
   nextKravToDocument: string
   forrigeKravUrl: string
@@ -86,7 +85,6 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
   etterlevelse,
   setEtterlevelse,
   alleKravVersjoner,
-  tidligereEtterlevelser,
   disableEdit,
   nextKravToDocument,
   forrigeKravUrl,
@@ -336,7 +334,7 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
           {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&
             etterlevelseDokumentasjon?.status === EEtterlevelseDokumentasjonStatus.UNDER_ARBEID &&
             !isPvoUnderarbeidWarningActive && (
-              <div className='mt-2'>
+              <div className='mt-3'>
                 {!isPreview && (
                   <CheckboxGroup
                     legend='Legg til i Prioritert kravliste'
@@ -369,7 +367,6 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
                   formRef={etterlevelseFormRef}
                   disableEdit={disableEdit}
                   editedEtterlevelse={editedEtterlevelse}
-                  tidligereEtterlevelser={tidligereEtterlevelser}
                   etterlevelseDokumentasjon={etterlevelseDokumentasjon}
                   etterlevelseDokStatusAlert={etterlevelseDokStatusAlert}
                   setEtterlevelseDokStatusAlert={setEtterlevelseDokStatusAlert}
@@ -390,7 +387,6 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
               <EtterlevelseViewFields
                 etterlevelse={etterlevelse}
                 suksesskriterier={krav.suksesskriterier}
-                tidligereEtterlevelser={tidligereEtterlevelser}
                 previousVurdering={previousVurdering}
                 forrigeSuksesskriterier={forrigeKrav?.suksesskriterier}
               />

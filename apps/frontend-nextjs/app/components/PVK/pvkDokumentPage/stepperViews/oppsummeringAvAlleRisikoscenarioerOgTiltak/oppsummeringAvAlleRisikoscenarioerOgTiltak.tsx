@@ -275,8 +275,10 @@ export const OppsummeringAvAlleRisikoscenarioerOgTiltak: FunctionComponent<TProp
             (tiltak: ITiltak) =>
               !tiltak.iverksatt &&
               tiltak.frist &&
-              moment(now).isBefore(moment(tiltak.frist), 'day') &&
-              moment(now).diff(moment(tiltak.frist), 'day') <= 3
+              Math.abs(
+                moment(now).startOf('day').diff(moment(tiltak.frist).startOf('day'), 'day')
+              ) <= 3 &&
+              moment(now).isBefore(moment(tiltak.frist), 'day')
           ).length
         )
 

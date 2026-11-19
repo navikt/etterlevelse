@@ -17,11 +17,14 @@ public class NomOrganisering {
 
     private String nomAvdelingId;
     private String avdelingNavn;
+
+    private Boolean forEtterlevelseILinje;
     private List<NomSeksjon> seksjoner;
 
     private List<NomEnhet> enheter;
     private List<NomEnhet> linjer;
     private List<NomEnhet> linjeEnheter;
+    private List<NomEnhet> lokalEnheter;
     private List<NomEnhet> linjeFylker;
     private List<NomEnhet> fylkeKontorer;
 }

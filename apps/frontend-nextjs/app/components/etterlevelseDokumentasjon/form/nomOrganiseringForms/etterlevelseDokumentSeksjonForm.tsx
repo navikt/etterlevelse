@@ -51,10 +51,11 @@ const EtterlevelseDokumentSeksjonForm: FunctionComponent<TProps> = ({
         <FieldArray name='nomOrganisering.seksjoner'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
-              <LabelWithDescription label='Angi hvilken seksjon som er ansvarlig for etterlevelsen' />
+              <LabelWithDescription label='Angi seksjon i direktoratet' />
               <OptionList
                 label='Seksjon'
                 options={filteredSeksjoner}
+                value=''
                 onChange={async (value: any) => {
                   if (value) {
                     const selectedSeksjon = filteredSeksjoner.find(

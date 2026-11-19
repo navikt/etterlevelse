@@ -62,6 +62,7 @@ import {
   IEtterlevelseDokumentasjonWithRelation,
 } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
@@ -175,6 +176,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               <Field name='relationType'>
                 {(fp: FieldProps) => (
                   <RadioGroup
+                    id='relationType'
                     legend='Hvordan ønsker du å gjenbruke dette dokumentet?'
                     onChange={(value) => fp.form.setFieldValue('relationType', value)}
                     description={
@@ -203,7 +205,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               rows={2}
               noPlaceholder
               label='Navngi ditt nye dokument'
-              caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+              caption={EEtterlevelseDokumentFormConstants.NAVNGI_DOKUMENT_CAPTION}
               name='title'
             />
 
@@ -211,7 +213,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               <TextAreaField
                 rows={5}
                 noPlaceholder
-                label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+                label={EEtterlevelseDokumentFormConstants.ETTERLEVELSENS_KONTEKST_LABEL}
                 name='beskrivelse'
               />
             </div>
@@ -243,7 +245,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
             </div>
 
             <Heading className='mt-5' size='small' level='2' spacing id='behandling'>
-              Velg behandlinger og systemer
+              {EEtterlevelseDokumentFormConstants.VELG_BEHANDLINGER_OG_SYSTEMER}
             </Heading>
 
             <FieldWrapper>
@@ -251,18 +253,18 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='my-3'>
                     <LabelWithDescription
-                      label={'Legg til behandlinger fra Behandlingskatalogen'}
-                      description='Skriv minst 3 tegn for å søke'
+                      label={EEtterlevelseDokumentFormConstants.VELG_BEHANDLINGER_OG_SYSTEMER_LABEL}
+                      description={EEtterlevelseDokumentFormConstants.SOK}
                     />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter behandlinger'
+                        aria-label={EEtterlevelseDokumentFormConstants.SOK_BEHANDLINGER}
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchBehandlingOptions}
                         onChange={(value) => {
@@ -285,25 +287,25 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
             </FieldWrapper>
 
             <ReadMore
-              header='Dersom Nav er databehandler'
+              header={EEtterlevelseDokumentFormConstants.DATABEHANDLER}
               defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
             >
               <FieldArray name='dpBehandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='my-3'>
                     <LabelWithDescription
-                      label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen'
-                      description='Skriv minst 3 tegn for å søke'
+                      label={EEtterlevelseDokumentFormConstants.DATABEHANDLER_LABEL}
+                      description={EEtterlevelseDokumentFormConstants.SOK}
                     />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter behandlinger'
+                        aria-label={EEtterlevelseDokumentFormConstants.SOK_BEHANDLINGER}
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchDpBehandlingOptions}
                         onChange={(value: any) => {
@@ -330,10 +332,10 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                 <FieldArray name='ardoqSystemData'>
                   {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                     <div className='flex-1'>
-                      <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                      <LabelWithDescription label={EEtterlevelseDokumentFormConstants.SYSTEMER} />
                       <div className='w-full'>
                         <AsyncSelect
-                          aria-label='Søk etter system'
+                          aria-label={EEtterlevelseDokumentFormConstants.SOK_SYSTEMER}
                           placeholder=''
                           tabSelectsValue={false}
                           components={{ DropdownIndicator }}
@@ -341,7 +343,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                             return noOptionMessage(inputValue)
                           }}
                           controlShouldRenderValue={false}
-                          loadingMessage={() => 'Søker...'}
+                          loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                           isClearable={false}
                           loadOptions={useArdoqSearch}
                           onChange={(value: any) => {
@@ -373,14 +375,13 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
             <ROSEdit />
 
             <Heading level='2' size='small' spacing>
-              Hvem skal ha redigeringstilgang til dokumentet?
+              {EEtterlevelseDokumentFormConstants.REDIGERINGSTILGANG}
             </Heading>
 
             <InfoCard data-color='info' className=' max-w-[70ch]' size='small'>
               <InfoCard.Header icon={<InformationSquareIcon aria-hidden />}>
                 <InfoCard.Title>
-                  Hvis du velger team, trenger du ikke legge inn teammedlemmene som enkeltpersoner.
-                  Er du i tvil på hvem som er med i teamet,{' '}
+                  {EEtterlevelseDokumentFormConstants.REDIGERINGSTILGANG_TITTEL}{' '}
                   <ExternalLink href='https://teamkatalogen.nav.no/'>
                     sjekk Teamkatalogen
                   </ExternalLink>
@@ -392,16 +393,19 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               <FieldArray name='teamsData'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='flex-1'>
-                    <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                    <LabelWithTooltip
+                      label={EEtterlevelseDokumentFormConstants.SOK_TEAMKATALOG}
+                      tooltip=''
+                    />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter team'
+                        aria-label={EEtterlevelseDokumentFormConstants.SOK_TEAM}
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={useSearchTeamOptions}
                         onChange={(value: any) => {
@@ -444,7 +448,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                           return noOptionMessage(inputValue)
                         }}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchResourceByNameOptions}
                         onChange={(value: any) => {
@@ -517,7 +521,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
               {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
             </div>
 
-            <Heading level='2' size='small' className='mt-5' spacing>
+            <Heading level='2' size='small' className='mt-7'>
               Ansvar for etterlevelsen
             </Heading>
 
@@ -541,7 +545,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                           return noOptionMessage(inputValue)
                         }}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchResourceByNameOptions}
                         onChange={(value: any) => {
@@ -565,10 +569,12 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                     </div>
 
                     {env.isDev && (
-                      <ReadMore header='Hva hvis jeg ikke finner risikoeier?'>
+                      <ReadMore
+                        header={EEtterlevelseDokumentFormConstants.INGEN_RISIKOEIER_READMORE}
+                      >
                         <div className='flex gap-2 items-end my-2'>
                           <TextField
-                            label='Skriv inn Nav ident dersom du ikke finner risikoeier over'
+                            label={EEtterlevelseDokumentFormConstants.INGEN_RISIKOEIER_LABEL}
                             value={customRisikoeierForDev}
                             onChange={(event: ChangeEvent<HTMLInputElement>) =>
                               setCustomRisikoeierForDev(event.target.value)
@@ -610,7 +616,7 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
             {!_.isEmpty(errors) && (
               <ErrorSummary
                 ref={errorSummaryRef}
-                heading='Du må rette disse feilene før du kan fortsette'
+                heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
               >
                 {Object.entries({
                   ...errors,
@@ -618,6 +624,9 @@ const GjenbrukEtterlevelseDokumentasjonForm: FunctionComponent<TProps> = ({
                   nomAvdelingId: getIn(errors, 'nomOrganisering.nomAvdelingId'),
                   seksjon: getIn(errors, 'nomOrganisering.seksjoner'),
                   linje: getIn(errors, 'nomOrganisering.linjer'),
+                  forEtterlevelseILinje: getIn(errors, 'nomOrganisering.forEtterlevelseILinje'),
+                  linjeEnhet: getIn(errors, 'nomOrganisering.linjeEnheter'),
+                  fylke: getIn(errors, 'nomOrganisering.linjeFylker'),
                 })
                   .filter(([, error]) => error)
                   .map(([key, error]) => (

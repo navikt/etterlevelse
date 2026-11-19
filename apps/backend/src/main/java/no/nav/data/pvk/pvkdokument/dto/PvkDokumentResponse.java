@@ -60,6 +60,8 @@ public class PvkDokumentResponse {
     private boolean hasPvkDocumentationStarted;
     private boolean hasPvkDocumentBeenUpdatedAfterApproval;
 
+    private boolean innsendingTrukket;
+
     public static PvkDokumentResponse buildFrom(PvkDokument pvkDokument) {
         return PvkDokumentResponse.builder()
                 .id(pvkDokument.getId())
@@ -89,6 +91,7 @@ public class PvkDokumentResponse {
                 .godkjentAvRisikoeier(pvkDokument.getPvkDokumentData().getGodkjentAvRisikoeier())
                 .antallInnsendingTilPvo(pvkDokument.getPvkDokumentData().getAntallInnsendingTilPvo())
                 .meldingerTilPvo(copyOf(pvkDokument.getPvkDokumentData().getMeldingerTilPvo()))
+                .innsendingTrukket(pvkDokument.getPvkDokumentData().isInnsendingTrukket())
                 .build();
     }
 

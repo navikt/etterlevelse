@@ -3,6 +3,7 @@ import { FieldProps } from 'formik'
 import { FunctionComponent, ReactNode } from 'react'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import P360IngenBrukerAlert from '@/components/p360/p360IngenBrukerAlert'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   EPvkDokumentStatus,
   IPvkDokument,
@@ -64,7 +65,10 @@ const SendTilPvo: FunctionComponent<TProps> = ({
         </Alert>
 
         {(merknadTilPvoError || endringsNotatError) && (
-          <ErrorSummary heading='Du må rette disse feilene før du kan fortsette' className='my-8'>
+          <ErrorSummary
+            heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
+            className='my-8'
+          >
             {merknadTilPvoError && (
               <ErrorSummary.Item href={`#meldingerTilPvo[${relevantIndex}].merknadTilPvo`}>
                 Forklar hvorfor dere ønsker å sende inn til ny vurdering må fylles ut.
@@ -118,6 +122,7 @@ const SendTilPvo: FunctionComponent<TProps> = ({
                     'antallInnsendingTilPvo',
                     pvkDokument.antallInnsendingTilPvo + 1
                   )
+                  await fieldProps.form.setFieldValue('innsendingTrukket', false)
                   await fieldProps.form.submitForm()
                 }
               }}

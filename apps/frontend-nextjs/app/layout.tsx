@@ -1,7 +1,7 @@
 import { FunctionComponent, ReactNode, Suspense } from 'react'
 import { registerOptimisticLockingInterceptor } from './api/optimisticLocking/optimisticLockingApi'
 import CookieConsentBanner from './components/common/cookieConsent/CookieConsentBanner'
-import UmamiTracker from './components/common/cookieConsent/UmamiTracker'
+import InnblikkSporing from './components/common/cookieConsent/InnblikkSporing'
 import { Footer } from './components/others/layout/footer/footer'
 import Header from './components/others/layout/header/header'
 import './globals.css'
@@ -32,7 +32,7 @@ const Main: FunctionComponent<TProps> = async ({ children }) => {
                   <CookieConsentBanner />
                   {children}
                   <Footer />
-                  <UmamiTracker />
+                  <InnblikkSporing />
                 </div>
               </Suspense>
             </DataProvider>

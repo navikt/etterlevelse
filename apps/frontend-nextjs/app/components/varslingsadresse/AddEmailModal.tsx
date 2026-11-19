@@ -23,6 +23,8 @@ export const AddEmailModal = (props: IProps) => {
   const [val, setVal] = useState(user.getEmail())
   const [error, setError] = useState('')
   const [radioValue, setRadioValue] = useState('meg')
+  const emailSectionId = 'add-email-address-section'
+  const isEmailSectionVisible = radioValue === 'epost'
 
   const add = (adresse?: string) => {
     const toAdd = adresse || val
@@ -45,11 +47,12 @@ export const AddEmailModal = (props: IProps) => {
       header={{ heading: 'Legg til Epost adresse', closeButton: false }}
       width='medium'
     >
-      <Modal.Body className='min-h-[18.75rem]'>
+      <Modal.Body className='min-h-75'>
         <RadioGroup
           legend='Hvem skal varsles på Epost?'
           value={radioValue}
           onChange={(val) => {
+            setError('')
             if (val === 'meg') {
               setVal(user.getEmail())
             } else {
@@ -60,13 +63,18 @@ export const AddEmailModal = (props: IProps) => {
           className='w-full'
         >
           <Radio value='meg'>Meg ({user.getEmail()})</Radio>
-          <Radio value='epost' className='w-full'>
+          <Radio
+            value='epost'
+            className='w-full'
+            aria-expanded={isEmailSectionVisible}
+            aria-controls={isEmailSectionVisible ? emailSectionId : undefined}
+          >
             Noen andre
           </Radio>
         </RadioGroup>
 
-        {radioValue === 'epost' && (
-          <div className='w-full pl-8'>
+        {isEmailSectionVisible && (
+          <div id={emailSectionId} className='w-full pl-8' role='region' aria-label='Epostadresse'>
             <Label className='mb-2 block'>Skriv Epost adresse</Label>
             <TextField
               type='email'
@@ -80,6 +88,9 @@ export const AddEmailModal = (props: IProps) => {
             {error && <Error message={error} />}
           </div>
         )}
+        <div role='status' aria-atomic='true' className='sr-only'>
+          {isEmailSectionVisible && 'Skriv Epost adresse'}
+        </div>
       </Modal.Body>
       <Modal.Footer>
         <Button type='button' onClick={() => add(val)} className='ml-2.5'>

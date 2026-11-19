@@ -1,4 +1,9 @@
 import * as yup from 'yup'
+import {
+  INomEnhet,
+  avdelingerUtenSeksjoner,
+  tjenestelinjeId,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 
 export enum EPaKrevdMember {
   PAKREVD = 'Påkrevd minst 1 team eller 1 person',
@@ -11,7 +16,11 @@ export enum EEtterlevelseDokumentSchemaMelding {
   TEAMDATA = 'Påkrevd minst 1 team',
   RESOURCEDATA = 'Påkrevd minst 1 person',
   NOM_AVDELING_ID = 'Dere må angi hvilken avdeling som er ansvarlig for etterlevelsen',
-  NOM_SEKSJON_ELLER_LINJE = 'Dere må velge minst en seksjon i direktoratet eller en linje',
+  NOM_FOR_ETTERLEVELSE_I_LINJE = 'Dere må angi om ansvaret er under seksjon eller linje',
+  NOM_SEKSJON = 'Dere må velge minst en seksjon i direktoratet',
+  NOM_LINJE = 'Dere må velge minst en linje',
+  NOM_FYLKE = 'Dere må velge minst en fylke',
+  NOM_LINJEENHET = 'Dere må velge minst en linjeenhet',
 }
 
 export const titleCheck = yup.string().required(EEtterlevelseDokumentSchemaMelding.TITLE)
@@ -51,20 +60,46 @@ export const resourcesDataCheck = yup.array().test({
   },
 })
 
-const seksjonEllerLinjeCheck = yup.array().test({
-  name: 'seksjonEllerLinjeCheck',
-  message: EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON_ELLER_LINJE,
-  test: function () {
-    const { parent } = this
-    if (!parent.nomAvdelingId) return true
-    return (parent.seksjoner?.length ?? 0) > 0 || (parent.linjer?.length ?? 0) > 0
-  },
-})
-
 export const nomOrganiseringCheck = yup.object({
   nomAvdelingId: yup.string().required(EEtterlevelseDokumentSchemaMelding.NOM_AVDELING_ID),
-  seksjoner: seksjonEllerLinjeCheck,
-  linjer: seksjonEllerLinjeCheck,
+  forEtterlevelseILinje: yup
+    .boolean()
+    .strict()
+    .typeError(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE)
+    .required(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE),
+  seksjoner: yup.array().when(['forEtterlevelseILinje', 'nomAvdelingId'], {
+    is: (forEtterlevelseILinje: boolean, nomAvdelingId: string) =>
+      forEtterlevelseILinje === false && !avdelingerUtenSeksjoner.includes(nomAvdelingId),
+    then: (schema) =>
+      schema
+        .required(EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON)
+        .min(1, EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON),
+  }),
+  linjer: yup.array().when('forEtterlevelseILinje', {
+    is: true,
+    then: (schema) =>
+      schema
+        .required(EEtterlevelseDokumentSchemaMelding.NOM_LINJE)
+        .min(1, EEtterlevelseDokumentSchemaMelding.NOM_LINJE),
+  }),
+  linjeEnheter: yup.array().when(['forEtterlevelseILinje', 'linjer'], {
+    is: (forEtterlevelseILinje: boolean, linjer: INomEnhet[] | undefined) =>
+      forEtterlevelseILinje === true &&
+      linjer?.some((linje) => linje.nomEnhetId !== tjenestelinjeId),
+    then: (schema) =>
+      schema
+        .required(EEtterlevelseDokumentSchemaMelding.NOM_LINJEENHET)
+        .min(1, EEtterlevelseDokumentSchemaMelding.NOM_LINJEENHET),
+  }),
+  linjeFylker: yup.array().when(['forEtterlevelseILinje', 'linjer'], {
+    is: (forEtterlevelseILinje: boolean, linjer: INomEnhet[] | undefined) =>
+      forEtterlevelseILinje === true &&
+      linjer?.some((linje) => linje.nomEnhetId === tjenestelinjeId),
+    then: (schema) =>
+      schema
+        .required(EEtterlevelseDokumentSchemaMelding.NOM_FYLKE)
+        .min(1, EEtterlevelseDokumentSchemaMelding.NOM_FYLKE),
+  }),
 })
 
 export const etterlevelseDokumentasjonSchema = () =>

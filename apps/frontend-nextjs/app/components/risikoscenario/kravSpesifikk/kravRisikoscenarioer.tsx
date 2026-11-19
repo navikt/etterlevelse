@@ -1,6 +1,7 @@
 'use client'
 
-import { Accordion, Alert, Button, Heading, Loader, LocalAlert, Tag } from '@navikt/ds-react'
+import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { Accordion, Button, Heading, InfoCard, Loader, LocalAlert, Tag } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { getPvkDokument } from '@/api/pvkDokument/pvkDokumentApi'
@@ -65,11 +66,23 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
   const accordionHeaderRef = useRef<HTMLButtonElement>(null)
   const [removedRisikoscenarioAlert, setRemovedRisikoscenarioAlert] = useState<{
     risikoscenarioName: string
+    risikoscenarioId: string
   } | null>(null)
+  const [isAnnouncementReady, setIsAnnouncementReady] = useState(false)
 
-  const handleRemovedFromThisKrav = (payload: { risikoscenarioName: string }) => {
+  const handleRemovedFromThisKrav = (payload: {
+    risikoscenarioName: string
+    risikoscenarioId: string
+  }) => {
+    setIsAnnouncementReady(false)
     setRemovedRisikoscenarioAlert(payload)
   }
+
+  useEffect(() => {
+    if (!removedRisikoscenarioAlert || isLoading) return
+    const timeout = setTimeout(() => setIsAnnouncementReady(true), 100)
+    return () => clearTimeout(timeout)
+  }, [removedRisikoscenarioAlert, isLoading])
 
   const activateFormButton = async (runFunction: () => void) => {
     await getPvkDokument(pvkDokument.id).then((response) => {
@@ -140,9 +153,9 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
     const raw = window.sessionStorage.getItem(storageKey)
     if (raw) {
       try {
-        const parsed = JSON.parse(raw) as { risikoscenarioName: string }
+        const parsed = JSON.parse(raw) as { risikoscenarioName: string; risikoscenarioId: string }
         if (parsed?.risikoscenarioName) {
-          setRemovedRisikoscenarioAlert(parsed)
+          handleRemovedFromThisKrav(parsed)
         }
       } finally {
         window.sessionStorage.removeItem(storageKey)
@@ -194,9 +207,11 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
 
           <div className='mt-5'>
             {!isCreateMode && !isLeggTilEksisterendeMode && risikoscenarioForKrav.length === 0 && (
-              <Alert variant='info' className='mb-5'>
-                Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
-              </Alert>
+              <InfoCard data-color='info' className='mb-5'>
+                <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                  Foreløpig finnes det ingen risikoscenarioer tilknyttet dette kravet.
+                </InfoCard.Message>
+              </InfoCard>
             )}
 
             {isLeggTilEksisterendeMode && (
@@ -282,20 +297,31 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
             )}
 
             {!isLeggTilEksisterendeMode && removedRisikoscenarioAlert && (
-              <LocalAlert status='success' className='mb-5 w-full max-w-[75ch] mx-auto'>
+              <LocalAlert
+                status='success'
+                role='region'
+                aria-label='Flytting av risikoscenario'
+                className='mb-5 w-full max-w-[75ch] mx-auto'
+              >
                 <LocalAlert.Header>
                   <LocalAlert.Title>
                     Risikoscenarioet “{removedRisikoscenarioAlert.risikoscenarioName}” er flyttet
                     til
                   </LocalAlert.Title>
-                  <LocalAlert.CloseButton onClick={() => setRemovedRisikoscenarioAlert(null)} />
+                  <LocalAlert.CloseButton
+                    onClick={() => {
+                      setIsAnnouncementReady(false)
+                      setRemovedRisikoscenarioAlert(null)
+                    }}
+                  />
                 </LocalAlert.Header>
                 <LocalAlert.Content>
                   <ExternalLink
                     href={pvkDokumentasjonStepUrl(
                       pvkDokument.etterlevelseDokumentId,
                       pvkDokument.id,
-                      6
+                      6,
+                      `&risikoscenario=${removedRisikoscenarioAlert.risikoscenarioId}`
                     )}
                   >
                     Identifisering av risikoscenarioer og tiltak
@@ -303,6 +329,15 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                 </LocalAlert.Content>
               </LocalAlert>
             )}
+
+            <div role='status' aria-atomic='true' className='sr-only'>
+              {isAnnouncementReady && !isLeggTilEksisterendeMode && removedRisikoscenarioAlert && (
+                <>
+                  Risikoscenarioet “{removedRisikoscenarioAlert.risikoscenarioName}” er flyttet til
+                  Identifisering av risikoscenarioer og tiltak
+                </>
+              )}
+            </div>
 
             {isCreateMode && (
               <CreateRisikoscenario
@@ -319,7 +354,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
             {!isCreateMode && !isLeggTilEksisterendeMode && !isTiltakFormActive && (
               <div className='flex gap-2 mt-8 lg:flex-row flex-col'>
                 <Button
-                  size='small'
+                  size='medium'
                   type='button'
                   onClick={async () =>
                     await activateFormButton(() => {
@@ -335,7 +370,7 @@ const KravRisikoscenarioer: FunctionComponent<TProps> = ({
                 </Button>
                 {risikoscenarioer.length !== 0 && (
                   <Button
-                    size='small'
+                    size='medium'
                     variant='secondary'
                     type='button'
                     onClick={async () =>

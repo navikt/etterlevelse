@@ -9,6 +9,7 @@ import { useEtterlevelseDokumentasjon } from '@/api/etterlevelseDokumentasjon/et
 import { Markdown } from '@/components/common/markdown/markdown'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { ERelationType } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   etterlevelseDokumentasjonIdUrl,
   etterlevelseDokumentasjonerUrl,
@@ -70,7 +71,7 @@ const GjenbrukEtterlevelseDokumentasjonPage = () => {
           {etterlevelseDokumentasjon.tilgjengeligForGjenbruk && (
             <div>
               <Alert variant='info' className='mb-5'>
-                <Label>Du kan gjenbruke dette etterlevelsesdokumentet</Label>
+                <Label>{EEtterlevelseDokumentFormConstants.GJENBRUK}</Label>
 
                 <div className='mb-5'>
                   <Markdown source={etterlevelseDokumentasjon.gjenbrukBeskrivelse} />

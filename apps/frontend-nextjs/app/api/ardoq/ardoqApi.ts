@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { IArdoqSyncData } from '@/constants/admin/ardoq/ardoqAdminConstants'
 import { IArdoqSystem } from '@/constants/ardoqSystem/ardoqSystemConstants'
 import { env } from '@/util/env/env'
 
@@ -22,4 +23,16 @@ export const useArdoqSearch = async (searchParam: string) => {
     })
   }
   return []
+}
+
+export const exportToArdoqSystemRelasjon = async () => {
+  return await axios.get(`${env.backendBaseUrl}/ardoq/export/relations`)
+}
+
+export const exportToArdoqEtterlevelseDokumentData = async () => {
+  return await axios.get(`${env.backendBaseUrl}/ardoq/export/dokument`)
+}
+
+export const syncArdoqDataWithEtterlevelsesDokument = async (request: IArdoqSyncData[]) => {
+  return await axios.post(`${env.backendBaseUrl}/ardoq/data/sync`, request)
 }

@@ -55,6 +55,8 @@ public class PvkDokumentRequest implements RequestElement {
     private String godkjentAvRisikoeier;
     private int antallInnsendingTilPvo;
 
+    private boolean innsendingTrukket;
+
     private Boolean update;
 
     private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (optimistisk låsing).
@@ -106,6 +108,7 @@ public class PvkDokumentRequest implements RequestElement {
                 .godkjentAvRisikoeier(godkjentAvRisikoeier)
                 .antallInnsendingTilPvo(antallInnsendingTilPvo)
                 .meldingerTilPvo(copyOf(convert(meldingerTilPvo, MeldingTilPvoRequest::convertToMeldingTilPvo)))
+                .innsendingTrukket(innsendingTrukket)
                 .build();
 
         return PvkDokument.builder()
@@ -136,5 +139,6 @@ public class PvkDokumentRequest implements RequestElement {
         pvkDokumentToMerge.getPvkDokumentData().setGodkjentAvRisikoeier(godkjentAvRisikoeier);
         pvkDokumentToMerge.getPvkDokumentData().setAntallInnsendingTilPvo(antallInnsendingTilPvo);
         pvkDokumentToMerge.getPvkDokumentData().setMeldingerTilPvo(copyOf(convert(meldingerTilPvo, MeldingTilPvoRequest::convertToMeldingTilPvo)));
+        pvkDokumentToMerge.getPvkDokumentData().setInnsendingTrukket(innsendingTrukket);
     }
 }

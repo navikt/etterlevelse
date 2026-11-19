@@ -22,6 +22,7 @@ public class BkatMocks {
     public static void mock() {
         stubFor(get("/bkat/process/74288ec1-c45d-4b9f-b799-33539981a690").willReturn(okJson(toJson(processMockResponse()))));
         stubFor(get("/bkat/processor/processor_1").willReturn(okJson(toJson(processorMockResponse()))));
+        stubFor(get("/bkat/databehandler/processor_1").willReturn(okJson(toJson(processorMockResponse()))));
         stubFor(get("/bkat/process?pageNumber=0&pageSize=20").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
         stubFor(post("/bkat/process/shortbyid").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));
         stubFor(get("/bkat/process/search/name?includePurpose=true").willReturn(okJson(toJson(new RestResponsePage<>(List.of(processMockResponse()))))));

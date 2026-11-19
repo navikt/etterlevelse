@@ -7,6 +7,7 @@ import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import { IDocumentRelationWithEtterlevelseDokumetajson } from '@/constants/etterlevelseDokumentasjon/dokumentRelasjon/dokumentRelasjonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IPvoTilbakemelding } from '@/constants/pvoTilbakemelding/pvoTilbakemeldingConstants'
 import { UserContext } from '@/provider/user/userProvider'
@@ -39,7 +40,7 @@ const EtterlevelseDokumentasjonButtonGroup: FunctionComponent<TProps> = ({
   const behandlerPersonopplysninger: boolean = !etterlevelseDokumentasjon.irrelevansFor.some(
     (irrelevans) =>
       irrelevans.code === 'PERSONOPPLYSNINGER' ||
-      irrelevans.shortName === 'Behandler personopplysninger'
+      irrelevans.shortName === EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER
   )
 
   useEffect(() => {

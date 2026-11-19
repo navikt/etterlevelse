@@ -14,8 +14,24 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useContext, useEffect, useState } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { EKravTab } from '@/constants/krav/kravConstants'
 import { UserContext } from '@/provider/user/userProvider'
+import {
+  behandlerPersonopplysningerId,
+  besvareEtterlevelseskravId,
+  faEtterlevelsenGodkjentId,
+  forRisikoeiereId,
+  gjenbrukId,
+  jobbeITemaoversiktenId,
+  omStotteTilEtterlevelseUrl,
+  oppdatereEtterGodkjenningId,
+  oppretteEllerOppdatereId,
+  redigereDokumentegenskaperId,
+  redigereDokumentegenskaperUrl,
+  slikGjenbrukerDuId,
+  tilretteleggeForGjenbrukId,
+} from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import VisMegHvorJegFinnerDigitalPVK from '../omPvk/images/VisMegHvorJegFinnerDigitalPVK.png'
 import JobbeITemaoversikten from './images/JobbeITemaoversikten.png'
 
@@ -36,18 +52,17 @@ const OmStotteTilEtterlevelseAccordion = () => {
   } as const
 
   const accordionId = {
-    oppretteEllerOppdatere: 'opprette-eller-oppdatere-et-etterlevelsesdokument',
-    redigereDokumentegenskaper: 'redigere-dokumentegenskaper-og-filtrere-krav',
-    jobbeITemaoversikten: 'jobbe-i-temaoversikten',
-    besvareEtterlevelseskrav: 'besvare-etterlevelseskrav',
-    behandlerPersonopplysninger: 'etterlevelse-nar-dere-behandler-personopplysninger',
-    faEtterlevelsenGodkjent: 'fa-etterlevelsen-godkjent-av-risikoeier',
-    forRisikoeiere: 'for-risikoeiere-slik-godkjenner-du-etterlevelsen',
-    oppdatereEtterGodkjenning: 'oppdatere-etterlevelsesdokumentasjon-etter-godkjenning',
-    gjenbruk: 'gjenbruk-av-etterlevelsesdokumentasjon',
-    tilretteleggeForGjenbruk:
-      'slik-tilrettelegger-dere-for-gjenbruk-av-deres-eget-etterlevelsesdokument',
-    slikGjenbrukerDu: 'slik-gjenbruker-du-et-etterlevelsesdokument',
+    oppretteEllerOppdatere: `${oppretteEllerOppdatereId}`,
+    redigereDokumentegenskaper: `${redigereDokumentegenskaperId}`,
+    jobbeITemaoversikten: `${jobbeITemaoversiktenId}`,
+    besvareEtterlevelseskrav: `${besvareEtterlevelseskravId}`,
+    behandlerPersonopplysninger: `${behandlerPersonopplysningerId}`,
+    faEtterlevelsenGodkjent: `${faEtterlevelsenGodkjentId}`,
+    forRisikoeiere: `${forRisikoeiereId}`,
+    oppdatereEtterGodkjenning: `${oppdatereEtterGodkjenningId}`,
+    gjenbruk: `${gjenbrukId}`,
+    tilretteleggeForGjenbruk: `${tilretteleggeForGjenbrukId}`,
+    slikGjenbrukerDu: `${slikGjenbrukerDuId}`,
   } as const
 
   const allItemIds = new Set<string>(Object.values(accordionId))
@@ -326,7 +341,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
               Behandlingens art og omfang
             </ExternalLink>
           </BodyLong>
-          <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene  ' className='mb-6'>
+          <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene' className='mb-6'>
             <Image
               className='mr-2.5 mt-6 mb-12'
               src={VisMegHvorJegFinnerDigitalPVK}
@@ -351,7 +366,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Header>
         <Accordion.Content>
           <ReadMore
-            header={'Vis meg hvordan jeg får etterlevelsen godkjent av risikoeier'}
+            header='Vis meg hvordan jeg får etterlevelsen godkjent av risikoeier'
             className='mb-6'
           >
             <div className='my-6'>
@@ -577,14 +592,14 @@ const OmStotteTilEtterlevelseAccordion = () => {
             oppdateringer kan så kreve at Nav-kontor revurderer deler av etterlevelsesdokumentasjon
             sin.
           </ReadMore>
-          <ReadMore header='Eksempel: bruk av Umami til måling av brukeratferd' className='mb-6'>
-            Flere team i Nav bruker verktøyet Umami til å måle brukeratferd i digitale løsninger.
-            Umami forvaltes av Team ResearchOps, som har lagd et sentralt etterlevelsesdokument hvor
-            de har gjort noen vurderinger som vil gjelde uansett hvor og hvordan man bruker Umami.
-            Ved enkelte etterlevelseskrav har ResearchOps skrevet veiledning som er spesielt
-            tilpasset bruk av Umami, og kladdet noen svar. Kravene med veiledning og kladd har de
-            samlet under Prioritert kravliste. Enkelte team som skal bruke Umami tar en
-            gjenbrukskopi av etterlevelsesdokumentet. I gjenbrukskopien arver de Prioritert
+          <ReadMore header='Eksempel: bruk av Innblikk til måling av brukeratferd' className='mb-6'>
+            Flere team i Nav bruker verktøyet Innblikk til å måle brukeratferd i digitale løsninger.
+            Innblikk forvaltes av Team ResearchOps, som har lagd et sentralt etterlevelsesdokument
+            hvor de har gjort noen vurderinger som vil gjelde uansett hvor og hvordan man bruker
+            Innblikk. Ved enkelte etterlevelseskrav har ResearchOps skrevet veiledning som er
+            spesielt tilpasset bruk av Innblikk, og kladdet noen svar. Kravene med veiledning og
+            kladd har de samlet under Prioritert kravliste. Enkelte team som skal bruke Innblikk tar
+            en gjenbrukskopi av etterlevelsesdokumentet. I gjenbrukskopien arver de Prioritert
             kravliste med sine tilpassede etterlevelseskrav. Teamet dokumenterer etterlevelse ved
             både disse og alle resterende etterlevelseskrav i dokumentet.
           </ReadMore>
@@ -742,8 +757,8 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </ReadMore>
           <BodyLong spacing>
             Etterlevelsesdokumenter hvor det er tillatt gjenbruk, har en egen seksjon på temaside
-            som heter “Du kan gjenbruke dette etterlevelsesdokumentet”. Her finner dere veiledning
-            om hvilke tilfeller som kan gjøre gjenbruk aktuell, samt mulighet for å opprette
+            som heter “{EEtterlevelseDokumentFormConstants.GJENBRUK}”. Her finner dere veiledning om
+            hvilke tilfeller som kan gjøre gjenbruk aktuell, samt mulighet for å opprette
             gjenbrukskopi.
           </BodyLong>
           <InfoCard size='small' data-color='success' className='mb-6'>
@@ -792,8 +807,10 @@ const OmStotteTilEtterlevelseAccordion = () => {
           <BodyLong spacing>Under Dette må du vite om gjenbruk, velg “Gjenbruk dokument”.</BodyLong>
           <BodyLong className='mb-3'>
             Fyll ut skjemaet i tråd med{' '}
-            <ExternalLink href='/'>Redigere dokumentegenskaper og filtrere krav </ExternalLink>{' '}
-            Fordi dere gjenbruker, vil det være noen forskjeller fra oppretting av et vanlig
+            <ExternalLink href={redigereDokumentegenskaperUrl}>
+              Redigere dokumentegenskaper og filtrere krav{' '}
+            </ExternalLink>
+            . Fordi dere gjenbruker, vil det være noen forskjeller fra oppretting av et vanlig
             etterlevelsesdokument:
           </BodyLong>
           <List as='ul' className='mb-6'>
@@ -894,7 +911,7 @@ const CopyAccordionLinkButton = ({ id }: { id: string }) => {
       className='ml-3'
       data-color='accent'
       size='xsmall'
-      copyText={`${window.location.origin}/omstottetiletterlevelse#${id}`}
+      copyText={`${window.location.origin}${omStotteTilEtterlevelseUrl}#${id}`}
       text='Kopier lenke'
       // Prevent toggling the accordion when clicking the copy button.
       onClick={(e) => e.stopPropagation()}

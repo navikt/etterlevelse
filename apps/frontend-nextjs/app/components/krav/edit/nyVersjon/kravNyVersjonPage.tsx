@@ -1,13 +1,13 @@
 'use client'
 
-import { Alert, Heading, Loader } from '@navikt/ds-react'
+import { Alert, Heading, Link, Loader, LocalAlert } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { Params } from 'next/dist/server/request/params'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useParams, useRouter } from 'next/navigation'
 import { RefObject, useContext, useEffect, useRef, useState } from 'react'
 import { GetKravData } from '@/api/krav/edit/kravEditApi'
-import { createKrav, kravMapToFormVal } from '@/api/krav/kravApi'
+import { createKrav, getKravByKravNummer, kravMapToFormVal } from '@/api/krav/kravApi'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { TextAreaField } from '@/components/common/textAreaField/textAreaField'
 import { UnsavedChangesGuard } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
@@ -36,6 +36,9 @@ export const KravNyVersjonPage = () => {
   const kravQuery: TKravById | undefined = kravData?.kravQuery
   const kravLoading: boolean | undefined = kravData?.kravLoading
   const codelist = useContext(CodelistContext)
+
+  const [kravNyUtkastVersjon, setKravNyUtkastVersjon] = useState<IKrav>()
+  const [checkForNyUtkastKrav, setCheckForNyUtkastKrav] = useState<boolean>(false)
 
   const submit = async (krav: TKravQL): Promise<void> => {
     const regelverk: TLovCode = codelist.utils.getCode(
@@ -74,6 +77,31 @@ export const KravNyVersjonPage = () => {
     })()
   }, [kravQuery])
 
+  useEffect(() => {
+    ;(async () => {
+      if (kravQuery) {
+        setCheckForNyUtkastKrav(true)
+        if (kravQuery.kravById.status === EKravStatus.AKTIV) {
+          await getKravByKravNummer(kravQuery.kravById.kravNummer)
+            .then((response) => {
+              const nyVersjonIUtkast = response.content.filter(
+                (kravResp) =>
+                  kravResp.kravVersjon > kravQuery.kravById.kravVersjon &&
+                  kravResp.status !== EKravStatus.AKTIV
+              )
+              if (nyVersjonIUtkast.length !== 0) {
+                setKravNyUtkastVersjon(nyVersjonIUtkast[0])
+              }
+            })
+            .finally(() => setCheckForNyUtkastKrav(false))
+        } else {
+          setKravNyUtkastVersjon(kravQuery.kravById)
+          setCheckForNyUtkastKrav(false)
+        }
+      }
+    })()
+  }, [kravQuery])
+
   return (
     <>
       {krav && (
@@ -83,99 +111,118 @@ export const KravNyVersjonPage = () => {
           breadcrumbPaths={[kravBreadCrumbPath]}
           key={`K${krav?.kravNummer}/${krav?.kravVersjon}`}
         >
-          {kravLoading && (
+          {(kravLoading || checkForNyUtkastKrav) && (
             <div className='w-full flex items-center flex-col'>
               <Loader size='3xlarge' />{' '}
             </div>
           )}
 
-          <div>
-            <Formik
-              initialValues={kravMapToFormVal({ ...krav, versjonEndringer: '' })}
-              onSubmit={submit}
-              validationSchema={kravNewVersionValidation()}
-              validateOnChange={false}
-              validateOnBlur={false}
-              innerRef={formRef}
-            >
-              {({ values, errors, isSubmitting, submitForm }) => (
-                <>
-                  <Form>
-                    <div>
-                      <div className='w-full'>
-                        <Heading level='1' size='medium'>
-                          Ny versjon
-                        </Heading>
-                        <Heading
-                          level='2'
-                          size='small'
-                        >{`K${krav?.kravNummer}.${krav?.kravVersjon} ${krav?.navn}`}</Heading>
-                        <Alert variant='warning'>
-                          <Heading spacing size='small' level='3'>
-                            Sikker på at du vil opprette en ny versjon?
+          {!kravLoading && !checkForNyUtkastKrav && kravNyUtkastVersjon === undefined && (
+            <div>
+              <Formik
+                initialValues={kravMapToFormVal({ ...krav, versjonEndringer: '' })}
+                onSubmit={submit}
+                validationSchema={kravNewVersionValidation()}
+                validateOnChange={false}
+                validateOnBlur={false}
+                innerRef={formRef}
+              >
+                {({ values, errors, isSubmitting, submitForm }) => (
+                  <>
+                    <Form>
+                      <div>
+                        <div className='w-full'>
+                          <Heading level='1' size='medium'>
+                            Ny versjon
                           </Heading>
-                          Ny versjon av kravet skal opprettes når det er{' '}
-                          <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
-                          <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
-                          mindre justeringer, endre i det aktive kravet, og da slipper teamene å
-                          revurdere sin besvarelse.
-                        </Alert>
-                      </div>
+                          <Heading
+                            level='2'
+                            size='small'
+                          >{`K${krav?.kravNummer}.${krav?.kravVersjon} ${krav?.navn}`}</Heading>
+                          <Alert variant='warning'>
+                            <Heading spacing size='small' level='3'>
+                              Sikker på at du vil opprette en ny versjon?
+                            </Heading>
+                            Ny versjon av kravet skal opprettes når det er{' '}
+                            <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
+                            <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
+                            mindre justeringer, endre i det aktive kravet, og da slipper teamene å
+                            revurdere sin besvarelse.
+                          </Alert>
+                        </div>
 
-                      <KravFormFields
-                        mode='edit'
-                        kravVersjon={values.kravVersjon}
-                        errors={errors}
-                        varselMeldingActive={varselMeldingActive}
-                        setVarselMeldingActive={setVarselMeldingActive}
-                      />
-
-                      <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
-                        {errors.status && (
-                          <div className='mb-3'>
-                            <FormError fieldName='status' />
-                          </div>
-                        )}
-
-                        <ContentLayout>
-                          <KravStandardButtons
-                            submitCancelButton={() => {
-                              router.push(
-                                kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1)
-                              )
-                            }}
-                            submitSaveButton={() => {
-                              values.status = EKravStatus.UTKAST
-                              submitForm()
-                            }}
-                            createMode
-                            kravStatus={values.status}
-                            submitAktivButton={() => {
-                              values.status = EKravStatus.AKTIV
-                              submitForm()
-                            }}
-                            isSubmitting={isSubmitting}
-                          />
-                        </ContentLayout>
-                      </div>
-                      <div className='py-12'>
-                        <TextAreaField
-                          label='Notater (Kun synlig for kraveier)'
-                          name='notat'
-                          height='15.625rem'
-                          markdown
+                        <KravFormFields
+                          mode='edit'
+                          kravVersjon={values.kravVersjon}
+                          errors={errors}
+                          varselMeldingActive={varselMeldingActive}
+                          setVarselMeldingActive={setVarselMeldingActive}
                         />
+
+                        <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
+                          {errors.status && (
+                            <div className='mb-3'>
+                              <FormError fieldName='status' />
+                            </div>
+                          )}
+
+                          <ContentLayout>
+                            <KravStandardButtons
+                              submitCancelButton={() => {
+                                router.push(
+                                  kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1)
+                                )
+                              }}
+                              submitSaveButton={() => {
+                                values.status = EKravStatus.UTKAST
+                                submitForm()
+                              }}
+                              createMode
+                              kravStatus={values.status}
+                              submitAktivButton={() => {
+                                values.status = EKravStatus.AKTIV
+                                submitForm()
+                              }}
+                              isSubmitting={isSubmitting}
+                            />
+                          </ContentLayout>
+                        </div>
+                        <div className='py-12'>
+                          <TextAreaField
+                            label='Notater (Kun synlig for kraveier)'
+                            name='notat'
+                            height='15.625rem'
+                            markdown
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </Form>
-                  <UnsavedChangesGuard
-                    formRef={formRef}
-                    navigateUrl={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1)}
-                  />
-                </>
-              )}
-            </Formik>
-          </div>
+                    </Form>
+                    <UnsavedChangesGuard
+                      formRef={formRef}
+                      navigateUrl={kravNummerVersjonUrl(krav.kravNummer, krav.kravVersjon - 1)}
+                    />
+                  </>
+                )}
+              </Formik>
+            </div>
+          )}
+
+          {!kravLoading && !checkForNyUtkastKrav && kravNyUtkastVersjon !== undefined && (
+            <LocalAlert status='warning'>
+              <LocalAlert.Header>
+                <LocalAlert.Title>
+                  Det finnes allerde en ny versjon av dette kravet i status utkast
+                </LocalAlert.Title>
+              </LocalAlert.Header>
+              <LocalAlert.Content>
+                Lenke til ny versjon av kravet{' '}
+                <Link href={`/krav/${kravNyUtkastVersjon.id}`}>
+                  K{kravNyUtkastVersjon.kravNummer}.{kravNyUtkastVersjon.kravVersjon}{' '}
+                  {kravNyUtkastVersjon.navn}
+                </Link>
+              </LocalAlert.Content>
+            </LocalAlert>
+          )}
         </PageLayout>
       )}
     </>

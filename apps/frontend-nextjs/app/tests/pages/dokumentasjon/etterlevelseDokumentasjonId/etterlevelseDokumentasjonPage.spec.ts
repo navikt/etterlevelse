@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -77,7 +78,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
               {
                 list: 'RELEVANS',
                 code: 'BEHANDLER_PERSONOPPLYSNINGER',
-                shortName: 'Behandler personopplysninger',
+                shortName: EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER,
                 description: 'Etterlevelsen behandler personopplysninger',
               },
             ],
@@ -139,6 +140,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
               ...mockNomOrganisering,
               nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
               avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
+              forEtterlevelseILinje: false,
               seksjoner: [
                 {
                   nomSeksjonId: 'seksjon-1',
@@ -285,7 +287,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByRole('button', { name: 'Les mer om dette dokumentet' }).click()
 
     await expect(page.getByText(oppretteEtterlevelsesdokument.description)).toBeVisible()
-    await expect(page.getByText('Behandler personopplysninger')).toBeVisible()
+    await expect(
+      page.getByText(EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER)
+    ).toBeVisible()
     await expect(
       page.getByRole('link', { name: oppretteEtterlevelsesdokument.treatmentName })
     ).toBeVisible()
@@ -317,11 +321,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     ).toBeVisible()
 
     await expect(
-      page.getByRole('button', { name: 'Du kan gjenbruke dette etterlevelsesdokumentet' })
+      page.getByRole('button', { name: EEtterlevelseDokumentFormConstants.GJENBRUK })
     ).toBeVisible()
-    await page
-      .getByRole('button', { name: 'Du kan gjenbruke dette etterlevelsesdokumentet' })
-      .click()
+    await page.getByRole('button', { name: EEtterlevelseDokumentFormConstants.GJENBRUK }).click()
     await expect(page.getByText(oppretteEtterlevelsesdokument.reuseDescription)).toBeVisible()
     await expect(page.getByRole('button', { name: 'Gjenbruk dokumentet' })).toBeVisible()
     await expect(
@@ -331,313 +333,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     ).toBeVisible()
   })
 
-  test('se liste av krav som følger etterlevelsesdokumentet jeg har opprettet', async ({
-    context,
-    page,
-  }) => {
-    await mockAdmin(page)
-
-    await context.route('**/api/codelist?refresh=false', async (route) => {
-      await route.fulfill({
-        json: {
-          codelist: {
-            TEMA: [
-              {
-                list: 'TEMA',
-                code: 'PERSONVERN',
-                shortName: 'Personvern',
-                description: 'Krav til personvern',
-                data: {},
-              },
-              {
-                list: 'TEMA',
-                code: 'INTERNKONTROLL',
-                shortName: 'Internkontroll',
-                description: 'Krav til internkontroll',
-                data: {},
-              },
-            ],
-            LOV: [
-              {
-                list: 'LOV',
-                code: 'PERSONOPPLYSNINGSLOVEN',
-                shortName: 'Personopplysningsloven',
-                description: 'Personopplysningsloven',
-                data: { tema: 'PERSONVERN' },
-              },
-              {
-                list: 'LOV',
-                code: 'INTERNKONTROLLFORSKRIFTEN',
-                shortName: 'Internkontrollforskriften',
-                description: 'Internkontrollforskriften',
-                data: { tema: 'INTERNKONTROLL' },
-              },
-            ],
-          },
-        },
-      })
-    })
-
-    await context.route('**/api/team?myTeams=true', async (route) => {
-      await route.fulfill({
-        json: {
-          pageNumber: 0,
-          pageSize: 20,
-          pages: 0,
-          numberOfElements: 0,
-          totalElements: 0,
-          content: [],
-        },
-      })
-    })
-
-    await context.route(
-      `**/api/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
-      async (route) => {
-        await route.fulfill({
-          json: {
-            id: oppretteEtterlevelsesdokument.id,
-            title: oppretteEtterlevelsesdokument.title,
-            status: 'UNDER_ARBEID',
-            etterlevelseNummer: 1,
-            etterlevelseDokumentVersjon: 1,
-            prioritertKravNummer: [visibleRequirements[0].number.toString()],
-            nomOrganisering: mockNomOrganisering,
-            irrelevansFor: [],
-            hasCurrentUserAccess: true,
-          },
-        })
-      }
-    )
-
-    await context.route(
-      `**/documentrelation/todocument/${oppretteEtterlevelsesdokument.id}**`,
-      async (route) => {
-        await route.fulfill({ json: [] })
-      }
-    )
-
-    await context.route(
-      `**/pvkdokument/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
-      async (route) => {
-        await route.fulfill({ status: 404 })
-      }
-    )
-    await context.route(
-      `**/behandlingenslivslop/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
-      async (route) => {
-        await route.fulfill({ status: 404 })
-      }
-    )
-    await context.route(
-      `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
-      async (route) => {
-        await route.fulfill({ status: 404 })
-      }
-    )
-    await context.route('**/kravprioritylist?pageNumber=0&pageSize=100', async (route) => {
-      await route.fulfill({
-        json: {
-          pageNumber: 0,
-          pageSize: 100,
-          pages: 1,
-          numberOfElements: 2,
-          totalElements: 2,
-          content: [
-            {
-              id: 'priority-personvern',
-              temaId: 'PERSONVERN',
-              priorityList: [101, 102],
-            },
-            {
-              id: 'priority-internkontroll',
-              temaId: 'INTERNKONTROLL',
-              priorityList: [201],
-            },
-          ],
-        },
-      })
-    })
-
-    await context.route(
-      `**/etterlevelsemetadata/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
-      async (route) => {
-        await route.fulfill({
-          json: {
-            pageNumber: 0,
-            pageSize: 20,
-            pages: 0,
-            numberOfElements: 0,
-            totalElements: 0,
-            content: [],
-          },
-        })
-      }
-    )
-    await context.route(
-      `**/etterlevelse/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
-      async (route) => {
-        await route.fulfill({
-          json: {
-            pageNumber: 0,
-            pageSize: 20,
-            pages: 0,
-            numberOfElements: 0,
-            totalElements: 0,
-            content: [],
-          },
-        })
-      }
-    )
-    await context.route('**/graphql', async (route) => {
-      const requestBody = route.request().postDataJSON() as { operationName?: string }
-
-      if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
-        const mockRequirement = (
-          number: number,
-          version: number,
-          name: string,
-          lawCode: string,
-          completed = false
-        ) => ({
-          kravNummer: number,
-          kravVersjon: version,
-          navn: name,
-          status: 'AKTIV',
-          aktivertDato: '2025-01-01T00:00:00Z',
-          tagger: [],
-          suksesskriterier: [],
-          changeStamp: {
-            createdDate: '2025-01-01T00:00:00Z',
-            lastModifiedDate: '2025-01-01T00:00:00Z',
-            lastModifiedBy: mockIdent,
-          },
-          etterlevelser: completed
-            ? [
-                {
-                  id: `etterlevelse-${number}`,
-                  status: 'FERDIG_DOKUMENTERT',
-                  etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
-                  fristForFerdigstillelse: '',
-                  suksesskriterieBegrunnelser: [],
-                  changeStamp: {
-                    createdDate: '2025-01-01T00:00:00Z',
-                    lastModifiedDate: '2025-01-01T00:00:00Z',
-                    lastModifiedBy: mockIdent,
-                  },
-                },
-              ]
-            : [],
-          regelverk: [{ lov: { code: lawCode } }],
-        })
-
-        await route.fulfill({
-          json: {
-            data: {
-              etterlevelseDokumentasjon: {
-                content: [
-                  {
-                    stats: {
-                      relevantKrav: [
-                        mockRequirement(
-                          visibleRequirements[0].number,
-                          visibleRequirements[0].version,
-                          visibleRequirements[0].name,
-                          'PERSONOPPLYSNINGSLOVEN',
-                          true
-                        ),
-                        mockRequirement(
-                          visibleRequirements[1].number,
-                          visibleRequirements[1].version,
-                          visibleRequirements[1].name,
-                          'PERSONOPPLYSNINGSLOVEN'
-                        ),
-                        mockRequirement(
-                          visibleRequirements[2].number,
-                          visibleRequirements[2].version,
-                          visibleRequirements[2].name,
-                          'INTERNKONTROLLFORSKRIFTEN'
-                        ),
-                      ],
-                      utgaattKrav: [
-                        {
-                          ...mockRequirement(
-                            expiredRequirement.number,
-                            expiredRequirement.version,
-                            expiredRequirement.name,
-                            'INTERNKONTROLLFORSKRIFTEN'
-                          ),
-                          status: 'UTGAATT',
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          },
-        })
-        return
-      }
-
-      if (requestBody.operationName === 'getKravByFilter') {
-        await route.fulfill({
-          json: {
-            data: {
-              krav: {
-                content: visibleRequirements.map((requirement) => ({
-                  navn: requirement.name,
-                  kravNummer: requirement.number,
-                  kravVersjon: requirement.version,
-                  status: 'AKTIV',
-                  prioriteringsId: null,
-                  etterlevelser: [],
-                })),
-              },
-            },
-          },
-        })
-        return
-      }
-
-      await route.continue()
-    })
-
+  test.describe('se liste av krav som følger etterlevelsesdokumentet jeg har opprettet', () => {
     const documentUrl = `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
     const documentOverviewUrl = `${documentUrl}?tema=all-open`
-
-    await page.goto(documentUrl)
-    const expandAllThemes = page.getByRole('checkbox', { name: 'Ekspander alle temaer' })
-    await expect(expandAllThemes).not.toBeChecked()
-    await expandAllThemes.click()
-    await expect(expandAllThemes).toBeChecked()
-    await expect(page).toHaveURL(documentOverviewUrl)
-
-    await expect(page.getByText('Totalt 3 krav, 1 ferdig utfylt')).toBeVisible()
-    await expect(
-      page.getByRole('button', { name: /Personvern \(1 av 2 krav er ferdig utfylt\)/ })
-    ).toBeVisible()
-    await expect(
-      page.getByRole('button', { name: /Internkontroll \(0 av 2 krav er ferdig utfylt\)/ })
-    ).toBeVisible()
-
-    for (const requirement of visibleRequirements) {
-      await expect(
-        page.getByRole('link', {
-          name: new RegExp(`K${requirement.number}\\.${requirement.version}.*${requirement.name}`),
-        })
-      ).toBeVisible()
-    }
-
-    await expect(
-      page.getByRole('link', {
-        name: new RegExp(
-          `K${expiredRequirement.number}\\.${expiredRequirement.version}.*${expiredRequirement.name}`
-        ),
-      })
-    ).toBeVisible()
-    await expect(page.getByText('Utgått krav', { exact: true })).toBeVisible()
-
     const requirementLinks = [
       ...visibleRequirements.slice(0, 2).map((requirement) => ({
         ...requirement,
@@ -647,46 +345,433 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       { ...expiredRequirement, theme: 'INTERNKONTROLL' },
     ]
 
-    for (const requirement of requirementLinks) {
-      const requirementUrl =
-        `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/${requirement.theme}` +
-        `/krav/${requirement.number}/${requirement.version}`
-      const requirementLink = page.getByRole('link', {
-        name: new RegExp(`K${requirement.number}\\.${requirement.version}.*${requirement.name}`),
+    test.beforeEach(async ({ context, page }) => {
+      await mockAdmin(page)
+
+      await context.route('**/api/codelist?refresh=false', async (route) => {
+        await route.fulfill({
+          json: {
+            codelist: {
+              TEMA: [
+                {
+                  list: 'TEMA',
+                  code: 'PERSONVERN',
+                  shortName: 'Personvern',
+                  description: 'Krav til personvern',
+                  data: {},
+                },
+                {
+                  list: 'TEMA',
+                  code: 'INTERNKONTROLL',
+                  shortName: 'Internkontroll',
+                  description: 'Krav til internkontroll',
+                  data: {},
+                },
+              ],
+              LOV: [
+                {
+                  list: 'LOV',
+                  code: 'PERSONOPPLYSNINGSLOVEN',
+                  shortName: 'Personopplysningsloven',
+                  description: 'Personopplysningsloven',
+                  data: { tema: 'PERSONVERN' },
+                },
+                {
+                  list: 'LOV',
+                  code: 'INTERNKONTROLLFORSKRIFTEN',
+                  shortName: 'Internkontrollforskriften',
+                  description: 'Internkontrollforskriften',
+                  data: { tema: 'INTERNKONTROLL' },
+                },
+              ],
+            },
+          },
+        })
       })
 
-      await expect(requirementLink).toHaveAttribute('href', requirementUrl)
-      await Promise.all([
-        page.waitForURL(`http://localhost:3000${requirementUrl}`),
-        requirementLink.click(),
-      ])
-      await page.goBack()
-      await expect(page).toHaveURL(documentOverviewUrl)
+      await context.route('**/api/team?myTeams=true', async (route) => {
+        await route.fulfill({
+          json: {
+            pageNumber: 0,
+            pageSize: 20,
+            pages: 0,
+            numberOfElements: 0,
+            totalElements: 0,
+            content: [],
+          },
+        })
+      })
+
+      await context.route(
+        `**/api/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              id: oppretteEtterlevelsesdokument.id,
+              title: oppretteEtterlevelsesdokument.title,
+              status: 'UNDER_ARBEID',
+              etterlevelseNummer: 1,
+              etterlevelseDokumentVersjon: 1,
+              prioritertKravNummer: [visibleRequirements[0].number.toString()],
+              nomOrganisering: mockNomOrganisering,
+              irrelevansFor: [],
+              hasCurrentUserAccess: true,
+            },
+          })
+        }
+      )
+
+      await context.route(
+        `**/documentrelation/todocument/${oppretteEtterlevelsesdokument.id}**`,
+        async (route) => {
+          await route.fulfill({ json: [] })
+        }
+      )
+
+      await context.route(
+        `**/pvkdokument/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route(
+        `**/behandlingenslivslop/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route(
+        `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+      await context.route('**/kravprioritylist?pageNumber=0&pageSize=100', async (route) => {
+        await route.fulfill({
+          json: {
+            pageNumber: 0,
+            pageSize: 100,
+            pages: 1,
+            numberOfElements: 2,
+            totalElements: 2,
+            content: [
+              {
+                id: 'priority-personvern',
+                temaId: 'PERSONVERN',
+                priorityList: [101, 102],
+              },
+              {
+                id: 'priority-internkontroll',
+                temaId: 'INTERNKONTROLL',
+                priorityList: [201],
+              },
+            ],
+          },
+        })
+      })
+
+      await context.route(
+        `**/etterlevelsemetadata/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
+      await context.route(
+        `**/etterlevelse/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
+      await context.route('**/api/krav/kravnummer/*', async (route) => {
+        await route.fulfill({ json: { content: [] } })
+      })
+
+      await context.route('**/api/melding/type/SYSTEM', async (route) => {
+        await route.fulfill({ json: [] })
+      })
+
+      await context.route(
+        `**/api/behandlingens-art-og-omfang/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
+        async (route) => {
+          await route.fulfill({ status: 404 })
+        }
+      )
+
+      await context.route('**/graphql', async (route) => {
+        const requestBody = route.request().postDataJSON() as {
+          operationName?: string
+          variables?: { kravNummer?: number; kravVersjon?: number }
+        }
+
+        if (requestBody.operationName === 'getKravWithEtterlevelse') {
+          const requirement = requirementLinks.find(
+            ({ number, version }) =>
+              number === requestBody.variables?.kravNummer &&
+              version === requestBody.variables?.kravVersjon
+          )
+          if (!requirement) {
+            throw new Error('The requested requirement must exist in the fixture')
+          }
+          await route.fulfill({
+            json: {
+              data: {
+                kravById: {
+                  id: `krav-${requirement.number}-${requirement.version}`,
+                  kravNummer: requirement.number,
+                  kravVersjon: requirement.version,
+                  navn: requirement.name,
+                  status: requirement.number === expiredRequirement.number ? 'UTGAATT' : 'AKTIV',
+                  changeStamp: {
+                    lastModifiedDate: '2025-01-01T00:00:00Z',
+                    lastModifiedBy: mockIdent,
+                  },
+                  aktivertDato: '2025-01-01T00:00:00Z',
+                  hensikt: 'Hensikten med testkravet',
+                  beskrivelse: '',
+                  dokumentasjon: [],
+                  tagger: [],
+                  suksesskriterier: [],
+                  etterlevelser: [],
+                  regelverk: [],
+                  relevansFor: [],
+                  begreper: [],
+                  begrepIder: [],
+                  kravRelasjoner: [],
+                  varslingsadresserQl: [],
+                },
+              },
+            },
+          })
+          return
+        }
+
+        if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
+          const mockRequirement = (
+            number: number,
+            version: number,
+            name: string,
+            lawCode: string,
+            completed = false
+          ) => ({
+            kravNummer: number,
+            kravVersjon: version,
+            navn: name,
+            status: 'AKTIV',
+            aktivertDato: '2025-01-01T00:00:00Z',
+            tagger: [],
+            suksesskriterier: [],
+            changeStamp: {
+              createdDate: '2025-01-01T00:00:00Z',
+              lastModifiedDate: '2025-01-01T00:00:00Z',
+              lastModifiedBy: mockIdent,
+            },
+            etterlevelser: completed
+              ? [
+                  {
+                    id: `etterlevelse-${number}`,
+                    status: 'FERDIG_DOKUMENTERT',
+                    etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
+                    fristForFerdigstillelse: '',
+                    ikkeBehovForRevurdering: false,
+                    suksesskriterieBegrunnelser: [],
+                    changeStamp: {
+                      createdDate: '2025-01-01T00:00:00Z',
+                      lastModifiedDate: '2025-01-01T00:00:00Z',
+                      lastModifiedBy: mockIdent,
+                    },
+                  },
+                ]
+              : [],
+            regelverk: [{ lov: { code: lawCode, shortName: lawCode } }],
+          })
+
+          await route.fulfill({
+            json: {
+              data: {
+                etterlevelseDokumentasjon: {
+                  content: [
+                    {
+                      stats: {
+                        relevantKrav: [
+                          mockRequirement(
+                            visibleRequirements[0].number,
+                            visibleRequirements[0].version,
+                            visibleRequirements[0].name,
+                            'PERSONOPPLYSNINGSLOVEN',
+                            true
+                          ),
+                          mockRequirement(
+                            visibleRequirements[1].number,
+                            visibleRequirements[1].version,
+                            visibleRequirements[1].name,
+                            'PERSONOPPLYSNINGSLOVEN'
+                          ),
+                          mockRequirement(
+                            visibleRequirements[2].number,
+                            visibleRequirements[2].version,
+                            visibleRequirements[2].name,
+                            'INTERNKONTROLLFORSKRIFTEN'
+                          ),
+                        ],
+                        irrelevantKrav: [],
+                        utgaattKrav: [
+                          {
+                            ...mockRequirement(
+                              expiredRequirement.number,
+                              expiredRequirement.version,
+                              expiredRequirement.name,
+                              'INTERNKONTROLLFORSKRIFTEN'
+                            ),
+                            status: 'UTGAATT',
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          })
+          return
+        }
+
+        if (requestBody.operationName === 'getKravByFilter') {
+          await route.fulfill({
+            json: {
+              data: {
+                krav: {
+                  content: visibleRequirements.map((requirement) => ({
+                    navn: requirement.name,
+                    kravNummer: requirement.number,
+                    kravVersjon: requirement.version,
+                    status: 'AKTIV',
+                    prioriteringsId: null,
+                    etterlevelser: [],
+                  })),
+                },
+              },
+            },
+          })
+          return
+        }
+
+        await route.continue()
+      })
+    })
+
+    test('viser kravoversikten og lar alle temaer ekspanderes', async ({ page }) => {
+      await page.goto(documentUrl)
+      const expandAllThemes = page.getByRole('checkbox', { name: 'Ekspander alle temaer' })
+      await expect(expandAllThemes).not.toBeChecked()
+      await expandAllThemes.click()
       await expect(expandAllThemes).toBeChecked()
-    }
+      await expect(page).toHaveURL(documentOverviewUrl)
 
-    await page.getByRole('tab', { name: 'Prioritert kravliste' }).click()
-    await expect(
-      page.getByRole('link', {
-        name: new RegExp(
-          `K${visibleRequirements[0].number}\\.${visibleRequirements[0].version}.*${visibleRequirements[0].name}`
-        ),
-      })
-    ).toBeVisible()
-    for (const requirement of visibleRequirements.slice(1)) {
+      await expect(page.getByText('Totalt 3 krav, 1 ferdig utfylt')).toBeVisible()
+      await expect(
+        page.getByRole('button', { name: /Personvern \(1 av 2 krav er ferdig utfylt\)/ })
+      ).toBeVisible()
+      await expect(
+        page.getByRole('button', { name: /Internkontroll \(0 av 2 krav er ferdig utfylt\)/ })
+      ).toBeVisible()
+
+      for (const requirement of visibleRequirements) {
+        await expect(
+          page.getByRole('link', {
+            name: new RegExp(
+              `K${requirement.number}\\.${requirement.version}.*${requirement.name}`
+            ),
+          })
+        ).toBeVisible()
+      }
+
       await expect(
         page.getByRole('link', {
+          name: new RegExp(
+            `K${expiredRequirement.number}\\.${expiredRequirement.version}.*${expiredRequirement.name}`
+          ),
+        })
+      ).toBeVisible()
+      await expect(page.getByText('Utgått krav', { exact: true })).toBeVisible()
+    })
+
+    for (const requirement of requirementLinks) {
+      test(`åpner K${requirement.number}.${requirement.version} og bevarer ekspanderte temaer ved retur`, async ({
+        page,
+      }) => {
+        await page.goto(documentOverviewUrl)
+        const expandAllThemes = page.getByRole('checkbox', { name: 'Ekspander alle temaer' })
+        await expect(expandAllThemes).toBeChecked()
+        const requirementUrl =
+          `/dokumentasjon/${oppretteEtterlevelsesdokument.id}/${requirement.theme}` +
+          `/krav/${requirement.number}/${requirement.version}`
+        const requirementLink = page.getByRole('link', {
           name: new RegExp(`K${requirement.number}\\.${requirement.version}.*${requirement.name}`),
         })
-      ).toHaveCount(0)
-    }
-    await expect(
-      page.getByRole('link', {
-        name: new RegExp(
-          `K${expiredRequirement.number}\\.${expiredRequirement.version}.*${expiredRequirement.name}`
-        ),
+
+        if (requirement.theme === 'PERSONVERN') {
+          await expect(
+            page.getByRole('heading', { name: /Fordi dere behandler personopplysninger/ })
+          ).toBeVisible()
+        }
+
+        await expect(requirementLink).toHaveAttribute('href', requirementUrl)
+        await requirementLink.click()
+        await expect(page).toHaveURL(`http://localhost:3000${requirementUrl}`)
+        await expect(
+          page.getByRole('heading', { name: requirement.name, exact: false })
+        ).toBeVisible()
+        await page.goBack({ waitUntil: 'domcontentloaded' })
+        await expect(page).toHaveURL(documentOverviewUrl)
+        await expect(expandAllThemes).toBeChecked()
       })
-    ).toHaveCount(0)
+    }
+
+    test('viser bare prioriterte krav i prioritert kravliste', async ({ page }) => {
+      await page.goto(documentOverviewUrl)
+      await page.getByRole('tab', { name: 'Prioritert kravliste' }).click()
+      await expect(
+        page.getByRole('link', {
+          name: new RegExp(
+            `K${visibleRequirements[0].number}\\.${visibleRequirements[0].version}.*${visibleRequirements[0].name}`
+          ),
+        })
+      ).toBeVisible()
+      for (const requirement of visibleRequirements.slice(1)) {
+        await expect(
+          page.getByRole('link', {
+            name: new RegExp(
+              `K${requirement.number}\\.${requirement.version}.*${requirement.name}`
+            ),
+          })
+        ).toHaveCount(0)
+      }
+      await expect(
+        page.getByRole('link', {
+          name: new RegExp(
+            `K${expiredRequirement.number}\\.${expiredRequirement.version}.*${expiredRequirement.name}`
+          ),
+        })
+      ).toHaveCount(0)
+    })
   })
 })
 

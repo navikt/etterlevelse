@@ -6,6 +6,7 @@ import AsyncSelect from 'react-select/async'
 import { useSearchKravToOptionsPvk } from '@/api/krav/kravApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { IKravReference } from '@/constants/krav/kravConstants'
 import { kravNummerView } from '@/util/krav/kravUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
@@ -267,7 +268,7 @@ export const OvrigToKravSpesifikkRisikoscenarioField: FunctionComponent<TProps> 
                     components={{ DropdownIndicator }}
                     noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                     controlShouldRenderValue={false}
-                    loadingMessage={() => 'Søker...'}
+                    loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                     isClearable={false}
                     menuShouldBlockScroll={false}
                     captureMenuScroll={false}

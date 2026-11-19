@@ -2,6 +2,7 @@
 
 import { Link as AkselLink, BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   AVDELING_SUKSESS_COLORS,
   BEHOV_COLORS,
@@ -81,7 +82,7 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
       color: DOK_COLORS[1],
     },
     {
-      name: 'Godkjent av risikoeier',
+      name: EEtterlevelseDokumentFormConstants.GODKJENT_AV_RISIKOEIER,
       value: stats.dokumenter.godkjentAvRisikoeier,
       color: DOK_COLORS[2],
     },
@@ -159,7 +160,7 @@ export const DashboardBarCard = ({ stats, hideHeader, subHeadingLevel = '3' }: I
       color: PVK_COLORS[4],
     },
     {
-      name: 'Godkjent av risikoeier',
+      name: EEtterlevelseDokumentFormConstants.GODKJENT_AV_RISIKOEIER,
       value: stats.pvk.godkjentAvRisikoeier,
       color: PVK_COLORS[5],
     },

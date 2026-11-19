@@ -31,6 +31,7 @@ import {
   ISeksjonOption,
   ITemaDashboardStats,
 } from '@/constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { IOrgEnhet } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { useUrlFilterSync } from '@/util/hooks/urlFilterSync/urlFilterSync'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
@@ -613,7 +614,7 @@ const TemaDashboardPage = () => {
               (a) => a.avdelingId === selectedAvdeling
             )?.avdelingNavn
             const filteredSeksjoner = seksjoner.filter((s) => s.navn !== avdelingNavn)
-            return selectedAvdeling && filteredSeksjoner.length > 0 ? (
+            return selectedAvdeling && filteredSeksjoner.some((s) => s.id !== 'ingen-seksjon') ? (
               <Select
                 label='Filtrer etter seksjon'
                 style={{ width: 350 }}
@@ -666,13 +667,13 @@ const TemaDashboardPage = () => {
             <div className='max-w-xl grow'>
               <AsyncSelect
                 inputId='tema-dashboard-team-search'
-                aria-label='Søk etter team'
+                aria-label={EEtterlevelseDokumentFormConstants.SOK_TEAM}
                 placeholder=''
                 tabSelectsValue={false}
                 components={{ DropdownIndicator }}
                 noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                 controlShouldRenderValue={false}
-                loadingMessage={() => 'Søker...'}
+                loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                 isClearable={false}
                 loadOptions={useSearchTeamOptions}
                 value={null}

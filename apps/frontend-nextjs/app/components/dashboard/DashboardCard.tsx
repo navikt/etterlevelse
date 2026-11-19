@@ -2,6 +2,7 @@
 
 import { Link as AkselLink, BodyShort, Detail, Heading } from '@navikt/ds-react'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 
 interface IProps {
   stats: IAvdelingDashboardStats
@@ -156,7 +157,7 @@ export const DashboardCard = ({ stats, hideHeader, subHeadingLevel = '3' }: IPro
             Sendt til godkjenning <span className='font-bold'>{stats.pvk.sendtTilGodkjenning}</span>
           </BodyShort>
           <BodyShort>
-            Godkjent av risikoeier{' '}
+            {EEtterlevelseDokumentFormConstants.GODKJENT_AV_RISIKOEIER}{' '}
             <span className='font-bold'>{stats.pvk.godkjentAvRisikoeier}</span>
           </BodyShort>
         </div>

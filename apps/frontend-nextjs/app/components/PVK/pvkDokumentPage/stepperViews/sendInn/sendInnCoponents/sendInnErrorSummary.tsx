@@ -3,6 +3,7 @@ import { FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject } from 'react'
 import { IArtOgOmfangError } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import {
@@ -91,7 +92,7 @@ const SendInnErrorSummary: FunctionComponent<TProps> = ({
         savnerVurderingError !== '') && (
         <ErrorSummary
           ref={errorSummaryRef}
-          heading='Du må rette disse feilene før du kan fortsette'
+          heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
         >
           {manglerBehandlingError && (
             <ErrorSummary.Item

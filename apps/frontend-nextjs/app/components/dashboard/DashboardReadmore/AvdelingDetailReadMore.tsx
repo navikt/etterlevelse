@@ -1,4 +1,9 @@
 import { Link, List, ReadMore } from '@navikt/ds-react'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
+import {
+  hvordanDokumentereEtterlevelseUrl,
+  omStotteTilEtterlevelseDetteInneholderEtEtterlevelseKravUrl,
+} from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 
 export const AvdelingDetailReadMore = () => (
   <div style={{ maxWidth: '75ch' }}>
@@ -27,10 +32,7 @@ export const AvdelingDetailReadMore = () => (
           Hvert etterlevelseskrav består av ett eller flere suksesskriterier. Suksesskriterier er
           aktive handlinger som viser hva etterleveren konkret må gjøre for å etterleve kravet.
           Hvorvidt man etterlever kravet beskrives på suksesskriteriumsnivået.{' '}
-          <Link
-            href='/omstottetiletterlevelse#dette-inneholder-et-etterlevelseskrav'
-            target='_blank'
-          >
+          <Link href={omStotteTilEtterlevelseDetteInneholderEtEtterlevelseKravUrl} target='_blank'>
             Les mer om etterlevelseskrav og suksesskriterier (åpner i en ny fane)
           </Link>
           .
@@ -43,7 +45,7 @@ export const AvdelingDetailReadMore = () => (
           markere noen krav og suksesskriterier som &quot;ikke relevant&quot;
           <br />
           <br />
-          <Link href='/omstottetiletterlevelse#hvordan-dokumentere-etterlevelse' target='_blank'>
+          <Link href={hvordanDokumentereEtterlevelseUrl} target='_blank'>
             Les mer om dokumentering av etterlevelse (åpner i en ny fane)
           </Link>
         </List.Item>
@@ -59,9 +61,9 @@ export const AvdelingDetailReadMore = () => (
           <strong>Hva vil det si å vurdere behov for PVK?</strong>
           <br />I Støtte til etterlevelse er det mulig å gå inn og registrere at man har vurdert
           behov for PVK, og hva som ble konklusjonen. Muligheten vises for alle etterlevere som har
-          valgt &quot;Behandler personopplysninger&quot; som egenskap i etterlevelsesdokumentet
-          sitt. Det er viktig at vurderingen om behov for PVK registreres, uansett konklusjon, slik
-          at Nav har oversikt.{' '}
+          valgt &quot;{EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER}&quot; som
+          egenskap i etterlevelsesdokumentet sitt. Det er viktig at vurderingen om behov for PVK
+          registreres, uansett konklusjon, slik at Nav har oversikt.{' '}
           <Link href='/om-pvk#beslutningsstotte' target='_blank'>
             Les mer om beslutningsstøtte ved vurdering av behov for PVK (åpner i en ny fane)
           </Link>

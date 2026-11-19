@@ -26,9 +26,10 @@ const EtterlevelseDokumentFylkeForm: FunctionComponent<TProps> = ({
         <FieldArray name='nomOrganisering.linjeFylker'>
           {(fieldProps: FieldArrayRenderProps) => (
             <div>
-              <LabelWithDescription label='Angi hvilken fylke som er ansvarlig for etterlevelsen' />
+              <LabelWithDescription label='Angi fylke' />
               <OptionList
                 label='Fylke'
+                value=''
                 options={alleFylkeOptions}
                 onChange={async (value: any) => {
                   const selectedFylke = alleFylkeOptions.find((fylke) => fylke.value === value)

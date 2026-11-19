@@ -204,6 +204,7 @@ export const SendInnView: FunctionComponent<TProps> = ({
                   ? submitedValues.godkjentAvRisikoeierDato
                   : response.godkjentAvRisikoeierDato,
                 antallInnsendingTilPvo: submitedValues.antallInnsendingTilPvo,
+                innsendingTrukket: submitedValues.innsendingTrukket,
               }
 
               if (

@@ -48,6 +48,7 @@ type TProps = {
   previousVurdering?: IVurdering
   tidligereEtterlevelser?: IEtterlevelse[]
   forrigeKrav?: IKrav
+  apneSvarhistorikkRef?: RefObject<(() => void) | null>
 }
 
 const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
@@ -62,6 +63,7 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   previousVurdering,
   tidligereEtterlevelser,
   forrigeKrav,
+  apneSvarhistorikkRef,
 }) => {
   const user = useContext(UserContext)
   const forrigeEtterlevelse = forrigeKrav
@@ -81,7 +83,28 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [isPvkFormActive, setIsPvkFormActive] = useState<boolean>(false)
   const formRef: RefObject<any> = useRef(undefined)
+  const svarhistorikkTabRef = useRef<HTMLButtonElement>(null)
   const pathName = usePathname()
+
+  const velgFane = (tabValue: string): boolean => {
+    if (formRef.current?.dirty) {
+      setSelectedTab(tabValue)
+      setIsUnsaved(true)
+      return false
+    }
+    setIsPvkFormActive(false)
+    setActiveTab(tabValue)
+    return true
+  }
+
+  useEffect(() => {
+    if (!apneSvarhistorikkRef) return
+    apneSvarhistorikkRef.current = () => {
+      if (velgFane('svarhistorikk')) {
+        requestAnimationFrame(() => svarhistorikkTabRef.current?.focus())
+      }
+    }
+  })
 
   const userHasAccess = () => {
     return user.isAdmin() || etterlevelseDokumentasjon?.hasCurrentUserAccess || false
@@ -116,15 +139,9 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
           defaultValue='mer'
           value={activeTab}
           size='small'
-          onChange={(tabValue) => {
-            if (formRef.current?.dirty) {
-              setSelectedTab(tabValue)
-              setIsUnsaved(true)
-            } else {
-              setIsPvkFormActive(false)
-              setActiveTab(tabValue)
-            }
-          }}
+          onChange={velgFane}
+          // Hidden scroll buttons still take up space and push the first tab to the right
+          className='[&_.aksel-tabs\_\_scroll-button--hidden]:hidden'
         >
           <Tabs.List>
             <Tabs.Tab
@@ -151,6 +168,7 @@ const EtterlevelseSidePanel: FunctionComponent<TProps> = ({
               )}
             {forrigeKrav && (
               <Tabs.Tab
+                ref={svarhistorikkTabRef}
                 className='whitespace-nowrap'
                 value='svarhistorikk'
                 label={

@@ -10,22 +10,27 @@ import { TOption } from '@/constants/commonConstants'
 import {
   INomEnhet,
   TEtterlevelseDokumentasjonQL,
+  tjenestelinjeId,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import EtterlevelseDokumentFylkeForm from './etterlevelseDokumentFylkeForm'
 import EtterlevelseDokumentFylkeKontorForm from './etterlevelseDokumentFylkeKontorForm'
 import EtterlevelseDokumentLinjeEnhetForm from './etterlevelseDokumentLinjeEnhetForm'
+import EtterlevelseDokumentLokalEnheterForm from './etterlevelseDokumentLokalEnheterForm'
 
 type TProps = {
+  etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   formValues: TEtterlevelseDokumentasjonQL
 }
 
-const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }) => {
-  const tjenestelinjeId = 'ry630r'
-
+const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({
+  etterlevelseDokumentasjon,
+  formValues,
+}) => {
   const [alleLinjeOptions, setAlleLinjeOptions] = useState<TOption[]>([])
   const [alleFylkeOptions, setAlleFylkeOptions] = useState<TOption[]>([])
   const [linjeEnheterByLinje, setLinjeEnheterByLinje] = useState<Map<string, TOption[]>>(new Map())
   const [kontorByFylke, setKontorByFylke] = useState<Map<string, TOption[]>>(new Map())
+  const [lokalEnheterByLinje, setLokalEnheterByLinje] = useState<Map<string, TOption[]>>(new Map())
 
   const hasArbeidsOgTjenestelinjen = useMemo(() => {
     return formValues.nomOrganisering.linjer
@@ -40,6 +45,29 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
     })()
   }, [])
 
+  useEffect(() => {
+    if (etterlevelseDokumentasjon?.nomOrganisering.linjer.length) {
+      etterlevelseDokumentasjon.nomOrganisering.linjer.forEach((linje) => {
+        if (linje.nomEnhetId !== tjenestelinjeId) {
+          getUnderenheter(linje.nomEnhetId)
+            .then((enheter) => {
+              if (enheter.length > 0) {
+                setLinjeEnheterByLinje((prev) => {
+                  const next = new Map(prev)
+                  next.set(
+                    linje.nomEnhetId,
+                    enheter.map((e) => ({ value: e.id, label: e.navn }))
+                  )
+                  return next
+                })
+              }
+            })
+            .catch(() => {})
+        }
+      })
+    }
+  }, [etterlevelseDokumentasjon?.nomOrganisering.linjer])
+
   return (
     <div>
       <div id='linje' className='flex flex-col lg:flex-row gap-2 mb-5'>
@@ -47,9 +75,10 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
           <FieldArray name='nomOrganisering.linjer'>
             {(fieldProps: FieldArrayRenderProps) => (
               <div>
-                <LabelWithDescription label='Angi hvilken linje som er ansvarlig for etterlevelsen' />
+                <LabelWithDescription label='Angi linje' />
                 <OptionList
                   label='Linje'
+                  value=''
                   options={alleLinjeOptions}
                   onChange={async (value: any) => {
                     const selectedLinje = alleLinjeOptions.find((linje) => linje.value === value)
@@ -104,21 +133,33 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
                     fieldProps.remove(index)
 
                     if (removedLinje.nomEnhetId !== tjenestelinjeId) {
-                      const removedLinjeEnheter =
+                      const linjeEnhetIds = (
+                        linjeEnheterByLinje.get(removedLinje.nomEnhetId) ?? []
+                      ).map((opt) => String(opt.value))
+                      const lokalEnhetIds = linjeEnhetIds.flatMap((linjeEnhetId) =>
+                        (lokalEnheterByLinje.get(linjeEnhetId) ?? []).map((opt) =>
+                          String(opt.value)
+                        )
+                      )
+
+                      fieldProps.form.setFieldValue(
+                        'nomOrganisering.linjeEnheter',
                         fieldProps.form.values.nomOrganisering.linjeEnheter.filter(
-                          (e: INomEnhet) => {
-                            const enhetOptions = linjeEnheterByLinje.get(removedLinje.nomEnhetId)
-                            return enhetOptions?.some((opt) => opt.value === e.nomEnhetId)
-                          }
+                          (e: INomEnhet) => !linjeEnhetIds.includes(e.nomEnhetId)
                         )
-                      if (removedLinjeEnheter.length > 0) {
-                        fieldProps.form.setFieldValue(
-                          'nomOrganisering.linjeEnheter',
-                          fieldProps.form.values.nomOrganisering.linjeEnheter.filter(
-                            (e: INomEnhet) => !removedLinjeEnheter.includes(e)
-                          )
+                      )
+                      fieldProps.form.setFieldValue(
+                        'nomOrganisering.lokalEnheter',
+                        fieldProps.form.values.nomOrganisering.lokalEnheter.filter(
+                          (e: INomEnhet) => !lokalEnhetIds.includes(e.nomEnhetId)
                         )
-                      }
+                      )
+
+                      setLokalEnheterByLinje((prev) => {
+                        const next = new Map(prev)
+                        linjeEnhetIds.forEach((linjeEnhetId) => next.delete(linjeEnhetId))
+                        return next
+                      })
                       setLinjeEnheterByLinje((prev) => {
                         const next = new Map(prev)
                         next.delete(removedLinje.nomEnhetId)
@@ -139,7 +180,14 @@ const EtterlevelseDokumentLinjeForm: FunctionComponent<TProps> = ({ formValues }
         <div className='flex-1' />
       </div>
 
-      <EtterlevelseDokumentLinjeEnhetForm linjeEnheterByLinje={linjeEnheterByLinje} />
+      <EtterlevelseDokumentLinjeEnhetForm
+        etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+        linjeEnheterByLinje={linjeEnheterByLinje}
+        lokalEnheterByLinje={lokalEnheterByLinje}
+        setLokalEnheterByLinje={setLokalEnheterByLinje}
+      />
+
+      <EtterlevelseDokumentLokalEnheterForm lokalEnheterByLinje={lokalEnheterByLinje} />
 
       {formValues.nomOrganisering.linjer && hasArbeidsOgTjenestelinjen && (
         <EtterlevelseDokumentFylkeForm

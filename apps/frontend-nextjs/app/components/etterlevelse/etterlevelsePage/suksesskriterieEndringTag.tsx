@@ -13,7 +13,7 @@ const erEndret = (a: ISuksesskriterie, b: ISuksesskriterie): boolean =>
   (a.beskrivelse ?? '').trim() !== (b.beskrivelse ?? '').trim() ||
   a.behovForBegrunnelse !== b.behovForBegrunnelse
 
-export const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
+const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
   suksesskriterie,
   sammenlignMed,
   versjon,
@@ -24,7 +24,7 @@ export const SuksesskriterieEndringTag: FunctionComponent<TProps> = ({
 
   if (!motpart) {
     return versjon === 'gjeldende' ? (
-      <Tag size='small' variant='outline' data-color='info'>
+      <Tag size='small' variant='outline' data-color='warning'>
         Nytt suksesskriterium
       </Tag>
     ) : (

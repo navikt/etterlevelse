@@ -14,6 +14,7 @@ import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdow
 import { IBehandling } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { getEtterlevelseDokumentasjonByBehandlingIdQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import { emptyPage } from '@/util/common/emptyPageUtil'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
@@ -106,13 +107,13 @@ const BehandlingSok = () => {
     <div className='my-5'>
       <div className='max-w-[37.5rem] mb-10 flex flex-col'>
         <AsyncSelect
-          aria-label='Søk etter behandlinger'
-          placeholder='Søk etter behandlinger'
+          aria-label={EEtterlevelseDokumentFormConstants.SOK_BEHANDLINGER}
+          placeholder={EEtterlevelseDokumentFormConstants.SOK_BEHANDLINGER}
           components={{ DropdownIndicator }}
           noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
           controlShouldRenderValue={false}
           tabSelectsValue={false}
-          loadingMessage={() => 'Søker...'}
+          loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
           isClearable={false}
           loadOptions={searchBehandlingOptions}
           onChange={(value) => {

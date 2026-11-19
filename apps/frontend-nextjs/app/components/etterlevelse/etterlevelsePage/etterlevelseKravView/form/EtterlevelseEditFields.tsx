@@ -1,6 +1,7 @@
 'use client'
 
 import { InformationSquareIcon } from '@navikt/aksel-icons'
+import { Events } from '@navikt/analytics-types'
 import {
   BodyShort,
   Button,
@@ -27,7 +28,6 @@ import {
   UnsavedChangesGuard,
   bypassUnsavedGuard,
 } from '@/components/common/unsavedChangesGuard/unsavedChangesGuard'
-import EtterlevelseCard from '@/components/etterlevelse/etterlevelseModal/etterlevelseCard'
 import {
   ERelationType,
   IDocumentRelation,
@@ -38,9 +38,10 @@ import {
   ISuksesskriterieBegrunnelse,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { TEtterlevelseDokumentasjonQL } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { EKravStatus, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { etterlevelseDokumentasjonIdUrl } from '@/routes/etterlevelseDokumentasjon/etterlevelseDokumentasjonRoutes'
-import { UMAMI_EVENTS, trackUmamiEvent } from '@/util/analytics/umami'
+import { sporInnblikkHendelse } from '@/util/analytics/innblikk'
 import { env } from '@/util/env/env'
 import { TKravNavigationGroup } from '@/util/etterlevelseDokumentasjon/etterlevelseDokumentasjonUtil'
 import { syncEtterlevelseKriterieBegrunnelseWithKrav } from '@/util/etterlevelseUtil/etterlevelseUtil'
@@ -58,7 +59,6 @@ type TEditProps = {
   varsleMelding?: string
   disableEdit: boolean
   editedEtterlevelse?: IEtterlevelse
-  tidligereEtterlevelser?: IEtterlevelse[]
   etterlevelseDokumentasjon?: TEtterlevelseDokumentasjonQL
   isPreview: boolean
   etterlevelseDokStatusAlert: boolean
@@ -78,7 +78,6 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
   formRef,
   disableEdit,
   editedEtterlevelse,
-  tidligereEtterlevelser,
   etterlevelseDokumentasjon,
   isPreview,
   etterlevelseDokStatusAlert,
@@ -223,6 +222,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           'second'
                         ) && (
                           <CheckboxGroup
+                            className='mb-3'
                             legend='Legg til i Prioritert kravliste'
                             hideLegend
                             onChange={(value: string[]) => {
@@ -238,7 +238,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                           >
                             <Checkbox
                               value='check'
-                              description='Kravet er satt til lesemodus, men dere kan ombestemme dere senere.  Krav markert som “ikke behov for redigering” kan filtreres bort på temaside for å gi bedre oversikt over hvilke krav som gjenstår å dokumentere.'
+                              description='Kravet blir satt til lesemodus, men dere kan ombestemme dere senere.  Krav markert som “ikke behov for redigering” kan filtreres bort på temaside for å gi bedre oversikt over hvilke krav som gjenstår å dokumentere.'
                             >
                               Marker dette kravet som “ikke behov for revurdering”
                             </Checkbox>
@@ -274,13 +274,6 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         <BodyShort>{etterlevelse.statusBegrunnelse}</BodyShort>
                       </div>
                     )}
-                    <div className='flex w-full items-center mb-4'>
-                      {tidligereEtterlevelser && tidligereEtterlevelser.length > 0 && (
-                        <div className='flex w-full justify-end'>
-                          <EtterlevelseCard etterlevelse={tidligereEtterlevelser[0]} />
-                        </div>
-                      )}
-                    </div>
 
                     <SuksesskriterierBegrunnelseEdit
                       disableEdit={disableEdit}
@@ -297,14 +290,13 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                         checked={isOppfylesSenere}
                         onChange={() => {
                           setOppfylesSenere(!isOppfylesSenere)
-                          trackUmamiEvent(UMAMI_EVENTS.CHECKBOX_TOGGLED, {
-                            page: 'etterlevelse',
-                            component: 'etterlevelse-form',
-                            field: 'oppfylles_senere',
+                          sporInnblikkHendelse(Events.AVKRYSNINGSBOKS_ENDRET, {
+                            tekst: 'Kravet skal etterleves senere',
                             checked: !isOppfylesSenere,
-                            status: !isOppfylesSenere ? 'selected' : 'unselected',
-                            id: krav.kravNummer,
-                            context: 'krav-status',
+                            kontekst: 'etterlevelse-krav-status',
+                            komponentId: 'etterlevelse-form-oppfylles-senere',
+                            seksjon: 'etterlevelse',
+                            opprinnelse: 'etterlevelse',
                           })
                         }}
                         key={EEtterlevelseStatus.OPPFYLLES_SENERE}
@@ -333,7 +325,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                     {!_.isEmpty(errors) && (
                       <ErrorSummary
                         ref={errorSummaryRef}
-                        heading='Du må rette disse feilene før du kan fortsette'
+                        heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
                         onClick={() => console.debug(errors)}
                       >
                         {errors.suksesskriterieBegrunnelser && (
@@ -546,7 +538,7 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
                               window.location.assign(url)
                             }}
                           >
-                            Lagre og fortsette
+                            Lagre og fortsett
                           </Button>
                           <Button
                             type='button'
@@ -617,7 +609,6 @@ const EtterlevelseEditFields: FunctionComponent<TEditProps> = ({
               <EtterlevelseViewFields
                 etterlevelse={values}
                 suksesskriterier={krav.suksesskriterier}
-                tidligereEtterlevelser={tidligereEtterlevelser}
                 forrigeSuksesskriterier={forrigeSuksesskriterier}
               />
             )}

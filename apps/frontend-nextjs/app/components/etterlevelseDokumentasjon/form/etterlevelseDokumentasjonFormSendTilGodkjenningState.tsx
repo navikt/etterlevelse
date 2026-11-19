@@ -68,6 +68,7 @@ import {
   IEtterlevelseDokumentasjon,
   TEtterlevelseDokumentasjonQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { EListName, ICode, IGetParsedOptionsProps } from '@/constants/kodeverk/kodeverkConstants'
 import { ITeam, ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { CodelistContext } from '@/provider/kodeverk/kodeverkProvider'
@@ -108,8 +109,8 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
   const [validateOnBlur, setValidateOnBlur] = useState(false)
   const [submitClick, setSubmitClick] = useState<boolean>(false)
   const labelNavngiDokument: string = isForRedigering
-    ? 'Navngi dokumentet ditt'
-    : 'Navngi det nye dokumentet ditt'
+    ? EEtterlevelseDokumentFormConstants.NAVNGI_DOKUMENT_LABEL_ONE
+    : EEtterlevelseDokumentFormConstants.NAVNGI_DOKUMENT_LABEL_TWO
 
   useEffect(() => {
     ;(async () => {
@@ -228,7 +229,7 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
 
             {dokumentRelasjon && (
               <Alert contentMaxWidth={false} variant='info' className='mb-5'>
-                <Label>Du kan gjenbruke dette etterlevelsesdokumentet</Label>
+                <Label>{EEtterlevelseDokumentFormConstants.GJENBRUK}</Label>
 
                 <div className='mb-5'>
                   <Markdown source={dokumentRelasjon.fromDocumentWithData.gjenbrukBeskrivelse} />
@@ -240,7 +241,7 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               rows={2}
               noPlaceholder
               label={labelNavngiDokument}
-              caption='Prøv å velge noe unikt som gjør det lett å skille denne etterlevelsen fra andre, lignende'
+              caption={EEtterlevelseDokumentFormConstants.NAVNGI_DOKUMENT_CAPTION}
               name='title'
             />
 
@@ -248,7 +249,7 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               <TextAreaField
                 height='150px'
                 noPlaceholder
-                label='Beskriv nærmere etterlevelsens kontekst, for eksempel hvilken løsning, målgruppe eller arbeid som omfattes'
+                label={EEtterlevelseDokumentFormConstants.ETTERLEVELSENS_KONTEKST_LABEL}
                 name='beskrivelse'
                 markdown
               />
@@ -259,12 +260,12 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='h-full pt-5 w-[calc(100% - 1rem)]'>
                     <Heading size='small' level='2' spacing>
-                      Velg egenskaper
+                      {EEtterlevelseDokumentFormConstants.VELG_EGENSKAPER}
                     </Heading>
                     <CheckboxGroup
                       readOnly
-                      legend='Hvilke egenskaper gjelder for etterlevelsen?'
-                      description='Kun krav fra egenskaper du velger som gjeldende vil være tilgjengelig for dokumentasjon.'
+                      legend={EEtterlevelseDokumentFormConstants.VELG_EGENSKAPER_LEGEND}
+                      description={EEtterlevelseDokumentFormConstants.VELG_EGENSKAPER_BESKRIVELSE}
                       value={selectedFilter}
                       onChange={(selected: number[]) => {
                         setSelectedFilter(selected)
@@ -306,7 +307,9 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               <FieldArray name='behandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='my-3'>
-                    <LabelWithDescription label='Legg til behandlinger fra Behandlingskatalogen' />
+                    <LabelWithDescription
+                      label={EEtterlevelseDokumentFormConstants.VELG_BEHANDLINGER_OG_SYSTEMER_LABEL}
+                    />
 
                     <DataTextWrapper>
                       {fieldArrayRenderProps.form.values.behandlinger.length === 0 && (
@@ -329,13 +332,15 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
             </FieldWrapper>
 
             <ReadMore
-              header='Dersom Nav er databehandler'
+              header={EEtterlevelseDokumentFormConstants.DATABEHANDLER}
               defaultOpen={values.dpBehandlinger && values.dpBehandlinger.length !== 0}
             >
               <FieldArray name='dpBehandlinger'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='my-3'>
-                    <LabelWithDescription label='Legg til behandlinger der Nav er databehandler fra Behandlingskatalogen' />
+                    <LabelWithDescription
+                      label={EEtterlevelseDokumentFormConstants.DATABEHANDLER_LABEL}
+                    />
 
                     <DataTextWrapper>
                       {fieldArrayRenderProps.form.values.dpBehandlinger.length === 0 && (
@@ -362,10 +367,10 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                 <FieldArray name='ardoqSystemData'>
                   {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                     <div className='flex-1'>
-                      <LabelWithDescription label='Angi hvilke systemer etterlevelsen bruker' />
+                      <LabelWithDescription label={EEtterlevelseDokumentFormConstants.SYSTEMER} />
                       <div className='w-full'>
                         <AsyncSelect
-                          aria-label='Søk etter system'
+                          aria-label={EEtterlevelseDokumentFormConstants.SOK_SYSTEMER}
                           placeholder=''
                           tabSelectsValue={false}
                           components={{ DropdownIndicator }}
@@ -373,7 +378,7 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                             return noOptionMessage(inputValue)
                           }}
                           controlShouldRenderValue={false}
-                          loadingMessage={() => 'Søker...'}
+                          loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                           isClearable={false}
                           loadOptions={useArdoqSearch}
                           onChange={(value: any) => {
@@ -457,16 +462,19 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               <FieldArray name='teamsData'>
                 {(fieldArrayRenderProps: FieldArrayRenderProps) => (
                   <div className='flex-1'>
-                    <LabelWithTooltip label='Søk team fra Teamkatalogen' tooltip='' />
+                    <LabelWithTooltip
+                      label={EEtterlevelseDokumentFormConstants.SOK_TEAMKATALOG}
+                      tooltip=''
+                    />
                     <div className='w-full'>
                       <AsyncSelect
-                        aria-label='Søk etter team'
+                        aria-label={EEtterlevelseDokumentFormConstants.SOK_TEAM}
                         placeholder=''
                         tabSelectsValue={false}
                         components={{ DropdownIndicator }}
                         noOptionsMessage={({ inputValue }) => noOptionMessage(inputValue)}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={useSearchTeamOptions}
                         onChange={(value: any) => {
@@ -509,7 +517,7 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                           return noOptionMessage(inputValue)
                         }}
                         controlShouldRenderValue={false}
-                        loadingMessage={() => 'Søker...'}
+                        loadingMessage={() => EEtterlevelseDokumentFormConstants.SOKER}
                         isClearable={false}
                         loadOptions={searchResourceByNameOptions}
                         onChange={(value: any) => {
@@ -582,6 +590,10 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
               {errors.varslingsadresser && <Error message={errors.varslingsadresser as string} />}
             </div>
 
+            <Heading level='2' size='small' className='mt-7'>
+              Ansvar for etterlevelsen
+            </Heading>
+
             <EtterlevelseDokumentNomOrganiseringForm
               etterlevelseDokumentasjon={etterlevelseDokumentasjon}
               formValues={values}
@@ -595,7 +607,7 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                     <div>
                       <DataTextWrapper>
                         {fieldArrayRenderProps.form.values.risikoeiereData.length === 0 &&
-                          'Ingen risikoeier satt'}
+                          EEtterlevelseDokumentFormConstants.INGEN_RISIKOEIER}
 
                         {fieldArrayRenderProps.form.values.risikoeiereData.length !== 0 && (
                           <List as='ul'>
@@ -652,10 +664,10 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                           EEtterlevelseDokumentasjonStatus.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER
                         }
                       >
-                        Sendt til godkjenning til risikoeier
+                        {EEtterlevelseDokumentFormConstants.SENDT_TIL_GODKJENNING_TIL_RISIKOEIER}
                       </option>
                       <option value={EEtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER}>
-                        Godkjent av risikoeier
+                        {EEtterlevelseDokumentFormConstants.GODKJENT_AV_RISIKOEIER}
                       </option>
                     </Select>
                   </div>
@@ -681,7 +693,7 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
             {!_.isEmpty(errors) && (
               <ErrorSummary
                 ref={errorSummaryRef}
-                heading='Du må rette disse feilene før du kan fortsette'
+                heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
               >
                 {Object.entries({
                   ...errors,
@@ -689,6 +701,9 @@ const EtterlevelseDokumentasjonFormSendTilGodkjenningState: FunctionComponent<TP
                   nomAvdelingId: getIn(errors, 'nomOrganisering.nomAvdelingId'),
                   seksjon: getIn(errors, 'nomOrganisering.seksjoner'),
                   linje: getIn(errors, 'nomOrganisering.linjer'),
+                  forEtterlevelseILinje: getIn(errors, 'nomOrganisering.forEtterlevelseILinje'),
+                  linjeEnhet: getIn(errors, 'nomOrganisering.linjeEnheter'),
+                  fylke: getIn(errors, 'nomOrganisering.linjeFylker'),
                 })
                   .filter(([, error]) => error)
                   .map(([key, error]) => (

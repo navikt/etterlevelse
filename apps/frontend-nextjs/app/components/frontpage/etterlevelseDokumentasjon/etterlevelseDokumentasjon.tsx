@@ -1,7 +1,8 @@
 'use client'
 
 import { useQuery } from '@apollo/client/react'
-import { Alert, Button, Heading, Link } from '@navikt/ds-react'
+import { ExclamationmarkTriangleIcon, InformationSquareIcon } from '@navikt/aksel-icons'
+import { Button, Heading, InfoCard, Link } from '@navikt/ds-react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import { useRouter } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
@@ -56,12 +57,19 @@ export const EtterlevelseDokumentasjon = () => {
       <div className='max-w-7xl w-full px-4 py-10'>
         {forsideVarsel?.meldingStatus === EMeldingStatus.ACTIVE && (
           <div className='mb-10 flex justify-center' id='forsideVarselMelding'>
-            <Alert
-              fullWidth
-              variant={forsideVarsel.alertType === EAlertType.INFO ? 'info' : 'warning'}
-            >
-              <Markdown source={forsideVarsel.melding} />
-            </Alert>
+            <InfoCard data-color={forsideVarsel.alertType === EAlertType.INFO ? 'info' : 'warning'}>
+              <InfoCard.Message
+                icon={
+                  forsideVarsel.alertType === EAlertType.INFO ? (
+                    <InformationSquareIcon aria-hidden />
+                  ) : (
+                    <ExclamationmarkTriangleIcon aria-hidden />
+                  )
+                }
+              >
+                <Markdown source={forsideVarsel.melding} />
+              </InfoCard.Message>
+            </InfoCard>
           </div>
         )}
 

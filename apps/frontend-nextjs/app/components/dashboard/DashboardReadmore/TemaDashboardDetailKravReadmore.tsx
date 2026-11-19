@@ -1,4 +1,8 @@
 import { Link, List, ReadMore } from '@navikt/ds-react'
+import {
+  hvordanDokumentereEtterlevelseUrl,
+  omStotteTilEtterlevelseDetteInneholderEtEtterlevelseKravUrl,
+} from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 
 export const TemaDashboardDetailKravReadmore = () => (
   <div style={{ maxWidth: '75ch' }}>
@@ -21,10 +25,7 @@ export const TemaDashboardDetailKravReadmore = () => (
           Hvert etterlevelseskrav består av ett eller flere suksesskriterier. Suksesskriterier er
           aktive handlinger som viser hva etterleveren konkret må gjøre for å etterleve kravet.
           Hvorvidt man etterlever kravet beskrives på suksesskriteriumsnivået.{' '}
-          <Link
-            href={'/omstottetiletterlevelse#dette-inneholder-et-etterlevelseskrav'}
-            target='_blank'
-          >
+          <Link href={omStotteTilEtterlevelseDetteInneholderEtEtterlevelseKravUrl} target='_blank'>
             Les mer om etterlevelseskrav og suksesskriterier (åpner i en ny fane).
           </Link>
         </List.Item>
@@ -48,11 +49,7 @@ export const TemaDashboardDetailKravReadmore = () => (
         </List.Item>
       </List>
 
-      <Link
-        className='mt-4'
-        href={'/omstottetiletterlevelse#hvordan-dokumentere-etterlevelse'}
-        target='_blank'
-      >
+      <Link className='mt-4' href={hvordanDokumentereEtterlevelseUrl} target='_blank'>
         Les mer om dokumentering av etterlevelse (åpner i en ny fane)
       </Link>
     </ReadMore>

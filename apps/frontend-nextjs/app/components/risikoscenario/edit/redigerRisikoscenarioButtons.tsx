@@ -44,11 +44,16 @@ const RedigerRisikoscenarioButtons: FunctionComponent<TProps> = ({
       }
     })
   }
+  const ferdigBeskrevet: boolean =
+    risikoscenario.konsekvensNivaa !== 0 &&
+    risikoscenario.sannsynlighetsNivaa !== 0 &&
+    risikoscenario.konsekvensNivaaBegrunnelse !== '' &&
+    risikoscenario.sannsynlighetsNivaaBegrunnelse !== ''
 
   return (
     <div className='mt-5'>
       <Button
-        variant='tertiary'
+        variant={ferdigBeskrevet ? 'tertiary' : 'primary'}
         type='button'
         icon={<PencilIcon aria-hidden />}
         onClick={async () => await activateFormButton(() => setIsEditModalOpen(true))}

@@ -280,7 +280,11 @@ const BehandlingensLivslopPage = () => {
 
                             {savedSuccessful && !dirty && (
                               <div className='mt-5'>
-                                <LocalAlert status='success'>
+                                <LocalAlert
+                                  status='success'
+                                  role='region'
+                                  aria-label='Lagringsstatus'
+                                >
                                   <LocalAlert.Header>
                                     <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                                     <LocalAlert.CloseButton
@@ -290,6 +294,10 @@ const BehandlingensLivslopPage = () => {
                                 </LocalAlert>
                               </div>
                             )}
+
+                            <div role='status' aria-atomic='true' className='sr-only'>
+                              {savedSuccessful && !dirty && 'Lagring vellykket'}
+                            </div>
 
                             {!isSubmitting && (
                               <div className='flex gap-2 mt-5 lg:flex-row flex-col'>

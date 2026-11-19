@@ -4,7 +4,7 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Requires Node 22.22+
+## Requires Node 26.7+
 
 ### Install dependencies
 

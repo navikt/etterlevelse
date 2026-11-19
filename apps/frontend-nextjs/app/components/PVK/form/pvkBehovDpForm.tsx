@@ -345,7 +345,12 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                 )}
 
               {savedAlert && !dirty && (
-                <LocalAlert className='mt-5' status='success'>
+                <LocalAlert
+                  className='mt-5'
+                  status='success'
+                  role='region'
+                  aria-label='Lagringsstatus'
+                >
                   <LocalAlert.Header>
                     <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                     <LocalAlert.CloseButton onClick={() => setSavedAlert(false)} />
@@ -353,8 +358,17 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                 </LocalAlert>
               )}
 
+              <div role='status' aria-atomic='true' className='sr-only'>
+                {savedAlert && !dirty && 'Lagring vellykket'}
+              </div>
+
               {errorAlert && (
-                <LocalAlert className='mt-5' status='error'>
+                <LocalAlert
+                  className='mt-5'
+                  status='error'
+                  role='region'
+                  aria-label='Feil ved lagring'
+                >
                   <LocalAlert.Header>
                     <LocalAlert.Title>
                       Kan ikke oppdatere vurderingen fordi personvernkonsekvensevurderingen pågår.
@@ -363,6 +377,11 @@ const PvkBehovForm: FunctionComponent<TProps> = ({
                   </LocalAlert.Header>
                 </LocalAlert>
               )}
+
+              <div role='alert' aria-atomic='true' className='sr-only'>
+                {errorAlert &&
+                  'Kan ikke oppdatere vurderingen fordi personvernkonsekvensvurderingen pågår.'}
+              </div>
 
               <div className='flex items-center mt-5 gap-2'>
                 <Button

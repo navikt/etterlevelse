@@ -42,7 +42,7 @@ const UnsavedModalAlert: FunctionComponent<TProps> = ({
                 setIsOpen(false)
               }}
             >
-              Lagre og fortsette
+              Lagre og fortsett
             </Button>
             <Button
               type='button'

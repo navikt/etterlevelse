@@ -10,6 +10,17 @@ import {
 } from '../teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { IEtterlevelse } from './etterlevelse/etterlevelseConstants'
 
+export const tjenestelinjeId = 'ry630r'
+
+export const avdelingerUtenSeksjoner = [
+  'vu258m',
+  'vu140n',
+  'ga846n',
+  'arbeids_og_velferdsdirektor',
+  'internrevisjon',
+  'sekretariatet',
+]
+
 export interface IEtterlevelseDokumentasjon {
   id: string
   changeStamp: IChangeStamp
@@ -129,10 +140,12 @@ export interface INomEnhet {
 export interface INomOrganisering {
   nomAvdelingId?: string
   avdelingNavn?: string
+  forEtterlevelseILinje?: boolean
   seksjoner: INomSeksjon[]
   enheter: INomEnhet[]
   linjer: INomEnhet[]
   linjeEnheter: INomEnhet[]
+  lokalEnheter: INomEnhet[]
   linjeFylker: INomEnhet[]
   fylkeKontorer: INomEnhet[]
 }

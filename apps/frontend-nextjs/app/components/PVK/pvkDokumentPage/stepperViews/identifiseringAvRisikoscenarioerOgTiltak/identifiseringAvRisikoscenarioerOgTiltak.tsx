@@ -111,24 +111,22 @@ const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
           pvkDokument.status !== EPvkDokumentStatus.GODKJENT_AV_RISIKOEIER &&
           (user.isAdmin() || etterlevelseDokumentasjon.hasCurrentUserAccess) && (
             <div className='w-full'>
-              {risikoscenarioList.length !== 0 && (
-                <div className='my-5'>
-                  <RisikoscenarioAccordianList
-                    risikoscenarioList={risikoscenarioList}
-                    allRisikoscenarioList={allRisikoscenarioList}
-                    setAllRisikoscenarioList={setAllRisikoscenarioList}
-                    tiltakList={tiltakList}
-                    etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
-                    setTiltakList={setTiltakList}
-                    setRisikoscenarioList={setRisikoscenarioList}
-                    setIsTiltakFormActive={setIsTiltakFormActive}
-                    isIngenTilgangFormDirty={isIngenTilgangFormDirty}
-                    setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
-                    formRef={formRef}
-                    isCreateModalOpen={isCreateModalOpen}
-                  />
-                </div>
-              )}
+              <div className='my-5'>
+                <RisikoscenarioAccordianList
+                  risikoscenarioList={risikoscenarioList}
+                  allRisikoscenarioList={allRisikoscenarioList}
+                  setAllRisikoscenarioList={setAllRisikoscenarioList}
+                  tiltakList={tiltakList}
+                  etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
+                  setTiltakList={setTiltakList}
+                  setRisikoscenarioList={setRisikoscenarioList}
+                  setIsTiltakFormActive={setIsTiltakFormActive}
+                  isIngenTilgangFormDirty={isIngenTilgangFormDirty}
+                  setIsIngenTilgangFormDirty={setIsIngenTilgangFormDirty}
+                  formRef={formRef}
+                  isCreateModalOpen={isCreateModalOpen}
+                />
+              </div>
 
               {!isTiltakFormActive && (
                 <CreateRisikoscenarioModal

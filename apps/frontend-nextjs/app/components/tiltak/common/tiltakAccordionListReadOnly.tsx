@@ -39,7 +39,9 @@ const TiltakAccordionListReadOnly = (props: IProps) => {
                 {!tiltak.ansvarlig.navIdent && !tiltak.ansvarligTeam.name && (
                   <Tag variant='alt2'>Tiltaksansvarlig savnes</Tag>
                 )}
-                {!tiltak.frist && <Tag variant='alt2'>Tiltaksfrist savnes</Tag>}
+                {!tiltak.iverksatt && !tiltak.frist && (
+                  <Tag variant='alt2'>Tiltaksfrist savnes</Tag>
+                )}
               </div>
             </Accordion.Header>
             <Accordion.Content>

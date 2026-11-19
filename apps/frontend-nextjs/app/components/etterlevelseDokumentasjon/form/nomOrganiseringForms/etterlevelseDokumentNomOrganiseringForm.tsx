@@ -1,5 +1,4 @@
-import { InformationSquareIcon } from '@navikt/aksel-icons'
-import { Heading, InfoCard } from '@navikt/ds-react'
+import { Radio, RadioGroup, Stack } from '@navikt/ds-react'
 import { Field, FieldProps, getIn } from 'formik'
 import { FunctionComponent, useEffect, useState } from 'react'
 import {
@@ -77,7 +76,7 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
           <Field name='nomOrganisering.nomAvdelingId'>
             {(fieldProps: FieldProps) => (
               <div>
-                <LabelWithDescription label='Angi hvilken avdeling i direktoratet som er ansvarlig for etterlevelsen' />
+                <LabelWithDescription label='Angi hvilken avdeling som er ansvarlig for etterlevelsen' />
                 <OptionList
                   label='Avdeling'
                   options={alleAvdelingOptions}
@@ -88,6 +87,11 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
                     if (value !== fieldProps.form.values.nomOrganisering.nomAvdelingId) {
                       await fieldProps.form.setFieldValue('nomOrganisering.seksjoner', [])
                       await fieldProps.form.setFieldValue('nomOrganisering.enheter', [])
+                      await fieldProps.form.setFieldValue('nomOrganisering.linjer', [])
+                      await fieldProps.form.setFieldValue('nomOrganisering.linjeEnheter', [])
+                      await fieldProps.form.setFieldValue('nomOrganisering.lokalEnheter', [])
+                      await fieldProps.form.setFieldValue('nomOrganisering.linjeFylker', [])
+                      await fieldProps.form.setFieldValue('nomOrganisering.fylkeKontorer', [])
                       setEnheterBySeksjon(new Map())
                     }
 
@@ -113,34 +117,60 @@ const EtterlevelseDokumentNomOrganiseringForm: FunctionComponent<TProps> = ({
 
       {selectedAvdeling !== '' && selectedAvdeling !== undefined && (
         <div>
-          <InfoCard data-color='info' className='max-w-155.5 w-full'>
-            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
-              Dere må velge minst én av direktoratet eller linje, men kan velge begge deler.
-            </InfoCard.Message>
-          </InfoCard>
+          <FieldWrapper id='forEtterlevelseILinje'>
+            <Field name='nomOrganisering.forEtterlevelseILinje'>
+              {(fieldProps: FieldProps) => (
+                <div className='my-5'>
+                  <RadioGroup
+                    legend='Hvem har ansvar for etterlevelsen?'
+                    value={fieldProps.field.value}
+                    onChange={(value) => {
+                      fieldProps.form.setFieldValue('nomOrganisering.forEtterlevelseILinje', value)
+                    }}
+                    error={
+                      getIn(fieldProps.form.errors, 'nomOrganisering.forEtterlevelseILinje') && (
+                        <FormError fieldName='nomOrganisering.forEtterlevelseILinje' />
+                      )
+                    }
+                  >
+                    <Stack
+                      gap='space-0 space-24'
+                      direction={{
+                        xs: 'column',
+                        sm: 'row',
+                      }}
+                      wrap={false}
+                    >
+                      <Radio value={false}>Direktoratet</Radio>
+                      <Radio value={true}>Linje</Radio>
+                    </Stack>
+                  </RadioGroup>
+                </div>
+              )}
+            </Field>
+          </FieldWrapper>
 
-          <Heading level='3' size='xsmall' className='mt-5 mb-3'>
-            Velg ansvar for etterlevelsen i direktoratet
-          </Heading>
+          {formValues.nomOrganisering.forEtterlevelseILinje === false && (
+            <div>
+              <EtterlevelseDokumentSeksjonForm
+                seksjonerByAvdeling={seksjonerByAvdeling}
+                selectedAvdeling={selectedAvdeling}
+                enheterBySeksjon={enheterBySeksjon}
+                setEnheterBySeksjon={setEnheterBySeksjon}
+              />
 
-          <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-            <EtterlevelseDokumentSeksjonForm
-              seksjonerByAvdeling={seksjonerByAvdeling}
-              selectedAvdeling={selectedAvdeling}
-              enheterBySeksjon={enheterBySeksjon}
-              setEnheterBySeksjon={setEnheterBySeksjon}
-            />
+              <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
+            </div>
+          )}
 
-            <EtterlevelseDokumentEnheterForm enheterBySeksjon={enheterBySeksjon} />
-          </div>
-
-          <Heading level='3' size='xsmall' className='mt-7 mb-3'>
-            Velg ansvar for etterlevelsen i linjen
-          </Heading>
-
-          <div className='border-l-[6px] border-l-[#D9D9D9] pl-6.5'>
-            <EtterlevelseDokumentLinjeForm formValues={formValues} />
-          </div>
+          {formValues.nomOrganisering.forEtterlevelseILinje === true && (
+            <div>
+              <EtterlevelseDokumentLinjeForm
+                etterlevelseDokumentasjon={etterlevelseDokumentasjon}
+                formValues={formValues}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

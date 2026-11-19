@@ -6,7 +6,7 @@ import {
   type TConsentValue,
   getConsentPreference,
   saveConsentPreference,
-} from './umami'
+} from './innblikk'
 
 const subscribe = (listener: () => void) => {
   if (typeof window === 'undefined') {

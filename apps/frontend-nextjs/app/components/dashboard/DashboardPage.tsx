@@ -18,6 +18,7 @@ import { DashboardOverviewCard } from '@/components/dashboard/DashboardOverviewC
 import { DashboardReadMore } from '@/components/dashboard/DashboardReadmore/DashboardReadMore'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
 import { IAvdelingDashboardStats } from '@/constants/dashboard/dashboardConstants'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { CenteredLoader } from '../common/centeredLoader/centeredLoader'
 
 const DashboardPage = () => {
@@ -64,7 +65,7 @@ const DashboardPage = () => {
         </List>
         <p className='mt-4'>
           For mer detaljer anbefaler vi informasjonssidene{' '}
-          <Link href='/omstottetiletterlevelse' target='_blank'>
+          <Link href={omStotteTilEtterlevelseUrl} target='_blank'>
             Om Støtte til etterlevelse
           </Link>
           ,{' '}

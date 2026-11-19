@@ -257,6 +257,7 @@ const PvkDokumentReadOnlyPage = () => {
                     setSelectedStep={setSelectedStep}
                     updateTitleUrlAndStep={updateTitleUrlAndStep}
                     pvkKrav={pvkKrav}
+                    isReadOnly={true}
                   />
                 )}
                 {activeStep === 2 && (

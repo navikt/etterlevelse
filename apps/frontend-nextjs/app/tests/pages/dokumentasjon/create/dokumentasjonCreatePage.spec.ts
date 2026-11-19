@@ -1,4 +1,5 @@
 import test, { expect } from '@playwright/test'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -79,9 +80,11 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await expect(page.getByRole('button', { name: 'Nytt etterlevelsesdokument' })).toBeVisible()
     await page.getByRole('button', { name: 'Nytt etterlevelsesdokument' }).click()
 
+    // The dev server may compile the create route on first navigation
+    await expect(page).toHaveURL(/\/dokumentasjon\/create$/, { timeout: 15000 })
     await expect(
       page.getByRole('heading', { name: 'Opprett nytt etterlevelsesdokument' })
-    ).toBeVisible()
+    ).toBeVisible({ timeout: 15000 })
   })
 
   test('fylle ut miniumskriteriene for «Opprett nytt etterlevelsesdokument» skjemaet og deretter opprette det', async ({
@@ -98,7 +101,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
               {
                 list: 'RELEVANS',
                 code: 'BEHANDLER_PERSONOPPLYSNINGER',
-                shortName: 'Behandler personopplysninger',
+                shortName: EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER,
                 description: 'Etterlevelsen behandler personopplysninger',
               },
             ],
@@ -149,6 +152,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
           nomAvdelingId: oppretteEtterlevelsesdokument.departmentId,
           avdelingNavn: oppretteEtterlevelsesdokument.departmentName,
           seksjoner: [{ nomSeksjonId: 'seksjon-1', nomSeksjonName: 'Seksjon 1' }],
+          forEtterlevelseILinje: false,
         },
         resources: [mockIdent],
         varslingsadresser: [{ type: 'EPOST', adresse: oppretteEtterlevelsesdokument.email }],
@@ -161,7 +165,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
     const titleField = page.getByLabel('Navngi det nye dokumentet ditt')
     const relevanceCheckbox = page.getByRole('checkbox', {
-      name: 'Behandler personopplysninger',
+      name: EEtterlevelseDokumentFormConstants.BEHANDLER_PERSONOPPLYSNINGER,
     })
 
     await expect(relevanceCheckbox).toBeVisible()
@@ -180,9 +184,16 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByRole('button', { name: 'Legg til epost' }).click()
     await page.getByRole('button', { name: 'Legg til Epost', exact: true }).click()
     await page.getByLabel('Avdeling').selectOption(oppretteEtterlevelsesdokument.departmentId)
-    await page.getByLabel('Seksjon').selectOption('seksjon-1')
 
     await expect(titleField).toHaveValue(oppretteEtterlevelsesdokument.title)
+
+    const lineCompliance = page.getByRole('radiogroup', {
+      name: 'Hvem har ansvar for etterlevelsen?',
+    })
+    await expect(
+      lineCompliance.getByRole('radio', { name: 'Direktoratet', exact: true })
+    ).toBeChecked()
+    await page.getByRole('combobox', { name: 'Seksjon', exact: true }).selectOption('seksjon-1')
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()
 
     await expect(page).toHaveURL(

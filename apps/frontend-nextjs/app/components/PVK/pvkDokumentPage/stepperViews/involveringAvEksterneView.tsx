@@ -331,7 +331,7 @@ const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
 
                         {savedSuccessful && !dirty && (
                           <div className='mt-5'>
-                            <LocalAlert status='success'>
+                            <LocalAlert status='success' role='region' aria-label='Lagringsstatus'>
                               <LocalAlert.Header>
                                 <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
                                 <LocalAlert.CloseButton onClick={() => setSavedSuccessful(false)} />
@@ -339,6 +339,10 @@ const InvolveringAvEksterneView: FunctionComponent<TProps> = ({
                             </LocalAlert>
                           </div>
                         )}
+
+                        <div role='status' aria-atomic='true' className='sr-only'>
+                          {savedSuccessful && !dirty && 'Lagring vellykket'}
+                        </div>
 
                         <div className='flex gap-2 mt-5'>
                           <Button

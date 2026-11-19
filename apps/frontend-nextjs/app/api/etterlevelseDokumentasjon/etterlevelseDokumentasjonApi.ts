@@ -191,8 +191,11 @@ export const etterlevelseDokumentasjonMapToFormVal = (
     avdelingNavn: etterlevelseDokumentasjon.nomOrganisering?.avdelingNavn || '',
     seksjoner: etterlevelseDokumentasjon.nomOrganisering?.seksjoner || [],
     enheter: etterlevelseDokumentasjon.nomOrganisering?.enheter || [],
+    forEtterlevelseILinje:
+      etterlevelseDokumentasjon.nomOrganisering?.forEtterlevelseILinje ?? false,
     linjer: etterlevelseDokumentasjon.nomOrganisering?.linjer || [],
     linjeEnheter: etterlevelseDokumentasjon.nomOrganisering?.linjeEnheter || [],
+    lokalEnheter: etterlevelseDokumentasjon.nomOrganisering?.lokalEnheter || [],
     linjeFylker: etterlevelseDokumentasjon.nomOrganisering?.linjeFylker || [],
     fylkeKontorer: etterlevelseDokumentasjon.nomOrganisering?.fylkeKontorer || [],
   },

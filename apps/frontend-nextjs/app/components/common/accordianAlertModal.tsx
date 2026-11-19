@@ -49,7 +49,7 @@ const AccordianAlertModal: FunctionComponent<TProps> = ({
             }
           }}
         >
-          Lagre og fortsette
+          Lagre og fortsett
         </Button>
         <Button
           type='button'

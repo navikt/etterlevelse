@@ -26,6 +26,7 @@ export const mockNomOrganisering: INomOrganisering = {
   enheter: [],
   linjer: [],
   linjeEnheter: [],
+  lokalEnheter: [],
   linjeFylker: [],
   fylkeKontorer: [],
 }

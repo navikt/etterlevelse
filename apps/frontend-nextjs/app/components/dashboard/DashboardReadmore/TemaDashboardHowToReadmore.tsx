@@ -1,4 +1,5 @@
 import { Link, List, ReadMore } from '@navikt/ds-react'
+import { omStotteTilEtterlevelseUrl } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 
 export const TemaDashboardHowToReadmore = () => (
   <div style={{ maxWidth: '75ch' }}>
@@ -17,7 +18,7 @@ export const TemaDashboardHowToReadmore = () => (
       </List>
       <p className='mt-4'>
         For mer detaljer anbefaler vi informasjonssidene{' '}
-        <Link href='/omstottetiletterlevelse' target='_blank'>
+        <Link href={omStotteTilEtterlevelseUrl} target='_blank'>
           Om Støtte til etterlevelse
         </Link>
         ,{' '}

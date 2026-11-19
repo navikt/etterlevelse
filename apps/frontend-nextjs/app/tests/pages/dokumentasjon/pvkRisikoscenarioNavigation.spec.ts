@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { mockIdent } from '@/tests/utils/roller'
 
@@ -94,6 +95,7 @@ test.beforeEach(async ({ context }) => {
           enheter: [],
           linjer: [],
           linjeEnheter: [],
+          lokalEnheter: [],
           linjeFylker: [],
           fylkeKontorer: [],
         },
@@ -176,11 +178,12 @@ test('lar risikoscenarioene være lukket når lenken bare har et filter', async 
 })
 
 test('valideringsfeil lenker til hvert enkelt risikoscenario', async ({ page, context }) => {
-  await page.goto(`${baseUrl}?steg=8`)
-  await page.getByRole('button', { name: 'Lagre og send til risikoeier' }).click()
+  await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
+  const sendButton = page.getByRole('button', { name: 'Lagre og send til risikoeier' })
+  await sendButton.click()
 
   const errorSummary = page.getByRole('heading', {
-    name: 'Du må rette disse feilene før du kan fortsette',
+    name: EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING,
   })
   await expect(errorSummary).toBeVisible()
 

@@ -44,7 +44,11 @@ type TProps = {
   setIsIngenTilgangFormDirty: (state: boolean) => void
   formRef: RefObject<any>
   isCreateModalOpen: boolean
-  onMovedToKrav?: (payload: { risikoscenarioName: string; kravRefs: IKravReference[] }) => void
+  onMovedToKrav?: (payload: {
+    risikoscenarioName: string
+    risikoscenarioId: string
+    kravRefs: IKravReference[]
+  }) => void
 }
 
 const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
@@ -99,8 +103,13 @@ const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
       (hydrated.relevanteKravNummer || []).length > 0
     ) {
       const storageKey = `pvk:moved-risikoscenario:${etterlevelseDokumentasjonId}`
-      const payload: { risikoscenarioName: string; kravRefs: IKravReference[] } = {
+      const payload: {
+        risikoscenarioName: string
+        risikoscenarioId: string
+        kravRefs: IKravReference[]
+      } = {
         risikoscenarioName: hydrated.navn || 'Risikoscenario',
+        risikoscenarioId: hydrated.id || '',
         kravRefs: hydrated.relevanteKravNummer || [],
       }
       window.sessionStorage.setItem(storageKey, JSON.stringify(payload))
@@ -386,13 +395,16 @@ const RisikoscenarioAccordionContent: FunctionComponent<TProps> = ({
           )}
 
         {submitSuccess && !isIngenTilgangFormDirty && (
-          <LocalAlert className='mt-3' status='success'>
+          <LocalAlert className='mt-3' status='success' role='region' aria-label='Lagringsstatus'>
             <LocalAlert.Header>
               <LocalAlert.Title>Lagring vellykket</LocalAlert.Title>
               <LocalAlert.CloseButton onClick={() => setSubmitSuccess(false)} />
             </LocalAlert.Header>
           </LocalAlert>
         )}
+        <div role='status' aria-atomic='true' className='sr-only'>
+          {submitSuccess && !isIngenTilgangFormDirty && 'Lagring vellykket'}
+        </div>
       </div>
 
       {isEditModalOpen && (
