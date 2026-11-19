@@ -255,7 +255,7 @@ export const EtterlevelseKravView: FunctionComponent<TProps> = ({
                 <div className='flex justify-between lg:flex-row flex-col'>
                   <div>
                     {krav.aktivertDato !== null && krav.kravVersjon > 1 && (
-                      <Tag variant='warning'>
+                      <Tag className='mb-2' variant='warning'>
                         Ny versjon {moment(krav.aktivertDato).format('LL')}
                       </Tag>
                     )}
