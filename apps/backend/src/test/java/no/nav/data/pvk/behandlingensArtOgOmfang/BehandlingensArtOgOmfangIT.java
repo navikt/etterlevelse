@@ -69,6 +69,7 @@ public class BehandlingensArtOgOmfangIT extends IntegrationTestBase {
                 .id(artOgOmfang.getId())
                 .etterlevelseDokumentasjonId(artOgOmfang.getEtterlevelseDokumentasjonId())
                 .stemmerPersonkategorier(false)
+                .version(artOgOmfang.getVersion())
                 .build();
         var resp = restTemplate.exchange("/behandlingens-art-og-omfang/{id}", HttpMethod.PUT, new HttpEntity<>(request), BehandlingensArtOgOmfangResponse.class, request.getId());
 

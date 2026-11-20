@@ -82,6 +82,7 @@ public class ArdoqImportService {
                             .varslingsadresser(etterlevelseDokument.getEtterlevelseDokumentasjonData().getVarslingsadresser())
                             .etterlevelseDokumentVersjon(etterlevelseDokument.getEtterlevelseDokumentasjonData().getEtterlevelseDokumentVersjon())
                             .versjonHistorikk(etterlevelseDokument.getEtterlevelseDokumentasjonData().getVersjonHistorikk())
+                            .version(etterlevelseDokument.getVersion())
                             .build();
                     etterlevelseDokumentasjonService.save(newRequest);
                     count.addAndGet(newSystemIds.size());

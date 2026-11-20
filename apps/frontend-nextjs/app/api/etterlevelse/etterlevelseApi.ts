@@ -1,6 +1,8 @@
 'use client'
 
 import axios from 'axios'
+import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
+
 import { useEffect, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
@@ -37,9 +39,11 @@ export const getEtterlevelserByEtterlevelseDokumentasjonIdKravNumber = async (
   ).data
 }
 
-export const deleteEtterlevelse = async (id: string, reason: string) => {
+export const deleteEtterlevelse = async (id: string, reason: string, version?: number) => {
   return (
-    await axios.delete<IEtterlevelse>(`${env.backendBaseUrl}/etterlevelse/${id}?comment=${reason}`)
+    await axios.delete<IEtterlevelse>(
+      `${env.backendBaseUrl}/etterlevelse/${id}?comment=${reason}${versionParam(version)}`
+    )
   ).data
 }
 
@@ -81,7 +85,6 @@ function etterlevelseToEtterlevelseDto(etterlevelse: IEtterlevelse) {
     ...etterlevelse,
   } as any
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 
@@ -120,7 +123,7 @@ export const mapEtterlevelseToFormValue = (
     kravVersjon: etterlevelse.kravVersjon || 0,
     changeStamp: etterlevelse.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
     suksesskriterieBegrunnelser: suksesskriterieBegrunnelser,
-    version: -1,
+    version: etterlevelse.version ?? -1,
     etterleves: etterlevelse.etterleves || false,
     statusBegrunnelse: etterlevelse.statusBegrunnelse || '',
     dokumentasjon: etterlevelse.dokumentasjon || [],

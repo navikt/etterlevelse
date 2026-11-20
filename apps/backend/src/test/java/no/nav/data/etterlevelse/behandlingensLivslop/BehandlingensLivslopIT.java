@@ -92,6 +92,7 @@ public class BehandlingensLivslopIT extends IntegrationTestBase {
                 .etterlevelseDokumentasjonId(behandlingensLivslop.getEtterlevelseDokumentasjonId())
                 .filer(List.of())
                 .beskrivelse("test updated")
+                .version(behandlingensLivslop.getVersion())
                 .build();
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);

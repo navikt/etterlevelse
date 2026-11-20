@@ -104,6 +104,7 @@ const CodeListTable = ({ tableData, refresh }: TTableCodelistProps) => {
       code: selectedCode.code ?? '',
       shortName: selectedCode.shortName ?? '',
       description: selectedCode.description ?? '',
+      version: selectedCode.version,
     }
 
     if (selectedCode.data && (list === EListName.LOV || list === EListName.TEMA)) {

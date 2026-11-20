@@ -27,7 +27,9 @@ public interface GenericStorageRepository<T extends DomainObject> extends JpaRep
 
     void deleteByIdAndType(UUID id, String type);
 
+    @Deprecated // FIXME: Ikke i bruk, fjern
     @Modifying
     @Query("delete from GenericStorage where id in ?1")
     void deleteAll(List<UUID> uuids);
+
 }

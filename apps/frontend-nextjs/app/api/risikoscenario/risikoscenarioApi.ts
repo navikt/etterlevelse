@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
+
 import { useEffect, useRef, useState } from 'react'
 import { IPageResponse } from '@/constants/commonConstants'
 import { IPvkDokument } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
@@ -133,10 +135,13 @@ export const updateKravForRisikoscenarioer = async (
     )
   ).data
 
-export const deleteRisikoscenario = async (id: string): Promise<IRisikoscenario> =>
+export const deleteRisikoscenario = async (
+  id: string,
+  version?: number
+): Promise<IRisikoscenario> =>
   (
     await axios.delete<IRisikoscenario>(
-      `${env.backendBaseUrl}/risikoscenario/${id}?comment=slettet av bruker`
+      `${env.backendBaseUrl}/risikoscenario/${id}?comment=slettet av bruker${versionParam(version)}`
     )
   ).data
 
@@ -204,7 +209,6 @@ const risikoscenarioToRisikoscenarioDto = (risikoscenario: IRisikoscenario) => {
     ...risikoscenario,
   } as any
   delete dto.changeStamp
-  delete dto.version
   delete dto.tiltakIds
   delete dto.relevanteKravNummer
   return dto
@@ -216,7 +220,7 @@ export const mapRisikoscenarioToFormValue = (
   return {
     id: risikoscenario.id || '',
     changeStamp: risikoscenario.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: risikoscenario.version ?? -1,
     pvkDokumentId: risikoscenario.pvkDokumentId || '',
     navn: risikoscenario.navn || '',
     beskrivelse: risikoscenario.beskrivelse || '',

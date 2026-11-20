@@ -141,7 +141,7 @@ class TilbakemeldingIT extends IntegrationTestBase {
                                 .build()))
                         .build())
                 .build();
-        return kravService.save(krav);
+        return kravRepo.save(krav);
     }
 
     private void assertSlackMessageScheduled(String title, String mottager) {

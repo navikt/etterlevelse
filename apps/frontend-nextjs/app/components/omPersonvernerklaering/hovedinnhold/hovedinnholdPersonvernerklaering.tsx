@@ -8,6 +8,7 @@ import {
 } from '@/constants/omPersonvernerklaering/omPersonvernerklaeringConstants'
 import { TConsentValue } from '@/util/analytics/innblikk'
 import { useConsent } from '@/util/analytics/useConsent'
+import { datajegerSlackLink } from '@/util/footer/footerUtil'
 
 const HovedinnholdPersonerklaering = () => {
   const { consent, setConsent } = useConsent()
@@ -183,7 +184,12 @@ const HovedinnholdPersonerklaering = () => {
           med Team Datajegerne:
         </BodyLong>
         <List className='mb-6'>
-          <List.Item>Bli med på #etterlevelse på Slack</List.Item>
+          <List.Item>
+            Bli med på{' '}
+            <ExternalLink href={datajegerSlackLink} noNewTabLabel>
+              #etterlevelse på Slack
+            </ExternalLink>
+          </List.Item>
           <List.Item>Send mail til: teamdatajegerne@nav.no</List.Item>
         </List>
       </div>

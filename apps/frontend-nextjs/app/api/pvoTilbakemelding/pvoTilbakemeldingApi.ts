@@ -143,7 +143,6 @@ const pvoTilbakemeldingToPvoTilbakemeldingDto = (pvoTilbakemelding: IPvoTilbakem
   } as any
   delete dto.ansvarligData
   delete dto.changeStamp
-  delete dto.version
   return dto
 }
 
@@ -237,7 +236,7 @@ export const mapPvoTilbakemeldingToFormValue = (
   return {
     id: pvoTilbakemelding.id || '',
     changeStamp: pvoTilbakemelding.changeStamp || { lastModifiedDate: '', lastModifiedBy: '' },
-    version: -1,
+    version: pvoTilbakemelding.version ?? -1,
     pvkDokumentId: pvoTilbakemelding.pvkDokumentId || '',
     status: pvoTilbakemelding.status || EPvoTilbakemeldingStatus.IKKE_PABEGYNT,
     vurderinger: pvoTilbakemelding.vurderinger

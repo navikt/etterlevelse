@@ -1,5 +1,6 @@
 package no.nav.data.pvk.tiltak;
 
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
@@ -62,7 +63,16 @@ public class TiltakService {
 
     @Transactional
     public Tiltak delete(UUID id) {
+        return delete(id, null);
+    }
+
+    /**
+     * @param version versjonen klienten sist leste. Sjekkes hvis oppgitt.
+     */
+    @Transactional
+    public Tiltak delete(UUID id, Integer version) {
         Optional<Tiltak> tiltak = repo.findById(id);
+        tiltak.ifPresent(t -> OptimisticLockUtil.checkVersionIfPresent(Tiltak.class, id, t.getVersion(), version));
         repo.deleteById(id);
         return tiltak.orElse(null);
     }
@@ -76,7 +86,8 @@ public class TiltakService {
         if (!relation.isEmpty()) {
             throw new DataIntegrityViolationException("Tiltak with id " + tiltakId + " is already related to Risikoscenario with id " + risikoscenarioId);
         }
-        repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
+        int inserted = repo.insertTiltakRisikoscenarioRelation(risikoscenarioId, tiltakId, LocalDateTime.now());
+        OptimisticLockUtil.checkRowCount(Tiltak.class, tiltakId, 1, inserted);
     }
 
     public List<Tiltak> getByPvkDokument(UUID pvkDokumentId) {

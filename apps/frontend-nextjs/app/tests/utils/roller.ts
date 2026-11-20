@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { BrowserContext, Page } from '@playwright/test'
 
 export const mockIdent = 'Z123456'
 
@@ -10,7 +10,7 @@ const mockUser = {
   groups: ['ADMIN', 'WRITE', 'READ'],
 }
 
-export const mockAdmin = async (page: Page) => {
+export const mockAdmin = async (page: Page | BrowserContext) => {
   await page.route('**/userinfo', async (route) => {
     await route.fulfill({
       contentType: 'application/json',
@@ -21,7 +21,7 @@ export const mockAdmin = async (page: Page) => {
   })
 }
 
-export const mockKraveier = async (page: Page) => {
+export const mockKraveier = async (page: Page | BrowserContext) => {
   await page.route('**/userinfo', async (route) => {
     await route.fulfill({
       contentType: 'application/json',
@@ -33,7 +33,7 @@ export const mockKraveier = async (page: Page) => {
   })
 }
 
-export const mockRead = async (page: Page) => {
+export const mockRead = async (page: Page | BrowserContext) => {
   await page.route('**/userinfo', async (route) => {
     await route.fulfill({
       contentType: 'application/json',
@@ -45,7 +45,7 @@ export const mockRead = async (page: Page) => {
   })
 }
 
-export const mockWrite = async (page: Page) => {
+export const mockWrite = async (page: Page | BrowserContext) => {
   await page.route('**/userinfo', async (route) => {
     await route.fulfill({
       contentType: 'application/json',
@@ -57,7 +57,7 @@ export const mockWrite = async (page: Page) => {
   })
 }
 
-export const mockPersonvernombud = async (page: Page) => {
+export const mockPersonvernombud = async (page: Page | BrowserContext) => {
   await page.route('**/userinfo', async (route) => {
     await route.fulfill({
       contentType: 'application/json',

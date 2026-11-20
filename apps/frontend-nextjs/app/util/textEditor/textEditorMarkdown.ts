@@ -41,3 +41,6 @@ export const markdownToHtml = (markdown: string): string =>
   marked.parse(markdown ?? '', { async: false })
 
 export const htmlToMarkdown = (html: string): string => turndownService.turndown(html)
+
+export const containsMarkdownList = (text: string): boolean =>
+  /^[ \t]*(?:[-*+]|\d+[.)])[ \t]+\S/m.test(text)

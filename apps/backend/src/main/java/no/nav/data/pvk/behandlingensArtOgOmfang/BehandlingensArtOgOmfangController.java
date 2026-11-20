@@ -12,12 +12,9 @@ import no.nav.data.common.exceptions.ValidationException;
 import no.nav.data.common.rest.PageParameters;
 import no.nav.data.common.rest.RestResponsePage;
 import no.nav.data.common.utils.UtcDateTimeUtil;
-import no.nav.data.etterlevelse.etterlevelseDokumentasjon.EtterlevelseDokumentasjonService;
 import no.nav.data.pvk.behandlingensArtOgOmfang.domain.BehandlingensArtOgOmfang;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangRequest;
 import no.nav.data.pvk.behandlingensArtOgOmfang.dto.BehandlingensArtOgOmfangResponse;
-import no.nav.data.pvk.pvkdokument.domain.PvkDokument;
-import no.nav.data.pvk.pvkdokument.dto.PvkDokumentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -42,7 +40,6 @@ import java.util.UUID;
 @Tag(name = "Behandlingens art og omfang", description = "Behandlingens art og omfang for etterlevelsesdokumentasjon")
 public class BehandlingensArtOgOmfangController {
     private final BehandlingensArtOgOmfangService service;
-    private final EtterlevelseDokumentasjonService etterlevelseDokumentasjonService;
 
     @Operation(summary = "Get Behandlingens art og omfang")
     @ApiResponse(description = "ok")
@@ -78,15 +75,11 @@ public class BehandlingensArtOgOmfangController {
     @PostMapping
     public ResponseEntity<BehandlingensArtOgOmfangResponse> createBehandlingensArtOgOmfang(@RequestBody BehandlingensArtOgOmfangRequest request) {
         log.info("Create Behandlingens art og omfang");
-
-        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
-
-        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        if (request.isUpdate()) {
+            throw new ValidationException("Request to create new BehandlingensArtOgOmfang, but request.isUpdate is true");
         }
 
-        var behandlingensArtOgOmfang = service.save(request.convertToBehandlingensArtOgOmfang(), request.isUpdate());
-
+        var behandlingensArtOgOmfang = service.save(request);
         return new ResponseEntity<>(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang), HttpStatus.CREATED);
     }
 
@@ -95,34 +88,23 @@ public class BehandlingensArtOgOmfangController {
     @PutMapping("/{id}")
     public ResponseEntity<BehandlingensArtOgOmfangResponse> updateBehandlingensArtOgOmfang(@PathVariable UUID id, @Valid @RequestBody BehandlingensArtOgOmfangRequest request) {
         log.info("Update Behandlingens art og omfang id={}", id);
-
         if (!Objects.equals(id, request.getId())) {
             throw new ValidationException(String.format("id mismatch in request %s and path %s", request.getId(), id));
         }
-
-        var edok = etterlevelseDokumentasjonService.get(request.getEtterlevelseDokumentasjonId());
-
-        if (!etterlevelseDokumentasjonService.hasUserWriteAccess(edok)) {
-            throw new ValidationException(String.format("User has no write access for this dokument %s", request.getId()));
+        if (!request.isUpdate()) {
+            throw new ValidationException("Request to update existing BehandlingensArtOgOmfang, but request.isUpdate is false");
         }
 
-        var behandlingensArtOgOmfangToUpdate = service.get(id);
-
-        if (behandlingensArtOgOmfangToUpdate == null) {
-            throw new ValidationException(String.format("Could not find Behandlingens art og omfang to be updated with id = %s ", id));
-        }
-
-        request.mergeInto(behandlingensArtOgOmfangToUpdate);
-        var behandlingensArtOgOmfang = service.save(behandlingensArtOgOmfangToUpdate, request.isUpdate());
+        var behandlingensArtOgOmfang = service.save(request);
         return ResponseEntity.ok(BehandlingensArtOgOmfangResponse.buildFrom(behandlingensArtOgOmfang));
     }
 
     @Operation(summary = "Delete Behandlingens art og omfang", parameters = {@Parameter(name = "comment", description = "Reason for deleting the behandlingens art og omfang", required = true, in = ParameterIn.QUERY)})
     @ApiResponse(description = "Behandlingens art og omfang deleted")
     @DeleteMapping("/{id}")
-    public ResponseEntity<BehandlingensArtOgOmfangResponse> deleteBehandlingensArtOgOmfangById(@PathVariable UUID id) {
+    public ResponseEntity<BehandlingensArtOgOmfangResponse> deleteBehandlingensArtOgOmfangById(@PathVariable UUID id, @RequestParam(required = false) Integer version) {
         log.info("Delete Behandlingens art og omfang id={}", id);
-        var behandlingensArtOgOmfang = service.delete(id);
+        var behandlingensArtOgOmfang = service.delete(id, version);
         if (behandlingensArtOgOmfang == null) {
             log.warn("Could not delete Behandlingens art og omfang with id = {}: Non-existing og related to other resources", id);
             throw new ValidationException("Could not delete Behandlingens art og omfang: Non-existing og related to other resources");

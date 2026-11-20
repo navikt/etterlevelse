@@ -46,7 +46,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   }, [pathname])
 
   return (
-    <div className='w-full'>
+    <div className='relative z-[60] w-full'>
       <div className='w-full flex justify-center'>
         <SkipToContent />
         <InternalHeader className='w-full justify-center items-center py-2'>

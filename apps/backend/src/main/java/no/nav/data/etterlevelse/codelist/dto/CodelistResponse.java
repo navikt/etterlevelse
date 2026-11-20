@@ -15,8 +15,8 @@ import tools.jackson.databind.JsonNode;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = "data")
-@JsonPropertyOrder({"list", "code", "shortName", "description", "data"})
+@EqualsAndHashCode(exclude = {"data", "version"})
+@JsonPropertyOrder({"list", "code", "shortName", "description", "data", "version"})
 public class CodelistResponse {
 
     private ListName list;
@@ -24,6 +24,8 @@ public class CodelistResponse {
     private String shortName;
     private String description;
     private JsonNode data;
+    @JsonInclude(Include.NON_NULL)
+    private Integer version;
 
     @Override
     public String toString() {

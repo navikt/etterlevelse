@@ -50,9 +50,15 @@ const TillatGjenbrukModal: FunctionComponent<TProps> = ({
     }
 
     setEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithGjenbrukData)
-    await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithGjenbrukData).catch((e) =>
-      console.debug(e)
-    )
+    await updateEtterlevelseDokumentasjon(etterlevelseDokumentasjonWithGjenbrukData)
+      .then((response) =>
+        // Oppdater med ny versjon fra serveren
+        setEtterlevelseDokumentasjon({
+          ...etterlevelseDokumentasjonWithGjenbrukData,
+          version: response.version,
+        })
+      )
+      .catch((e) => console.debug(e))
     setIsOpen(false)
   }
 

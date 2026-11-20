@@ -2,13 +2,18 @@
 
 import Image from '@tiptap/extension-image'
 import Link from '@tiptap/extension-link'
+import { DOMParser as ProseMirrorDOMParser, Slice } from '@tiptap/pm/model'
 import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { FieldMetaProps, FormikErrors } from 'formik'
 import { useState } from 'react'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import { borderColor, borderRadius, borderStyle, borderWidth } from '@/util/style/Style'
-import { htmlToMarkdown, markdownToHtml } from '@/util/textEditor/textEditorMarkdown'
+import {
+  containsMarkdownList,
+  htmlToMarkdown,
+  markdownToHtml,
+} from '@/util/textEditor/textEditorMarkdown'
 import { ettlevColors } from '@/util/theme/theme'
 import { FormError } from '../modalSchema/formError/formError'
 import { Toolbar } from './Toolbar'
@@ -90,6 +95,16 @@ const TextEditor = ({
           }
         })
         return doc.body.innerHTML
+      },
+      clipboardTextParser: (text, $context, plain, view) => {
+        if (plain || !containsMarkdownList(text)) {
+          return undefined as unknown as Slice
+        }
+        const element = document.createElement('div')
+        element.innerHTML = markdownToHtml(text)
+        return ProseMirrorDOMParser.fromSchema(view.state.schema).parseSlice(element, {
+          context: $context,
+        })
       },
       attributes: {
         role: 'textbox',

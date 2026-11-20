@@ -29,6 +29,8 @@ public class CodelistRequest implements RequestElement {
     private String shortName;
     private String description;
     private JsonNode data;
+    private Boolean update;
+    private Integer version; // Versjon klienten sist leste. Påkrevd ved oppdatering (for optimistisk låsing).
 
     public Codelist convert() {
         return Codelist.builder()
@@ -39,8 +41,6 @@ public class CodelistRequest implements RequestElement {
                 .data(data)
                 .build();
     }
-
-    private Boolean update;
 
     @JsonIgnore
     public String getKey() {

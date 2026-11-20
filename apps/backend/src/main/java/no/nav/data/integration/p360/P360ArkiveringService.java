@@ -39,7 +39,7 @@ public class P360ArkiveringService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void archive(UUID eDokId, boolean onlyActiveKrav, boolean pvoTilbakemelding, boolean personvernkonsekvensvurdering, boolean godkjenning, String responsiblePersonIdent) {
         var eDok = etterlevelseDokumentasjonRepo.getReferenceById(eDokId);
-        var pvkDokument = pvkDokumentRepo.findByEtterlevelseDokumensjon(eDok.getId());
+        var pvkDokument = pvkDokumentRepo.findByetterlevelseDokumentId(eDok.getId());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy'-'MM'-'dd");
         SimpleDateFormat titleDateformatter = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss");

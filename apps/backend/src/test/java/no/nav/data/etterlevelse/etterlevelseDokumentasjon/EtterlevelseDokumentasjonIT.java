@@ -144,6 +144,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .etterlevelseNummer(101)
@@ -206,6 +207,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
@@ -250,6 +252,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
@@ -352,6 +355,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
@@ -421,6 +425,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
@@ -461,6 +466,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .status(EtterlevelseDokumentasjonStatus.UNDER_ARBEID)
@@ -509,6 +515,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest request = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .status(EtterlevelseDokumentasjonStatus.GODKJENT_AV_RISIKOEIER)
@@ -547,6 +554,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .etterlevelseNummer(101)
@@ -598,6 +606,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
 
         EtterlevelseDokumentasjonRequest eDokRequest = EtterlevelseDokumentasjonRequest.builder()
                 .id(eDok.getId())
+                .version(eDok.getVersion())
                 .update(true)
                 .title(eDok.getTitle())
                 .etterlevelseNummer(101)
@@ -615,7 +624,7 @@ public class EtterlevelseDokumentasjonIT extends IntegrationTestBase {
                 eDokRequest.getId()
         );
 
-        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
 }

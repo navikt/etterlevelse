@@ -1,5 +1,6 @@
 const navSlackTeamId: string = 'T5LNAMWNA'
 const etterlevelseSlackChannelId: string = 'C01V697SSR2'
+const behandlingskatalogSlackChannelId: string = 'CR1B19E6L'
 
 const slackLink = (channelId: string): string =>
   `slack://channel?team=${navSlackTeamId}&id=${channelId}`
@@ -15,3 +16,4 @@ export const teamInfoLink: string =
 export const markdownLink: string = 'https://guides.github.com/features/mastering-markdown/'
 
 export const datajegerSlackLink: string = slackLink(etterlevelseSlackChannelId)
+export const behandlingskatalogSlackLink: string = slackLink(behandlingskatalogSlackChannelId)

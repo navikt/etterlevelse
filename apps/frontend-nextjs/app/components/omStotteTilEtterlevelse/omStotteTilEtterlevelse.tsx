@@ -4,6 +4,7 @@ import { BodyLong, FormProgress, Heading, List, ReadMore, Stepper } from '@navik
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { OmNavigering } from '@/components/common/omSideneCommon/omSideneCommon'
 import OmStotteTilEtterlevelseAccordion from '@/components/omStotteTilEtterlevelse/omStotteTilEtterlevelseAccordion'
 import { PageLayout } from '@/components/others/scaffold/scaffold'
@@ -22,6 +23,7 @@ import {
   temainndelingOgTemaoversiktId,
   temainndelingOgTemaoversiktUrl,
 } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
+import { datajegerSlackLink } from '@/util/footer/footerUtil'
 import ForsidenIStotteTilEtterlevelse from './images/ForsidenIStotteTilEtterlevelse.png'
 import TemainndelingOgTemaoversiktReadmore from './images/TemainndelingOgTemaoversiktReadmore.png'
 import VisMegHvordanEnKravsideSerUt from './images/VisMegHvordanEnKravsideSerUt.png'
@@ -279,7 +281,12 @@ const OmStotteTilEtterlevelse = () => {
             Team Datajegerne:
           </BodyLong>
           <List as='ul'>
-            <List.Item>Bli med på #etterlevelse på Slack </List.Item>
+            <List.Item>
+              B Bli med på{' '}
+              <ExternalLink href={datajegerSlackLink} noNewTabLabel>
+                #etterlevelse på Slack
+              </ExternalLink>
+            </List.Item>
             <List.Item>Send mail til: teamdatajegerne@nav.no </List.Item>
           </List>
         </div>

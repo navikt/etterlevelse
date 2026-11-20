@@ -198,11 +198,15 @@ const EtterlevelseDokumentasjonKravListe: FunctionComponent<TProps> = ({
         <KravNivaaStatusFilter
           kravNivaaStatusFilter={kravNivaaStatusFilter}
           setKravNivaaStatusFilter={setKravNivaaStatusFilter}
+          relevanteStats={relevanteStats}
+          searchKrav={searchKrav}
         />
 
         <SuksesskriterieStatusFilter
           suksesskriterieStatusFilter={suksesskriterieStatusFilter}
           setSuksesskriterieStatusFilter={setSuksesskriterieStatusFilter}
+          relevanteStats={relevanteStats}
+          searchKrav={searchKrav}
         />
       </div>
       <div className='flex items-center w-full pb-2'>

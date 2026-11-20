@@ -9,6 +9,12 @@ public interface RequestElement extends Validated {
 
     UUID getId();
 
+    /**
+     * Versjonen klienten sist leste (optimistisk låsing). Påkrevd ved oppdatering, ignoreres ved opprettelse.
+     */
+    Integer getVersion();
+
+
     @JsonIgnore
     default String getRequestType() {
         return StringUtils.substringBeforeLast(getClass().getSimpleName(), "Request");

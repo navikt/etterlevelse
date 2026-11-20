@@ -14,6 +14,7 @@ import java.util.UUID;
 
 public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
 
+    // FIXME: Fjern 
     @Query(value = "select * from tiltak where pvk_dokument_id = ?1", nativeQuery = true)
     List<Tiltak> findByPvkDokumentId(UUID pvkDokumentId);
 
@@ -26,11 +27,6 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
     @Query(value="select tiltak_id from risikoscenario_tiltak_relation where risikoscenario_id = ?1 and tiltak_id = ?2 and gyldig_dato_til > ?3", nativeQuery = true)
     List<UUID> getRelationByRisikoscenarioIdAndTiltakId(UUID risikoscenarioId, UUID tiltakId, LocalDateTime timestamp);
     
-    @Transactional(propagation = Propagation.MANDATORY)
-    @Modifying
-    @Query(value="delete from risikoscenario_tiltak_relation where risikoscenario_id = ?1 and tiltak_id = ?2", nativeQuery = true)
-    int deleteTiltakRisikoscenarioRelation(UUID risikoscenarioId, UUID tiltakId);
-
     @Transactional(propagation = Propagation.MANDATORY)
     @Modifying
     @Query(value="delete from risikoscenario_tiltak_relation where tiltak_id = ?1", nativeQuery = true)
@@ -46,6 +42,7 @@ public interface TiltakRepo extends JpaRepository<Tiltak, UUID> {
     @Query(value="update risikoscenario_tiltak_relation set gyldig_dato_til = ?3 where risikoscenario_id = ?1 and tiltak_id = ?2 and gyldig_dato_til > ?3", nativeQuery = true)
     int updateTiltakRisikoscenarioRelationWithGyldigDatoTil(UUID risikoscenarioId, UUID tiltakId, LocalDateTime gyldigDatoTil);
 
+    /** Kun for tester (IntegrationTestBase). Bevisst uten antallssjekk: skal tømme tabellen. */
     @Transactional
     @Modifying
     @Query(value="delete from risikoscenario_tiltak_relation", nativeQuery = true)
