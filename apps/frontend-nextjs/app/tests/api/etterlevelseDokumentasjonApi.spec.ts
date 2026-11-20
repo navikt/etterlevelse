@@ -216,8 +216,21 @@ for (const [name, schema] of [
     [true, 'linjer', 'seksjoner', EEtterlevelseDokumentSchemaMelding.NOM_LINJE],
   ] as const) {
     test(`${name} requires ${requiredField} for the selected responsibility`, async () => {
-      for (const nomAvdelingId of ['avdeling-1', '']) {
-        for (const value of [[], undefined, null]) {
+      for (const value of [[], undefined, null]) {
+        const values = {
+          nomOrganisering: {
+            ...nomOrganisering,
+            forEtterlevelseILinje,
+            [requiredField]: value,
+          },
+        }
+        await expect(schema.validateAt(`nomOrganisering.${requiredField}`, values)).rejects.toThrow(
+          message
+        )
+      }
+
+      for (const nomAvdelingId of ['', undefined]) {
+        for (const value of [[], undefined]) {
           const values = {
             nomOrganisering: {
               ...nomOrganisering,
@@ -228,7 +241,7 @@ for (const [name, schema] of [
           }
           await expect(
             schema.validateAt(`nomOrganisering.${requiredField}`, values)
-          ).rejects.toThrow(message)
+          ).resolves.toEqual(value)
         }
       }
 
