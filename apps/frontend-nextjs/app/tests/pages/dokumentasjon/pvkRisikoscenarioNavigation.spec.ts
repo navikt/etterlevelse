@@ -1,6 +1,22 @@
-import { expect, test } from '@playwright/test'
+import { test as base, expect } from '@playwright/test'
+import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
+import { IPageResponse } from '@/constants/commonConstants'
+import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
+import {
+  EEtterlevelseDokumentasjonStatus,
+  IEtterlevelseDokumentasjon,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
+import {
+  EPvkDokumentStatus,
+  EPvkVurdering,
+  IPvkDokument,
+} from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
+import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
+import { IP360UserPageResponse } from '@/constants/p360/p360Constants'
+import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
+import { mockNomOrganisering } from '@/tests/utils/etterlevelsesdokument'
 import { mockIdent } from '@/tests/utils/roller'
 
 const dokumentasjonId = 'pvk-navigation-document'
@@ -9,6 +25,98 @@ const baseUrl = `http://localhost:3000/dokumentasjon/${dokumentasjonId}/pvkdokum
 const changeStamp = {
   lastModifiedDate: '2026-10-26T10:00:00Z',
   lastModifiedBy: mockIdent,
+}
+const resource: ITeamResource = {
+  navIdent: mockIdent,
+  givenName: 'Test',
+  familyName: 'Risikoeier',
+  fullName: 'Test Risikoeier',
+  email: 'test.risikoeier@nav.no',
+  resourceType: 'INTERNAL',
+}
+const dokumentasjon: IEtterlevelseDokumentasjon = {
+  id: dokumentasjonId,
+  changeStamp,
+  version: 1,
+  title: 'PVK-navigasjon',
+  beskrivelse: 'Dokumentasjon for simulering av PVK-prosessen',
+  status: EEtterlevelseDokumentasjonStatus.UNDER_ARBEID,
+  etterlevelseNummer: 1,
+  etterlevelseDokumentVersjon: 1,
+  hasCurrentUserAccess: true,
+  behandlerPersonopplysninger: true,
+  behandlinger: [],
+  behandlingIds: [],
+  dpBehandlinger: [],
+  dpBehandlingIds: [],
+  resources: [mockIdent],
+  resourcesData: [resource],
+  teams: [],
+  teamsData: [],
+  risikoeiere: [mockIdent],
+  risikoeiereData: [resource],
+  nomOrganisering: {
+    ...mockNomOrganisering,
+    nomAvdelingId: 'avdeling-1',
+    avdelingNavn: 'Testavdelingen',
+  },
+  varslingsadresser: [],
+  irrelevansFor: [],
+  prioritertKravNummer: [],
+  ardoqSystemIds: [],
+  ardoqSystemData: [],
+  risikovurderinger: [],
+  tilgjengeligForGjenbruk: false,
+  forGjenbruk: false,
+  gjenbrukBeskrivelse: '',
+  p360Recno: 0,
+  p360CaseNumber: '',
+  versjonHistorikk: [{ versjon: 1, kravTilstandHistorikk: [] }],
+}
+const pvkDokument: IPvkDokument = {
+  id: pvkDokumentId,
+  changeStamp,
+  version: 1,
+  etterlevelseDokumentId: dokumentasjonId,
+  status: EPvkDokumentStatus.UNDERARBEID,
+  pvkVurdering: EPvkVurdering.LEGGE_OVER_EKSISTERENDE,
+  pvkVurderingsBegrunnelse: 'Eksisterende PVK skal dokumenteres',
+  behandlingensLivslopBeskrivelse: '',
+  ytterligereEgenskaper: [],
+  harInvolvertRepresentant: false,
+  representantInvolveringsBeskrivelse: 'Representanter er ikke involvert i denne simuleringen',
+  harDatabehandlerRepresentantInvolvering: false,
+  dataBehandlerRepresentantInvolveringBeskrivelse: 'Ingen eksterne databehandlere',
+  merknadTilRisikoeier: '',
+  merknadFraRisikoeier: '',
+  meldingerTilPvo: [],
+  antallInnsendingTilPvo: 0,
+  godkjentAvRisikoeierDato: '',
+  godkjentAvRisikoeier: '',
+  currentEtterlevelseDokumentVersjon: 1,
+  hasPvkDocumentationStarted: true,
+  hasPvkDocumentBeenUpdatedAfterApproval: false,
+  dpProcessProfilering: false,
+  dpProcessHelautomatiskBehandling: false,
+  innsendingTrukket: false,
+}
+const behandlingensLivslop: IBehandlingensLivslop = {
+  id: 'livslop-1',
+  changeStamp,
+  version: 1,
+  etterlevelseDokumentasjonId: dokumentasjonId,
+  beskrivelse: 'Personopplysninger samles inn, behandles og slettes',
+  filer: [],
+}
+const artOgOmfang: IBehandlingensArtOgOmfang = {
+  id: 'art-og-omfang-1',
+  changeStamp,
+  version: 1,
+  etterlevelseDokumentasjonId: dokumentasjonId,
+  stemmerPersonkategorier: true,
+  personkategoriAntallBeskrivelse: 'Et begrenset antall registrerte',
+  tilgangsBeskrivelsePersonopplysningene: 'Kun autoriserte medarbeidere har tilgang',
+  lagringsBeskrivelsePersonopplysningene: 'Opplysningene lagres i et tilgangsstyrt system',
 }
 const risikoscenarioer: IRisikoscenario[] = ['Første risiko', 'Andre risiko'].map(
   (navn, index) => ({
@@ -41,7 +149,28 @@ const vurderteRisikoscenarioer: IRisikoscenario[] = Array.from({ length: 6 }, (_
   nivaaBegrunnelseEtterTiltak: 'Vurdert',
 }))
 const alleRisikoscenarioer: IRisikoscenario[] = [...vurderteRisikoscenarioer, ...risikoscenarioer]
-const emptyPage = {
+const tiltak: ITiltak = {
+  id: 'tiltak-1',
+  changeStamp,
+  version: 1,
+  pvkDokumentId,
+  navn: 'Begrense tilgang',
+  beskrivelse: 'Tilgang gis kun ved tjenstlig behov',
+  ansvarlig: resource,
+  ansvarligTeam: {
+    id: 'team-1',
+    name: 'Testteam',
+    description: 'Team for simuleringen',
+    tags: [],
+    members: [{ navIdent: mockIdent, name: resource.fullName }],
+  },
+  frist: '',
+  risikoscenarioIds: alleRisikoscenarioer.map(({ id }) => id),
+  iverksatt: true,
+  iverksattDato: '2026-10-26',
+  iverksettingsKommentar: 'Tilgangsstyring er innført',
+}
+const emptyPage: IPageResponse<never> = {
   pageNumber: 0,
   pageSize: 20,
   pages: 0,
@@ -49,6 +178,50 @@ const emptyPage = {
   totalElements: 0,
   content: [],
 }
+const p360User: IP360UserPageResponse = {
+  Successful: true,
+  Users: [{ ContactExternalId: mockIdent, IsActive: true }],
+  TotalPageCount: 1,
+  TotalCount: 1,
+  ErrorMessage: '',
+  ErrorDetails: '',
+}
+
+const test = base.extend<{ mockIsolation: void }>({
+  mockIsolation: [
+    async ({ context }, use) => {
+      const unmockedRequests: string[] = []
+      const pageErrors: string[] = []
+      context.on('page', (page) => {
+        page.on('pageerror', (error) => pageErrors.push(error.message))
+      })
+      await context.route('**/*', async (route) => {
+        const request = route.request()
+        const url = new URL(request.url())
+        if (request.resourceType() === 'font') {
+          await route.abort('blockedbyclient')
+          return
+        }
+        // Only Next.js page assets and navigation may reach the local frontend.
+        if (
+          url.origin === new URL(baseUrl).origin &&
+          !url.pathname.startsWith('/api/') &&
+          url.pathname !== '/graphql' &&
+          url.pathname !== '/userinfo'
+        ) {
+          await route.continue()
+          return
+        }
+        unmockedRequests.push(`${request.method()} ${request.url()}`)
+        await route.abort('blockedbyclient')
+      })
+      await use()
+      expect(unmockedRequests, 'Alle dataforespørsler skal være mocket').toEqual([])
+      expect(pageErrors, 'Simuleringen skal ikke ha ubehandlede JavaScript-feil').toEqual([])
+    },
+    { auto: true },
+  ],
+})
 
 test.beforeEach(async ({ context }) => {
   await context.route('**/userinfo', (route) =>
@@ -66,67 +239,34 @@ test.beforeEach(async ({ context }) => {
     route.fulfill({ json: { codelist: {} } })
   )
   await context.route('**/api/team?myTeams=true', (route) => route.fulfill({ json: emptyPage }))
-  await context.route('**/graphql', (route) =>
-    route.fulfill({ json: { data: { krav: emptyPage } } })
-  )
+  await context.route('**/api/melding/type/SYSTEM', (route) => route.fulfill({ json: emptyPage }))
+  await context.route('**/api/p360/user', (route) => route.fulfill({ json: p360User }))
+  await context.route('**/graphql', (route) => {
+    expect(route.request().postDataJSON().operationName).toBe('getKravByFilter')
+    return route.fulfill({ json: { data: { krav: emptyPage } } })
+  })
   await context.route(`**/api/etterlevelsedokumentasjon/${dokumentasjonId}`, (route) =>
-    route.fulfill({
-      json: {
-        id: dokumentasjonId,
-        changeStamp,
-        version: 1,
-        title: 'PVK-navigasjon',
-        status: 'UNDER_ARBEID',
-        etterlevelseNummer: 1,
-        etterlevelseDokumentVersjon: 1,
-        hasCurrentUserAccess: true,
-        behandlinger: [],
-        behandlingIds: [],
-        dpBehandlinger: [],
-        resources: [mockIdent],
-        resourcesData: [],
-        teams: [],
-        teamsData: [],
-        risikoeiere: [mockIdent],
-        risikoeiereData: [{ navIdent: mockIdent, fullName: 'Test Risikoeier' }],
-        nomOrganisering: {
-          nomAvdelingId: 'avdeling-1',
-          seksjoner: [],
-          enheter: [],
-          linjer: [],
-          linjeEnheter: [],
-          lokalEnheter: [],
-          linjeFylker: [],
-          fylkeKontorer: [],
-        },
-        varslingsadresser: [],
-        irrelevansFor: [],
-        ardoqSystemIds: [],
-        risikovurderinger: [],
-      },
-    })
+    route.fulfill({ json: dokumentasjon })
   )
   await context.route(`**/api/pvkdokument/${pvkDokumentId}`, (route) =>
-    route.fulfill({
-      json: {
-        id: pvkDokumentId,
-        changeStamp,
-        etterlevelseDokumentId: dokumentasjonId,
-        status: 'UNDERARBEID',
-        pvkVurdering: 'LEGGE_OVER_EKSISTERENDE',
-        hasPvkDocumentationStarted: true,
-      },
-    })
+    route.fulfill({ json: pvkDokument })
   )
-  await context.route(`**/api/pvotilbakemelding/**`, (route) => route.fulfill({ status: 404 }))
-  await context.route(`**/api/behandlingens-art-og-omfang/**`, (route) =>
-    route.fulfill({ status: 404 })
+  await context.route(`**/api/pvkdokument/etterlevelsedokument/${dokumentasjonId}`, (route) =>
+    route.fulfill({ json: pvkDokument })
   )
-  await context.route(`**/api/behandlingenslivslop/**`, (route) => route.fulfill({ status: 404 }))
+  await context.route(
+    `**/api/behandlingens-art-og-omfang/etterlevelsedokument/${dokumentasjonId}`,
+    (route) => route.fulfill({ json: artOgOmfang })
+  )
+  await context.route(
+    `**/api/behandlingenslivslop/etterlevelsedokument/${dokumentasjonId}`,
+    (route) => route.fulfill({ json: behandlingensLivslop })
+  )
   await context.route(`**/api/risikoscenario/pvkdokument/${pvkDokumentId}/ALL`, (route) =>
     route.fulfill({
       json: {
         ...emptyPage,
+        pages: 1,
         content: alleRisikoscenarioer,
         numberOfElements: alleRisikoscenarioer.length,
         totalElements: alleRisikoscenarioer.length,
@@ -134,9 +274,35 @@ test.beforeEach(async ({ context }) => {
     })
   )
   await context.route(`**/api/tiltak/pvkdokument/${pvkDokumentId}`, (route) =>
-    route.fulfill({ json: emptyPage })
+    route.fulfill({
+      json: {
+        ...emptyPage,
+        pages: 1,
+        content: [tiltak],
+        numberOfElements: 1,
+        totalElements: 1,
+      },
+    })
   )
 })
+
+const stepHeadings = [
+  'Oversikt over PVK-prosessen',
+  'Behandlingens livsløp',
+  'Behandlingens art og omfang',
+  'Tilhørende dokumentasjon',
+  'Involvering av eksterne deltakere',
+  'Identifisering av risikoscenarioer og tiltak',
+  'Risikobildet etter tiltak',
+  'Les og send inn',
+]
+
+for (const [index, heading] of stepHeadings.entries()) {
+  test(`simulerer PVK-steg ${index + 1} med mocket data`, async ({ page }) => {
+    await page.goto(`${baseUrl}?steg=${index + 1}`)
+    await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+  })
+}
 
 test('åpner og fokuserer risikoscenarioet fra lenken etter at data er lastet', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 400 })
