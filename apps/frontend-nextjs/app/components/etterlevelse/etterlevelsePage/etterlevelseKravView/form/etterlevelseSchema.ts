@@ -13,7 +13,7 @@ export const etterlevelseSchema = () => {
           .test({
             name: 'suksesskriterieStatus',
             message:
-              'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid, ikke påbegynt eller ikke oppfylt.',
+              'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid eller ikke påbegynt.',
             test: function (suksesskriterieStatus) {
               const { options } = this
               if (
@@ -22,7 +22,6 @@ export const etterlevelseSchema = () => {
                 [
                   ESuksesskriterieStatus.UNDER_ARBEID,
                   ESuksesskriterieStatus.IKKE_PAABEGYNT,
-                  ESuksesskriterieStatus.IKKE_OPPFYLT,
                 ].includes(suksesskriterieStatus as ESuksesskriterieStatus)
               ) {
                 return false
