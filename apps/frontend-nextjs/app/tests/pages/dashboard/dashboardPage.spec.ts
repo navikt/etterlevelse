@@ -3,13 +3,13 @@ import {
   IDashboardDetailResponse,
   IDashboardTable,
   ITemaDashboardStats,
-} from '../../constants/dashboard/dashboardConstants'
-import { EEtterlevelseDokumentasjonStatus } from '../../constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
+} from '../../../constants/dashboard/dashboardConstants'
+import { EEtterlevelseDokumentasjonStatus } from '../../../constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
 import {
   EPvkDokumentStatus,
   EPvkVurdering,
-} from '../../constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
-import { mockAdmin } from '../utils/roller'
+} from '../../../constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { mockAdmin } from '../../utils/roller'
 
 const avdelingId = 'arbeids_og_velferdsdirektor'
 const documents: IDashboardTable[] = [
