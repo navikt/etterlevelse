@@ -25,7 +25,6 @@ export const KravCreatePage = () => {
   const formRef: RefObject<any> = useRef(undefined)
 
   const [loading, setLoading] = useState(false)
-  const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>([])
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
   const codelist = useContext(CodelistContext)
@@ -83,13 +82,7 @@ export const KravCreatePage = () => {
                   Opprett nytt krav
                 </Heading>
                 <div>
-                  <KravFormFields
-                    mode='create'
-                    kravVersjon={values.kravVersjon}
-                    errors={errors}
-                    varselMeldingActive={varselMeldingActive}
-                    setVarselMeldingActive={setVarselMeldingActive}
-                  />
+                  <KravFormFields mode='create' kravVersjon={values.kravVersjon} errors={errors} />
 
                   <div className='button_container flex flex-col py-4 px-4 sticky mt-5 bottom-0 border-t-2 z-10 bg-white'>
                     <ContentLayout>

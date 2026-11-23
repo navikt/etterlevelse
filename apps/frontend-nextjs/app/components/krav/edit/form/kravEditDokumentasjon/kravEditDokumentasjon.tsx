@@ -1,4 +1,3 @@
-import { Heading } from '@navikt/ds-react'
 import { FunctionComponent } from 'react'
 import { MultiInputField } from '@/components/common/inputs'
 
@@ -8,10 +7,6 @@ type TProps = {
 
 export const KravEditDokumentasjon: FunctionComponent<TProps> = ({ maxInputWidth }) => (
   <>
-    <Heading level='2' size='medium' className='mb-2'>
-      Dokumentasjon
-    </Heading>
-
     <MultiInputField
       marginBottom
       maxInputWidth={maxInputWidth}

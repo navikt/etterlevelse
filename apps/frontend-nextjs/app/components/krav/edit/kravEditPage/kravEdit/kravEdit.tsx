@@ -35,9 +35,6 @@ export const KravEdit: FunctionComponent<TProps> = ({
 }) => {
   const router: AppRouterInstance = useRouter()
   const formRef: RefObject<any> = useRef(undefined)
-  const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
-    krav?.varselMelding ? ['VarselMelding'] : []
-  )
 
   const [showErrorModal, setShowErrorModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState('')
@@ -61,7 +58,6 @@ export const KravEdit: FunctionComponent<TProps> = ({
     const mutatedKrav: TKravQL = {
       ...formKrav,
       underavdeling: underavdeling as ICode | undefined,
-      varselMelding: varselMeldingActive ? formKrav.varselMelding : undefined,
     }
 
     const etterlevelser: IPageResponse<IEtterlevelse> =
@@ -78,7 +74,6 @@ export const KravEdit: FunctionComponent<TProps> = ({
       setShowErrorModal(true)
     } else if (formKrav.id) {
       close(await updateKrav(mutatedKrav))
-      setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
     }
   }
 
@@ -103,10 +98,10 @@ export const KravEdit: FunctionComponent<TProps> = ({
               <Form>
                 <div>
                   <div className='w-full'>
-                    <Heading level='1' size='medium'>
+                    <Heading level='1' size='large' className='mb-2.5'>
                       Rediger krav
                     </Heading>
-                    <Heading level='2' size='small'>
+                    <Heading level='2' size='medium'>
                       {`K${krav.kravNummer}.${krav.kravVersjon} ${krav.navn}`}
                     </Heading>
                   </div>
@@ -114,8 +109,6 @@ export const KravEdit: FunctionComponent<TProps> = ({
                     mode='edit'
                     kravVersjon={values.kravVersjon}
                     errors={errors}
-                    varselMeldingActive={varselMeldingActive}
-                    setVarselMeldingActive={setVarselMeldingActive}
                     isEditingUtgaattKrav={isEditingUtgaattKrav}
                   />
                   <KravEditButtons

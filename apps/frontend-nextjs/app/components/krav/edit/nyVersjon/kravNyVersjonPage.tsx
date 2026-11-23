@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Heading, Link, Loader, LocalAlert } from '@navikt/ds-react'
+import { Heading, Link, Loader, LocalAlert } from '@navikt/ds-react'
 import { Form, Formik } from 'formik'
 import { Params } from 'next/dist/server/request/params'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
@@ -28,9 +28,6 @@ export const KravNyVersjonPage = () => {
   const params: Params = useParams()
   const formRef: RefObject<any> = useRef(undefined)
   const [krav, setKrav] = useState<TKravQL | undefined>()
-  const [varselMeldingActive, setVarselMeldingActive] = useState<string[]>(
-    krav?.varselMelding ? ['VarselMelding'] : []
-  )
 
   const kravData: IKravDataProps | undefined = GetKravData(params)
   const kravQuery: TKravById | undefined = kravData?.kravQuery
@@ -52,10 +49,8 @@ export const KravNyVersjonPage = () => {
     const mutatedKrav: TKravQL = {
       ...krav,
       underavdeling: underavdeling as ICode,
-      varselMelding: varselMeldingActive ? krav.varselMelding : undefined,
     }
     close(await createKrav(mutatedKrav))
-    setVarselMeldingActive(mutatedKrav.varselMelding ? ['VarselMelding'] : [])
   }
 
   const close = (krav: IKrav): void => {
@@ -132,31 +127,35 @@ export const KravNyVersjonPage = () => {
                     <Form>
                       <div>
                         <div className='w-full'>
-                          <Heading level='1' size='medium'>
+                          <Heading level='1' size='large' className='mb-2.5'>
                             Ny versjon
                           </Heading>
                           <Heading
                             level='2'
-                            size='small'
+                            size='medium'
+                            className='mb-2.5'
                           >{`K${krav?.kravNummer}.${krav?.kravVersjon} ${krav?.navn}`}</Heading>
-                          <Alert variant='warning'>
-                            <Heading spacing size='small' level='3'>
-                              Sikker på at du vil opprette en ny versjon?
-                            </Heading>
-                            Ny versjon av kravet skal opprettes når det er{' '}
-                            <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
-                            <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved alle
-                            mindre justeringer, endre i det aktive kravet, og da slipper teamene å
-                            revurdere sin besvarelse.
-                          </Alert>
+
+                          <LocalAlert status='warning'>
+                            <LocalAlert.Header>
+                              <LocalAlert.Title>
+                                Sikker på at du vil opprette en ny versjon?
+                              </LocalAlert.Title>
+                            </LocalAlert.Header>
+                            <LocalAlert.Content>
+                              Ny versjon av kravet skal opprettes når det er{' '}
+                              <strong>vesentlige endringer</strong> i kravet som gjør at{' '}
+                              <strong>teamene må revurdere</strong> sin besvarelse av kravet. Ved
+                              alle mindre justeringer, endre i det aktive kravet, og da slipper
+                              teamene å revurdere sin besvarelse.
+                            </LocalAlert.Content>
+                          </LocalAlert>
                         </div>
 
                         <KravFormFields
                           mode='edit'
                           kravVersjon={values.kravVersjon}
                           errors={errors}
-                          varselMeldingActive={varselMeldingActive}
-                          setVarselMeldingActive={setVarselMeldingActive}
                         />
 
                         <div className='button_container flex flex-col mt-5 py-4 px-4 sticky bottom-0 border-t-2 z-10 bg-white'>
