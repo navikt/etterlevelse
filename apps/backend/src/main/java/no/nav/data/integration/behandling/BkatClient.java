@@ -5,7 +5,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.rest.RestResponsePage;
-import no.nav.data.common.security.SecurityProperties;
 import no.nav.data.common.utils.MetricUtils;
 import no.nav.data.common.web.TraceHeaderFilter;
 import no.nav.data.integration.begrep.BegrepService;
@@ -33,16 +32,14 @@ public class BkatClient implements BegrepService {
     private final WebClient client;
     private final LoadingCache<String, List<BkatProcess>> processSearchCache;
     private final LoadingCache<String, BkatProcess> processCache;
-    private final LoadingCache<String, BkatProcessor> processorCache;
+    private final LoadingCache<String, BkatProcessor> databehandlerCache;
     private final Cache<String, ProcessPage> processPageCache;
     private final LoadingCache<String, List<BkatProcess>> processTeamCache;
 
     private final Cache<String, BegrepResponse> termCache;
     private final Cache<String, List<BegrepResponse>> termSearchCache;
-    private final SecurityProperties securityProperties;
 
-    public BkatClient(WebClient.Builder webClientBuilder, BkatProperties properties, SecurityProperties securityProperties) {
-        this.securityProperties = securityProperties;
+    public BkatClient(WebClient.Builder webClientBuilder, BkatProperties properties) {
         this.client = webClientBuilder
                 .baseUrl(properties.getBaseUrl())
                 .filter(new TraceHeaderFilter(true))
@@ -58,10 +55,10 @@ public class BkatClient implements BegrepService {
                         .expireAfterWrite(Duration.ofMinutes(2))
                         .maximumSize(300).build(this::getProcess0));
 
-        this.processorCache = MetricUtils.register("bkatProcessorCache",
+        this.databehandlerCache = MetricUtils.register("bkatDatabehandlerCache",
                 Caffeine.newBuilder().recordStats()
                         .expireAfterWrite(Duration.ofMinutes(2))
-                        .maximumSize(300).build(this::getProcessor0));
+                        .maximumSize(300).build(this::getDatabehandler0));
 
         this.processPageCache = MetricUtils.register("bkatProcessPageCache",
                 Caffeine.newBuilder().recordStats()
@@ -87,7 +84,7 @@ public class BkatClient implements BegrepService {
     }
 
     public BkatProcessor getProcessor(String id) {
-        return processorCache.get(id);
+        return databehandlerCache.get(id);
     }
 
     public Map<String, BkatProcess> getProcessesById(Collection<String> ids) {
@@ -114,11 +111,8 @@ public class BkatClient implements BegrepService {
         return get("/process/{id}", BkatProcess.class, id);
     }
 
-    private BkatProcessor getProcessor0(String id) {
-        if ( securityProperties.isDev()) {
-            return get("/databehandler/{id}", BkatProcessor.class, id);
-        }
-        return get("/processor/{id}", BkatProcessor.class, id);
+    private BkatProcessor getDatabehandler0(String id) {
+        return get("/databehandler/{id}", BkatProcessor.class, id);
     }
 
     private Map<String, BkatProcess> getProcesses0(Iterable<? extends String> uncachedIds) {
