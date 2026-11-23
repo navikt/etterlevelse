@@ -104,7 +104,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "formik": "^2.4.9",
     "husky": "^9.1.7",
-    "knip": "^6.45.1",
+    "knip": "^6.46.1",
     "lint-staged": "17.6.1",
     "postcss": "^8.5.33",
     "prettier": "^3.10.1",
