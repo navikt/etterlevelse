@@ -290,9 +290,9 @@ test.describe('Om Støtte til etterlevelse', () => {
         })
       })
       const accordion = page.getByRole('main').locator(`[id="${item.id}"]`)
-      const header = accordion.getByRole('button').filter({ hasText: item.title }).first()
+      const header = accordion.getByRole('button', { name: item.title, exact: true })
       const copyButton = accordion.getByRole('button', { name: 'Kopier lenke', exact: true })
-      await expect(header.getByRole('button')).toHaveCount(0)
+      await expect(copyButton).toHaveCount(1)
       await expect(header).toHaveAttribute('aria-expanded', 'false')
       await copyButton.click()
       await expect
