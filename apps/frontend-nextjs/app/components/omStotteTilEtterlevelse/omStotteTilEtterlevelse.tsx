@@ -282,7 +282,7 @@ const OmStotteTilEtterlevelse = () => {
           </BodyLong>
           <List as='ul'>
             <List.Item>
-              B Bli med på{' '}
+              Bli med på{' '}
               <ExternalLink href={datajegerSlackLink} noNewTabLabel>
                 #etterlevelse på Slack
               </ExternalLink>
