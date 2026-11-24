@@ -165,7 +165,11 @@ test.describe('Om Støtte til etterlevelse', () => {
       })
     })
     await mockAdmin(page)
-    await page.goto(pageUrl, { waitUntil: 'domcontentloaded' })
+    const [userInfoResponse] = await Promise.all([
+      page.waitForResponse('**/userinfo'),
+      page.goto(pageUrl, { waitUntil: 'domcontentloaded' }),
+    ])
+    expect(userInfoResponse.status()).toBe(200)
     await expect(
       page.getByRole('heading', { name: 'Om Støtte til etterlevelse', exact: true })
     ).toBeVisible()
@@ -329,7 +333,11 @@ test.describe('Om Støtte til etterlevelse', () => {
     page,
   }) => {
     await mockRead(page)
-    await page.reload({ waitUntil: 'domcontentloaded' })
+    const [userInfoResponse] = await Promise.all([
+      page.waitForResponse('**/userinfo'),
+      page.reload({ waitUntil: 'domcontentloaded' }),
+    ])
+    expect(userInfoResponse.status()).toBe(200)
     await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
     const main = page.getByRole('main')
     await expect(main.getByRole('button', { name: 'Kopier lenke', exact: true })).toHaveCount(0)
