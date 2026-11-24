@@ -310,17 +310,9 @@ const test = base.extend<{
   ],
 })
 
-test.beforeEach(async ({ context, page, mockData, role }) => {
+test.beforeEach(async ({ context, mockData, role }) => {
   expect(mockData.dokumentasjon.id).toBe(dokumentasjonId)
-  await role.mockUser(page)
-  // Replay the shared role helper's response in tabs opened by validation links.
-  const userInfo = page.waitForResponse('**/userinfo').then((response) => response.body())
-  await context.route('**/userinfo', async (route) =>
-    route.fulfill({
-      contentType: 'application/json',
-      body: await userInfo,
-    })
-  )
+  await role.mockUser(context)
 })
 
 const stepHeadings = [

@@ -456,15 +456,49 @@ test.describe('Om Støtte til etterlevelse', () => {
     })
   }
 
-  for (const [name, path, role] of [
-    ['Forsiden', '/', 'link'],
-    ['Tilbake til Oversikt over løsningene', oversiktOverLosningeneUrl, 'button'],
-    ['Fortsett til Om Digital PVK', omPVKUrl, 'button'],
+  for (const [name, path, role, heading] of [
+    ['Forsiden', '/', 'link', 'Støtte til etterlevelse'],
+    [
+      'Tilbake til Oversikt over løsningene',
+      oversiktOverLosningeneUrl,
+      'button',
+      'Oversikt over Behandlingskatalogen, Støtte til etterlevelse og Digital PVK',
+    ],
+    ['Fortsett til Om Digital PVK', omPVKUrl, 'button', 'Om Digital PVK'],
   ] as const) {
     test(`Som en bruker vil jeg navigere videre via «${name}»`, async ({ page }) => {
+      if (path === '/') {
+        await page.route('**/api/melding/type/FORSIDE', async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        })
+        await page.route('**/graphql', async (route) => {
+          const requestBody = route.request().postDataJSON() as { operationName?: string }
+
+          if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
+            await route.continue()
+            return
+          }
+
+          await route.fulfill({ json: mockNyligeEtterlevelseDokumentasjoner })
+        })
+      }
+
       await page.getByRole('main').getByRole(role, { name, exact: true }).click()
       await expect(page).toHaveURL(`${baseUrl}${path}`)
       await expect(page.getByRole('main')).toBeVisible()
+      await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+      if (path === '/') {
+        await expect(page.getByRole('link', { name: 'E716.1 Justice League' })).toBeVisible()
+      }
     })
   }
 })
