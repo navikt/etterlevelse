@@ -148,7 +148,7 @@ const OmStotteTilEtterlevelse = () => {
             Forsiden i Støtte til etterlevelse
           </Heading>
           <Image
-            loading='lazy'
+            loading='eager'
             className='mr-2.5 mt-6 mb-12'
             src={ForsidenIStotteTilEtterlevelse}
             alt='Skjermbilde fra forsiden til Støtte til etterlevelse'
@@ -190,7 +190,7 @@ const OmStotteTilEtterlevelse = () => {
           </Heading>
           <ReadMore className='mt-3 mb-6' header='Vis meg hvordan kravene inndeles i temaer'>
             <Image
-              loading='lazy'
+              loading='eager'
               className='mr-2.5 mt-6 mb-12'
               src={TemainndelingOgTemaoversiktReadmore}
               alt='Skjermbilde som viser temainndeling og temaoversikt'
@@ -212,7 +212,7 @@ const OmStotteTilEtterlevelse = () => {
           </Heading>
           <ReadMore className='mt-3 mb-6' header='Vis meg hvordan en kravside ser ut'>
             <Image
-              loading='lazy'
+              loading='eager'
               className='mr-2.5 mt-6 mb-12'
               src={VisMegHvordanEnKravsideSerUt}
               alt='Skjermbilde som viser en kravside'

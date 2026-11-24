@@ -32,7 +32,7 @@ const BehandlingensLivslopTextContent = () => (
         Illustrasjonen under viser hvordan dere kunne tegne behandlingens livsløp.
       </BodyShort>
       <Image
-        loading='lazy'
+        loading='eager'
         className='mr-2.5'
         src={behandlingensLivslopImage}
         alt='Illustrasjon på hvordan man kunne tegne behandlingens livsløp. Tegningen bruker et flytdiagram til å visualisere at visse opplysninger flyter mellom løsninger internt i Nav og utleveres eventuelt videre til omverden, for eksempel til andre offentlige etater. Illustrasjonen viser et eksempel der hvis X gjelder, flyter opplysninger en vei gjennom systemene, mens hvis Y gjelder, så tar opplysninger en annen rute. Illustrasjonen nevner også at P personer har tilgang til et visst saksystem, mens Q personer har tilgang til et annet.'

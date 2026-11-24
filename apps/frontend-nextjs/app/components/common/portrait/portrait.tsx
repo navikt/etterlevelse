@@ -14,7 +14,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
       {loading && <Loader size={'large'} className='flex justify-self-center' />}
       {!error && (
         <Image
-          loading='lazy'
+          loading='eager'
           width={loading ? 0 : '44'}
           height={loading ? 0 : '44'}
           onLoad={() => {
@@ -37,7 +37,7 @@ export const Portrait = (props: { ident: string; size?: string }) => {
       )}
       {error && (
         <Image
-          loading='lazy'
+          loading='eager'
           src={avatarPlaceholder}
           alt='Avatar icon'
           aria-hidden

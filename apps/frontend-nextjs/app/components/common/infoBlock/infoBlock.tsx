@@ -46,7 +46,7 @@ export const InfoBlock2: FunctionComponent<TInfoBlock2Props> = (props) => {
       }}
     >
       <div className='self-center mx-6'>
-        <Image loading='lazy' src={icon} alt={alt} width='80' height='80' />
+        <Image loading='eager' src={icon} alt={alt} width='80' height='80' />
       </div>
 
       <div className='flex flex-col p-5'>

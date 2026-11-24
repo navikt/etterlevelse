@@ -7,7 +7,7 @@ const ForbiddenAlert = () => (
     <div className='flex items-center flex-col gap-5'>
       <Alert variant='warning'>Du har ikke tilgang til å redigere på PVK dokument.</Alert>
 
-      <Image loading='lazy' src={alertGif} alt='no no no' width='400' />
+      <Image loading='eager' src={alertGif} alt='no no no' width='400' />
     </div>
   </div>
 )

@@ -10,7 +10,7 @@ const IconInCircle = (props: {
 
   return (
     <div className={`bg-[${backgroundColor}] rounded-full p-[7.5%]`}>
-      <Image loading='lazy' src={icon} alt={alt} width={size} />
+      <Image loading='eager' src={icon} alt={alt} width={size} />
     </div>
   )
 }

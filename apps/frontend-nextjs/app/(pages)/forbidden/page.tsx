@@ -14,7 +14,7 @@ const Forbidden = () => {
         </Heading>
         <Image
           src={notFound}
-          loading='lazy'
+          loading='eager'
           alt='Oida 404! Fant ikke den siden der nei'
           style={{ maxWidth: '65%' }}
         />
