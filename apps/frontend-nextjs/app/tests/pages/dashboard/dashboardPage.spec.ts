@@ -215,7 +215,9 @@ for (const path of [
 test('theme document DataGrid shows a skeleton while refreshing filtered documents', async ({
   page,
 }) => {
-  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter')
+  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter', {
+    waitUntil: 'domcontentloaded',
+  })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table.getByRole('link', { name: 'E100.1 Alpha' })).toBeVisible()
   let resolveResponse!: () => void
@@ -248,7 +250,9 @@ test('theme document DataGrid shows a skeleton while refreshing filtered documen
 test('department DataGrids preserve columns, sorting, links and popovers across tabs', async ({
   page,
 }) => {
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`)
+  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`, {
+    waitUntil: 'domcontentloaded',
+  })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table).toHaveClass(/aksel-data-table/)
   await expect(table.getByRole('columnheader')).toHaveCount(10)
@@ -303,7 +307,9 @@ test('department DataGrids preserve columns, sorting, links and popovers across 
 test('department DataGrid shows empty results inside the table after filtering', async ({
   page,
 }) => {
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}?sok=missing-document`)
+  await page.goto(`http://localhost:3000/dashboard/${avdelingId}?sok=missing-document`, {
+    waitUntil: 'domcontentloaded',
+  })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table.getByText('Ingen treff på valgte filtre')).toBeVisible()
   await expect(table.getByRole('link')).toHaveCount(0)
@@ -312,7 +318,9 @@ test('department DataGrid shows empty results inside the table after filtering',
 test('theme document DataGrid preserves numeric sorting, row headers and popovers', async ({
   page,
 }) => {
-  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter')
+  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter', {
+    waitUntil: 'domcontentloaded',
+  })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table).toHaveClass(/aksel-data-table/)
   await expect(table.getByRole('columnheader')).toHaveCount(6)
@@ -351,7 +359,9 @@ test('DataGrid keeps its header visible while scrolling a large document list', 
   await page.route('**/dashboard/table/avdeling/**', (route) =>
     route.fulfill({ json: manyDocuments })
   )
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`)
+  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`, {
+    waitUntil: 'domcontentloaded',
+  })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table.locator('tbody tr')).toHaveCount(40)
   await table.getByRole('columnheader').first().scrollIntoViewIfNeeded()
@@ -382,7 +392,9 @@ test('department DataGrid hides the unit column when no document has units', asy
   await page.route('**/dashboard/table/avdeling/**', (route) =>
     route.fulfill({ json: documents.map((dok) => ({ ...dok, enheter: [] })) })
   )
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`)
+  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`, {
+    waitUntil: 'domcontentloaded',
+  })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table.getByRole('columnheader')).toHaveCount(9)
   await expect(table.getByRole('columnheader', { name: 'Enhet', exact: true })).toHaveCount(0)
@@ -392,7 +404,9 @@ test('theme document DataGrid displays an empty state without losing its headers
   page,
 }) => {
   await page.route('**/dashboard/table/tema/**', (route) => route.fulfill({ json: [] }))
-  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter')
+  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter', {
+    waitUntil: 'domcontentloaded',
+  })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
   await expect(table.getByRole('columnheader')).toHaveCount(6)
   await expect(table.getByText('Ingen treff på valgte filtre')).toBeVisible()

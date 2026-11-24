@@ -75,7 +75,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       await route.continue()
     })
 
-    await page.goto('http://localhost:3000/')
+    await page.goto('http://localhost:3000/', {
+      waitUntil: 'domcontentloaded',
+    })
 
     await expect(page).toHaveTitle(/Etterlevelse/)
     await expect(page.getByRole('button', { name: 'Nytt etterlevelsesdokument' })).toBeVisible()
@@ -352,12 +354,16 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
         await route.continue()
       })
 
-      await page.goto('http://localhost:3000/dokumentasjon/create')
+      await page.goto('http://localhost:3000/dokumentasjon/create', {
+        waitUntil: 'domcontentloaded',
+      })
       await expect(
         page.getByRole('heading', { name: 'Opprett nytt etterlevelsesdokument' })
       ).toBeVisible()
 
-      await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
+      await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`, {
+        waitUntil: 'domcontentloaded',
+      })
       await expect(
         page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
       ).toBeVisible()

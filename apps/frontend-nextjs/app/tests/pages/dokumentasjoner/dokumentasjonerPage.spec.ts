@@ -40,7 +40,9 @@ test.describe('nagivation to dokumentasjon page', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/')
+    await page.goto('http://localhost:3000/', {
+      waitUntil: 'domcontentloaded',
+    })
 
     await expect(page).toHaveTitle(/Etterlevelse/)
     await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()
@@ -157,7 +159,9 @@ test.describe('nagivation to dokumentasjon page', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/')
+    await page.goto('http://localhost:3000/', {
+      waitUntil: 'domcontentloaded',
+    })
 
     await expect(page).toHaveTitle(/Etterlevelse/)
     await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()

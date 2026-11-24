@@ -641,7 +641,9 @@ for (const role of roleScenarios) {
         await page.getByRole('button', { name: 'Lagre', exact: true }).click()
         expect((await saved).ok()).toBe(true)
         await expect(page.getByText('Lagring vellykket', { exact: true }).first()).toBeVisible()
-        await page.reload()
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
         await expect(field).toHaveValue('Omtrent 100 registrerte i simuleringen')
       })
 
@@ -668,7 +670,9 @@ for (const role of roleScenarios) {
         expect(mockData.behandlingensLivslop.filer[0].filnavn).toBe('livslop.png')
         expect(mockData.behandlingensLivslop.filer[0].filtype).toBe('image/png')
         expect(mockData.behandlingensLivslop.filer[0].fil).toBe(buffer.toString('base64'))
-        await page.reload()
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
         await expect(page.getByText('livslop.png', { exact: true }).first()).toBeVisible()
       })
 
@@ -688,7 +692,9 @@ for (const role of roleScenarios) {
         await dialog.getByRole('button', { name: 'Lagre risikoscenario', exact: true }).click()
         const header = page.getByRole('button', { name: 'Ny simulert risiko', exact: false })
         await expect(header).toHaveAttribute('aria-expanded', 'true')
-        await page.reload()
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
         await expect(header).toHaveAttribute('aria-expanded', 'true')
         await expect(header).toBeFocused()
         await page.getByRole('button', { name: 'Rediger risikoscenario', exact: true }).click()
@@ -732,9 +738,12 @@ for (const role of roleScenarios) {
         await page.getByRole('option', { name: responsible.fullName }).click()
         await page.getByRole('checkbox', { name: 'Marker tiltaket som iverksatt' }).check()
         await page.getByRole('button', { name: 'Lagre tiltak', exact: true }).click()
-        await expect(
-          page.getByRole('button', { name: 'Nytt simulert tiltak', exact: false })
-        ).toBeVisible()
+        const createdHeader = page.getByRole('button', {
+          name: 'Nytt simulert tiltak',
+          exact: false,
+        })
+        await expect(createdHeader).toBeVisible()
+        await expect(createdHeader).toBeFocused()
         const created = mockData.tiltak.find(({ navn }) => navn === 'Nytt simulert tiltak')
         expect(created?.ansvarlig.navIdent).toBe(responsible.navIdent)
         expect(created?.risikoscenarioIds).toEqual(['risiko-2'])
@@ -743,21 +752,29 @@ for (const role of roleScenarios) {
           .getByRole('textbox', { name: 'Navngi tiltaket' })
           .fill('Oppdatert simulert tiltak')
         await page.getByRole('button', { name: 'Lagre tiltak', exact: true }).click()
-        await expect(
-          page.getByRole('button', { name: 'Oppdatert simulert tiltak', exact: false })
-        ).toBeVisible()
-        await page.reload()
-        await expect(
-          page.getByRole('button', { name: 'Oppdatert simulert tiltak', exact: false })
-        ).toBeVisible()
+        const updatedHeader = page.getByRole('button', {
+          name: 'Oppdatert simulert tiltak',
+          exact: false,
+        })
+        await expect(updatedHeader).toBeVisible()
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
+        await expect(updatedHeader).toBeVisible()
+        await expect(updatedHeader).toBeFocused()
         await page.getByRole('button', { name: 'Slett tiltak', exact: true }).click()
-        await page
-          .getByRole('dialog', { name: 'Vil dere slette dette tiltaket?' })
-          .getByRole('button', { name: 'Slett', exact: true })
-          .click()
-        await expect(
-          page.getByRole('button', { name: 'Oppdatert simulert tiltak', exact: false })
-        ).toHaveCount(0)
+        const deleteDialog = page.getByRole('dialog', {
+          name: 'Vil dere slette dette tiltaket?',
+        })
+        await expect(deleteDialog).toBeVisible()
+        const deleted = page.waitForResponse(
+          (response) =>
+            new URL(response.url()).pathname === `/api/tiltak/${created?.id}` &&
+            response.request().method() === 'DELETE'
+        )
+        await deleteDialog.getByRole('button', { name: 'Slett', exact: true }).click()
+        expect((await deleted).ok()).toBe(true)
+        await expect(updatedHeader).toHaveCount(0)
         expect(mockData.tiltak.some(({ id }) => id === created?.id)).toBe(false)
       })
 

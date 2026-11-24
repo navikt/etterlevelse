@@ -16,7 +16,9 @@ test.describe('etterlevelse main page tests', () => {
       await route.fulfill({ json: mockNyligeEtterlevelseDokumentasjoner })
     })
 
-    await page.goto('http://localhost:3000/')
+    await page.goto('http://localhost:3000/', {
+      waitUntil: 'domcontentloaded',
+    })
 
     await expect(page).toHaveTitle(/Etterlevelse/)
     await expect(page.getByRole('button', { name: mockIdent })).toBeVisible()
