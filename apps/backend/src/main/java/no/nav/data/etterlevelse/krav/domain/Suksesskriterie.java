@@ -10,6 +10,8 @@ import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
 
 import java.util.List;
 
+import static no.nav.data.common.utils.StreamUtils.copyOf;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -30,7 +32,7 @@ public class Suksesskriterie {
                 .navn(request.getNavn())
                 .beskrivelse(request.getBeskrivelse())
                 .behovForBegrunnelse(request.isBehovForBegrunnelse())
-                .deaktiverteSuksesskriterieStatus(List.copyOf(request.getDeaktiverteSuksesskriterieStatus()))
+                .deaktiverteSuksesskriterieStatus(copyOf(request.getDeaktiverteSuksesskriterieStatus()))
                 .build();
     }
 
@@ -40,7 +42,7 @@ public class Suksesskriterie {
                 .navn(navn)
                 .beskrivelse(beskrivelse)
                 .behovForBegrunnelse(behovForBegrunnelse)
-                .deaktiverteSuksesskriterieStatus(List.copyOf(deaktiverteSuksesskriterieStatus))
+                .deaktiverteSuksesskriterieStatus(copyOf(deaktiverteSuksesskriterieStatus))
                 .build();
     }
 
