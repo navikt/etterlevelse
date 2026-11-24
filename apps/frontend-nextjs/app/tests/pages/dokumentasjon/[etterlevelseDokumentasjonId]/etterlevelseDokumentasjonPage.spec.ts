@@ -954,56 +954,70 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
         const requestBody = route.request().postDataJSON() as { operationName?: string }
 
         if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
-          await route.fulfill({
-            json: {
-              data: {
-                etterlevelseDokumentasjon: {
-                  content: [
-                    {
-                      stats: {
-                        relevantKrav: visibleRequirements.map((requirement, index) => ({
-                          kravNummer: requirement.number,
-                          kravVersjon: requirement.version,
-                          navn: requirement.name,
-                          status: 'AKTIV',
-                          aktivertDato: '2025-01-01T00:00:00Z',
-                          tagger: [],
-                          suksesskriterier: [],
-                          changeStamp: {
-                            createdDate: '2025-01-01T00:00:00Z',
-                            lastModifiedDate: '2025-01-01T00:00:00Z',
-                            lastModifiedBy: mockIdent,
-                          },
-                          etterlevelser:
-                            index === 0
-                              ? [
-                                  {
-                                    id: `etterlevelse-${requirement.number}`,
-                                    status: 'FERDIG_DOKUMENTERT',
-                                    etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
-                                    suksesskriterieBegrunnelser: [],
-                                  },
-                                ]
-                              : [],
-                          regelverk: [
-                            {
-                              lov: {
-                                code:
-                                  index < 2
-                                    ? 'PERSONOPPLYSNINGSLOVEN'
-                                    : 'INTERNKONTROLLFORSKRIFTEN',
-                              },
-                            },
-                          ],
-                        })),
-                        irrelevantKrav: [],
-                        utgaattKrav: [],
+          const data = {
+            etterlevelseDokumentasjon: {
+              content: [
+                {
+                  stats: {
+                    relevantKrav: visibleRequirements.map((requirement, index) => ({
+                      kravNummer: requirement.number,
+                      kravVersjon: requirement.version,
+                      navn: requirement.name,
+                      status: 'AKTIV',
+                      aktivertDato: '2025-01-01T00:00:00Z',
+                      tagger: [],
+                      suksesskriterier: [],
+                      changeStamp: {
+                        createdDate: '2025-01-01T00:00:00Z',
+                        lastModifiedDate: '2025-01-01T00:00:00Z',
+                        lastModifiedBy: mockIdent,
                       },
-                    },
-                  ],
+                      etterlevelser:
+                        index === 0
+                          ? [
+                              {
+                                id: `etterlevelse-${requirement.number}`,
+                                status: 'FERDIG_DOKUMENTERT',
+                                etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
+                                fristForFerdigstillelse: '',
+                                ikkeBehovForRevurdering: false,
+                                suksesskriterieBegrunnelser: [],
+                                changeStamp: {
+                                  createdDate: '2025-01-01T00:00:00Z',
+                                  lastModifiedDate: '2025-01-01T00:00:00Z',
+                                  lastModifiedBy: mockIdent,
+                                },
+                              },
+                            ]
+                          : [],
+                      regelverk: [
+                        {
+                          lov: {
+                            code:
+                              index < 2 ? 'PERSONOPPLYSNINGSLOVEN' : 'INTERNKONTROLLFORSKRIFTEN',
+                            shortName:
+                              index < 2 ? 'Personopplysningsloven' : 'Internkontrollforskriften',
+                          },
+                        },
+                      ],
+                    })),
+                    irrelevantKrav: [],
+                    utgaattKrav: [],
+                  },
                 },
-              },
+              ],
             },
+          }
+          const cache = new InMemoryCache()
+          const queryOptions = {
+            query: getEtterlevelseDokumentasjonStatsQuery,
+            variables: { etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id },
+          }
+          cache.writeQuery({ ...queryOptions, data })
+          expect(cache.diff({ ...queryOptions, optimistic: false }).complete).toBe(true)
+
+          await route.fulfill({
+            json: { data },
           })
           return
         }
