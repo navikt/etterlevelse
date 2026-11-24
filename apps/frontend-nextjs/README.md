@@ -54,6 +54,8 @@ With UI:
 
 It's important to having `dev-gcp` and `frontend` running locally while committing, otherwise the Playwright tests will fail.
 
+The pre-commit hook only runs the Playwright tests in Chromium (`--project=chromium`). Run `yarn playwright test` to test Firefox and WebKit as well.
+
 ## Other
 
 ### To use Yarn v4 and node you need to
