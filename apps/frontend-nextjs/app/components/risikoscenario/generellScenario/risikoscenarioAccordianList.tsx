@@ -104,7 +104,8 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
     const target = `${risikoscenarioId}_${tiltakId ?? ''}`
     if (
       focusedTargetRef.current === target ||
-      !risikoscenarioList.some((risikoscenario) => risikoscenario.id === risikoscenarioId)
+      !risikoscenarioList.some((risikoscenario) => risikoscenario.id === risikoscenarioId) ||
+      (tiltakId && !tiltakList.some((tiltak) => tiltak.id === tiltakId))
     ) {
       return
     }
@@ -134,7 +135,7 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
       }
     }, 200)
     return () => clearTimeout(timeout)
-  }, [risikoscenarioId, tiltakId, risikoscenarioList])
+  }, [risikoscenarioId, tiltakId, risikoscenarioList, tiltakList])
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {
