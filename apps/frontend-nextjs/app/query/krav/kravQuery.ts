@@ -119,6 +119,7 @@ export const getKravWithEtterlevelseQuery = gql`
         navn
         beskrivelse
         behovForBegrunnelse
+        deaktiverteSuksesskriterieStatus
       }
 
       kravIdRelasjoner
