@@ -24,21 +24,17 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
 import TextEditor from '@/components/common/textEditor/TextEditor'
-import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
+import {
+  ESuksesskriterieStatus,
+  suksesskriterieStatusOptions as statusOptions,
+} from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 
-const suksesskriterieStatusOptions: {
-  value: ESuksesskriterieStatus
-  label: string
-  obligatorisk: boolean
-}[] = [
-  { value: ESuksesskriterieStatus.IKKE_PAABEGYNT, label: 'Ikke påbegynt', obligatorisk: true },
-  { value: ESuksesskriterieStatus.UNDER_ARBEID, label: 'Under arbeid', obligatorisk: true },
-  { value: ESuksesskriterieStatus.OPPFYLT, label: 'Oppfylt', obligatorisk: true },
-  { value: ESuksesskriterieStatus.IKKE_OPPFYLT, label: 'Ikke oppfylt', obligatorisk: true },
-  { value: ESuksesskriterieStatus.IKKE_RELEVANT, label: 'Ikke relevant', obligatorisk: false },
-]
+const suksesskriterieStatusOptions = statusOptions.map((option) => ({
+  ...option,
+  obligatorisk: option.value !== ESuksesskriterieStatus.IKKE_RELEVANT,
+}))
 
 type TKravSuksesskriterieEditProps = {
   newVersion?: boolean
