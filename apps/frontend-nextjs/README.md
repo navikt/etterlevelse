@@ -85,6 +85,12 @@ do not depend on the forwarded backend.
 Message-loading failures are logged in the browser console without becoming
 unhandled promise rejections. This does not repair the backend connection.
 
+Keep message-failure tests authenticated and mock the front-page GraphQL query.
+An unauthenticated `/userinfo` response triggers a login redirect, cancelling
+in-flight requests. WebKit can report those cancellations as `pageerror` events
+with "due to access control checks", including Next.js development stack-frame
+requests, even when promise rejections are caught.
+
 ###
 
 #### Kubernetes error

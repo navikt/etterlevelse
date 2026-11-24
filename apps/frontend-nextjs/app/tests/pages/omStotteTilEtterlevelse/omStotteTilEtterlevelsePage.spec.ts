@@ -21,7 +21,8 @@ import {
   temainndelingOgTemaoversiktUrl,
   tilretteleggeForGjenbrukId,
 } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
-import { mockAdmin, mockIdent, mockRead, mockUnauthorised } from '../../utils/roller'
+import { mockNyligeEtterlevelseDokumentasjoner } from '../../utils/mocks'
+import { mockAdmin, mockIdent, mockRead } from '../../utils/roller'
 
 const test = base.extend<{ userRole: 'admin' | 'read' }>({
   userRole: ['admin', { option: true }],
@@ -188,7 +189,16 @@ test.describe('Om Støtte til etterlevelse', () => {
       page.on('console', (message) => {
         if (message.type() === 'error') consoleErrors.push(message.text())
       })
-      await mockUnauthorised(page)
+      await page.route('**/graphql', async (route) => {
+        const requestBody = route.request().postDataJSON() as { operationName?: string }
+
+        if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
+          await route.continue()
+          return
+        }
+
+        await route.fulfill({ json: mockNyligeEtterlevelseDokumentasjoner })
+      })
       await page.route('**/api/melding/type/*', async (route) => {
         if (failure === 'HTTP 500') {
           await route.fulfill({ status: 500, body: 'Internal Server Error' })
@@ -201,6 +211,7 @@ test.describe('Om Støtte til etterlevelse', () => {
       await expect(
         page.getByRole('heading', { name: 'Støtte til etterlevelse', exact: true })
       ).toBeVisible()
+      await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
       await expect
         .poll(() =>
           consoleErrors.some((message) => message.includes('Failed to fetch system message:'))
