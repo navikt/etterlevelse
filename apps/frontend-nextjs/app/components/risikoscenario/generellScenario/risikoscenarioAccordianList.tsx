@@ -50,6 +50,9 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   const risikoscenarioId: string | null = queryParams.get('risikoscenario')
   const tiltakId: string | null = queryParams.get('tiltak')
   const steg: string | undefined = queryParams.get('steg') || undefined
+  const selectedRisikoscenarioIndex = risikoscenarioList.findIndex(
+    (risikoscenario) => risikoscenario.id === risikoscenarioId
+  )
 
   const [isUnsaved, setIsUnsaved] = useState<boolean>(false)
   const [navigateUrl, setNavigateUrl] = useState<string>('')
@@ -96,8 +99,8 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   }, [etterlevelseDokumentasjonId])
 
   useEffect(() => {
-    if (risikoscenarioId) {
-      setTimeout(() => {
+    if (risikoscenarioId && selectedRisikoscenarioIndex !== -1) {
+      const timeout = setTimeout(() => {
         const element: HTMLElement | null = document.getElementById(risikoscenarioId)
         if (element) {
           element
@@ -121,8 +124,9 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
           }
         }
       }, 200)
+      return () => clearTimeout(timeout)
     }
-  }, [risikoscenarioId, tiltakId])
+  }, [risikoscenarioId, tiltakId, selectedRisikoscenarioIndex])
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {

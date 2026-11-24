@@ -148,7 +148,22 @@ const toggleExample = async (button: Locator) => {
 }
 
 test.describe('Om Støtte til etterlevelse', () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ context, page }) => {
+    await context.route('**/api/codelist?refresh=false', async (route) => {
+      await route.fulfill({ json: { codelist: {} } })
+    })
+    await context.route('**/api/melding/type/SYSTEM', async (route) => {
+      await route.fulfill({
+        json: {
+          pageNumber: 0,
+          pageSize: 20,
+          pages: 0,
+          numberOfElements: 0,
+          totalElements: 0,
+          content: [],
+        },
+      })
+    })
     await mockAdmin(page)
     await page.goto(pageUrl, { waitUntil: 'domcontentloaded' })
     await expect(
@@ -277,6 +292,7 @@ test.describe('Om Støtte til etterlevelse', () => {
       const accordion = page.getByRole('main').locator(`[id="${item.id}"]`)
       const header = accordion.getByRole('button').filter({ hasText: item.title }).first()
       const copyButton = accordion.getByRole('button', { name: 'Kopier lenke', exact: true })
+      await expect(header.getByRole('button')).toHaveCount(0)
       await expect(header).toHaveAttribute('aria-expanded', 'false')
       await copyButton.click()
       await expect

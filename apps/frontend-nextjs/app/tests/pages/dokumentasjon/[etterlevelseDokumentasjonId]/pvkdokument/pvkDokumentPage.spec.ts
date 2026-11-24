@@ -263,7 +263,14 @@ const test = base.extend<{
     async ({ context }, use) => {
       const unmockedRequests: string[] = []
       const pageErrors: string[] = []
+      const cacheWarnings: string[] = []
       context.on('page', (page) => {
+        page.on('console', (message) => {
+          const text = message.text()
+          if (text.includes('getKravByFilter') && text.includes('partial result')) {
+            cacheWarnings.push(text)
+          }
+        })
         page.on('pageerror', (error) => {
           if (error.message === 'ResizeObserver loop completed with undelivered notifications.') {
             console.warn(`Browser layout warning: ${error.message}`)
@@ -295,6 +302,9 @@ const test = base.extend<{
       await use()
       expect(unmockedRequests, 'Alle dataforespørsler skal være mocket').toEqual([])
       expect(pageErrors, 'Simuleringen skal ikke ha ubehandlede JavaScript-feil').toEqual([])
+      expect(cacheWarnings, 'Kravresponsen skal kunne leses fullstendig fra Apollo-cache').toEqual(
+        []
+      )
     },
     { auto: true },
   ],
@@ -332,7 +342,7 @@ for (const role of roleScenarios) {
       test(`${role.canView ? 'se' : 'nektes tilgang til'} PVK-steg ${index + 1} med mocket data`, async ({
         page,
       }) => {
-        await page.goto(`${baseUrl}?steg=${index + 1}`)
+        await page.goto(`${baseUrl}?steg=${index + 1}`, { waitUntil: 'domcontentloaded' })
         if (!role.canView) {
           await expect(
             page.getByText('Du har ikke tilgang til å redigere på PVK dokument.', { exact: true })
@@ -388,7 +398,7 @@ for (const role of roleScenarios) {
         mockData,
       }) => {
         setDocumentAccess(mockData, false)
-        await page.goto(`${baseUrl}?steg=8`)
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByText('Du har ikke tilgang til å redigere på PVK dokument.', { exact: true })
         ).toBeVisible()
@@ -403,7 +413,7 @@ for (const role of roleScenarios) {
       mockData,
     }) => {
       mockData.pvkDokument.status = EPvkDokumentStatus.TRENGER_GODKJENNING
-      await page.goto(`${baseUrl}?steg=8`)
+      await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
       if (role.canView) {
         await expect(
           page.getByRole('heading', { name: 'Sendt oppdatert PVK', exact: true })
@@ -425,7 +435,7 @@ for (const role of roleScenarios) {
 
       test('få tilgang til godkjenning av mitt PVK-dokument', async ({ page, mockData }) => {
         mockData.pvkDokument.status = EPvkDokumentStatus.TRENGER_GODKJENNING
-        await page.goto(`${baseUrl}?steg=8`)
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByRole('button', {
             name: 'Aksepter restrisiko og arkiver i Public 360',
@@ -441,7 +451,8 @@ for (const role of roleScenarios) {
       }) => {
         await page.setViewportSize({ width: 1280, height: 400 })
         await page.goto(
-          `${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert&risikoscenario=risiko-2`
+          `${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert&risikoscenario=risiko-2`,
+          { waitUntil: 'domcontentloaded' }
         )
 
         const selectedHeader = page.getByRole('button', { name: 'Andre risiko', exact: false })
@@ -468,7 +479,9 @@ for (const role of roleScenarios) {
       })
 
       test('lar risikoscenarioene være lukket når lenken bare har et filter', async ({ page }) => {
-        await page.goto(`${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert`)
+        await page.goto(`${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert`, {
+          waitUntil: 'domcontentloaded',
+        })
 
         for (const risiko of risikoscenarioer) {
           await expect(
@@ -527,7 +540,9 @@ for (const role of roleScenarios) {
             })
           }
         )
-        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`)
+        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`, {
+          waitUntil: 'domcontentloaded',
+        })
 
         const selectedHeader = page.getByRole('button', { name: 'Andre risiko', exact: false })
         await expect(selectedHeader).toHaveAttribute('aria-expanded', 'true')
@@ -560,7 +575,7 @@ for (const role of roleScenarios) {
           const feedback = page.waitForResponse(
             `**/api/pvotilbakemelding/pvkdokument/${pvkDokumentId}`
           )
-          await page.goto(`${baseUrl}?steg=8`)
+          await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
           expect((await feedback).ok()).toBe(true)
           await expect(
             page.getByRole('heading', { name: 'Les og send inn', exact: true })
@@ -587,7 +602,7 @@ for (const role of roleScenarios) {
           mockData.pvkDokument.godkjentAvRisikoeierDato = changeStamp.lastModifiedDate
           const tableId = step === 4 ? dokumentasjonId : pvkDokumentId
           const history = page.waitForResponse(`**/api/audit/log/${tableId}/**`)
-          await page.goto(`${baseUrl}?steg=${step}`)
+          await page.goto(`${baseUrl}?steg=${step}`, { waitUntil: 'domcontentloaded' })
           expect((await history).ok()).toBe(true)
           await expect(
             page.getByRole('heading', { name: stepHeadings[step - 1], exact: true })
@@ -600,7 +615,7 @@ for (const role of roleScenarios) {
       test('viser PVOs nåværende og tidligere tilbakemelding', async ({ page, mockData }) => {
         mockData.pvkDokument.status = EPvkDokumentStatus.VURDERT_AV_PVO
         mockData.pvkDokument.antallInnsendingTilPvo = 2
-        await page.goto(`${baseUrl}?steg=2`)
+        await page.goto(`${baseUrl}?steg=2`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByText('PVO-tilbakemelding fra innsending 2', { exact: true })
         ).toBeVisible()
@@ -615,7 +630,7 @@ for (const role of roleScenarios) {
       test('lagrer art og omfang i mockdata og beholder endringen etter omlasting', async ({
         page,
       }) => {
-        await page.goto(`${baseUrl}?steg=3`)
+        await page.goto(`${baseUrl}?steg=3`, { waitUntil: 'domcontentloaded' })
         const field = page.getByRole('textbox', { name: /2\. For hver av personkategoriene/ })
         await field.fill('Omtrent 100 registrerte i simuleringen')
         const saved = page.waitForResponse(
@@ -635,7 +650,7 @@ for (const role of roleScenarios) {
           'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
           'base64'
         )
-        await page.goto(`${baseUrl}?steg=2`)
+        await page.goto(`${baseUrl}?steg=2`, { waitUntil: 'domcontentloaded' })
         await page.locator('input[type="file"]').setInputFiles({
           name: 'livslop.png',
           mimeType: 'image/png',
@@ -661,7 +676,7 @@ for (const role of roleScenarios) {
         page,
         mockData,
       }) => {
-        await page.goto(`${baseUrl}?steg=6`)
+        await page.goto(`${baseUrl}?steg=6`, { waitUntil: 'domcontentloaded' })
         await page
           .getByRole('button', { name: 'Legg til ikke krav-spesifikt risikoscenario' })
           .click()
@@ -702,7 +717,9 @@ for (const role of roleScenarios) {
         mockData,
       }) => {
         const responsible = role.hasDocumentAccess ? resource : otherResource
-        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`)
+        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`, {
+          waitUntil: 'domcontentloaded',
+        })
         await expect(page.getByRole('button', { name: 'Andre risiko', exact: true })).toBeFocused()
         await page.getByRole('button', { name: 'Opprett nytt tiltak', exact: true }).click()
         await page.getByRole('textbox', { name: 'Navngi tiltaket' }).fill('Nytt simulert tiltak')
@@ -751,7 +768,7 @@ for (const role of roleScenarios) {
           risiko.nivaaBegrunnelseEtterTiltak = 'Tiltaket reduserer risikoen'
         })
         mockData.pvkDokument.berOmNyVurderingFraPvo = true
-        await page.goto(`${baseUrl}?steg=8`)
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByText('Et begrenset antall registrerte', { exact: true })
         ).toBeVisible()
@@ -787,7 +804,7 @@ for (const role of roleScenarios) {
         mockData.pvkDokument.merknadTilRisikoeier = 'Dokumentasjonen er klar for godkjenning'
         mockData.dokumentasjon.risikoeiere = [mockIdent]
         mockData.dokumentasjon.risikoeiereData = [resource]
-        await page.goto(`${baseUrl}?steg=8`)
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await page
           .getByRole('button', { name: 'Lagre og send til risikoeier', exact: true })
           .click()
