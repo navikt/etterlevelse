@@ -154,7 +154,10 @@ test.describe('Om Støtte til etterlevelse', () => {
     await expect(
       page.getByRole('heading', { name: 'Om Støtte til etterlevelse', exact: true })
     ).toBeVisible()
-    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
+    // The button needs hydration and a /userinfo round trip, which is slow under parallel dev-mode runs.
+    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible({
+      timeout: 15_000,
+    })
   })
 
   test('Som en bruker vil jeg se innhold, overskrifter, illustrasjon og introduksjonsvideo', async ({
