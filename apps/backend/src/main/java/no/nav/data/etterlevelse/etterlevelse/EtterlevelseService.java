@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static no.nav.data.common.utils.StreamUtils.groupBy;
+import static no.nav.data.common.utils.StreamUtils.safeStream;
 
 
 @Service
@@ -192,6 +193,20 @@ public class EtterlevelseService {
                 validator.addError(Fields.kravNummer, "FEIL_KRAVSTATUS", "Krav %s kan ikke ettereleves med status %s".formatted(
                         krav.get().kravId(), krav.get().getStatus()
                 ));
+        }
+        var begrunnelser = validator.getItem().getSuksesskriterieBegrunnelser();
+        for (int i = 0; i < begrunnelser.size(); i++) {
+            var begrunnelse = begrunnelser.get(i);
+            boolean deaktivert = safeStream(krav.get().getSuksesskriterier())
+                    .filter(suksesskriterie -> suksesskriterie.getId() == begrunnelse.getSuksesskriterieId())
+                    .flatMap(suksesskriterie -> safeStream(suksesskriterie.getDeaktiverteSuksesskriterieStatus()))
+                    .anyMatch(status -> status != null && status == begrunnelse.getSuksesskriterieStatus());
+            if (deaktivert) {
+                validator.addError(Fields.suksesskriterieBegrunnelser + "[" + i + "]." + SuksesskriterieBegrunnelseRequest.Fields.suksesskriterieStatus,
+                        "DEAKTIVERT_SUKSESSKRITERIE_STATUS",
+                        "Status %s er deaktivert for suksesskriterie %d i krav %s".formatted(
+                                begrunnelse.getSuksesskriterieStatus(), begrunnelse.getSuksesskriterieId(), krav.get().kravId()));
+            }
         }
     }
     
