@@ -30,7 +30,7 @@ Remember to flush sockets when you can't login
 
 ### Run locally, with port forward to dev-gcp
 
-`kubectl port-forward deployment/etterlevelse-backend`
+`kubectl port-forward deployment/etterlevelse-backend 8080:8080 --namespace teamdatajegerne`
 
 OR
 
@@ -62,6 +62,28 @@ It's important to having `dev-gcp` and `frontend` running locally while committi
 2. `brew install node`
 
 ## Common errors
+
+#### Message requests fail with HTTP 500 / ECONNRESET
+
+In development, Next.js proxies `/api/melding/type/SYSTEM` and
+`/api/melding/type/FORSIDE` to `http://localhost:8080`. A
+`Failed to proxy ... ECONNRESET` error means the upstream connection was reset;
+the HTTP 500 seen by Axios can originate from the proxy, not the message controller.
+
+Check the backend connection directly:
+
+```bash
+curl -i --max-time 10 http://localhost:8080/melding/type/SYSTEM
+```
+
+If the connection resets, check the port-forward terminal and backend pod health.
+A port-forward can still listen locally after its connection becomes unusable.
+Stop it in its original terminal and restart it using the command above.
+For mocked Playwright tests, intercept message requests before navigating so they
+do not depend on the forwarded backend.
+
+Message-loading failures are logged in the browser console without becoming
+unhandled promise rejections. This does not repair the backend connection.
 
 ###
 

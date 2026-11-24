@@ -36,13 +36,13 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   }, [source])
 
   useEffect(() => {
-    ;(async () => {
-      await getMeldingByType(EMeldingType.SYSTEM).then((response: IPageResponse<IMelding>) => {
+    getMeldingByType(EMeldingType.SYSTEM)
+      .then((response: IPageResponse<IMelding>) => {
         if (response.numberOfElements > 0) {
           setSystemVarsel(response.content[0])
         }
       })
-    })()
+      .catch((error) => console.error('Failed to fetch system message:', error))
   }, [pathname])
 
   return (

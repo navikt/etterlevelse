@@ -21,7 +21,7 @@ import {
   temainndelingOgTemaoversiktUrl,
   tilretteleggeForGjenbrukId,
 } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
-import { mockAdmin, mockIdent, mockRead } from '../../utils/roller'
+import { mockAdmin, mockIdent, mockRead, mockUnauthorised } from '../../utils/roller'
 
 const test = base.extend<{ userRole: 'admin' | 'read' }>({
   userRole: ['admin', { option: true }],
@@ -179,6 +179,41 @@ test.describe('Om Støtte til etterlevelse', () => {
     ).toBeVisible()
     await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
   })
+
+  for (const failure of ['HTTP 500', 'connection reset'] as const) {
+    test(`Message requests log ${failure} without unhandled rejections`, async ({ page }) => {
+      const pageErrors: string[] = []
+      const consoleErrors: string[] = []
+      page.on('pageerror', (error) => pageErrors.push(error.message))
+      page.on('console', (message) => {
+        if (message.type() === 'error') consoleErrors.push(message.text())
+      })
+      await mockUnauthorised(page)
+      await page.route('**/api/melding/type/*', async (route) => {
+        if (failure === 'HTTP 500') {
+          await route.fulfill({ status: 500, body: 'Internal Server Error' })
+        } else {
+          await route.abort('connectionreset')
+        }
+      })
+
+      await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
+      await expect(
+        page.getByRole('heading', { name: 'Støtte til etterlevelse', exact: true })
+      ).toBeVisible()
+      await expect
+        .poll(() =>
+          consoleErrors.some((message) => message.includes('Failed to fetch system message:'))
+        )
+        .toBe(true)
+      await expect
+        .poll(() =>
+          consoleErrors.some((message) => message.includes('Failed to fetch frontpage message:'))
+        )
+        .toBe(true)
+      expect(pageErrors).toEqual([])
+    })
+  }
 
   test('Som en bruker vil jeg se innhold, overskrifter, illustrasjon og introduksjonsvideo', async ({
     page,

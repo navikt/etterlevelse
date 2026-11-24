@@ -43,13 +43,13 @@ export const EtterlevelseDokumentasjon = () => {
   })
 
   useEffect(() => {
-    ;(async () => {
-      await getMeldingByType(EMeldingType.FORSIDE).then((response: IPageResponse<IMelding>) => {
+    getMeldingByType(EMeldingType.FORSIDE)
+      .then((response: IPageResponse<IMelding>) => {
         if (response.numberOfElements > 0) {
           setForsideVarsle(response.content[0])
         }
       })
-    })()
+      .catch((error) => console.error('Failed to fetch frontpage message:', error))
   }, [])
 
   return (
