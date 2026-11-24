@@ -783,6 +783,40 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
     }) => {
       await role.mockUser(page)
 
+      await context.route('**/api/melding/type/SYSTEM', async (route) => {
+        await route.fulfill({ json: { content: [] } })
+      })
+      await context.route(
+        `**/etterlevelsemetadata/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
+      await context.route(
+        `**/etterlevelse/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
+
       await context.route('**/api/codelist?refresh=false', async (route) => {
         await route.fulfill({
           json: {
@@ -974,14 +1008,14 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       ]
 
       for (const navigationUrl of navigationUrls) {
-        await page.goto(navigationUrl)
+        await page.goto(navigationUrl, { waitUntil: 'domcontentloaded' })
         await expect(page).toHaveURL(navigationUrl)
         await expect(
           page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
         ).toBeVisible()
       }
 
-      await page.goto(`${documentUrl}?tema=all-open`)
+      await page.goto(`${documentUrl}?tema=all-open`, { waitUntil: 'domcontentloaded' })
       await expect(
         page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
       ).toBeVisible()

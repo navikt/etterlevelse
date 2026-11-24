@@ -283,7 +283,7 @@ test.describe('Om Støtte til etterlevelse', () => {
         .poll(() => page.evaluate(() => sessionStorage.getItem('copiedAccordionLink')))
         .toBe(`${pageUrl}#${item.id}`)
       await expect(header).toHaveAttribute('aria-expanded', 'false')
-      await page.goto(`${pageUrl}#${item.id}`)
+      await page.goto(`${pageUrl}#${item.id}`, { waitUntil: 'domcontentloaded' })
       await expect(header).toHaveAttribute('aria-expanded', 'true')
       await expect(accordion.getByText(item.content, { exact: false })).toBeVisible()
       await expect(header).toBeInViewport()

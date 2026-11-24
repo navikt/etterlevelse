@@ -198,7 +198,7 @@ for (const path of [
   })
 
   test(`sort icons remain visible without hovering on ${path}`, async ({ page }) => {
-    await page.goto(`http://localhost:3000${path}`)
+    await page.goto(`http://localhost:3000${path}`, { waitUntil: 'domcontentloaded' })
     const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
     await expect(table).toBeVisible()
     await expect(table).not.toHaveAttribute('aria-busy', 'true')

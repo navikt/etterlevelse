@@ -161,7 +161,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       await route.fulfill({ json: { id: oppretteEtterlevelsesdokument.id } })
     })
 
-    await page.goto('http://localhost:3000/dokumentasjon/create')
+    await page.goto('http://localhost:3000/dokumentasjon/create', { waitUntil: 'domcontentloaded' })
 
     const titleField = page.getByLabel('Navngi det nye dokumentet ditt')
     const relevanceCheckbox = page.getByRole('checkbox', {
