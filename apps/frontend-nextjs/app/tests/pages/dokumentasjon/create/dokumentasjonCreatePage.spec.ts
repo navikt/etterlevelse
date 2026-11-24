@@ -80,8 +80,11 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     })
 
     await expect(page).toHaveTitle(/Etterlevelse/)
-    await expect(page.getByRole('button', { name: 'Nytt etterlevelsesdokument' })).toBeVisible()
-    await page.getByRole('button', { name: 'Nytt etterlevelsesdokument' }).click()
+    // Wait for hydration and user loading before interacting with the server-rendered button.
+    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
+    await page
+      .getByRole('button', { name: 'Opprett nytt etterlevelsesdokument', exact: true })
+      .click()
 
     // The dev server may compile the create route on first navigation
     await expect(page).toHaveURL(/\/dokumentasjon\/create$/, { timeout: 15000 })
