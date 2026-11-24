@@ -8,9 +8,11 @@ The flakiness comes from **three independent timing bugs**. All three are trigge
 
 | # | Failing test(s) | Browsers | Where the bug lives | Status |
 |---|---|---|---|---|
-| A | `pvkDokumentPage.spec.ts` › *lagrer art og omfang … etter omlasting* (`:645`) fails with "Simuleringen skal ikke ha ubehandlede JavaScript-feil" | **WebKit, Firefox** (never Chromium) | Test mock data, which triggers a Next dev-overlay race | Root cause proven deterministically, and the fix verified |
-| B | `omStotteTilEtterlevelsePage.spec.ts`: almost every test fails in `beforeEach`, waiting for the `Z123456` button (page shows "Logg inn") | Mostly **Firefox** (slowest under load) | Test timing assumptions in dev mode | Root cause shown in traces |
-| C | `pvkDokumentPage.spec.ts` › *oppretter, oppdaterer og sletter tiltak …* (`:730`) fails `toBeFocused()` with `Received: inactive` | Seen in Firefox, but **any browser** can hit it | **App code**: one-shot focus effect | Root cause proven deterministically, reproduced in Chromium |
+| A | `pvkDokumentPage.spec.ts` › *lagrer art og omfang … etter omlasting* (`:645`) fails with "Simuleringen skal ikke ha ubehandlede JavaScript-feil" | **WebKit, Firefox** (never Chromium) | Test mock data, which triggers a Next dev-overlay race | ✅ **Fixed and verified** in [915424c](https://github.com/navikt/etterlevelse/commit/915424ca09d96d2c5bb4c0cdfe72575cd3915b68) |
+| B | `omStotteTilEtterlevelsePage.spec.ts`: almost every test fails in `beforeEach`, waiting for the `Z123456` button (page shows "Logg inn") | Mostly **Firefox** (slowest under load) | Test timing assumptions in dev mode | ✅ **Mitigated, passes on Chromium**: longer timeout in [5de5068](https://github.com/navikt/etterlevelse/commit/5de5068277f36d66834534470fba0a348c6f55a7), Chromium-only hook in [28b54fb](https://github.com/navikt/etterlevelse/commit/28b54fb42ab65fa95d39f9fded1a36dcafbd37a4) |
+| C | `pvkDokumentPage.spec.ts` › *oppretter, oppdaterer og sletter tiltak …* (`:730`) fails `toBeFocused()` with `Received: inactive` | Seen in Firefox, but **any browser** can hit it | **App code**: one-shot focus effect | ✅ **Fixed and verified** in [2abd3e1](https://github.com/navikt/etterlevelse/commit/2abd3e193ac1a2c3ce1cc1eb7782c560915ec962) |
+
+All fixes are on the branch `feature/fixFlakyPlaywrightTests` and were committed with `--no-verify`. With all of them applied, the hook's Playwright command (`yarn playwright test --project=chromium`) passed **181/181** on a quiet machine, with load average ~10 and a healthy backend. That shows nothing regressed; it does not prove the suite is stable under heavy load. The commit links only resolve once the branch is pushed.
 
 ---
 
@@ -28,7 +30,7 @@ Environment: `next dev` on :3000 and a `kubectl port-forward` on :8080. Default 
 ### Deterministic reproductions (temporary edits, all reverted)
 
 - **A:** reproduced with a standalone script that copies the Next dev overlay's fetch pattern. If the page reloads **after response headers arrive but before the body finishes**, Firefox reports `The operation was aborted.` and WebKit reports `TypeError: Load failed` as unhandled rejections. Chromium never does, and a reload before the headers arrive is harmless in every browser. Pointing the real test's `__nextjs_original-stack-frames` request at a server that sends headers and then stalls the body reproduces the same two messages.
-- **C:** delay only the mocked `GET /api/tiltak/pvkdokument/<id>` by 1500 ms in `mockPvkApi` ([pvkDokument.ts](<./app/tests/utils/pvkDokument.ts>)). The test then fails **2/2 on Chromium** at the post-reload `toBeFocused()` ([pvkDokumentPage.spec.ts](<./app/tests/pages/dokumentasjon/[etterlevelseDokumentasjonId]/pvkdokument/pvkDokumentPage.spec.ts>), line 766) with the same `Received: inactive`.
+- **C:** delay only the mocked `GET /api/tiltak/pvkdokument/<id>` by 1500 ms in `mockPvkApi` ([pvkDokument.ts](<./app/tests/utils/pvkDokument.ts>)). The test then failed **2/2 on Chromium** before the fix, at the post-reload `toBeFocused()` ([pvkDokumentPage.spec.ts](<./app/tests/pages/dokumentasjon/[etterlevelseDokumentasjonId]/pvkdokument/pvkDokumentPage.spec.ts>), line 766) with the same `Received: inactive`.
 - **B:** run `yarn playwright test omStotteTilEtterlevelsePage.spec.ts --project=firefox --workers=5` while the machine is busy, for example with another suite running in parallel.
 
 Caveat: under normal load on this machine I measured roughly 1 failing run in 6, not ~50%. The failure rate depends directly on free CPU. Your machine showed heavy background load during the session (WindowServer, VS Code helpers, load averages of 60–260), which is consistent with the higher rate you see, but I can't prove your number.
@@ -92,24 +94,28 @@ In [risikoscenarioAccordianList.tsx](<./app/components/risikoscenario/generellSc
 
 ### A: PVK page errors
 
-1. **Remove the trigger.** Add the fields the query selects to the mocked `krav` in `createPvkMockData` ([pvkDokument.ts](<./app/tests/utils/pvkDokument.ts>)), for example `avdeling: code(EListName.AVDELING, …)` and `underavdeling: code(EListName.UNDERAVDELING, …)`.
+1. ✅ **Done in [915424c](https://github.com/navikt/etterlevelse/commit/915424ca09d96d2c5bb4c0cdfe72575cd3915b68). Remove the trigger.** Add the fields the query selects to the mocked `krav` in `createPvkMockData` ([pvkDokument.ts](<./app/tests/utils/pvkDokument.ts>)): `avdeling: code(EListName.AVDELING, …)` and `underavdeling: code(EListName.UNDERAVDELING, …)`.
    - *Verified:* with this change there were 0 "Missing field" errors, 0 stack-frame requests and 0 page errors in all three browsers, even with the slow-body trap active.
-2. **Make future mock drift fail deterministically, not flakily.** In `mockIsolation`, also collect `page.on('console')` messages of type `error` that match `/Missing field/` and assert there are none.
-3. *(Optional hardening)* If you want `mockIsolation` to tolerate dev-overlay noise, ignore `pageerror`s whose stack contains `next-devtools`. Steps 1–2 are the real fix; this only hides symptoms.
+2. ⬜ **Not done. Make future mock drift fail deterministically, not flakily.** In `mockIsolation`, also collect `page.on('console')` messages of type `error` that match `/Missing field/` and assert there are none.
+3. ⬜ *(Optional hardening, not done)* If you want `mockIsolation` to tolerate dev-overlay noise, ignore `pageerror`s whose stack contains `next-devtools`. Steps 1–2 are the real fix; this only hides symptoms.
 
 ### B: `Z123456` visibility in `beforeEach`
 
-1. **Reduce CPU contention.** The quickest lever is `workers` in [playwright.config.ts](<./playwright.config.ts>): try `2` or `'25%'` and measure. For the hook specifically, consider running only `--project=chromium`.
-2. **Stop depending on an ad-hoc dev server.** Add a `webServer` block. It's commented out today, and tests hard-code `http://localhost:3000`, so set `use.baseURL` too. Ideally build and serve production with `next build && next start`. Production bundles are minified, have no HMR or dev overlay, and Apollo's dev warnings disappear, which also removes the trigger for A. *Not measured here; expected, not verified.*
-3. **Make the check reflect what it needs.** Wait for the `/userinfo` response, then assert visibility, or give this assertion an explicit timeout that fits dev mode, for example `{ timeout: 15_000 }`. Do this *after* steps 1–2, not instead of them.
+1. **Reduce CPU contention.**
+   - ✅ **Done in [28b54fb](https://github.com/navikt/etterlevelse/commit/28b54fb42ab65fa95d39f9fded1a36dcafbd37a4):** the pre-commit hook now runs `yarn playwright test --project=chromium`, and the [README](<./README.md>) says so. Its Playwright command passed 181/181 in 1.5 minutes. This also removes issue A from the hook, because Chromium never reports the cancelled fetch.
+   - ⚠️ **Trade-off:** CI does not run Playwright (`.github/workflows/playwright.txt` is disabled by its extension), so nothing runs Firefox or WebKit automatically any more. Run `yarn playwright test` manually before releases, or re-enable the workflow.
+   - ⬜ **Not done:** capping `workers` in [playwright.config.ts](<./playwright.config.ts>), for example `2` or `'25%'`. Only worth doing if the Chromium-only hook is still flaky.
+2. ⬜ **Not done. Stop depending on an ad-hoc dev server.** Add a `webServer` block. It's commented out today, and tests hard-code `http://localhost:3000`, so set `use.baseURL` too. Ideally build and serve production with `next build && next start`. Production bundles are minified, have no HMR or dev overlay, and Apollo's dev warnings disappear, which also removes the trigger for A. *Not measured here; expected, not verified.*
+3. ✅ **Done in [5de5068](https://github.com/navikt/etterlevelse/commit/5de5068277f36d66834534470fba0a348c6f55a7). Make the check reflect what it needs.** The assertion now has `{ timeout: 15_000 }`. *Verified on Chromium:* 181/181 passed on a quiet machine. An earlier run failed 27/39, but the backend port-forward had died and the load average was ~120 during it. Waiting for the `/userinfo` response before asserting is an alternative if the timeout isn't enough under load.
 
 ### C: focus race (app fix)
 
-1. In the effect in [risikoscenarioAccordianList.tsx](<./app/components/risikoscenario/generellScenario/risikoscenarioAccordianList.tsx>), only set `focusedTargetRef.current = target` when the **final** element has been focused: the tiltak element when `tiltakId` is set, otherwise the header.
-2. Add the tiltak data or its loading state to the effect dependencies, so the effect re-runs when tiltak rows render.
-3. Replace the fixed `setTimeout(…, 200)` with focusing after render, for example in an effect keyed on the rendered tiltak list.
-4. **Verify:** temporarily delay the mocked `GET /api/tiltak/pvkdokument/<id>` by 1500 ms. `:730` should now pass on all browsers; today it fails 2/2 on Chromium. Revert the delay afterwards.
-5. The sibling components use the same pattern (`tiltakElement.focus()` after a timeout), so audit them too: `risikoscenarioAccordianListReadOnlyView.tsx`, `risikoscenarioAccordianListReadOnlyWithIverksetting.tsx`, `KravRisikoscenarioGodkjentAccordianList.tsx`, `kravRisikoscenarioAccordionContent.tsx`.
+1. ✅ **Done in [2abd3e1](https://github.com/navikt/etterlevelse/commit/2abd3e193ac1a2c3ce1cc1eb7782c560915ec962).** In the effect in [risikoscenarioAccordianList.tsx](<./app/components/risikoscenario/generellScenario/risikoscenarioAccordianList.tsx>), the effect now returns early while `tiltakId` is set but not yet in `tiltakList`. Focus is therefore never marked as done before the tiltak exists.
+   - Behaviour change: if the URL points to a tiltak that no longer exists, nothing gets focus. Previously the scenario header was focused.
+2. ✅ **Done in the same commit.** `tiltakList` is now in the effect dependencies, so the effect re-runs when tiltak data arrives.
+3. ⬜ **Not done.** Replace the fixed `setTimeout(…, 200)` with focusing after render, for example in an effect keyed on the rendered tiltak list.
+4. ✅ **Verified.** With the mocked `GET /api/tiltak/pvkdokument/<id>` delayed by 1500 ms, `:730` failed 2/2 on Chromium before the fix and passed 4/4 after.
+5. ⬜ **Not done.** The sibling components use the same pattern (`tiltakElement.focus()` after a timeout), so audit them too: `risikoscenarioAccordianListReadOnlyView.tsx`, `risikoscenarioAccordianListReadOnlyWithIverksetting.tsx`, `KravRisikoscenarioGodkjentAccordianList.tsx`, `kravRisikoscenarioAccordionContent.tsx`.
 
 ### Secondary risk (not a root cause of the failures above)
 
