@@ -177,6 +177,8 @@ export const createPvkMockData = (
     rettskilder: [],
     tagger: ['Personvernkonsekvensvurdering'],
     regelverk: [{ lov }],
+    avdeling: code(EListName.AVDELING, 'AVD', 'Avdeling'),
+    underavdeling: code(EListName.UNDERAVDELING, 'UAVD', 'Underavdeling'),
     relevansFor: [],
     status: EKravStatus.AKTIV,
     suksesskriterier: [],
