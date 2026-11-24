@@ -1,10 +1,22 @@
 import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
-import { Box, Button, Radio, RadioGroup, TextField, ToggleGroup, Tooltip } from '@navikt/ds-react'
+import {
+  Accordion,
+  BodyShort,
+  Box,
+  Button,
+  ExpansionCard,
+  Heading,
+  Radio,
+  RadioGroup,
+  TextField,
+  ToggleGroup,
+} from '@navikt/ds-react'
+import { AccordionHeader, AccordionItem } from '@navikt/ds-react/Accordion'
 import { FieldArray, FieldArrayRenderProps } from 'formik'
 import _ from 'lodash'
-import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
+import { ChangeEvent, FunctionComponent, useEffect, useRef, useState } from 'react'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
-import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
+import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Markdown } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
@@ -54,7 +66,7 @@ const AddSuksessKriterieButton: FunctionComponent<TAddSuksessKriterieButtonProps
   suksesskriterier,
   fieldArrayRenderProps,
 }) => (
-  <div className='my-4 ml-2.5 self-end'>
+  <div className='my-4'>
     <Button
       type='button'
       icon={<PlusIcon aria-label='' aria-hidden />}
@@ -69,7 +81,7 @@ const AddSuksessKriterieButton: FunctionComponent<TAddSuksessKriterieButtonProps
         })
       }
     >
-      Suksesskriterie
+      Legg til suksesskriterium
     </Button>
   </div>
 )
@@ -78,10 +90,10 @@ const KriterieList = ({ fieldArrayRenderProps, newVersion, newKrav }: IPropsKrit
   const suksesskriterier = fieldArrayRenderProps.form.values.suksesskriterier as ISuksesskriterie[]
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col gap-2'>
       {suksesskriterier.map((suksesskriterium, index) => (
         <Kriterie
-          key={`${suksesskriterium.id}_${index}`}
+          key={suksesskriterium.id}
           suksesskriterium={suksesskriterium}
           index={index}
           arrayLength={suksesskriterier.length}
@@ -144,6 +156,8 @@ const Kriterie = ({
   )
 
   const [mode, setMode] = useState('edit')
+  const headerRef = useRef<HTMLDivElement>(null)
+  const [headerHeight, setHeaderHeight] = useState<number>(0)
 
   const nummer = index + 1
 
@@ -162,100 +176,133 @@ const Kriterie = ({
     })
   }, [navn, beskrivelse, behovForBegrunnelse])
 
+  useEffect(() => {
+    const header = headerRef.current
+    if (!header) return
+    const observer = new ResizeObserver(() => setHeaderHeight(header.offsetHeight))
+    observer.observe(header)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <Box padding='space-4' className='mb-4' background='neutral-soft' borderColor='neutral-strong'>
-      <div className='relative pt-1'>
-        <div className='flex items-center absolute right-0 top-0'>
-          {(fieldArrayRenderProps.form.initialValues.status !== EKravStatus.AKTIV ||
-            newVersion) && (
-            <Tooltip content='Fjern suksesskriterium'>
-              <Button
-                variant='secondary'
-                type={'button'}
-                icon={
-                  <TrashIcon title='Fjern suksesskriterium' arial-label='Fjern suksesskriterium' />
-                }
-                onClick={remove}
-              />
-            </Tooltip>
-          )}
-          <RearrangeButtons
-            label='suksesskriterium'
-            index={index}
-            arrayLength={arrayLength}
-            updateIndex={updateIndex}
-            marginLeft
-          />
-        </div>
+    <ExpansionCard aria-label={navn}>
+      <ExpansionCard.Header ref={headerRef} className='sticky top-0 z-10 bg-white'>
+        <ExpansionCard.Title size='small' className='wrap-anywhere'>
+          {navn}
+          <BodyShort size='medium'>{`Suksesskriterium ${nummer} av ${arrayLength}`}</BodyShort>
+        </ExpansionCard.Title>
+      </ExpansionCard.Header>
+      <ExpansionCard.Content className='data-[open=true]:overflow-visible'>
+        <Box
+          padding='space-16'
+          background='brand-blue-soft'
+          borderRadius='0 0 0 8'
+          className='mt-5 mb-2.5'
+        >
+          <div className='relative'>
+            <Heading level='4' size='small' className='mb-10'>
+              Beskriv suksesskriteriet
+            </Heading>
 
-        <div className='mb-5'>
-          <LabelWithToolTip
-            label={`Suksesskriterium ${nummer}`}
-            tooltip='Definer hvilke kriterier som skal til for at kravet er oppnådd. Formålet er å identifisere en terskel for kravoppnåelse og en enhetlig besvarelse på tvers.'
-          />
-
-          <TextField
-            label={`Suksesskriterium ${nummer}`}
-            hideLabel
-            value={navn}
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setNavn((event.target as HTMLInputElement).value)
-            }
-            placeholder='Navn'
-            error={
-              fieldArrayRenderProps.form.errors &&
-              fieldArrayRenderProps.form.errors['suksesskriterier'] && (
-                <FormError fieldName='suksesskriterier' />
-              )
-            }
-          />
-        </div>
-
-        <div>
-          <div className='flex w-full items-center justify-between mb-1'>
-            <div>
-              <LabelWithToolTip
-                label='Beskrivelse av suksesskriteriet'
-                tooltip='Nærmere detaljer rundt oppnåelse av suksesskriteriet.'
-                noMarginBottom
+            <div className='flex items-center absolute right-0 top-0'>
+              <RearrangeButtons
+                label='suksesskriterium'
+                index={index}
+                arrayLength={arrayLength}
+                updateIndex={updateIndex}
+                marginLeft
               />
             </div>
           </div>
 
-          {mode === 'edit' && (
-            <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height='15.625rem' />
-          )}
+          <div className='mb-6.5'>
+            <TextField
+              label={`Navngi suksesskriterium ${nummer}`}
+              value={navn}
+              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                setNavn((event.target as HTMLInputElement).value)
+              }
+              placeholder='Navn'
+              error={
+                fieldArrayRenderProps.form.errors &&
+                fieldArrayRenderProps.form.errors['suksesskriterier'] && (
+                  <FormError fieldName='suksesskriterier' />
+                )
+              }
+            />
+          </div>
 
-          {mode === 'view' && (
-            <div className='p-8 border-border-subtle-hover border border-solid rounded-md bg-white'>
-              <Markdown source={beskrivelse} />
+          <div>
+            <div>
+              <LabelWithDescription
+                label='Utfyllende om kriteriet'
+                description='Som etterlever skal det være mulig å forstå fra suksesskriteriumsbeskrivelsen om man har oppnådd eller ikke oppnådd kriteriet, eller eventuelt om kriteriet ikke er relevant.'
+                noMarginBottom
+              />
             </div>
-          )}
-        </div>
-        <div className='flex justify-end -mt-px'>
-          <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
-            <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
-            <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
-          </ToggleGroup>
-        </div>
 
-        <div className='flex flex-1 mt-1'>
-          <RadioGroup
-            legend='Velg type besvarelse:'
-            value={behovForBegrunnelse}
-            onChange={(value) => {
-              fieldArrayRenderProps.form.setFieldValue(
-                'behovForBegrunnelse',
-                value === 'true' ? true : false
-              )
-              setBehovForBegrunnelse(value)
-            }}
+            {mode === 'edit' && (
+              <TextEditor initialValue={beskrivelse} setValue={setBeskrivelse} height='15.625rem' />
+            )}
+
+            {mode === 'view' && (
+              <div className='p-8 border-border-subtle-hover border border-solid rounded-md bg-white'>
+                <Markdown source={beskrivelse} />
+              </div>
+            )}
+          </div>
+          <div className='flex justify-end -mt-px'>
+            <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
+              <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
+              <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
+            </ToggleGroup>
+          </div>
+        </Box>
+
+        <Accordion className='mb-2.5'>
+          <AccordionItem>
+            <AccordionHeader className='sticky z-9 bg-white' style={{ top: headerHeight }}>
+              <Heading level='4' size='small'>
+                Obligatorisk: velg hvordan etterlever skal kunne besvare suksesskriteriet
+              </Heading>
+            </AccordionHeader>
+            <Accordion.Content>
+              <Box
+                padding='space-16'
+                background='brand-blue-soft'
+                borderRadius='0 0 0 8'
+                className='flex flex-1 mt-1'
+              >
+                <RadioGroup
+                  legend='Velg type besvarelse:'
+                  value={behovForBegrunnelse}
+                  onChange={(value) => {
+                    fieldArrayRenderProps.form.setFieldValue(
+                      'behovForBegrunnelse',
+                      value === 'true' ? true : false
+                    )
+                    setBehovForBegrunnelse(value)
+                  }}
+                >
+                  <Radio value='true'>Bekreftelse med tekstlig begrunnelse</Radio>
+                  <Radio value='false'>Kun bekreftelse </Radio>
+                </RadioGroup>
+              </Box>
+            </Accordion.Content>
+          </AccordionItem>
+        </Accordion>
+
+        {(fieldArrayRenderProps.form.initialValues.status !== EKravStatus.AKTIV || newVersion) && (
+          <Button
+            variant='secondary'
+            type={'button'}
+            icon={<TrashIcon title='Fjern suksesskriterium' aria-hidden />}
+            onClick={remove}
           >
-            <Radio value='true'>Bekreftelse med tekstlig begrunnelse</Radio>
-            <Radio value='false'>Kun bekreftelse </Radio>
-          </RadioGroup>
-        </div>
-      </div>
-    </Box>
+            Fjern suksesskriterium
+          </Button>
+        )}
+      </ExpansionCard.Content>
+    </ExpansionCard>
   )
 }

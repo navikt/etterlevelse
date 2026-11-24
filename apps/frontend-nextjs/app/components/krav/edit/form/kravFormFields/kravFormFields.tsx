@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, ErrorSummary, Heading } from '@navikt/ds-react'
+import { Box, ErrorSummary, Heading, ReadMore } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useContext, useEffect, useRef } from 'react'
@@ -77,12 +77,25 @@ export const KravFormFields: FunctionComponent<TProps> = ({
 
       <div className='flex w-full justify-center'>
         <div className='w-full mb-2.5'>
-          <div className='mb-10' id='suksesskriterier'>
-            <Heading level='2' size='medium' className='mb-2'>
+          <Box
+            padding='space-16'
+            background='neutral-soft'
+            borderRadius='0 0 0 8'
+            className='mb-10'
+            id='suksesskriterier'
+          >
+            <Heading level='2' size='medium' className='mb-3'>
               Suksesskriterier
             </Heading>
+
+            <ReadMore header='Om oppretting av suksesskriterier' className='mb-5.5'>
+              Her definerer du hvilke kriterier som skal til for at kravet i sin helhet er oppnådd.
+              Formålet med hvert suksesskriterium er å identifisere en terskel for kravoppnåelse, og
+              en enhetlig besvarelse på tvers i Nav.
+            </ReadMore>
+
             <KravSuksesskriterierEdit />
-          </div>
+          </Box>
 
           <Box
             padding='space-16'
