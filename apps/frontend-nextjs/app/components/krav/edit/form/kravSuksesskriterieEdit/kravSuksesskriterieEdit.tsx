@@ -173,6 +173,7 @@ const Kriterie = ({
       navn,
       beskrivelse,
       behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
+      deaktiverteSuksesskriterieStatus: [],
     })
   }, [navn, beskrivelse, behovForBegrunnelse])
 

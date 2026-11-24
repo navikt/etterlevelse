@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
-
 import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
@@ -168,7 +167,13 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
   relevansFor: krav.relevansFor || [],
   status: krav.status || EKravStatus.UTKAST,
   suksesskriterier: krav.suksesskriterier || [
-    { id: 0, navn: '', beskrivelse: '', behovForBegrunnelse: true },
+    {
+      id: 0,
+      navn: '',
+      beskrivelse: '',
+      behovForBegrunnelse: true,
+      deaktiverteSuksesskriterieStatus: [],
+    },
   ],
   nyKravVersjon: krav.nyKravVersjon || false,
   tema:

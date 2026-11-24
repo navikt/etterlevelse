@@ -3,6 +3,7 @@ import { ICode, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
 import { IBegrep } from '../behandlingskatalogen/behandlingskatalogConstants'
 import {
   EEtterlevelseStatus,
+  ESuksesskriterieStatus,
   TEtterlevelseQL,
 } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
@@ -58,6 +59,7 @@ export interface ISuksesskriterie {
   navn: string
   beskrivelse?: string
   behovForBegrunnelse: boolean
+  deaktiverteSuksesskriterieStatus: ESuksesskriterieStatus[]
 }
 
 export type TKravQL = TReplace<

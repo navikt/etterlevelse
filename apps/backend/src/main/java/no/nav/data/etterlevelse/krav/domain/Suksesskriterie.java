@@ -30,7 +30,7 @@ public class Suksesskriterie {
                 .navn(request.getNavn())
                 .beskrivelse(request.getBeskrivelse())
                 .behovForBegrunnelse(request.isBehovForBegrunnelse())
-                .deaktiverteSuksesskriterieStatus(request.getDeaktiverteSuksesskriterieStatus())
+                .deaktiverteSuksesskriterieStatus(List.copyOf(request.getDeaktiverteSuksesskriterieStatus()))
                 .build();
     }
 

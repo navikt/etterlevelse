@@ -19,7 +19,7 @@ export const KravEditTags = () => {
         return (
           <div>
             <LabelWithToolTip label='Tagger' />
-            <BodyLong className='text-[var(--a-text-subtle)]'>
+            <BodyLong className='text-(--a-text-subtle)'>
               Tilgjengelig for admin til å sette på tagger
             </BodyLong>
             <Select
