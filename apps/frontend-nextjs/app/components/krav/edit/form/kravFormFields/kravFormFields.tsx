@@ -79,7 +79,7 @@ export const KravFormFields: FunctionComponent<TProps> = ({
         <div className='w-full mb-2.5'>
           <Box
             padding='space-16'
-            background='neutral-soft'
+            background='sunken'
             borderRadius='0 0 0 8'
             className='mb-10'
             id='suksesskriterier'

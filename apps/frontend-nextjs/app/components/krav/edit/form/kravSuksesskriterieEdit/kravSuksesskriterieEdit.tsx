@@ -1,9 +1,12 @@
-import { PlusIcon, TrashIcon } from '@navikt/aksel-icons'
+import { PadlockLockedFillIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons'
 import {
   Accordion,
+  BodyLong,
   BodyShort,
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   ExpansionCard,
   Heading,
   Radio,
@@ -21,8 +24,21 @@ import { Markdown } from '@/components/common/markdown/markdown'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
 import TextEditor from '@/components/common/textEditor/TextEditor'
+import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
+
+const suksesskriterieStatusOptions: {
+  value: ESuksesskriterieStatus
+  label: string
+  obligatorisk: boolean
+}[] = [
+  { value: ESuksesskriterieStatus.IKKE_PAABEGYNT, label: 'Ikke påbegynt', obligatorisk: true },
+  { value: ESuksesskriterieStatus.UNDER_ARBEID, label: 'Under arbeid', obligatorisk: true },
+  { value: ESuksesskriterieStatus.OPPFYLT, label: 'Oppfylt', obligatorisk: true },
+  { value: ESuksesskriterieStatus.IKKE_OPPFYLT, label: 'Ikke oppfylt', obligatorisk: true },
+  { value: ESuksesskriterieStatus.IKKE_RELEVANT, label: 'Ikke relevant', obligatorisk: false },
+]
 
 type TKravSuksesskriterieEditProps = {
   newVersion?: boolean
@@ -155,6 +171,10 @@ const Kriterie = ({
       : suksesskriterium.behovForBegrunnelse.toString()
   )
 
+  const [deaktiverteSuksesskriterieStatus, setDeaktiverteSuksesskriterieStatus] = useState<
+    ESuksesskriterieStatus[]
+  >(suksesskriterium.deaktiverteSuksesskriterieStatus || [])
+
   const [mode, setMode] = useState('edit')
   const headerRef = useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
@@ -173,9 +193,9 @@ const Kriterie = ({
       navn,
       beskrivelse,
       behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
-      deaktiverteSuksesskriterieStatus: [],
+      deaktiverteSuksesskriterieStatus,
     })
-  }, [navn, beskrivelse, behovForBegrunnelse])
+  }, [navn, beskrivelse, behovForBegrunnelse, deaktiverteSuksesskriterieStatus])
 
   useEffect(() => {
     const header = headerRef.current
@@ -261,6 +281,52 @@ const Kriterie = ({
         </Box>
 
         <Accordion className='mb-2.5'>
+          <AccordionItem>
+            <AccordionHeader className='sticky z-9 bg-white' style={{ top: headerHeight }}>
+              <Heading level='4' size='small'>
+                Obligatorisk: velg om suksesskriteriet også skal ha status “ikke relevant”.
+              </Heading>
+            </AccordionHeader>
+            <Accordion.Content>
+              <Box
+                padding='space-16'
+                background='brand-blue-soft'
+                borderRadius='0 0 0 8'
+                className='flex flex-1 mt-1'
+              >
+                <CheckboxGroup
+                  legend='Velg om suksesskriteriet også skal ha status "Ikke relevant".'
+                  description='Alle suksesskriterier må ha statusene Ikke påbegynt, Under arbeid, Oppfylt og Ikke oppfylt.'
+                  value={suksesskriterieStatusOptions
+                    .map((option) => option.value)
+                    .filter((status) => !deaktiverteSuksesskriterieStatus.includes(status))}
+                  onChange={(aktiveStatuser: ESuksesskriterieStatus[]) => {
+                    setDeaktiverteSuksesskriterieStatus(
+                      suksesskriterieStatusOptions
+                        .filter(
+                          (option) => !option.obligatorisk && !aktiveStatuser.includes(option.value)
+                        )
+                        .map((option) => option.value)
+                    )
+                  }}
+                >
+                  {suksesskriterieStatusOptions.map((option) => (
+                    <Checkbox
+                      key={option.value}
+                      value={option.value}
+                      readOnly={option.obligatorisk}
+                      className='flex items-center'
+                    >
+                      <BodyLong className='flex justify-center items-center'>
+                        {option.obligatorisk && <PadlockLockedFillIcon aria-hidden />}{' '}
+                        {option.label}
+                      </BodyLong>
+                    </Checkbox>
+                  ))}
+                </CheckboxGroup>
+              </Box>
+            </Accordion.Content>
+          </AccordionItem>
           <AccordionItem>
             <AccordionHeader className='sticky z-9 bg-white' style={{ top: headerHeight }}>
               <Heading level='4' size='small'>
