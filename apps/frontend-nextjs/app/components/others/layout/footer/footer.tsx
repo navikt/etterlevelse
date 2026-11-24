@@ -69,6 +69,7 @@ export const Footer = () => {
           <div className=' flex flex-col'>
             <BodyShort className='text-2xl mb-5 flex items-baseline'>
               <Image
+                loading='eager'
                 className='mr-2.5 hidden md:block'
                 src={etterlevelseLogoWhiteIcon}
                 alt='Etterlevelse logo'

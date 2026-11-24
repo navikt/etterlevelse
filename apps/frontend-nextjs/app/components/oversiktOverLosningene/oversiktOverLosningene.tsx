@@ -52,6 +52,7 @@ export const OversiktOverLosningene = () => {
 
           <div className='flex items-start my-6'>
             <Image
+              loading='lazy'
               className='mr-2.5'
               src={KortOmLosningenStotteTilEtterlevelse}
               alt='Skjermbilde fra Støtte til etterlevelse.'
@@ -70,6 +71,7 @@ export const OversiktOverLosningene = () => {
           </div>
           <div className='flex items-start my-12'>
             <Image
+              loading='lazy'
               className='mr-2.5'
               src={KortOmLosningenDigitalPVK}
               alt='Skjermbilde fra Digital PVK.'
@@ -90,6 +92,7 @@ export const OversiktOverLosningene = () => {
           </div>
           <div className='flex items-start my-6'>
             <Image
+              loading='lazy'
               className='mr-2.5'
               src={KortOmLosningeneBehandlingskatalogen}
               alt='Skjermbilde fra Behandlingskatalogen.'
@@ -117,6 +120,7 @@ export const OversiktOverLosningene = () => {
             et bedre grunnlag for internkontroll.
           </BodyLong>
           <Image
+            loading='lazy'
             className='mr-2.5 mt-6'
             src={KortOmLosningeneSammenhengenMellomVerktoyene}
             alt='Skjermbilde som viser sammenhengen mellom verktøyene Behandlingskatalogen, Støtte til Etterlevelse og Digital PVK.'

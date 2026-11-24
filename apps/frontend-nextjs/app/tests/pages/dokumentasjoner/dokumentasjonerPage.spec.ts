@@ -136,7 +136,7 @@ test.describe('nagivation to dokumentasjon page', () => {
           body: JSON.stringify({
             data: {
               etterlevelseDokumentasjon: {
-                content: [{ stats: { relevantKrav: [], utgaattKrav: [] } }],
+                content: [{ stats: { relevantKrav: [], irrelevantKrav: [], utgaattKrav: [] } }],
               },
             },
           }),

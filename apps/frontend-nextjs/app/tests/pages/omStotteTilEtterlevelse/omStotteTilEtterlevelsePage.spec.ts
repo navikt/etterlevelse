@@ -1,4 +1,4 @@
-import { Locator, expect, test } from '@playwright/test'
+import { Locator, test as base, expect } from '@playwright/test'
 import { omPVKUrl, oversiktOverLosningeneUrl } from '@/routes/omSidene/omSideneUrl'
 import {
   behandlerPersonopplysningerId,
@@ -22,6 +22,10 @@ import {
   tilretteleggeForGjenbrukId,
 } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
 import { mockAdmin, mockIdent, mockRead } from '../../utils/roller'
+
+const test = base.extend<{ userRole: 'admin' | 'read' }>({
+  userRole: ['admin', { option: true }],
+})
 
 const baseUrl = 'http://localhost:3000'
 const pageUrl = `${baseUrl}${omStotteTilEtterlevelseUrl}`
@@ -148,7 +152,7 @@ const toggleExample = async (button: Locator) => {
 }
 
 test.describe('Om Støtte til etterlevelse', () => {
-  test.beforeEach(async ({ context, page }) => {
+  test.beforeEach(async ({ context, page, userRole }) => {
     await context.route('**/api/codelist?refresh=false', async (route) => {
       await route.fulfill({ json: { codelist: {} } })
     })
@@ -164,7 +168,7 @@ test.describe('Om Støtte til etterlevelse', () => {
         },
       })
     })
-    await mockAdmin(page)
+    await (userRole === 'admin' ? mockAdmin : mockRead)(page)
     const [userInfoResponse] = await Promise.all([
       page.waitForResponse('**/userinfo'),
       page.goto(pageUrl, { waitUntil: 'domcontentloaded' }),
@@ -329,23 +333,20 @@ test.describe('Om Støtte til etterlevelse', () => {
     await expect(first).toHaveAttribute('aria-expanded', 'true')
   })
 
-  test('Som en bruker med lesetilgang vil jeg åpne veiledningen uten å se administratorens kopieringsknapper', async ({
-    page,
-  }) => {
-    await mockRead(page)
-    const [userInfoResponse] = await Promise.all([
-      page.waitForResponse('**/userinfo'),
-      page.reload({ waitUntil: 'domcontentloaded' }),
-    ])
-    expect(userInfoResponse.status()).toBe(200)
-    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
-    const main = page.getByRole('main')
-    await expect(main.getByRole('button', { name: 'Kopier lenke', exact: true })).toHaveCount(0)
-    for (const item of accordionItems) {
-      const accordion = main.locator(`[id="${item.id}"]`)
-      await accordion.getByRole('button', { name: item.title, exact: true }).click()
-      await expect(accordion.getByText(item.content, { exact: false })).toBeVisible()
-    }
+  test.describe('Lesetilgang', () => {
+    test.use({ userRole: 'read' })
+
+    test('Som en bruker med lesetilgang vil jeg åpne veiledningen uten å se administratorens kopieringsknapper', async ({
+      page,
+    }) => {
+      const main = page.getByRole('main')
+      await expect(main.getByRole('button', { name: 'Kopier lenke', exact: true })).toHaveCount(0)
+      for (const item of accordionItems) {
+        const accordion = main.locator(`[id="${item.id}"]`)
+        await accordion.getByRole('button', { name: item.title, exact: true }).click()
+        await expect(accordion.getByText(item.content, { exact: false })).toBeVisible()
+      }
+    })
   })
 
   for (const [accordionId, name, path] of [

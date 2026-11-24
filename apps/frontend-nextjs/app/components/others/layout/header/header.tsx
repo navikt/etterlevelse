@@ -104,6 +104,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
             <div className='flex gap-2'>
               <div className='flex items-baseline pt-1'>
                 <Image
+                  loading='eager'
                   src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
                   width='18'
                   height='18'

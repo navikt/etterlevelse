@@ -1,5 +1,7 @@
+import { InMemoryCache } from '@apollo/client'
 import test, { expect } from '@playwright/test'
 import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
+import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
@@ -256,14 +258,21 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       const requestBody = route.request().postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
-        await route.fulfill({
-          json: {
-            data: {
-              etterlevelseDokumentasjon: {
-                content: [{ stats: { relevantKrav: [], utgaattKrav: [] } }],
-              },
-            },
+        const data = {
+          etterlevelseDokumentasjon: {
+            content: [{ stats: { relevantKrav: [], irrelevantKrav: [], utgaattKrav: [] } }],
           },
+        }
+        const cache = new InMemoryCache()
+        const queryOptions = {
+          query: getEtterlevelseDokumentasjonStatsQuery,
+          variables: { etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id },
+        }
+        cache.writeQuery({ ...queryOptions, data })
+        expect(cache.diff({ ...queryOptions, optimistic: false }).complete).toBe(true)
+
+        await route.fulfill({
+          json: { data },
         })
         return
       }
@@ -271,7 +280,9 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       await route.continue()
     })
 
-    await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
+    await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`, {
+      waitUntil: 'domcontentloaded',
+    })
 
     await expect(page).toHaveURL(
       `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
@@ -678,7 +689,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     })
 
     test('viser kravoversikten og lar alle temaer ekspanderes', async ({ page }) => {
-      await page.goto(documentUrl)
+      await page.goto(documentUrl, { waitUntil: 'domcontentloaded' })
       const expandAllThemes = page.getByRole('checkbox', { name: 'Ekspander alle temaer' })
       await expect(expandAllThemes).not.toBeChecked()
       await expandAllThemes.click()
@@ -717,7 +728,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       test(`åpner K${requirement.number}.${requirement.version} og bevarer ekspanderte temaer ved retur`, async ({
         page,
       }) => {
-        await page.goto(documentOverviewUrl)
+        await page.goto(documentOverviewUrl, { waitUntil: 'domcontentloaded' })
         const expandAllThemes = page.getByRole('checkbox', { name: 'Ekspander alle temaer' })
         await expect(expandAllThemes).toBeChecked()
         const requirementUrl =
@@ -746,7 +757,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     }
 
     test('viser bare prioriterte krav i prioritert kravliste', async ({ page }) => {
-      await page.goto(documentOverviewUrl)
+      await page.goto(documentOverviewUrl, { waitUntil: 'domcontentloaded' })
       await page.getByRole('tab', { name: 'Prioritert kravliste' }).click()
       await expect(
         page.getByRole('link', {
@@ -985,6 +996,7 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
                             },
                           ],
                         })),
+                        irrelevantKrav: [],
                         utgaattKrav: [],
                       },
                     },

@@ -238,7 +238,7 @@ export const KravCard = (props: IProps) => {
 
 export const ShowWarningMessage = ({ warningMessage }: { warningMessage: string }) => (
   <div className='flex items-center gap-2'>
-    <Image src={warningAlert} width='18' height='18' alt='warning icon' />
+    <Image loading='lazy' src={warningAlert} width='18' height='18' alt='warning icon' />
     <Detail className='whitespace-nowrap'>{warningMessage}</Detail>
   </div>
 )

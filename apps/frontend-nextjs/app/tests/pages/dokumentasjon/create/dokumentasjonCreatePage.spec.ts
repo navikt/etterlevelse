@@ -10,6 +10,7 @@ import {
   mockKraveier,
   mockPersonvernombud,
   mockRead,
+  mockUnauthorised,
   mockWrite,
 } from '@/tests/utils/roller'
 
@@ -202,6 +203,45 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
   })
 })
 
+test.describe('Ingen tilgang for uautoriserte brukere', () => {
+  for (const [name, path] of [
+    ['forsiden', '/'],
+    ['oppretting', '/dokumentasjon/create'],
+    ['lesing', `/dokumentasjon/${oppretteEtterlevelsesdokument.id}`],
+    ['redigering', `/dokumentasjon/edit/${oppretteEtterlevelsesdokument.id}`],
+  ]) {
+    test(`bruker uten @nav.no-adresse har ikke tilgang til ${name}`, async ({ context, page }) => {
+      await context.route('**/api/**', async (route) => {
+        await route.fulfill({ status: 403 })
+      })
+      await context.route('**/graphql', async (route) => {
+        await route.fulfill({ status: 403 })
+      })
+      await mockUnauthorised(page)
+
+      // The authentication backend is outside this frontend test.
+      await context.route('**/login?redirect_uri=**', async (route) => {
+        await route.fulfill({
+          status: 401,
+          contentType: 'text/plain',
+          body: 'Unauthorized',
+        })
+      })
+
+      const pageUrl = `http://localhost:3000${path}`
+      const loginResponse = page.waitForResponse(
+        (response) => new URL(response.url()).pathname === '/login'
+      )
+      await page.goto(pageUrl, { waitUntil: 'domcontentloaded' })
+
+      expect((await loginResponse).status()).toBe(401)
+      await expect(page).toHaveURL(`http://localhost:3000/login?redirect_uri=${pageUrl}`)
+      await expect(page.getByRole('main')).toHaveCount(0)
+      await expect(page.getByRole('button', { name: mockIdent, exact: true })).toHaveCount(0)
+    })
+  }
+})
+
 test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', () => {
   for (const role of roleScenarios) {
     test(`${role.name} kan opprette og lese, med forventet redigeringstilgang`, async ({
@@ -301,7 +341,7 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
             json: {
               data: {
                 etterlevelseDokumentasjon: {
-                  content: [{ stats: { relevantKrav: [], utgaattKrav: [] } }],
+                  content: [{ stats: { relevantKrav: [], irrelevantKrav: [], utgaattKrav: [] } }],
                 },
               },
             },
