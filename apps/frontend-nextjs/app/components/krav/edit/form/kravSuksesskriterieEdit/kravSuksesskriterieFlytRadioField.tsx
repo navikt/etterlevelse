@@ -16,6 +16,8 @@ type TProps = {
   hopperOverTilIndex?: number
   setHopperOverTilIndex: (value: number | undefined) => void
   error?: string
+  hopperOverTilFieldName: string
+  hopperOverTilError?: string
   scrollMarginTop?: number
   marginTop?: boolean
   marginBottom?: boolean
@@ -32,6 +34,8 @@ const KravSuksesskriterieFlytRadioField: FunctionComponent<TProps> = ({
   hopperOverTilIndex,
   setHopperOverTilIndex,
   error,
+  hopperOverTilFieldName,
+  hopperOverTilError,
   scrollMarginTop,
   marginTop,
   marginBottom,
@@ -74,23 +78,29 @@ const KravSuksesskriterieFlytRadioField: FunctionComponent<TProps> = ({
           Gå direkte til et bestemt suksesskriterium (etterlever slipper de imellom)
         </Radio>
         {value === ESuksesskriteriumFlyt.GA_OVER_NOEN_SUKSESSKRITERIER && (
-          <Select
-            label='Velg hvilket suksesskriterium etterlever skal til direkte'
-            description='Innebærer at suksesskriterier som hoppes over, ikke trenger et svar'
-            value={hopperOverTilIndex ?? ''}
-            onChange={(event) =>
-              setHopperOverTilIndex(
-                event.target.value === '' ? undefined : Number(event.target.value)
-              )
-            }
+          <div
+            id={`suksesskriterier[${index}].${hopperOverTilFieldName}`}
+            style={{ scrollMarginTop }}
           >
-            <option value=''>Velg suksesskriterium</option>
-            {etterfolgendeSuksesskriterier.map(({ suksesskriterium, suksesskriteriumIndex }) => (
-              <option key={suksesskriterium.id} value={suksesskriteriumIndex}>
-                {`${suksesskriteriumIndex + 1} av ${suksesskriterier.length} ${suksesskriterium.navn ? `: ${suksesskriterium.navn}` : ''}`}
-              </option>
-            ))}
-          </Select>
+            <Select
+              error={hopperOverTilError}
+              label='Velg hvilket suksesskriterium etterlever skal til direkte'
+              description='Innebærer at suksesskriterier som hoppes over, ikke trenger et svar'
+              value={hopperOverTilIndex ?? ''}
+              onChange={(event) =>
+                setHopperOverTilIndex(
+                  event.target.value === '' ? undefined : Number(event.target.value)
+                )
+              }
+            >
+              <option value=''>Velg suksesskriterium</option>
+              {etterfolgendeSuksesskriterier.map(({ suksesskriterium, suksesskriteriumIndex }) => (
+                <option key={suksesskriterium.id} value={suksesskriteriumIndex}>
+                  {`${suksesskriteriumIndex + 1} av ${suksesskriterier.length} ${suksesskriterium.navn ? `: ${suksesskriterium.navn}` : ''}`}
+                </option>
+              ))}
+            </Select>
+          </div>
         )}
         <Radio
           value={ESuksesskriteriumFlyt.GA_OVER_RESTERENDE_SUKSESSKRITERIER}

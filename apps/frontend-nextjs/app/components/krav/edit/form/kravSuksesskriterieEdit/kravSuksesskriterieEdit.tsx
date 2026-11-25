@@ -311,10 +311,20 @@ const Kriterie = ({
   const oppfyltStatusFlytFeil = feilmelding('oppfyltStatusFlyt')
   const ikkeOppfyltStatusFlytFeil = feilmelding('ikkeOppfyltStatusFlyt')
   const ikkeRelevantStatusFlytFeil = feilmelding('ikkeRelevantStatusFlyt')
+  const hopperOverTilOppfyltFeil = feilmelding('hopperOverTilSuksesskriterieIndexForOppfyltFlyt')
+  const hopperOverTilIkkeOppfyltFeil = feilmelding(
+    'hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt'
+  )
+  const hopperOverTilIkkeRelevantFeil = feilmelding(
+    'hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt'
+  )
   const harFlytFeil = !!(
     oppfyltStatusFlytFeil ||
     ikkeOppfyltStatusFlytFeil ||
-    ikkeRelevantStatusFlytFeil
+    ikkeRelevantStatusFlytFeil ||
+    hopperOverTilOppfyltFeil ||
+    hopperOverTilIkkeOppfyltFeil ||
+    hopperOverTilIkkeRelevantFeil
   )
 
   const skalApneFlyt = flytVelgesPaNyttAlert || harFlytFeil
@@ -555,6 +565,8 @@ const Kriterie = ({
                 suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='oppfyltStatusFlyt'
+                hopperOverTilFieldName='hopperOverTilSuksesskriterieIndexForOppfyltFlyt'
+                hopperOverTilError={hopperOverTilOppfyltFeil}
                 scrollMarginTop={headerHeight + flytAccordionHeaderHeight}
                 error={oppfyltStatusFlytFeil}
                 suksesskriterieStatus='Oppfylt'
@@ -571,6 +583,8 @@ const Kriterie = ({
                 suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='ikkeOppfyltStatusFlyt'
+                hopperOverTilFieldName='hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt'
+                hopperOverTilError={hopperOverTilIkkeOppfyltFeil}
                 scrollMarginTop={headerHeight + flytAccordionHeaderHeight}
                 error={ikkeOppfyltStatusFlytFeil}
                 suksesskriterieStatus='Ikke oppfylt'
@@ -587,6 +601,8 @@ const Kriterie = ({
                 suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='ikkeRelevantStatusFlyt'
+                hopperOverTilFieldName='hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt'
+                hopperOverTilError={hopperOverTilIkkeRelevantFeil}
                 scrollMarginTop={headerHeight + flytAccordionHeaderHeight}
                 error={ikkeRelevantStatusFlytFeil}
                 suksesskriterieStatus='Ikke relevant'

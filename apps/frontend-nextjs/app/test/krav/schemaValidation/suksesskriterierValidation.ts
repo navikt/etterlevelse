@@ -19,6 +19,31 @@ const flytCheck = (name: string, message: string) =>
     },
   })
 
+const isIkkeRelevantDeaktivert = (context: yup.TestContext): boolean =>
+  ((context.parent.deaktiverteSuksesskriterieStatus || []) as ESuksesskriterieStatus[]).includes(
+    ESuksesskriterieStatus.IKKE_RELEVANT
+  )
+
+const hopperOverTilCheck = (
+  name: string,
+  flytFelt: 'oppfyltStatusFlyt' | 'ikkeOppfyltStatusFlyt' | 'ikkeRelevantStatusFlyt'
+) =>
+  yup
+    .number()
+    .nullable()
+    .test({
+      name,
+      message: 'Du må velge hvilket suksesskriterium som etterlever skal sendes til',
+      test: function (hopperOverTilIndex) {
+        if (!isKravAktiv(this)) return true
+        if (flytFelt === 'ikkeRelevantStatusFlyt' && isIkkeRelevantDeaktivert(this)) return true
+        if (this.parent[flytFelt] !== ESuksesskriteriumFlyt.GA_OVER_NOEN_SUKSESSKRITERIER) {
+          return true
+        }
+        return hopperOverTilIndex !== null && hopperOverTilIndex !== undefined
+      },
+    })
+
 const suksesskriteriumCheck = yup.object({
   navn: yup.string().test({
     name: 'suksesskriteriumNavnCheck',
@@ -39,15 +64,25 @@ const suksesskriteriumCheck = yup.object({
     name: 'ikkeRelevantStatusFlytCheck',
     message: 'Du må velge konsekvens for flyt når suksesskriterium settes til Ikke relevant',
     test: function (flyt) {
-      const deaktiverteStatuser: ESuksesskriterieStatus[] =
-        this.parent.deaktiverteSuksesskriterieStatus || []
       return (
         !isKravAktiv(this) ||
-        deaktiverteStatuser.includes(ESuksesskriterieStatus.IKKE_RELEVANT) ||
+        isIkkeRelevantDeaktivert(this) ||
         isFlytValgt(flyt as ESuksesskriteriumFlyt)
       )
     },
   }),
+  hopperOverTilSuksesskriterieIndexForOppfyltFlyt: hopperOverTilCheck(
+    'hopperOverTilSuksesskriterieIndexForOppfyltFlytCheck',
+    'oppfyltStatusFlyt'
+  ),
+  hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt: hopperOverTilCheck(
+    'hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlytCheck',
+    'ikkeOppfyltStatusFlyt'
+  ),
+  hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt: hopperOverTilCheck(
+    'hopperOverTilSuksesskriterieIndexForIkkeRelevantFlytCheck',
+    'ikkeRelevantStatusFlyt'
+  ),
 })
 
 export const suksesskriterierCheck = yup
