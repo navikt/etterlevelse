@@ -9,6 +9,7 @@ import {
   CheckboxGroup,
   ExpansionCard,
   Heading,
+  InlineMessage,
   LocalAlert,
   Radio,
   RadioGroup,
@@ -503,8 +504,13 @@ const Kriterie = ({
               </Heading>
             </AccordionHeader>
             <Accordion.Content>
+              <InlineMessage status='info' className='mb-3'>
+                Det anbefales at styring av flyt tas sist, etter at alle suksesskriterier er
+                opprettet og beskrevet.
+              </InlineMessage>
+
               {flytVelgesPaNyttAlert && (
-                <LocalAlert status='warning'>
+                <LocalAlert status='warning' className='mb-3'>
                   <LocalAlert.Header>
                     <LocalAlert.Title>
                       Fordi du har endret rekkefølgen til noen suksesskriterier, må du velge
