@@ -3,7 +3,7 @@ import AsyncSelect from 'react-select/async'
 import { useBegrepSearch } from '@/api/begrep/begrepApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
-import LabelWithTooltip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
+import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RenderTagList } from '@/components/common/renderTagList/renderTagList'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
@@ -15,9 +15,9 @@ export const EditBegreper = () => (
     <FieldArray name='begreper'>
       {(fieldArrayRenderProps: FieldArrayRenderProps) => (
         <div>
-          <LabelWithTooltip
-            label='Begreper'
-            tooltip='Legg ved lenke til relevante begrep(er) i Begrepskatalogen.'
+          <LabelWithDescription
+            label='Legg til relevante begreper fra Begrepskatalogen'
+            description='Skriv minst 3 tegn for å søke'
           />
           <AsyncSelect
             aria-label='Søk etter begrep'

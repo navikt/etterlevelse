@@ -1,6 +1,6 @@
 'use client'
 
-import { Checkbox, CheckboxGroup, ErrorSummary, Heading } from '@navikt/ds-react'
+import { Box, ErrorSummary, Heading, ReadMore } from '@navikt/ds-react'
 import { FormikErrors } from 'formik'
 import _ from 'lodash'
 import { FunctionComponent, RefObject, useContext, useEffect, useRef } from 'react'
@@ -24,8 +24,6 @@ type TProps = {
   mode: 'create' | 'edit'
   kravVersjon: number
   errors: FormikErrors<TKravQL>
-  varselMeldingActive: string[]
-  setVarselMeldingActive: React.Dispatch<React.SetStateAction<string[]>>
   isEditingUtgaattKrav?: boolean
 }
 
@@ -35,8 +33,6 @@ export const KravFormFields: FunctionComponent<TProps> = ({
   mode,
   kravVersjon,
   errors,
-  varselMeldingActive,
-  setVarselMeldingActive,
   isEditingUtgaattKrav,
 }) => {
   const user = useContext(UserContext)
@@ -50,33 +46,16 @@ export const KravFormFields: FunctionComponent<TProps> = ({
 
   return (
     <>
-      <div className='mt-5 mb-10'>
+      <Box
+        padding='space-16'
+        background='brand-blue-soft'
+        borderRadius='0 0 0 8'
+        className='mt-5 mb-10'
+      >
+        <Heading size='medium' level='2' className='mb-3'>
+          Om kravet
+        </Heading>
         <InputField marginBottom label='Navn på krav' name='navn' />
-        <div className='mb-10'>
-          <CheckboxGroup
-            legend='Send varselmelding'
-            value={varselMeldingActive}
-            onChange={(value) => {
-              setVarselMeldingActive(value)
-            }}
-          >
-            <Checkbox value='VarselMelding'>
-              Gi kravet en varselmelding (eks. for kommende krav)
-            </Checkbox>
-          </CheckboxGroup>
-
-          {varselMeldingActive.length > 0 && (
-            <div className='w-full ml-8 mt-6'>
-              <TextAreaField
-                label='Forklaring til etterlevere'
-                name='varselMelding'
-                maxCharacter={100}
-                rows={2}
-                noPlaceholder
-              />
-            </div>
-          )}
-        </div>
         {isEditingUtgaattKrav && (
           <div className='mb-10'>
             <TextAreaField
@@ -87,66 +66,103 @@ export const KravFormFields: FunctionComponent<TProps> = ({
             />
           </div>
         )}
-        <TextAreaField label='Hensikt' name='hensikt' height='15.625rem' markdown />
-      </div>
+        <TextAreaField
+          label='Hensikten med kravet'
+          name='hensikt'
+          height='15.625rem'
+          markdown
+          caption='Forklar slik at etterlever forstår hva formålet med kravet er, og hvorfor det er viktig å etterleve det.'
+        />
+      </Box>
 
       <div className='flex w-full justify-center'>
         <div className='w-full mb-2.5'>
-          <div className='mb-10' id='suksesskriterier'>
-            <Heading level='2' size='medium' className='mb-2'>
+          <Box
+            padding='space-16'
+            background='sunken'
+            borderRadius='0 0 0 8'
+            className='mb-10'
+            id='suksesskriterier'
+          >
+            <Heading level='2' size='medium' className='mb-3'>
               Suksesskriterier
             </Heading>
+
+            <ReadMore header='Om oppretting av suksesskriterier' className='mb-5.5'>
+              Her definerer du hvilke kriterier som skal til for at kravet i sin helhet er oppnådd.
+              Formålet med hvert suksesskriterium er å identifisere en terskel for kravoppnåelse, og
+              en enhetlig besvarelse på tvers i Nav.
+            </ReadMore>
+
             <KravSuksesskriterierEdit />
-          </div>
+          </Box>
 
-          <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
+          <Box
+            padding='space-16'
+            background='brand-blue-soft'
+            borderRadius='0 0 0 8'
+            className='mt-5 mb-10'
+          >
+            <Heading level='2' size='medium' className='mb-3'>
+              Dokumentasjon
+            </Heading>
+            <KravEditDokumentasjon maxInputWidth={maxInputWidth} />
 
-          <RegelverkEdit />
+            <RegelverkEdit />
 
-          {kravVersjon > 1 && mode === 'edit' && (
-            <div className='w-full' id='versjonEndringer'>
-              <TextAreaField
-                label='Endringer siden siste versjon'
-                name='versjonEndringer'
-                height='15.625rem'
-                markdown
-              />
-            </div>
-          )}
+            {kravVersjon > 1 && mode === 'edit' && (
+              <div className='w-full' id='versjonEndringer'>
+                <TextAreaField
+                  label='Endringer siden siste versjon'
+                  name='versjonEndringer'
+                  height='15.625rem'
+                  markdown
+                />
+              </div>
+            )}
+          </Box>
 
-          <div className='mt-20'>
-            <Heading level='2' size='medium'>
+          <Box
+            padding='space-16'
+            background='brand-blue-soft'
+            borderRadius='0 0 0 8'
+            className='mt-5 mb-10'
+          >
+            <Heading level='2' size='medium' className='mb-3'>
               Gruppering
             </Heading>
-          </div>
-
-          <div className='w-full max-w-md'>
             <KravEditMultiOptionField
               marginBottom
               name='relevansFor'
-              label='Legg til relevante kategorier'
+              label='Velg kategori(er) kravet er relevant for'
               listName={EListName.RELEVANS}
-              tooltip='Velg kategori(er) kravet er relevant for i nedtrekksmenyen. \n'
             />
-          </div>
 
-          <div className='w-full mb-20 max-w-md'>
             <EditBegreper />
-          </div>
-
-          <div className='w-full mb-20 max-w-md'>
-            <KravEditRelasjoner />
-          </div>
-
-          {user.isAdmin() && (
-            <div className='w-full mb-20 max-w-md'>
-              <KravEditTags />
+            <div className='my-3'>
+              <KravEditRelasjoner />
             </div>
-          )}
 
-          <div id='varslingsadresserQl'>
-            <VarslingsadresserEdit fieldName='varslingsadresserQl' />
-          </div>
+            {user.isAdmin() && (
+              <div className='w-full my-3'>
+                <KravEditTags />
+              </div>
+            )}
+          </Box>
+
+          <Box
+            padding='space-16'
+            background='brand-blue-soft'
+            borderRadius='0 0 0 8'
+            className='mt-5 mb-10'
+          >
+            <Heading level='2' size='medium' className='mb-3'>
+              Kontakt
+            </Heading>
+            <div id='varslingsadresserQl'>
+              <VarslingsadresserEdit fieldName='varslingsadresserQl' />
+            </div>
+          </Box>
 
           <FormError fieldName='varslingsadresserQl' akselStyling />
 

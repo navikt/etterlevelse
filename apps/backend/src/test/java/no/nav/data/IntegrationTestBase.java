@@ -335,7 +335,7 @@ public abstract class IntegrationTestBase {
     protected Risikoscenario insertRisikoscenario() {
         PvkDokument pvkDokument = createPvkDokument();
         Krav krav = kravRepo.save(Krav.builder().id(UUID.randomUUID()).kravNummer(50).kravVersjon(1)
-                .data(KravData.builder().navn("Krav 50").regelverk(List.of(Regelverk.builder()
+                .data(KravData.builder().navn("Krav 50").tagger(List.of("Personvernkonsekvensvurdering")).regelverk(List.of(Regelverk.builder()
                         .lov("ARKIV").spesifisering("§1").build())).status(KravStatus.AKTIV).build())
                 .build());
 

@@ -56,7 +56,16 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
             <div>
               <LabelWithDescription label='Velg varslingskanal (slack og/eller epost) for spørsmål eller tilbakemeldinger på kravet.' />
               <div>
-                <div className='mb-2.5'>
+                <div className='mb-2.5 flex gap-5'>
+                  <Button
+                    className='ml-2.5'
+                    variant='secondary'
+                    type='button'
+                    onClick={() => setAddSlackUser(true)}
+                    icon={<PersonIcon aria-hidden aria-label='' />}
+                  >
+                    Legg til slack-bruker
+                  </Button>
                   <Button
                     variant='secondary'
                     type='button'
@@ -72,15 +81,7 @@ export const VarslingsadresserEdit = (props: IVarslingsadresserEditProps) => {
                   >
                     Legg til slack-kanal
                   </Button>
-                  <Button
-                    className='ml-2.5'
-                    variant='secondary'
-                    type='button'
-                    onClick={() => setAddSlackUser(true)}
-                    icon={<PersonIcon aria-hidden aria-label='' />}
-                  >
-                    Legg til slack-bruker
-                  </Button>
+
                   <Button
                     variant='secondary'
                     className='ml-2.5'

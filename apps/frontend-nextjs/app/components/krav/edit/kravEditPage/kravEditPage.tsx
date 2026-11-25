@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert } from '@navikt/ds-react'
+import { LocalAlert } from '@navikt/ds-react'
 import { Params } from 'next/dist/server/request/params'
 import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
@@ -73,7 +73,11 @@ export const KravEditPage = () => {
         <>
           {!krav && (
             <div className='flex w-full items-left my-6 pl-6'>
-              <Alert variant='error'>Error - Ingen tilgjengelig krav.</Alert>
+              <LocalAlert status='error'>
+                <LocalAlert.Header>
+                  <LocalAlert.Title>Error - Ingen tilgjengelig krav.</LocalAlert.Title>
+                </LocalAlert.Header>
+              </LocalAlert>
             </div>
           )}
           {krav && (

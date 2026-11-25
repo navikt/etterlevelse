@@ -4,7 +4,7 @@ import AsyncSelect from 'react-select/async'
 import { useSearchKrav } from '@/api/krav/kravApi'
 import { DropdownIndicator } from '@/components/common/dropdownIndicator/dropdownIndicator'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
-import LabelWithToolTip from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
+import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { noOptionMessage, selectOverrides } from '@/util/search/searchUtil'
@@ -14,9 +14,9 @@ export const KravEditRelasjoner = () => (
     <FieldArray name='kravRelasjoner'>
       {(fieldArrayRenderProps: FieldArrayRenderProps) => (
         <div>
-          <LabelWithToolTip
-            label={'Relasjoner til andre krav'}
-            tooltip={'Legg ved lenke til relasjoner til andre krav'}
+          <LabelWithDescription
+            label='Velg eventuelt andre krav med relasjon til dette kravet'
+            description='Skriv minst 3 tegn for å søke'
           />
           <AsyncSelect
             aria-label='Søk etter krav'

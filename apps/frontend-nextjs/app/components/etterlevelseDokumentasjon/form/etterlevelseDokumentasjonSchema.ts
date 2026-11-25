@@ -69,14 +69,18 @@ export const nomOrganiseringCheck = yup.object({
     .required(EEtterlevelseDokumentSchemaMelding.NOM_FOR_ETTERLEVELSE_I_LINJE),
   seksjoner: yup.array().when(['forEtterlevelseILinje', 'nomAvdelingId'], {
     is: (forEtterlevelseILinje: boolean, nomAvdelingId: string) =>
-      forEtterlevelseILinje === false && !avdelingerUtenSeksjoner.includes(nomAvdelingId),
+      forEtterlevelseILinje === false &&
+      nomAvdelingId !== '' &&
+      nomAvdelingId !== undefined &&
+      !avdelingerUtenSeksjoner.includes(nomAvdelingId),
     then: (schema) =>
       schema
         .required(EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON)
         .min(1, EEtterlevelseDokumentSchemaMelding.NOM_SEKSJON),
   }),
-  linjer: yup.array().when('forEtterlevelseILinje', {
-    is: true,
+  linjer: yup.array().when(['forEtterlevelseILinje', 'nomAvdelingId'], {
+    is: (forEtterlevelseILinje: boolean, nomAvdelingId: string) =>
+      forEtterlevelseILinje === true && nomAvdelingId !== '' && nomAvdelingId !== undefined,
     then: (schema) =>
       schema
         .required(EEtterlevelseDokumentSchemaMelding.NOM_LINJE)

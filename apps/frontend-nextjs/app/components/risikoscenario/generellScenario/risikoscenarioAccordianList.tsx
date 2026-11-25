@@ -2,7 +2,7 @@
 
 import { Accordion, List, LocalAlert } from '@navikt/ds-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { FunctionComponent, RefObject, useEffect, useState } from 'react'
+import { FunctionComponent, RefObject, useEffect, useRef, useState } from 'react'
 import { ExternalLink } from '@/components/common/externalLink/externalLink'
 import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/risikoscenario/risikoscenarioConstants'
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
@@ -62,6 +62,7 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
     kravRefs: IKravReference[]
   } | null>(null)
   const [isAnnouncementReady, setIsAnnouncementReady] = useState(false)
+  const focusedTargetRef = useRef<string | null>(null)
 
   const handleMovedToKrav = (payload: {
     risikoscenarioName: string
@@ -99,34 +100,44 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   }, [etterlevelseDokumentasjonId])
 
   useEffect(() => {
-    if (risikoscenarioId && selectedRisikoscenarioIndex !== -1) {
-      const timeout = setTimeout(() => {
-        const element: HTMLElement | null = document.getElementById(risikoscenarioId)
-        if (element) {
-          element
-            .querySelector<HTMLButtonElement>('.aksel-accordion__header')
-            ?.focus({ preventScroll: true })
-          window.scrollTo({
-            top: element.getBoundingClientRect().top + window.pageYOffset - 30,
-            behavior: 'smooth',
-          })
-          if (tiltakId) {
-            const tiltakElement: HTMLElement | null = document.getElementById(
-              `${risikoscenarioId}_${tiltakId}`
-            )
-            if (tiltakElement) {
-              tiltakElement.focus()
-              window.scrollTo({
-                top: tiltakElement.getBoundingClientRect().top + window.pageYOffset - 30,
-                behavior: 'smooth',
-              })
-            }
+    if (!risikoscenarioId || selectedRisikoscenarioIndex !== -1) {
+      focusedTargetRef.current = null
+      return
+    }
+    const target = `${risikoscenarioId}_${tiltakId ?? ''}`
+    if (
+      focusedTargetRef.current === target ||
+      !risikoscenarioList.some((risikoscenario) => risikoscenario.id === risikoscenarioId)
+    ) {
+      return
+    }
+    const timeout = setTimeout(() => {
+      const element: HTMLElement | null = document.getElementById(risikoscenarioId)
+      if (element) {
+        focusedTargetRef.current = target
+        element
+          .querySelector<HTMLButtonElement>('.aksel-accordion__header')
+          ?.focus({ preventScroll: true })
+        window.scrollTo({
+          top: element.getBoundingClientRect().top + window.pageYOffset - 30,
+          behavior: 'smooth',
+        })
+        if (tiltakId) {
+          const tiltakElement: HTMLElement | null = document.getElementById(
+            `${risikoscenarioId}_${tiltakId}`
+          )
+          if (tiltakElement) {
+            tiltakElement.focus()
+            window.scrollTo({
+              top: tiltakElement.getBoundingClientRect().top + window.pageYOffset - 30,
+              behavior: 'smooth',
+            })
           }
         }
-      }, 200)
-      return () => clearTimeout(timeout)
-    }
-  }, [risikoscenarioId, tiltakId, selectedRisikoscenarioIndex])
+      }
+    }, 200)
+    return () => clearTimeout(timeout)
+  }, [risikoscenarioId, tiltakId, risikoscenarioList, selectedRisikoscenarioIndex])
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {

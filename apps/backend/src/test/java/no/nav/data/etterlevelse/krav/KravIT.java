@@ -133,7 +133,7 @@ public class KravIT extends IntegrationTestBase {
                 .tagger(List.of("tag"))
                 .regelverk(List.of(RegelverkRequest.builder().lov("ARKIV").spesifisering("§1").build()))
                 .status(KravStatus.UTKAST)
-                .suksesskriterier(List.of(SuksesskriterieRequest.builder().id(1).navn("suksess").beskrivelse("beskrivelse").build()))
+                .suksesskriterier(List.of(SuksesskriterieRequest.builder().id(1).navn("suksess").beskrivelse("beskrivelse").deaktiverteSuksesskriterieStatus(List.of()).build()))
                 .build();
     }
 
@@ -158,7 +158,7 @@ public class KravIT extends IntegrationTestBase {
         assertThat(krav.getTagger()).containsOnly("tag");
         assertThat(krav.getRegelverk()).containsOnly(RegelverkResponse.builder().lov(CodelistService.getCodelistResponse(ListName.LOV, "ARKIV")).spesifisering("§1").build());
         assertThat(krav.getStatus()).isEqualTo(KravStatus.UTKAST);
-        assertThat(krav.getSuksesskriterier()).containsOnly(SuksesskriterieResponse.builder().id(1).navn("suksess").beskrivelse("beskrivelse").build());
+        assertThat(krav.getSuksesskriterier()).containsOnly(SuksesskriterieResponse.builder().id(1).navn("suksess").beskrivelse("beskrivelse").deaktiverteSuksesskriterieStatus(List.of()).build());
     }
 
     @Test

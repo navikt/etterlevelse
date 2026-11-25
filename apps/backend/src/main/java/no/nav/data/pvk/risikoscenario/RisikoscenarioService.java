@@ -1,11 +1,13 @@
 package no.nav.data.pvk.risikoscenario;
 
-import no.nav.data.common.jpa.OptimisticLockUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.data.common.auditing.AuditVersionService;
 import no.nav.data.common.auditing.domain.AuditVersion;
+import no.nav.data.common.exceptions.ValidationException;
+import no.nav.data.common.jpa.OptimisticLockUtil;
 import no.nav.data.common.rest.PageParameters;
+import no.nav.data.etterlevelse.krav.domain.KravRepo;
 import no.nav.data.pvk.risikoscenario.domain.Risikoscenario;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepo;
 import no.nav.data.pvk.risikoscenario.domain.RisikoscenarioRepoCustom;
@@ -33,6 +35,7 @@ public class RisikoscenarioService {
     private final TiltakRepo tiltakRepo;
     private final RisikoscenarioRepoCustom risikoscenarioRepoCustom;
     private final AuditVersionService auditVersionService;
+    private final KravRepo kravRepo;
 
     public Risikoscenario get(UUID uuid) {
         return risikoscenarioRepo.findById(uuid).orElse(null);
@@ -73,17 +76,30 @@ public class RisikoscenarioService {
             if (!kravList.contains(kravnummer)) {
                 kravList.add(kravnummer);
             }
-            res.add(risikoscenarioRepo.save(risikoscenario));
+            res.add(save(risikoscenario, true));
         }
         return res;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario save(Risikoscenario risikoscenario, boolean isUpdate) {
+        validateRelevanteKrav(risikoscenario);
         if (!isUpdate) {
             risikoscenario.setId(UUID.randomUUID());
         }
         return risikoscenarioRepo.save(risikoscenario);
+    }
+
+    private void validateRelevanteKrav(Risikoscenario risikoscenario) {
+        for (Integer kravNummer : risikoscenario.getRisikoscenarioData().getRelevanteKravNummer()) {
+            boolean hasPvkTag = kravRepo.findByKravNummerAndAktiveStatus(kravNummer).stream()
+                    .anyMatch(krav -> krav.getTagger() != null
+                            && krav.getTagger().contains("Personvernkonsekvensvurdering"));
+            if (!hasPvkTag) {
+                throw new ValidationException("Could not save Risikoscenario: Krav " + kravNummer
+                        + " må ha et aktiv versjon som er knyttet til personvernkonsekvensvurdering");
+            }
+        }
     }
 
     /**
@@ -121,14 +137,14 @@ public class RisikoscenarioService {
 
         Risikoscenario risikoscenario = get(risikoscenarioId);
         risikoscenario.getRisikoscenarioData().setTiltakOppdatert(true);
-        return risikoscenarioRepo.save(risikoscenario);
+        return save(risikoscenario, true);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     public Risikoscenario updateTiltakOppdatertField(UUID risikoscenarioId, boolean tiltakOppdatert) {
         Risikoscenario risikoscenario = get(risikoscenarioId);
         risikoscenario.getRisikoscenarioData().setTiltakOppdatert(tiltakOppdatert);
-        return risikoscenarioRepo.save(risikoscenario);
+        return save(risikoscenario, true);
     }
 
     /**

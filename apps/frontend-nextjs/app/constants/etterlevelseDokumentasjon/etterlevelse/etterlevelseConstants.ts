@@ -49,3 +49,11 @@ export enum ESuksesskriterieStatus {
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
   IKKE_PAABEGYNT = 'IKKE_PAABEGYNT',
 }
+
+export const suksesskriterieStatusOptions: { value: ESuksesskriterieStatus; label: string }[] = [
+  { value: ESuksesskriterieStatus.IKKE_PAABEGYNT, label: 'Ikke påbegynt' },
+  { value: ESuksesskriterieStatus.UNDER_ARBEID, label: 'Under arbeid' },
+  { value: ESuksesskriterieStatus.OPPFYLT, label: 'Oppfylt' },
+  { value: ESuksesskriterieStatus.IKKE_OPPFYLT, label: 'Ikke oppfylt' },
+  { value: ESuksesskriterieStatus.IKKE_RELEVANT, label: 'Ikke relevant' },
+]

@@ -1,6 +1,5 @@
-import { ArrowDownIcon, ArrowUpIcon, ArrowsSquarepathIcon } from '@navikt/aksel-icons'
-import { Button, Dropdown, TextField, Tooltip } from '@navikt/ds-react'
-import { ChangeEvent, FunctionComponent, useEffect, useState } from 'react'
+import { Select } from '@navikt/ds-react'
+import { FunctionComponent, useEffect, useRef, useState } from 'react'
 
 type TProps = {
   label: string
@@ -17,82 +16,38 @@ export const RearrangeButtons: FunctionComponent<TProps> = ({
   updateIndex,
   marginLeft,
 }) => {
-  const [plassering, setPlassering] = useState<string>((index + 1).toString())
+  const selectRef = useRef<HTMLSelectElement>(null)
+  const [moved, setMoved] = useState<boolean>(false)
 
   useEffect(() => {
-    ;(async () => {
-      setPlassering((index + 1).toString())
-    })()
-  }, [index])
+    if (moved && selectRef.current) {
+      selectRef.current.focus({ preventScroll: true })
+      selectRef.current.scrollIntoView({ block: 'center' })
+      setMoved(false)
+    }
+  }, [index, moved])
 
   return (
     <div className={`flex ${marginLeft ? 'ml-10' : ''}`}>
-      {index !== 0 && (
-        <Tooltip content={`Flytt ${label} opp`}>
-          <Button
-            className='mr-2.5'
-            type='button'
-            variant='secondary'
-            onClick={() => {
-              updateIndex(index - 1)
-            }}
-            icon={<ArrowUpIcon title={`Flytt ${label} opp`} aria-label={`Flytt ${label} opp`} />}
-          />
-        </Tooltip>
-      )}
-      {index !== arrayLength - 1 && (
-        <Tooltip content={`Flytt ${label} ned`}>
-          <Button
-            className='mr-2.5'
-            type='button'
-            variant='secondary'
-            onClick={() => {
-              updateIndex(index + 1)
-            }}
-            icon={<ArrowDownIcon title={`Flytt ${label} ned`} aria-label={`Flytt ${label} ned`} />}
-          />
-        </Tooltip>
-      )}
       {arrayLength !== 1 && (
-        <Dropdown>
-          <Tooltip content={`Endre ${label}  rekkefølge`}>
-            <Button
-              as={Dropdown.Toggle}
-              type='button'
-              variant='secondary'
-              icon={
-                <ArrowsSquarepathIcon
-                  title={`Endre ${label}  rekkefølge`}
-                  aria-label={`Endre ${label}  rekkefølge`}
-                />
-              }
-            />
-          </Tooltip>
-          <Dropdown.Menu>
-            <TextField
-              type='number'
-              label='Angi ønsket plassering'
-              value={plassering}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => setPlassering(event.target.value)}
-              error={parseInt(plassering) ? undefined : 'Skriv et tall større enn 0'}
-            />
-            <Dropdown.Menu.List>
-              <Dropdown.Menu.List.Item
-                as={Button}
-                type='button'
-                variant='primary'
-                onClick={() => {
-                  const newIndex = parseInt(plassering)
-                  if (newIndex) {
-                    updateIndex(newIndex - 1)
-                  }
-                }}
-              >
-                Bytt plassering
-              </Dropdown.Menu.List.Item>
-            </Dropdown.Menu.List>
-          </Dropdown.Menu>
-        </Dropdown>
+        <Select
+          ref={selectRef}
+          label='Velg posisjon'
+          value={index}
+          onChange={(e) => {
+            const newIndex = parseInt(e.target.value)
+            if (newIndex !== index) {
+              setMoved(true)
+              updateIndex(newIndex)
+            }
+          }}
+        >
+          {Array.from({ length: arrayLength }, (_, i) => (
+            <option key={i + '_' + index + '_' + label} value={i}>
+              {`${i + 1} av ${arrayLength}`}
+            </option>
+          ))}
+        </Select>
       )}
     </div>
   )
