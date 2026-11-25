@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
+import no.nav.data.etterlevelse.krav.domain.SuksesskriteriumFlyt;
 
 import java.util.List;
 
@@ -22,5 +23,11 @@ public class SuksesskriterieResponse {
     private String beskrivelse;
     private boolean behovForBegrunnelse;
     private List<SuksesskriterieStatus> deaktiverteSuksesskriterieStatus;
+    private SuksesskriteriumFlyt oppyltStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForOppyfltFlyt;
+    private SuksesskriteriumFlyt ikkeOppyltStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeOppyltFlyt;
+    private SuksesskriteriumFlyt ikkeRelevantStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt;
 
 }

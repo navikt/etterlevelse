@@ -8,6 +8,7 @@ import lombok.experimental.FieldNameConstants;
 import no.nav.data.common.validator.Validated;
 import no.nav.data.common.validator.Validator;
 import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
+import no.nav.data.etterlevelse.krav.domain.SuksesskriteriumFlyt;
 
 import java.util.List;
 
@@ -26,6 +27,12 @@ public class SuksesskriterieRequest implements Validated {
     private String beskrivelse;
     private boolean behovForBegrunnelse;
     private List<SuksesskriterieStatus> deaktiverteSuksesskriterieStatus;
+    private SuksesskriteriumFlyt oppyltStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForOppyfltFlyt;
+    private SuksesskriteriumFlyt ikkeOppyltStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeOppyltFlyt;
+    private SuksesskriteriumFlyt ikkeRelevantStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt;
 
     @Override
     public void format() {

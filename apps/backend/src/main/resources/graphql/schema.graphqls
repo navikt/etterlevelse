@@ -140,6 +140,12 @@ type Suksesskriterie {
     beskrivelse: String
     behovForBegrunnelse: Boolean
     deaktiverteSuksesskriterieStatus: [SuksesskriterieStatus!]!
+    oppyltStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForOppyfltFlyt: Int
+    ikkeOppyltStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForIkkeOppyltFlyt: Int
+    ikkeRelevantStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt: Int
 }
 
 type Regelverk {
@@ -152,6 +158,13 @@ enum KravStatus {
     UNDER_ARBEID,
     AKTIV,
     UTGAATT
+}
+
+enum SuksesskriteriumFlyt {
+    UNDEFINED,
+    INGEN_KONSEKVENS,
+    GA_OVER_NOEN_SUKSESSKRITERIER,
+    GA_OVER_RESTERENDE_SUKSESSKRITERIER,
 }
 
 type Varslingsadresse {
