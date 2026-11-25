@@ -24,6 +24,7 @@ public class Suksesskriterie {
     @Builder.Default
     private boolean behovForBegrunnelse = true;
     private List<SuksesskriterieStatus> deaktiverteSuksesskriterieStatus;
+    private
 
 
     public static Suksesskriterie fromRequest(SuksesskriterieRequest request) {

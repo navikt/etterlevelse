@@ -30,6 +30,7 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
+import KravSuksesskriterieFlytRadioField from './kravSuksesskriterieFlytRadioField'
 
 const suksesskriterieStatusOptions = statusOptions.map((option) => ({
   ...option,
@@ -351,6 +352,38 @@ const Kriterie = ({
                   <Radio value='false'>Kun bekreftelse </Radio>
                 </RadioGroup>
               </Box>
+            </Accordion.Content>
+          </AccordionItem>
+          <AccordionItem>
+            <AccordionHeader className='sticky z-9 bg-white' style={{ top: headerHeight }}>
+              <Heading level='4' size='small'>
+                Obligatorisk: styr flyt etter hvorvidt suksesskriteriet vurderes som oppfylt
+              </Heading>
+            </AccordionHeader>
+            <Accordion.Content>
+              <KravSuksesskriterieFlytRadioField
+                fieldArrayRenderProps={fieldArrayRenderProps}
+                fieldName='test'
+                suksesskriterieStatus='Oppfylt'
+                marginTop
+                marginBottom
+              />
+
+              <KravSuksesskriterieFlytRadioField
+                fieldArrayRenderProps={fieldArrayRenderProps}
+                fieldName='test'
+                suksesskriterieStatus='Ikke oppfylt'
+                marginTop
+                marginBottom
+              />
+
+              <KravSuksesskriterieFlytRadioField
+                fieldArrayRenderProps={fieldArrayRenderProps}
+                fieldName='test'
+                suksesskriterieStatus='Ikke relevant'
+                marginTop
+                marginBottom
+              />
             </Accordion.Content>
           </AccordionItem>
         </Accordion>
