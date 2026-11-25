@@ -54,6 +54,15 @@ With UI:
 
 It's important to having `dev-gcp` and `frontend` running locally while committing, otherwise the Playwright tests will fail.
 
+The PVK page tests in `app/tests/pages/dokumentasjon/[etterlevelseDokumentasjonId]/pvkdokument/pvkDokumentPage.spec.ts`
+mock all data requests using `app/tests/utils/pvkDokument.ts`. They only need the
+frontend running on `http://localhost:3000`, not a backend port-forward.
+The risk-scenario CRUD tests verify header focus and mock-data persistence after reload.
+
+```bash
+yarn playwright test pvkDokumentPage.spec.ts --project=webkit --grep 'oppretter, oppdaterer og sletter' --workers=1
+```
+
 ## Other
 
 ### To use Yarn v4 and node you need to

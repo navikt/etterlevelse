@@ -100,15 +100,12 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   }, [etterlevelseDokumentasjonId])
 
   useEffect(() => {
-    if (!risikoscenarioId || selectedRisikoscenarioIndex !== -1) {
+    if (!risikoscenarioId || selectedRisikoscenarioIndex === -1) {
       focusedTargetRef.current = null
       return
     }
     const target = `${risikoscenarioId}_${tiltakId ?? ''}`
-    if (
-      focusedTargetRef.current === target ||
-      !risikoscenarioList.some((risikoscenario) => risikoscenario.id === risikoscenarioId)
-    ) {
+    if (focusedTargetRef.current === target) {
       return
     }
     const timeout = setTimeout(() => {

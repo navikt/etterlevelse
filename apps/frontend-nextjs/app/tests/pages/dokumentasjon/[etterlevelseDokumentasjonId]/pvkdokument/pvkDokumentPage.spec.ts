@@ -684,6 +684,16 @@ for (const role of roleScenarios) {
         await dialog.getByRole('button', { name: 'Lagre risikoscenario', exact: true }).click()
         const header = page.getByRole('button', { name: 'Ny simulert risiko', exact: false })
         await expect(header).toHaveAttribute('aria-expanded', 'true')
+        await expect(dialog).toHaveCount(0)
+        await expect(header).toBeFocused()
+        const created = mockData.risikoscenarioer.find(({ navn }) => navn === 'Ny simulert risiko')
+        expect(created).toMatchObject({
+          pvkDokumentId,
+          beskrivelse: 'Beskrivelse',
+          generelScenario: true,
+          tiltakIds: [],
+          relevanteKravNummer: [],
+        })
         await page.reload({
           waitUntil: 'domcontentloaded',
         })
@@ -699,6 +709,10 @@ for (const role of roleScenarios) {
         expect(
           mockData.risikoscenarioer.find(({ navn }) => navn === 'Ny simulert risiko')?.beskrivelse
         ).toBe('Oppdatert beskrivelse')
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await expect(header).toHaveAttribute('aria-expanded', 'true')
+        await expect(header).toBeFocused()
+        await expect(page.getByText('Oppdatert beskrivelse', { exact: true })).toBeVisible()
         await page.getByRole('button', { name: 'Slett risikoscenario', exact: true }).click()
         await page
           .getByRole('dialog', { name: 'Vil dere slette dette risikoscenarioet?' })
@@ -708,6 +722,12 @@ for (const role of roleScenarios) {
         expect(mockData.risikoscenarioer.some(({ navn }) => navn === 'Ny simulert risiko')).toBe(
           false
         )
+        await expect(page).toHaveURL(`${baseUrl}?steg=6`)
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await expect(
+          page.getByRole('heading', { name: stepHeadings[5], exact: true })
+        ).toBeVisible()
+        await expect(header).toHaveCount(0)
       })
 
       test('oppretter, oppdaterer og sletter tiltak med mocket tiltaksansvarlig', async ({
