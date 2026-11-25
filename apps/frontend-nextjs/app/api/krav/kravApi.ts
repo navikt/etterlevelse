@@ -4,7 +4,7 @@ import { EObjectType } from '@/constants/admin/audit/auditConstants'
 import { IBegrep } from '@/constants/behandlingskatalogen/behandlingskatalogConstants'
 import { IPageResponse } from '@/constants/commonConstants'
 import { ICode, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
-import { EKravStatus, IKrav, TKravQL } from '@/constants/krav/kravConstants'
+import { EKravStatus, ESuksesskriteriumFlyt, IKrav, TKravQL } from '@/constants/krav/kravConstants'
 import { TSearchItem } from '@/constants/search/searchConstants'
 import { TVarslingsadresseQL } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
 import { env } from '@/util/env/env'
@@ -173,6 +173,12 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
       beskrivelse: '',
       behovForBegrunnelse: true,
       deaktiverteSuksesskriterieStatus: [],
+      oppfyltStatusFlyt: ESuksesskriteriumFlyt.UNDEFINED,
+      hopperOverTilSuksesskriterieIndexForOppfyfltFlyt: undefined,
+      ikkeOppfyltStatusFlyt: ESuksesskriteriumFlyt.UNDEFINED,
+      hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt: undefined,
+      ikkeRelevantStatusFlyt: ESuksesskriteriumFlyt.UNDEFINED,
+      hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt: undefined,
     },
   ],
   nyKravVersjon: krav.nyKravVersjon || false,

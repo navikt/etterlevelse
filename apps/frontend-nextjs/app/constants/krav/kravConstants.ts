@@ -60,6 +60,19 @@ export interface ISuksesskriterie {
   beskrivelse?: string
   behovForBegrunnelse: boolean
   deaktiverteSuksesskriterieStatus: ESuksesskriterieStatus[]
+  oppfyltStatusFlyt: ESuksesskriteriumFlyt
+  hopperOverTilSuksesskriterieIndexForOppfyfltFlyt?: number
+  ikkeOppfyltStatusFlyt: ESuksesskriteriumFlyt
+  hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt?: number
+  ikkeRelevantStatusFlyt: ESuksesskriteriumFlyt
+  hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt?: number
+}
+
+export enum ESuksesskriteriumFlyt {
+  UNDEFINED = 'UNDEFINED',
+  INGEN_KONSEKVENS = 'INGEN_KONSEKVENS',
+  GA_OVER_NOEN_SUKSESSKRITERIER = 'GA_OVER_NOEN_SUKSESSKRITERIER',
+  GA_OVER_RESTERENDE_SUKSESSKRITERIER = 'GA_OVER_RESTERENDE_SUKSESSKRITERIER',
 }
 
 export type TKravQL = TReplace<

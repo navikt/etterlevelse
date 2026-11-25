@@ -28,7 +28,11 @@ import {
   ESuksesskriterieStatus,
   suksesskriterieStatusOptions as statusOptions,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
-import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
+import {
+  EKravStatus,
+  ESuksesskriteriumFlyt,
+  ISuksesskriterie,
+} from '@/constants/krav/kravConstants'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
 import KravSuksesskriterieFlytRadioField from './kravSuksesskriterieFlytRadioField'
 
@@ -172,6 +176,16 @@ const Kriterie = ({
     ESuksesskriterieStatus[]
   >(suksesskriterium.deaktiverteSuksesskriterieStatus || [])
 
+  const [oppfyltStatusFlyt, setOppflytStatusFlyt] = useState<ESuksesskriteriumFlyt>(
+    suksesskriterium.oppfyltStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
+  )
+  const [ikkeOppfyltStatusFlyt, setIkkeOppflytStatusFlyt] = useState<ESuksesskriteriumFlyt>(
+    suksesskriterium.ikkeOppfyltStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
+  )
+  const [ikkeRelevantStatusFlyt, setIkkeRelevantStatusFlyt] = useState<ESuksesskriteriumFlyt>(
+    suksesskriterium.ikkeRelevantStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
+  )
+
   const [mode, setMode] = useState('edit')
   const headerRef = useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
@@ -191,8 +205,19 @@ const Kriterie = ({
       beskrivelse,
       behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
       deaktiverteSuksesskriterieStatus,
+      oppfyltStatusFlyt,
+      ikkeOppfyltStatusFlyt,
+      ikkeRelevantStatusFlyt,
     })
-  }, [navn, beskrivelse, behovForBegrunnelse, deaktiverteSuksesskriterieStatus])
+  }, [
+    navn,
+    beskrivelse,
+    behovForBegrunnelse,
+    deaktiverteSuksesskriterieStatus,
+    oppfyltStatusFlyt,
+    ikkeOppfyltStatusFlyt,
+    ikkeRelevantStatusFlyt,
+  ])
 
   useEffect(() => {
     const header = headerRef.current
@@ -365,6 +390,8 @@ const Kriterie = ({
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='test'
                 suksesskriterieStatus='Oppfylt'
+                value={oppfyltStatusFlyt}
+                setValue={setOppflytStatusFlyt}
                 marginTop
                 marginBottom
               />
@@ -373,6 +400,8 @@ const Kriterie = ({
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='test'
                 suksesskriterieStatus='Ikke oppfylt'
+                value={ikkeOppfyltStatusFlyt}
+                setValue={setIkkeOppflytStatusFlyt}
                 marginTop
                 marginBottom
               />
@@ -381,6 +410,8 @@ const Kriterie = ({
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='test'
                 suksesskriterieStatus='Ikke relevant'
+                value={ikkeRelevantStatusFlyt}
+                setValue={setIkkeRelevantStatusFlyt}
                 marginTop
                 marginBottom
               />

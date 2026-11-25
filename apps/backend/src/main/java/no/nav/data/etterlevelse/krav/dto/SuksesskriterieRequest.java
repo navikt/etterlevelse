@@ -27,10 +27,10 @@ public class SuksesskriterieRequest implements Validated {
     private String beskrivelse;
     private boolean behovForBegrunnelse;
     private List<SuksesskriterieStatus> deaktiverteSuksesskriterieStatus;
-    private SuksesskriteriumFlyt oppyltStatusFlyt;
-    private Integer hopperOverTilSuksesskriterieIndexForOppyfltFlyt;
-    private SuksesskriteriumFlyt ikkeOppyltStatusFlyt;
-    private Integer hopperOverTilSuksesskriterieIndexForIkkeOppyltFlyt;
+    private SuksesskriteriumFlyt oppfyltStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForOppfyltFlyt;
+    private SuksesskriteriumFlyt ikkeOppfyltStatusFlyt;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt;
     private SuksesskriteriumFlyt ikkeRelevantStatusFlyt;
     private Integer hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt;
 
