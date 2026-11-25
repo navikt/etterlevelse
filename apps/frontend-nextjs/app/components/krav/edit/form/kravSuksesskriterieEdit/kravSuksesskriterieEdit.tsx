@@ -9,6 +9,7 @@ import {
   CheckboxGroup,
   ExpansionCard,
   Heading,
+  LocalAlert,
   Radio,
   RadioGroup,
   TextField,
@@ -103,8 +104,57 @@ const AddSuksessKriterieButton: FunctionComponent<TAddSuksessKriterieButtonProps
   </div>
 )
 
+const nullstillFlyt = (
+  suksesskriterium: ISuksesskriterie
+): { suksesskriterium: ISuksesskriterie; nullstilt: boolean } => {
+  const { GA_OVER_NOEN_SUKSESSKRITERIER, GA_OVER_RESTERENDE_SUKSESSKRITERIER, UNDEFINED } =
+    ESuksesskriteriumFlyt
+  const skalNullstilles = (flyt: ESuksesskriteriumFlyt) =>
+    flyt === GA_OVER_NOEN_SUKSESSKRITERIER || flyt === GA_OVER_RESTERENDE_SUKSESSKRITERIER
+  const oppfylt = skalNullstilles(suksesskriterium.oppfyltStatusFlyt)
+  const ikkeOppfylt = skalNullstilles(suksesskriterium.ikkeOppfyltStatusFlyt)
+  const ikkeRelevant = skalNullstilles(suksesskriterium.ikkeRelevantStatusFlyt)
+
+  return {
+    nullstilt: oppfylt || ikkeOppfylt || ikkeRelevant,
+    suksesskriterium: {
+      ...suksesskriterium,
+      ...(oppfylt && {
+        oppfyltStatusFlyt: UNDEFINED,
+        hopperOverTilSuksesskriterieIndexForOppfyltFlyt: undefined,
+      }),
+      ...(ikkeOppfylt && {
+        ikkeOppfyltStatusFlyt: UNDEFINED,
+        hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt: undefined,
+      }),
+      ...(ikkeRelevant && {
+        ikkeRelevantStatusFlyt: UNDEFINED,
+        hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt: undefined,
+      }),
+    },
+  }
+}
+
 const KriterieList = ({ fieldArrayRenderProps, newVersion, newKrav }: IPropsKriterieList) => {
   const suksesskriterier = fieldArrayRenderProps.form.values.suksesskriterier as ISuksesskriterie[]
+  const [nullstiltFlytIds, setNullstiltFlytIds] = useState<number[]>([])
+
+  const updateIndex = (index: number, newIndex: number) => {
+    const sukesskriterieListToUpdate = [...suksesskriterier]
+    const [suksesskriterieToMove] = sukesskriterieListToUpdate.splice(index, 1)
+    sukesskriterieListToUpdate.splice(newIndex, 0, suksesskriterieToMove)
+
+    const resultat = sukesskriterieListToUpdate.map(nullstillFlyt)
+    const nyeNullstilteIds = resultat
+      .filter(({ nullstilt }) => nullstilt)
+      .map(({ suksesskriterium }) => suksesskriterium.id)
+
+    fieldArrayRenderProps.form.setFieldValue(
+      'suksesskriterier',
+      resultat.map(({ suksesskriterium }) => suksesskriterium)
+    )
+    setNullstiltFlytIds((ids) => _.union(ids, nyeNullstilteIds))
+  }
 
   return (
     <div className='flex flex-col gap-2'>
@@ -120,6 +170,8 @@ const KriterieList = ({ fieldArrayRenderProps, newVersion, newKrav }: IPropsKrit
           }}
           fieldArrayRenderProps={fieldArrayRenderProps}
           newVersion={newVersion}
+          updateIndex={(newIndex) => updateIndex(index, newIndex)}
+          visFlytNullstiltVarsel={nullstiltFlytIds.includes(suksesskriterium.id)}
         />
       ))}
 
@@ -149,6 +201,8 @@ interface IPropsKriterie {
   update: (suksesskriterium: ISuksesskriterie) => void
   fieldArrayRenderProps: FieldArrayRenderProps
   newVersion?: boolean
+  updateIndex: (newIndex: number) => void
+  visFlytNullstiltVarsel: boolean
 }
 
 const Kriterie = ({
@@ -159,6 +213,8 @@ const Kriterie = ({
   remove,
   fieldArrayRenderProps,
   newVersion,
+  updateIndex,
+  visFlytNullstiltVarsel,
 }: IPropsKriterie) => {
   const debounceDelay = 500
   const [navn, setNavn] = useState(suksesskriterium.navn)
@@ -208,10 +264,49 @@ const Kriterie = ({
 
   const nummer = index + 1
 
-  const updateIndex = (newIndex: number) => {
-    const suksesskriterieToMove = fieldArrayRenderProps.form.values.suksesskriterier[index]
-    fieldArrayRenderProps.remove(index)
-    fieldArrayRenderProps.insert(newIndex, suksesskriterieToMove)
+  const flytFraSkjema = [
+    suksesskriterium.oppfyltStatusFlyt,
+    suksesskriterium.hopperOverTilSuksesskriterieIndexForOppfyltFlyt,
+    suksesskriterium.ikkeOppfyltStatusFlyt,
+    suksesskriterium.hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt,
+    suksesskriterium.ikkeRelevantStatusFlyt,
+    suksesskriterium.hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt,
+  ].join('|')
+  const [forrigeFlytFraSkjema, setForrigeFlytFraSkjema] = useState<string>(flytFraSkjema)
+
+  if (flytFraSkjema !== forrigeFlytFraSkjema) {
+    setForrigeFlytFraSkjema(flytFraSkjema)
+    setOppflytStatusFlyt(suksesskriterium.oppfyltStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED)
+    setHopperOverTilSuksesskriterieIndexForOppfyltFlyt(
+      suksesskriterium.hopperOverTilSuksesskriterieIndexForOppfyltFlyt
+    )
+    setIkkeOppflytStatusFlyt(
+      suksesskriterium.ikkeOppfyltStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
+    )
+    setHopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt(
+      suksesskriterium.hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt
+    )
+    setIkkeRelevantStatusFlyt(
+      suksesskriterium.ikkeRelevantStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
+    )
+    setHopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt(
+      suksesskriterium.hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt
+    )
+  }
+
+  const flytVelgesPaNyttAlert =
+    visFlytNullstiltVarsel &&
+    [oppfyltStatusFlyt, ikkeOppfyltStatusFlyt, ikkeRelevantStatusFlyt].includes(
+      ESuksesskriteriumFlyt.UNDEFINED
+    )
+
+  const [flytAccordionOpen, setFlytAccordionOpen] = useState<boolean>(flytVelgesPaNyttAlert)
+  const [forrigeFlytVelgesPaNyttAlert, setForrigeFlytVelgesPaNyttAlert] =
+    useState<boolean>(flytVelgesPaNyttAlert)
+
+  if (flytVelgesPaNyttAlert !== forrigeFlytVelgesPaNyttAlert) {
+    setForrigeFlytVelgesPaNyttAlert(flytVelgesPaNyttAlert)
+    if (flytVelgesPaNyttAlert) setFlytAccordionOpen(true)
   }
 
   useEffect(() => {
@@ -401,13 +496,24 @@ const Kriterie = ({
               </Box>
             </Accordion.Content>
           </AccordionItem>
-          <AccordionItem>
+          <AccordionItem open={flytAccordionOpen} onOpenChange={setFlytAccordionOpen}>
             <AccordionHeader className='sticky z-9 bg-white' style={{ top: headerHeight }}>
               <Heading level='4' size='small'>
                 Obligatorisk: styr flyt etter hvorvidt suksesskriteriet vurderes som oppfylt
               </Heading>
             </AccordionHeader>
             <Accordion.Content>
+              {flytVelgesPaNyttAlert && (
+                <LocalAlert status='warning'>
+                  <LocalAlert.Header>
+                    <LocalAlert.Title>
+                      Fordi du har endret rekkefølgen til noen suksesskriterier, må du velge
+                      konsekvens for flyt på nytt.
+                    </LocalAlert.Title>
+                  </LocalAlert.Header>
+                </LocalAlert>
+              )}
+
               <KravSuksesskriterieFlytRadioField
                 index={index}
                 suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
