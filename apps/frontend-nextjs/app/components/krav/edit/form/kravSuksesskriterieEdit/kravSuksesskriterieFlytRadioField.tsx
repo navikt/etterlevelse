@@ -1,29 +1,41 @@
 'use client'
 
-import { Box, Radio, RadioGroup } from '@navikt/ds-react'
+import { Box, Radio, RadioGroup, Select } from '@navikt/ds-react'
 import { FieldArrayRenderProps } from 'formik'
 import { FunctionComponent } from 'react'
-import { ESuksesskriteriumFlyt } from '@/constants/krav/kravConstants'
+import { ESuksesskriteriumFlyt, ISuksesskriterie } from '@/constants/krav/kravConstants'
 
 type TProps = {
+  index: number
+  suksesskriterier: ISuksesskriterie[]
   fieldArrayRenderProps: FieldArrayRenderProps
   fieldName: string
   suksesskriterieStatus: 'Oppfylt' | 'Ikke relevant' | 'Ikke oppfylt'
   value: ESuksesskriteriumFlyt
   setValue: (value: ESuksesskriteriumFlyt) => void
+  hopperOverTilIndex?: number
+  setHopperOverTilIndex: (value: number | undefined) => void
   marginTop?: boolean
   marginBottom?: boolean
 }
 
 const KravSuksesskriterieFlytRadioField: FunctionComponent<TProps> = ({
+  index,
+  suksesskriterier,
   fieldArrayRenderProps,
   fieldName,
   suksesskriterieStatus,
   value,
   setValue,
+  hopperOverTilIndex,
+  setHopperOverTilIndex,
   marginTop,
   marginBottom,
 }) => {
+  const etterfolgendeSuksesskriterier = suksesskriterier
+    .map((suksesskriterium, suksesskriteriumIndex) => ({ suksesskriterium, suksesskriteriumIndex }))
+    .filter(({ suksesskriteriumIndex }) => suksesskriteriumIndex > index)
+
   return (
     <Box
       padding='space-16'
@@ -37,6 +49,9 @@ const KravSuksesskriterieFlytRadioField: FunctionComponent<TProps> = ({
         onChange={(value) => {
           fieldArrayRenderProps.form.setFieldValue(fieldName, value)
           setValue(value)
+          if (value !== ESuksesskriteriumFlyt.GA_OVER_NOEN_SUKSESSKRITERIER) {
+            setHopperOverTilIndex(undefined)
+          }
         }}
       >
         <Radio
@@ -51,6 +66,25 @@ const KravSuksesskriterieFlytRadioField: FunctionComponent<TProps> = ({
         >
           Gå direkte til et bestemt suksesskriterium (etterlever slipper de imellom)
         </Radio>
+        {value === ESuksesskriteriumFlyt.GA_OVER_NOEN_SUKSESSKRITERIER && (
+          <Select
+            label='Velg hvilket suksesskriterium etterlever skal til direkte'
+            description='Innebærer at suksesskriterier som hoppes over, ikke trenger et svar'
+            value={hopperOverTilIndex ?? ''}
+            onChange={(event) =>
+              setHopperOverTilIndex(
+                event.target.value === '' ? undefined : Number(event.target.value)
+              )
+            }
+          >
+            <option value=''>Velg suksesskriterium</option>
+            {etterfolgendeSuksesskriterier.map(({ suksesskriterium, suksesskriteriumIndex }) => (
+              <option key={suksesskriterium.id} value={suksesskriteriumIndex}>
+                {`${suksesskriteriumIndex + 1} av ${suksesskriterier.length} ${suksesskriterium.navn ? `: ${suksesskriterium.navn}` : ''}`}
+              </option>
+            ))}
+          </Select>
+        )}
         <Radio
           value={ESuksesskriteriumFlyt.GA_OVER_RESTERENDE_SUKSESSKRITERIER}
           description='Eventuelle, resterende suksesskriterier i kravet vil ikke kreve svar fra etterlever.'

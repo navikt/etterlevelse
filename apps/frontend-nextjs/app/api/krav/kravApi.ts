@@ -174,7 +174,7 @@ export const kravMapToFormVal = (krav: Partial<TKravQL>): TKravQL => ({
       behovForBegrunnelse: true,
       deaktiverteSuksesskriterieStatus: [],
       oppfyltStatusFlyt: ESuksesskriteriumFlyt.UNDEFINED,
-      hopperOverTilSuksesskriterieIndexForOppfyfltFlyt: undefined,
+      hopperOverTilSuksesskriterieIndexForOppfyltFlyt: undefined,
       ikkeOppfyltStatusFlyt: ESuksesskriteriumFlyt.UNDEFINED,
       hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt: undefined,
       ikkeRelevantStatusFlyt: ESuksesskriteriumFlyt.UNDEFINED,

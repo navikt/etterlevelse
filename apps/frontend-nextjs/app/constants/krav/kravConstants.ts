@@ -61,7 +61,7 @@ export interface ISuksesskriterie {
   behovForBegrunnelse: boolean
   deaktiverteSuksesskriterieStatus: ESuksesskriterieStatus[]
   oppfyltStatusFlyt: ESuksesskriteriumFlyt
-  hopperOverTilSuksesskriterieIndexForOppfyfltFlyt?: number
+  hopperOverTilSuksesskriterieIndexForOppfyltFlyt?: number
   ikkeOppfyltStatusFlyt: ESuksesskriteriumFlyt
   hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt?: number
   ikkeRelevantStatusFlyt: ESuksesskriteriumFlyt

@@ -179,11 +179,27 @@ const Kriterie = ({
   const [oppfyltStatusFlyt, setOppflytStatusFlyt] = useState<ESuksesskriteriumFlyt>(
     suksesskriterium.oppfyltStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
   )
+  const [
+    hopperOverTilSuksesskriterieIndexForOppfyltFlyt,
+    setHopperOverTilSuksesskriterieIndexForOppfyltFlyt,
+  ] = useState<number | undefined>(suksesskriterium.hopperOverTilSuksesskriterieIndexForOppfyltFlyt)
   const [ikkeOppfyltStatusFlyt, setIkkeOppflytStatusFlyt] = useState<ESuksesskriteriumFlyt>(
     suksesskriterium.ikkeOppfyltStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
   )
+  const [
+    hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt,
+    setHopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt,
+  ] = useState<number | undefined>(
+    suksesskriterium.hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt
+  )
   const [ikkeRelevantStatusFlyt, setIkkeRelevantStatusFlyt] = useState<ESuksesskriteriumFlyt>(
     suksesskriterium.ikkeRelevantStatusFlyt || ESuksesskriteriumFlyt.UNDEFINED
+  )
+  const [
+    hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt,
+    setHopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt,
+  ] = useState<number | undefined>(
+    suksesskriterium.hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt
   )
 
   const [mode, setMode] = useState('edit')
@@ -206,8 +222,11 @@ const Kriterie = ({
       behovForBegrunnelse: behovForBegrunnelse === 'true' ? true : false,
       deaktiverteSuksesskriterieStatus,
       oppfyltStatusFlyt,
+      hopperOverTilSuksesskriterieIndexForOppfyltFlyt,
       ikkeOppfyltStatusFlyt,
+      hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt,
       ikkeRelevantStatusFlyt,
+      hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt,
     })
   }, [
     navn,
@@ -215,8 +234,11 @@ const Kriterie = ({
     behovForBegrunnelse,
     deaktiverteSuksesskriterieStatus,
     oppfyltStatusFlyt,
+    hopperOverTilSuksesskriterieIndexForOppfyltFlyt,
     ikkeOppfyltStatusFlyt,
+    hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt,
     ikkeRelevantStatusFlyt,
+    hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt,
   ])
 
   useEffect(() => {
@@ -387,31 +409,43 @@ const Kriterie = ({
             </AccordionHeader>
             <Accordion.Content>
               <KravSuksesskriterieFlytRadioField
+                index={index}
+                suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
-                fieldName='test'
+                fieldName='oppfyltStatusFlyt'
                 suksesskriterieStatus='Oppfylt'
                 value={oppfyltStatusFlyt}
                 setValue={setOppflytStatusFlyt}
+                hopperOverTilIndex={hopperOverTilSuksesskriterieIndexForOppfyltFlyt}
+                setHopperOverTilIndex={setHopperOverTilSuksesskriterieIndexForOppfyltFlyt}
                 marginTop
                 marginBottom
               />
 
               <KravSuksesskriterieFlytRadioField
+                index={index}
+                suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
-                fieldName='test'
+                fieldName='ikkeOppfyltStatusFlyt'
                 suksesskriterieStatus='Ikke oppfylt'
                 value={ikkeOppfyltStatusFlyt}
                 setValue={setIkkeOppflytStatusFlyt}
+                hopperOverTilIndex={hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt}
+                setHopperOverTilIndex={setHopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt}
                 marginTop
                 marginBottom
               />
 
               <KravSuksesskriterieFlytRadioField
+                index={index}
+                suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
-                fieldName='test'
+                fieldName='ikkeRelevantStatusFlyt'
                 suksesskriterieStatus='Ikke relevant'
                 value={ikkeRelevantStatusFlyt}
                 setValue={setIkkeRelevantStatusFlyt}
+                hopperOverTilIndex={hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt}
+                setHopperOverTilIndex={setHopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt}
                 marginTop
                 marginBottom
               />

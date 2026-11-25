@@ -120,6 +120,12 @@ export const getKravWithEtterlevelseQuery = gql`
         beskrivelse
         behovForBegrunnelse
         deaktiverteSuksesskriterieStatus
+        oppfyltStatusFlyt
+        hopperOverTilSuksesskriterieIndexForOppfyltFlyt
+        ikkeOppfyltStatusFlyt
+        hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt
+        ikkeRelevantStatusFlyt
+        hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt
       }
 
       kravIdRelasjoner
