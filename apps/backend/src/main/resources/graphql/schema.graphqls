@@ -140,10 +140,10 @@ type Suksesskriterie {
     beskrivelse: String
     behovForBegrunnelse: Boolean
     deaktiverteSuksesskriterieStatus: [SuksesskriterieStatus!]!
-    oppyltStatusFlyt: SuksesskriteriumFlyt!
-    hopperOverTilSuksesskriterieIndexForOppyfltFlyt: Int
-    ikkeOppyltStatusFlyt: SuksesskriteriumFlyt!
-    hopperOverTilSuksesskriterieIndexForIkkeOppyltFlyt: Int
+    oppfyltStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForOppfyltFlyt: Int
+    ikkeOppfyltStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt: Int
     ikkeRelevantStatusFlyt: SuksesskriteriumFlyt!
     hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt: Int
 }
