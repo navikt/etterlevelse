@@ -58,6 +58,8 @@ The PVK page tests in `app/tests/pages/dokumentasjon/[etterlevelseDokumentasjonI
 mock all data requests using `app/tests/utils/pvkDokument.ts`. They only need the
 frontend running on `http://localhost:3000`, not a backend port-forward.
 The risk-scenario CRUD tests verify header focus and mock-data persistence after reload.
+The PVO submission test checks the saved submission and withdrawal responses,
+waits for loading to finish before withdrawing, and verifies the withdrawn state after reload.
 
 ```bash
 yarn playwright test pvkDokumentPage.spec.ts --project=webkit --grep 'oppretter, oppdaterer og sletter' --workers=1

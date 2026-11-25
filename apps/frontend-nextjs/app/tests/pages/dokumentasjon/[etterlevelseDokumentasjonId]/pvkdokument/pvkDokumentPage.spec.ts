@@ -791,6 +791,12 @@ for (const role of roleScenarios) {
       })
 
       test('sender fullstendig PVK til PVO med kun mockdata', async ({ page, mockData }) => {
+        const waitForSave = () =>
+          page.waitForResponse(
+            (response) =>
+              new URL(response.url()).pathname === `/api/pvkdokument/${pvkDokumentId}` &&
+              response.request().method() === 'PUT'
+          )
         mockData.risikoscenarioer.forEach((risiko) => {
           risiko.sannsynlighetsNivaaEtterTiltak = 1
           risiko.konsekvensNivaaEtterTiltak = 1
@@ -802,20 +808,50 @@ for (const role of roleScenarios) {
           page.getByText('Et begrenset antall registrerte', { exact: true })
         ).toBeVisible()
         await expect(page.getByText(/Det er vurdert totalt sett 8 risikoscenarioer/)).toBeVisible()
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
+        const sent = waitForSave()
         await page
           .getByRole('button', { name: 'Lagre og send til Personvernombudet', exact: true })
           .click()
+        const sentResponse = await sent
+        expect(sentResponse.ok()).toBe(true)
+        expect(await sentResponse.json()).toMatchObject({
+          status: EPvkDokumentStatus.SENDT_TIL_PVO,
+          antallInnsendingTilPvo: 1,
+          innsendingTrukket: false,
+          berOmNyVurderingFraPvo: true,
+        })
         await expect(
           page.getByRole('button', { name: 'Trekk innsending', exact: true })
         ).toBeVisible()
         expect(mockData.pvkDokument.status).toBe(EPvkDokumentStatus.SENDT_TIL_PVO)
         expect(mockData.pvkDokument.meldingerTilPvo[0].sendtTilPvoAv).toContain(mockIdent)
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
+        const withdrawn = waitForSave()
         await page.getByRole('button', { name: 'Trekk innsending', exact: true }).click()
+        const withdrawnResponse = await withdrawn
+        expect(withdrawnResponse.ok()).toBe(true)
+        expect(await withdrawnResponse.json()).toMatchObject({
+          status: EPvkDokumentStatus.UNDERARBEID,
+          antallInnsendingTilPvo: 0,
+          innsendingTrukket: true,
+          berOmNyVurderingFraPvo: true,
+        })
         await expect(
           page.getByRole('button', { name: 'Lagre og send til Personvernombudet', exact: true })
         ).toBeVisible()
         expect(mockData.pvkDokument.status).toBe(EPvkDokumentStatus.UNDERARBEID)
         expect(mockData.pvkDokument.innsendingTrukket).toBe(true)
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await expect(
+          page.getByRole('button', { name: 'Lagre og send til Personvernombudet', exact: true })
+        ).toBeVisible()
+        await expect(page.getByText('Innsending trukket', { exact: true })).toBeVisible()
+        await expect(
+          page.getByRole('button', { name: 'Trekk innsending', exact: true })
+        ).toHaveCount(0)
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
       })
     }
 
