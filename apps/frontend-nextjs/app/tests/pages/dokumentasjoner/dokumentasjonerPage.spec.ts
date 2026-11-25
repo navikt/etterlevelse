@@ -1,4 +1,4 @@
-import test, { expect } from '@playwright/test'
+import { expect, frontendUrl, test } from '@/tests/utils/fixtures'
 import { mockNyligeEtterlevelseDokumentasjoner } from '@/tests/utils/mocks'
 import { mockAdmin, mockIdent } from '@/tests/utils/roller'
 
@@ -40,7 +40,7 @@ test.describe('nagivation to dokumentasjon page', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
 
@@ -110,7 +110,7 @@ test.describe('nagivation to dokumentasjon page', () => {
       }
     )
     await context.route(
-      '**/behandlings-art-og-omfang/etterlevelsedokumentasjon/1234-1234-1234-1234',
+      '**/behandlingens-art-og-omfang/etterlevelsedokument/1234-1234-1234-1234',
       async (route) => {
         await route.fulfill({ status: 404 })
       }
@@ -147,7 +147,7 @@ test.describe('nagivation to dokumentasjon page', () => {
       }
 
       if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-        await route.continue()
+        await route.fallback()
         return
       }
 
@@ -159,7 +159,7 @@ test.describe('nagivation to dokumentasjon page', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
 
@@ -197,13 +197,13 @@ test.describe('nagivation to dokumentasjon page', () => {
 
     await page.getByRole('tab', { name: 'Alle' }).click()
 
-    await expect(page).toHaveURL('http://localhost:3000/dokumentasjoner?tab=alle')
+    await expect(page).toHaveURL(`${frontendUrl}/dokumentasjoner?tab=alle`)
     await expect(page.getByRole('tab', { name: 'Alle', selected: true })).toBeVisible()
 
     await expect(page.getByRole('link', { name: /^E716\.1 Justice League/ })).toBeVisible()
 
     await page.getByRole('link', { name: /^E716\.1 Justice League/ }).click()
-    await expect(page).toHaveURL('http://localhost:3000/dokumentasjon/1234-1234-1234-1234')
+    await expect(page).toHaveURL(`${frontendUrl}/dokumentasjon/1234-1234-1234-1234`)
     await expect(
       page.getByRole('heading', { name: 'E716.1 Justice League', exact: true })
     ).toBeVisible()

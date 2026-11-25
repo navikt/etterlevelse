@@ -1,8 +1,10 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  distDir: process.env.PLAYWRIGHT_TEST === 'true' ? '.next-playwright' : '.next',
   /* config options here */
   images: {
+    unoptimized: process.env.PLAYWRIGHT_TEST === 'true',
     remotePatterns: [
       {
         protocol: 'https',

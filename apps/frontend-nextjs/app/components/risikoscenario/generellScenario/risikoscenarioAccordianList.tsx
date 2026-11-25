@@ -21,6 +21,7 @@ type TProps = {
   allRisikoscenarioList: IRisikoscenario[]
   setAllRisikoscenarioList: (state: IRisikoscenario[]) => void
   tiltakList: ITiltak[]
+  isTiltakLoading: boolean
   setTiltakList: (state: ITiltak[]) => void
   etterlevelseDokumentasjonId: string
   setIsTiltakFormActive: (state: boolean) => void
@@ -35,6 +36,7 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
   allRisikoscenarioList,
   setAllRisikoscenarioList,
   tiltakList,
+  isTiltakLoading,
   etterlevelseDokumentasjonId,
   setTiltakList,
   setRisikoscenarioList,
@@ -108,33 +110,38 @@ const RisikoscenarioAccordianList: FunctionComponent<TProps> = ({
     if (focusedTargetRef.current === target) {
       return
     }
-    const timeout = setTimeout(() => {
-      const element: HTMLElement | null = document.getElementById(risikoscenarioId)
-      if (element) {
-        focusedTargetRef.current = target
-        element
-          .querySelector<HTMLButtonElement>('.aksel-accordion__header')
-          ?.focus({ preventScroll: true })
-        window.scrollTo({
-          top: element.getBoundingClientRect().top + window.pageYOffset - 30,
-          behavior: 'smooth',
-        })
-        if (tiltakId) {
-          const tiltakElement: HTMLElement | null = document.getElementById(
-            `${risikoscenarioId}_${tiltakId}`
-          )
-          if (tiltakElement) {
-            tiltakElement.focus()
-            window.scrollTo({
-              top: tiltakElement.getBoundingClientRect().top + window.pageYOffset - 30,
-              behavior: 'smooth',
-            })
-          }
-        }
-      }
-    }, 200)
-    return () => clearTimeout(timeout)
-  }, [risikoscenarioId, tiltakId, risikoscenarioList, selectedRisikoscenarioIndex])
+    if (tiltakId && isTiltakLoading) return
+
+    const scenarioElement = document.getElementById(risikoscenarioId)
+    const hasTiltak = tiltakList.some(
+      (tiltak) =>
+        tiltak.id === tiltakId &&
+        risikoscenarioList[selectedRisikoscenarioIndex].tiltakIds.includes(tiltak.id)
+    )
+    const focusElement =
+      tiltakId && hasTiltak
+        ? document.getElementById(target)
+        : scenarioElement?.querySelector<HTMLButtonElement>('.aksel-accordion__header')
+    if (!focusElement) return
+
+    focusElement.focus({ preventScroll: true })
+    if (document.activeElement !== focusElement) return
+    focusedTargetRef.current = target
+    const scrollElement = tiltakId && hasTiltak ? focusElement : scenarioElement
+    if (scrollElement) {
+      window.scrollTo({
+        top: scrollElement.getBoundingClientRect().top + window.pageYOffset - 30,
+        behavior: 'smooth',
+      })
+    }
+  }, [
+    risikoscenarioId,
+    tiltakId,
+    risikoscenarioList,
+    selectedRisikoscenarioIndex,
+    tiltakList,
+    isTiltakLoading,
+  ])
 
   const handleAccordionChange = (risikoscenarioId?: string) => {
     if (risikoscenarioId) {

@@ -1,11 +1,11 @@
 import { InMemoryCache } from '@apollo/client'
-import test, { expect } from '@playwright/test'
 import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
 } from '@/tests/utils/etterlevelsesdokument'
+import { expect, frontendUrl, test } from '@/tests/utils/fixtures'
 import {
   mockAdmin,
   mockIdent,
@@ -236,7 +236,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       }
     )
     await context.route(
-      `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+      `**/behandlingens-art-og-omfang/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
       async (route) => {
         await route.fulfill({ status: 404 })
       }
@@ -277,16 +277,14 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         return
       }
 
-      await route.continue()
+      await route.fallback()
     })
 
-    await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`, {
+    await page.goto(`${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`, {
       waitUntil: 'domcontentloaded',
     })
 
-    await expect(page).toHaveURL(
-      `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
-    )
+    await expect(page).toHaveURL(`${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
     await expect(
       page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
     ).toBeVisible()
@@ -345,7 +343,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
   })
 
   test.describe('se liste av krav som følger etterlevelsesdokumentet jeg har opprettet', () => {
-    const documentUrl = `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
+    const documentUrl = `${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
     const documentOverviewUrl = `${documentUrl}?tema=all-open`
     const requirementLinks = [
       ...visibleRequirements.slice(0, 2).map((requirement) => ({
@@ -452,7 +450,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         }
       )
       await context.route(
-        `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+        `**/behandlingens-art-og-omfang/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
           await route.fulfill({ status: 404 })
         }
@@ -684,7 +682,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
           return
         }
 
-        await route.continue()
+        await route.fallback()
       })
     })
 
@@ -746,7 +744,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
         await expect(requirementLink).toHaveAttribute('href', requirementUrl)
         await requirementLink.click()
-        await expect(page).toHaveURL(`http://localhost:3000${requirementUrl}`)
+        await expect(page).toHaveURL(`${frontendUrl}${requirementUrl}`)
         await expect(
           page.getByRole('heading', { name: requirement.name, exact: false })
         ).toBeVisible()
@@ -1022,10 +1020,10 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
           return
         }
 
-        await route.continue()
+        await route.fallback()
       })
 
-      const documentUrl = `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
+      const documentUrl = `${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
       const navigationUrls = [
         documentUrl,
         `${documentUrl}?tema=PERSONVERN`,

@@ -1,4 +1,3 @@
-import { test as base, expect } from '@playwright/test'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -15,6 +14,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { mockNomOrganisering } from '@/tests/utils/etterlevelsesdokument'
+import { test as base, expect, frontendUrl } from '@/tests/utils/fixtures'
 import { IPvkMockData, createPvkMockData, mockPvkApi } from '@/tests/utils/pvkDokument'
 import {
   mockAdmin,
@@ -65,7 +65,7 @@ const roleScenarios = [
 
 const dokumentasjonId = 'pvk-navigation-document'
 const pvkDokumentId = 'pvk-navigation-pvk'
-const baseUrl = `http://localhost:3000/dokumentasjon/${dokumentasjonId}/pvkdokument/${pvkDokumentId}`
+const baseUrl = `${frontendUrl}/dokumentasjon/${dokumentasjonId}/pvkdokument/${pvkDokumentId}`
 const changeStamp = {
   lastModifiedDate: '2026-10-26T10:00:00Z',
   lastModifiedBy: mockIdent,
@@ -261,13 +261,15 @@ const test = base.extend<{
   },
   mockIsolation: [
     async ({ context }, use) => {
-      const unmockedRequests: string[] = []
       const pageErrors: string[] = []
       const cacheWarnings: string[] = []
       context.on('page', (page) => {
         page.on('console', (message) => {
           const text = message.text()
-          if (text.includes('getKravByFilter') && text.includes('partial result')) {
+          if (
+            (message.type() === 'error' && /Missing field/.test(text)) ||
+            (text.includes('getKravByFilter') && text.includes('partial result'))
+          ) {
             cacheWarnings.push(text)
           }
         })
@@ -279,28 +281,7 @@ const test = base.extend<{
           pageErrors.push(error.message)
         })
       })
-      await context.route('**/*', async (route) => {
-        const request = route.request()
-        const url = new URL(request.url())
-        if (request.resourceType() === 'font') {
-          await route.abort('blockedbyclient')
-          return
-        }
-        // Only Next.js page assets and navigation may reach the local frontend.
-        if (
-          url.origin === new URL(baseUrl).origin &&
-          !url.pathname.startsWith('/api/') &&
-          url.pathname !== '/graphql' &&
-          url.pathname !== '/userinfo'
-        ) {
-          await route.continue()
-          return
-        }
-        unmockedRequests.push(`${request.method()} ${request.url()}`)
-        await route.abort('blockedbyclient')
-      })
       await use()
-      expect(unmockedRequests, 'Alle dataforespørsler skal være mocket').toEqual([])
       expect(pageErrors, 'Simuleringen skal ikke ha ubehandlede JavaScript-feil').toEqual([])
       expect(cacheWarnings, 'Kravresponsen skal kunne leses fullstendig fra Apollo-cache').toEqual(
         []
@@ -769,6 +750,10 @@ for (const role of roleScenarios) {
           exact: false,
         })
         await expect(updatedHeader).toBeVisible()
+        await page.route(`**/api/tiltak/pvkdokument/${pvkDokumentId}`, async (route) => {
+          await new Promise((resolve) => setTimeout(resolve, 1500))
+          await route.fallback()
+        })
         await page.reload({
           waitUntil: 'domcontentloaded',
         })
@@ -788,6 +773,17 @@ for (const role of roleScenarios) {
         expect((await deleted).ok()).toBe(true)
         await expect(updatedHeader).toHaveCount(0)
         expect(mockData.tiltak.some(({ id }) => id === created?.id)).toBe(false)
+      })
+
+      test('fokuserer risikoscenarioet når tiltaket i lenken ikke finnes', async ({ page }) => {
+        await page.route(`**/api/tiltak/pvkdokument/${pvkDokumentId}`, async (route) => {
+          await new Promise((resolve) => setTimeout(resolve, 1500))
+          await route.fallback()
+        })
+        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2&tiltak=slettet-tiltak`, {
+          waitUntil: 'domcontentloaded',
+        })
+        await expect(page.getByRole('button', { name: 'Andre risiko', exact: true })).toBeFocused()
       })
 
       test('sender fullstendig PVK til PVO med kun mockdata', async ({ page, mockData }) => {

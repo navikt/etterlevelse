@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, frontendUrl, test } from '../utils/fixtures'
 import { mockIngenEndringerEtterlevelseDokumentasjoner } from '../utils/mocks'
 import {
   mockAdmin,
@@ -20,7 +20,7 @@ test.describe('etterlevelse menu button role tests', () => {
       const requestBody = route.request().postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-        await route.continue()
+        await route.fallback()
         return
       }
 
@@ -30,7 +30,7 @@ test.describe('etterlevelse menu button role tests', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
     await expect(page).toHaveTitle(/Etterlevelse/)
@@ -73,7 +73,7 @@ test.describe('etterlevelse menu button role tests', () => {
       const requestBody = request.postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-        await route.continue()
+        await route.fallback()
         return
       }
 
@@ -83,7 +83,7 @@ test.describe('etterlevelse menu button role tests', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
     await expect(page).toHaveTitle(/Etterlevelse/)
@@ -116,7 +116,7 @@ test.describe('etterlevelse menu button role tests', () => {
       const requestBody = request.postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-        await route.continue()
+        await route.fallback()
         return
       }
 
@@ -126,7 +126,7 @@ test.describe('etterlevelse menu button role tests', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
     await expect(page).toHaveTitle(/Etterlevelse/)
@@ -159,7 +159,7 @@ test.describe('etterlevelse menu button role tests', () => {
       const requestBody = request.postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-        await route.continue()
+        await route.fallback()
         return
       }
 
@@ -169,7 +169,7 @@ test.describe('etterlevelse menu button role tests', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
     await expect(page).toHaveTitle(/Etterlevelse/)
@@ -202,7 +202,7 @@ test.describe('etterlevelse menu button role tests', () => {
       const requestBody = request.postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-        await route.continue()
+        await route.fallback()
         return
       }
 
@@ -212,7 +212,7 @@ test.describe('etterlevelse menu button role tests', () => {
       })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
     await expect(page).toHaveTitle(/Etterlevelse/)

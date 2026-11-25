@@ -1,9 +1,8 @@
 'use client'
 
 import axios from 'axios'
-import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
-
 import { useEffect, useState } from 'react'
+import { versionParam } from '@/api/optimisticLocking/optimisticLockingApi'
 import { IPageResponse } from '@/constants/commonConstants'
 import {
   EEtterlevelseStatus,

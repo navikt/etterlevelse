@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, frontendUrl, test } from '../utils/fixtures'
 import { mockNyligeEtterlevelseDokumentasjoner } from '../utils/mocks'
 import { mockAdmin, mockIdent } from '../utils/roller'
 
@@ -9,14 +9,14 @@ test.describe('etterlevelse main page tests', () => {
       const requestBody = route.request().postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-        await route.continue()
+        await route.fallback()
         return
       }
 
       await route.fulfill({ json: mockNyligeEtterlevelseDokumentasjoner })
     })
 
-    await page.goto('http://localhost:3000/', {
+    await page.goto(`${frontendUrl}/`, {
       waitUntil: 'domcontentloaded',
     })
 

@@ -1,4 +1,4 @@
-import { Locator, test as base, expect } from '@playwright/test'
+import { Locator } from '@playwright/test'
 import { omPVKUrl, oversiktOverLosningeneUrl } from '@/routes/omSidene/omSideneUrl'
 import {
   behandlerPersonopplysningerId,
@@ -21,6 +21,7 @@ import {
   temainndelingOgTemaoversiktUrl,
   tilretteleggeForGjenbrukId,
 } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
+import { test as base, expect, frontendUrl } from '@/tests/utils/fixtures'
 import { mockNyligeEtterlevelseDokumentasjoner } from '../../utils/mocks'
 import { mockAdmin, mockIdent, mockRead } from '../../utils/roller'
 
@@ -28,7 +29,7 @@ const test = base.extend<{ userRole: 'admin' | 'read' }>({
   userRole: ['admin', { option: true }],
 })
 
-const baseUrl = 'http://localhost:3000'
+const baseUrl = frontendUrl
 const pageUrl = `${baseUrl}${omStotteTilEtterlevelseUrl}`
 
 const sections = [
@@ -193,7 +194,7 @@ test.describe('Om Støtte til etterlevelse', () => {
         const requestBody = route.request().postDataJSON() as { operationName?: string }
 
         if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-          await route.continue()
+          await route.fallback()
           return
         }
 
@@ -484,7 +485,7 @@ test.describe('Om Støtte til etterlevelse', () => {
           const requestBody = route.request().postDataJSON() as { operationName?: string }
 
           if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
-            await route.continue()
+            await route.fallback()
             return
           }
 

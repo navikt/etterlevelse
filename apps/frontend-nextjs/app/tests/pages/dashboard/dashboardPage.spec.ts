@@ -1,4 +1,3 @@
-import { expect, test } from '@playwright/test'
 import {
   IDashboardDetailResponse,
   IDashboardTable,
@@ -9,6 +8,7 @@ import {
   EPvkDokumentStatus,
   EPvkVurdering,
 } from '../../../constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/personvernkonsekvensevurderingConstants'
+import { expect, frontendUrl, test } from '../../utils/fixtures'
 import { mockAdmin } from '../../utils/roller'
 
 const avdelingId = 'arbeids_og_velferdsdirektor'
@@ -176,7 +176,7 @@ for (const path of [
 
     try {
       // WebKit delays the load event while the held fetch is pending
-      await page.goto(`http://localhost:3000${path}`, { waitUntil: 'domcontentloaded' })
+      await page.goto(`${frontendUrl}${path}`, { waitUntil: 'domcontentloaded' })
       const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
       await expect(table).toHaveAttribute('aria-busy', 'true')
       const skeletonRows = table.locator('tbody tr[aria-hidden="true"]')
@@ -198,7 +198,7 @@ for (const path of [
   })
 
   test(`sort icons remain visible without hovering on ${path}`, async ({ page }) => {
-    await page.goto(`http://localhost:3000${path}`, { waitUntil: 'domcontentloaded' })
+    await page.goto(`${frontendUrl}${path}`, { waitUntil: 'domcontentloaded' })
     const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
     await expect(table).toBeVisible()
     await expect(table).not.toHaveAttribute('aria-busy', 'true')
@@ -215,7 +215,7 @@ for (const path of [
 test('theme document DataGrid shows a skeleton while refreshing filtered documents', async ({
   page,
 }) => {
-  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter', {
+  await page.goto(`${frontendUrl}/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter`, {
     waitUntil: 'domcontentloaded',
   })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
@@ -250,7 +250,7 @@ test('theme document DataGrid shows a skeleton while refreshing filtered documen
 test('department DataGrids preserve columns, sorting, links and popovers across tabs', async ({
   page,
 }) => {
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`, {
+  await page.goto(`${frontendUrl}/dashboard/${avdelingId}`, {
     waitUntil: 'domcontentloaded',
   })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
@@ -307,7 +307,7 @@ test('department DataGrids preserve columns, sorting, links and popovers across 
 test('department DataGrid shows empty results inside the table after filtering', async ({
   page,
 }) => {
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}?sok=missing-document`, {
+  await page.goto(`${frontendUrl}/dashboard/${avdelingId}?sok=missing-document`, {
     waitUntil: 'domcontentloaded',
   })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
@@ -318,7 +318,7 @@ test('department DataGrid shows empty results inside the table after filtering',
 test('theme document DataGrid preserves numeric sorting, row headers and popovers', async ({
   page,
 }) => {
-  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter', {
+  await page.goto(`${frontendUrl}/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter`, {
     waitUntil: 'domcontentloaded',
   })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
@@ -359,7 +359,7 @@ test('DataGrid keeps its header visible while scrolling a large document list', 
   await page.route('**/dashboard/table/avdeling/**', (route) =>
     route.fulfill({ json: manyDocuments })
   )
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`, {
+  await page.goto(`${frontendUrl}/dashboard/${avdelingId}`, {
     waitUntil: 'domcontentloaded',
   })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
@@ -392,7 +392,7 @@ test('department DataGrid hides the unit column when no document has units', asy
   await page.route('**/dashboard/table/avdeling/**', (route) =>
     route.fulfill({ json: documents.map((dok) => ({ ...dok, enheter: [] })) })
   )
-  await page.goto(`http://localhost:3000/dashboard/${avdelingId}`, {
+  await page.goto(`${frontendUrl}/dashboard/${avdelingId}`, {
     waitUntil: 'domcontentloaded',
   })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })
@@ -404,7 +404,7 @@ test('theme document DataGrid displays an empty state without losing its headers
   page,
 }) => {
   await page.route('**/dashboard/table/tema/**', (route) => route.fulfill({ json: [] }))
-  await page.goto('http://localhost:3000/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter', {
+  await page.goto(`${frontendUrl}/dashboard/tema/ARKIV?tab=etterlevelsesdokumenter`, {
     waitUntil: 'domcontentloaded',
   })
   const table = page.getByRole('table', { name: 'Etterlevelsesdokumenter' })

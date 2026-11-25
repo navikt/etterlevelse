@@ -52,17 +52,33 @@ With UI:
 
 `yarn playwright test --ui`
 
-It's important to having `dev-gcp` and `frontend` running locally while committing, otherwise the Playwright tests will fail.
+Playwright builds and starts its own production frontend on `http://127.0.0.1:3100`.
+It uses `.next-playwright` so a development server on port 3000 can keep running.
+Port 3100 must be free; Playwright deliberately does not reuse an existing server.
+No backend port-forward is needed: shared fixtures mock common data requests and
+fail tests on unexpected requests instead of forwarding them to a real backend.
+Fonts are blocked and user photos are mocked. Image optimization is disabled
+only for the test server so server-side image fetches cannot bypass browser mocks.
+
+Local runs use two workers; CI uses one worker per browser job. The pre-commit
+hook runs Chromium only. `yarn playwright test` runs Chromium, Firefox and WebKit,
+and the Playwright workflow runs all three browsers on frontend pull requests
+and pushes to master.
+
+The unchanged `app/tests/example.spec.ts` visits `https://playwright.dev` and
+still requires an internet connection.
 
 The PVK page tests in `app/tests/pages/dokumentasjon/[etterlevelseDokumentasjonId]/pvkdokument/pvkDokumentPage.spec.ts`
-mock all data requests using `app/tests/utils/pvkDokument.ts`. They only need the
-frontend running on `http://localhost:3000`, not a backend port-forward.
-The risk-scenario CRUD tests verify header focus and mock-data persistence after reload.
+mock their data using `app/tests/utils/pvkDokument.ts`, validate GraphQL response
+completeness against the actual query using Apollo's cache, and reject Apollo
+missing-field errors. The risk-scenario CRUD tests verify header focus and
+mock-data persistence after reload, including a delayed tiltak response.
+An additional test verifies scenario-header focus for a deleted tiltak.
 The PVO submission test checks the saved submission and withdrawal responses,
 waits for loading to finish before withdrawing, and verifies the withdrawn state after reload.
 
 ```bash
-yarn playwright test pvkDokumentPage.spec.ts --project=webkit --grep 'oppretter, oppdaterer og sletter' --workers=1
+yarn playwright test pvkDokumentPage.spec.ts --project=chromium --grep 'oppretter, oppdaterer og sletter tiltak|tiltaket i lenken' --workers=1
 ```
 
 ## Other
