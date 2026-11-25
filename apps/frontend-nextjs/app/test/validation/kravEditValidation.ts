@@ -1,13 +1,8 @@
 import * as yup from 'yup'
-import { ESuksesskriterieStatus } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
-import {
-  EKravStatus,
-  ESuksesskriteriumFlyt,
-  IKravVersjon,
-  ISuksesskriterie,
-} from '@/constants/krav/kravConstants'
+import { EKravStatus, IKravVersjon } from '@/constants/krav/kravConstants'
 import { IVarslingsadresse } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { suksesskriterierCheck } from '@/test/krav/schemaValidation/suksesskriterierValidation'
 
 const isKravActiveStatus = (status: EKravStatus): boolean => status === EKravStatus.AKTIV
 
@@ -30,52 +25,6 @@ const hensiktCheck = yup.string().test({
     return activeStatusValueValidation(parent.status, checkIfHensiktHasValue(hensikt as string))
   },
 })
-
-const checkIfAllSuksesskriterieHasName = (suksesskriterier: ISuksesskriterie[]): boolean => {
-  return (
-    suksesskriterier.length > 0 &&
-    suksesskriterier.every((suksesskriterium) => suksesskriterium.navn)
-  )
-}
-
-const isFlytValgt = (flyt?: ESuksesskriteriumFlyt): boolean =>
-  !!flyt && flyt !== ESuksesskriteriumFlyt.UNDEFINED
-
-const checkIfAllSuksesskriterieHasFlyt = (suksesskriterier: ISuksesskriterie[]): boolean =>
-  suksesskriterier.every(
-    (suksesskriterium) =>
-      isFlytValgt(suksesskriterium.oppfyltStatusFlyt) &&
-      isFlytValgt(suksesskriterium.ikkeOppfyltStatusFlyt) &&
-      ((suksesskriterium.deaktiverteSuksesskriterieStatus || []).includes(
-        ESuksesskriterieStatus.IKKE_RELEVANT
-      ) ||
-        isFlytValgt(suksesskriterium.ikkeRelevantStatusFlyt))
-  )
-
-const suksesskriterierCheck = yup
-  .array()
-  .test({
-    name: 'suksesskriterierCheck',
-    message: 'Alle sukesskriterie må ha en tittel',
-    test: function (suksesskriterier) {
-      const { parent } = this
-      return activeStatusValueValidation(
-        parent.status,
-        !!checkIfAllSuksesskriterieHasName(suksesskriterier as ISuksesskriterie[])
-      )
-    },
-  })
-  .test({
-    name: 'suksesskriterierFlytCheck',
-    message: 'Alle suksesskriterier må ha valgt konsekvens for flyt',
-    test: function (suksesskriterier) {
-      const { parent } = this
-      return activeStatusValueValidation(
-        parent.status,
-        checkIfAllSuksesskriterieHasFlyt((suksesskriterier || []) as ISuksesskriterie[])
-      )
-    },
-  })
 
 const checkIfRegelverkIsEmpty = (regelverk: IRegelverk[]): boolean => {
   const regelverkCheck = regelverk.length > 0 ? true : false

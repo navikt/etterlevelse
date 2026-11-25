@@ -15,6 +15,8 @@ type TProps = {
   setValue: (value: ESuksesskriteriumFlyt) => void
   hopperOverTilIndex?: number
   setHopperOverTilIndex: (value: number | undefined) => void
+  error?: string
+  scrollMarginTop?: number
   marginTop?: boolean
   marginBottom?: boolean
 }
@@ -29,6 +31,8 @@ const KravSuksesskriterieFlytRadioField: FunctionComponent<TProps> = ({
   setValue,
   hopperOverTilIndex,
   setHopperOverTilIndex,
+  error,
+  scrollMarginTop,
   marginTop,
   marginBottom,
 }) => {
@@ -38,12 +42,15 @@ const KravSuksesskriterieFlytRadioField: FunctionComponent<TProps> = ({
 
   return (
     <Box
+      id={`suksesskriterier[${index}].${fieldName}`}
+      style={{ scrollMarginTop }}
       padding='space-16'
       background='brand-blue-soft'
       borderRadius='0 0 0 8'
       className={`flex flex-1 ${marginTop ? 'mt-3' : ''} ${marginBottom ? 'mb-3' : ''}`}
     >
       <RadioGroup
+        error={error}
         legend={`Velg konsekvens for flyt når suksesskriterium settes til ${suksesskriterieStatus}`}
         value={value}
         onChange={(value) => {

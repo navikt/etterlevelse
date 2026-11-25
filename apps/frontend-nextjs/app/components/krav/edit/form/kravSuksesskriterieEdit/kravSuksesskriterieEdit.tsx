@@ -17,13 +17,12 @@ import {
   ToggleGroup,
 } from '@navikt/ds-react'
 import { AccordionHeader, AccordionItem } from '@navikt/ds-react/Accordion'
-import { FieldArray, FieldArrayRenderProps } from 'formik'
+import { FieldArray, FieldArrayRenderProps, getIn } from 'formik'
 import _ from 'lodash'
 import { ChangeEvent, FunctionComponent, useEffect, useRef, useState } from 'react'
 import { FieldWrapper } from '@/components/common/fieldWrapper/fieldWrapper'
 import { LabelWithDescription } from '@/components/common/labelWithoTootip.tsx/LabelWithTooltip'
 import { Markdown } from '@/components/common/markdown/markdown'
-import { FormError } from '@/components/common/modalSchema/formError/formError'
 import { RearrangeButtons } from '@/components/common/rearrangeButtons/rearrangeButtons'
 import TextEditor from '@/components/common/textEditor/TextEditor'
 import {
@@ -262,6 +261,8 @@ const Kriterie = ({
   const [mode, setMode] = useState('edit')
   const headerRef = useRef<HTMLDivElement>(null)
   const [headerHeight, setHeaderHeight] = useState<number>(0)
+  const flytAccordionHeaderRef = useRef<HTMLButtonElement>(null)
+  const [flytAccordionHeaderHeight, setFlytAccordionHeaderHeight] = useState<number>(0)
 
   const nummer = index + 1
 
@@ -301,13 +302,34 @@ const Kriterie = ({
       ESuksesskriteriumFlyt.UNDEFINED
     )
 
-  const [flytAccordionOpen, setFlytAccordionOpen] = useState<boolean>(flytVelgesPaNyttAlert)
-  const [forrigeFlytVelgesPaNyttAlert, setForrigeFlytVelgesPaNyttAlert] =
-    useState<boolean>(flytVelgesPaNyttAlert)
+  const feilmelding = (felt: keyof ISuksesskriterie): string | undefined =>
+    fieldArrayRenderProps.form.submitCount > 0
+      ? getIn(fieldArrayRenderProps.form.errors, `suksesskriterier[${index}].${felt}`)
+      : undefined
 
-  if (flytVelgesPaNyttAlert !== forrigeFlytVelgesPaNyttAlert) {
-    setForrigeFlytVelgesPaNyttAlert(flytVelgesPaNyttAlert)
-    if (flytVelgesPaNyttAlert) setFlytAccordionOpen(true)
+  const navnFeil = feilmelding('navn')
+  const oppfyltStatusFlytFeil = feilmelding('oppfyltStatusFlyt')
+  const ikkeOppfyltStatusFlytFeil = feilmelding('ikkeOppfyltStatusFlyt')
+  const ikkeRelevantStatusFlytFeil = feilmelding('ikkeRelevantStatusFlyt')
+  const harFlytFeil = !!(
+    oppfyltStatusFlytFeil ||
+    ikkeOppfyltStatusFlytFeil ||
+    ikkeRelevantStatusFlytFeil
+  )
+
+  const skalApneFlyt = flytVelgesPaNyttAlert || harFlytFeil
+  const skalApneKort = skalApneFlyt || !!navnFeil
+  const [flytAccordionOpen, setFlytAccordionOpen] = useState<boolean>(skalApneFlyt)
+  const [kortOpen, setKortOpen] = useState<boolean>(skalApneKort)
+  const [forrigeSkalApne, setForrigeSkalApne] = useState({ skalApneFlyt, skalApneKort })
+
+  if (
+    skalApneFlyt !== forrigeSkalApne.skalApneFlyt ||
+    skalApneKort !== forrigeSkalApne.skalApneKort
+  ) {
+    setForrigeSkalApne({ skalApneFlyt, skalApneKort })
+    if (skalApneFlyt) setFlytAccordionOpen(true)
+    if (skalApneKort) setKortOpen(true)
   }
 
   useEffect(() => {
@@ -339,14 +361,19 @@ const Kriterie = ({
 
   useEffect(() => {
     const header = headerRef.current
-    if (!header) return
-    const observer = new ResizeObserver(() => setHeaderHeight(header.offsetHeight))
+    const flytAccordionHeader = flytAccordionHeaderRef.current
+    if (!header || !flytAccordionHeader) return
+    const observer = new ResizeObserver(() => {
+      setHeaderHeight(header.offsetHeight)
+      setFlytAccordionHeaderHeight(flytAccordionHeader.offsetHeight)
+    })
     observer.observe(header)
+    observer.observe(flytAccordionHeader)
     return () => observer.disconnect()
   }, [])
 
   return (
-    <ExpansionCard aria-label={navn}>
+    <ExpansionCard aria-label={navn} open={kortOpen} onToggle={setKortOpen}>
       <ExpansionCard.Header ref={headerRef} className='sticky top-0 z-10 bg-white'>
         <ExpansionCard.Title size='small' className='wrap-anywhere'>
           {navn}
@@ -376,7 +403,11 @@ const Kriterie = ({
             </div>
           </div>
 
-          <div className='mb-6.5'>
+          <div
+            id={`suksesskriterier[${index}].navn`}
+            className='mb-6.5'
+            style={{ scrollMarginTop: headerHeight }}
+          >
             <TextField
               label={`Navngi suksesskriterium ${nummer}`}
               value={navn}
@@ -384,12 +415,7 @@ const Kriterie = ({
                 setNavn((event.target as HTMLInputElement).value)
               }
               placeholder='Navn'
-              error={
-                fieldArrayRenderProps.form.errors &&
-                fieldArrayRenderProps.form.errors['suksesskriterier'] && (
-                  <FormError fieldName='suksesskriterier' />
-                )
-              }
+              error={navnFeil}
             />
           </div>
 
@@ -498,7 +524,11 @@ const Kriterie = ({
             </Accordion.Content>
           </AccordionItem>
           <AccordionItem open={flytAccordionOpen} onOpenChange={setFlytAccordionOpen}>
-            <AccordionHeader className='sticky z-9 bg-white' style={{ top: headerHeight }}>
+            <AccordionHeader
+              ref={flytAccordionHeaderRef}
+              className='sticky z-9 bg-white'
+              style={{ top: headerHeight }}
+            >
               <Heading level='4' size='small'>
                 Obligatorisk: styr flyt etter hvorvidt suksesskriteriet vurderes som oppfylt
               </Heading>
@@ -525,6 +555,8 @@ const Kriterie = ({
                 suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='oppfyltStatusFlyt'
+                scrollMarginTop={headerHeight + flytAccordionHeaderHeight}
+                error={oppfyltStatusFlytFeil}
                 suksesskriterieStatus='Oppfylt'
                 value={oppfyltStatusFlyt}
                 setValue={setOppflytStatusFlyt}
@@ -539,6 +571,8 @@ const Kriterie = ({
                 suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='ikkeOppfyltStatusFlyt'
+                scrollMarginTop={headerHeight + flytAccordionHeaderHeight}
+                error={ikkeOppfyltStatusFlytFeil}
                 suksesskriterieStatus='Ikke oppfylt'
                 value={ikkeOppfyltStatusFlyt}
                 setValue={setIkkeOppflytStatusFlyt}
@@ -553,6 +587,8 @@ const Kriterie = ({
                 suksesskriterier={fieldArrayRenderProps.form.values.suksesskriterier}
                 fieldArrayRenderProps={fieldArrayRenderProps}
                 fieldName='ikkeRelevantStatusFlyt'
+                scrollMarginTop={headerHeight + flytAccordionHeaderHeight}
+                error={ikkeRelevantStatusFlytFeil}
                 suksesskriterieStatus='Ikke relevant'
                 value={ikkeRelevantStatusFlyt}
                 setValue={setIkkeRelevantStatusFlyt}

@@ -29,6 +29,27 @@ type TProps = {
 
 const maxInputWidth = '25rem'
 
+const flattenErrors = (errors: FormikErrors<TKravQL>): { key: string; error: string }[] =>
+  Object.entries(errors).flatMap(([key, error]) => {
+    if (typeof error === 'string') return error ? [{ key, error }] : []
+    if (!Array.isArray(error)) return []
+
+    return error.flatMap((item, index) => {
+      if (typeof item === 'string') return item ? [{ key: `${key}[${index}]`, error: item }] : []
+      if (!item || typeof item !== 'object') return []
+
+      return Object.entries(item)
+        .filter((entry): entry is [string, string] => typeof entry[1] === 'string' && !!entry[1])
+        .map(([felt, feilmelding]) => ({
+          key: `${key}[${index}].${felt}`,
+          error:
+            key === 'suksesskriterier'
+              ? `Suksesskriterium ${index + 1}: ${feilmelding}`
+              : feilmelding,
+        }))
+    })
+  })
+
 export const KravFormFields: FunctionComponent<TProps> = ({
   mode,
   kravVersjon,
@@ -173,13 +194,11 @@ export const KravFormFields: FunctionComponent<TProps> = ({
                 heading={EEtterlevelseDokumentFormConstants.ERROR_SUMMARY_HEADING}
                 className='mt-5'
               >
-                {Object.entries(errors)
-                  .filter(([, error]) => error)
-                  .map(([key, error]) => (
-                    <ErrorSummary.Item href={`#${key}`} key={key}>
-                      {error as string}
-                    </ErrorSummary.Item>
-                  ))}
+                {flattenErrors(errors).map(({ key, error }) => (
+                  <ErrorSummary.Item href={`#${key}`} key={key}>
+                    {error}
+                  </ErrorSummary.Item>
+                ))}
               </ErrorSummary>
             )}
           </div>
