@@ -6,5 +6,5 @@ public enum SuksesskriterieStatus {
     IKKE_RELEVANT,
     IKKE_OPPFYLT,
     IKKE_PAABEGYNT,
-    
+    HOPPET_OVER_PGA_KONTROLLERT_FLYT,
 }

@@ -48,6 +48,7 @@ export enum ESuksesskriterieStatus {
   IKKE_RELEVANT = 'IKKE_RELEVANT',
   IKKE_OPPFYLT = 'IKKE_OPPFYLT',
   IKKE_PAABEGYNT = 'IKKE_PAABEGYNT',
+  HOPPET_OVER_PGA_KONTROLLERT_FLYT = 'HOPPET_OVER_PGA_KONTROLLERT_FLYT',
 }
 
 export const suksesskriterieStatusOptions: { value: ESuksesskriterieStatus; label: string }[] = [
