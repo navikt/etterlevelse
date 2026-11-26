@@ -1,7 +1,7 @@
 'use client'
 
 import { InformationSquareIcon } from '@navikt/aksel-icons'
-import { Checkbox, CheckboxGroup, InfoCard, Tabs, ToggleGroup } from '@navikt/ds-react'
+import { Checkbox, CheckboxGroup, Heading, InfoCard, Tabs, ToggleGroup } from '@navikt/ds-react'
 import { AxiosError } from 'axios'
 import { FormikProps } from 'formik'
 import { useParams, useRouter } from 'next/navigation'
@@ -303,9 +303,30 @@ const EtterlevelsePageTabs: FunctionComponent<TProps> = ({
         }}
       >
         <Tabs.List>
-          <Tabs.Tab value='dokumentasjon' label={EKravTab.DOKUMENTASJON} />
-          <Tabs.Tab value='etterlevelser' label={EKravTab.ETTERLEVER} />
-          <Tabs.Tab value='tilbakemeldinger' label={EKravTab.TILBAKEMELDINGER} />
+          <Tabs.Tab
+            value='dokumentasjon'
+            label={
+              <Heading level='2' size='xsmall'>
+                {EKravTab.DOKUMENTASJON}
+              </Heading>
+            }
+          />
+          <Tabs.Tab
+            value='etterlevelser'
+            label={
+              <Heading level='2' size='xsmall'>
+                {EKravTab.ETTERLEVER}
+              </Heading>
+            }
+          />
+          <Tabs.Tab
+            value='tilbakemeldinger'
+            label={
+              <Heading level='2' size='xsmall'>
+                {EKravTab.TILBAKEMELDINGER}
+              </Heading>
+            }
+          />
         </Tabs.List>
         <Tabs.Panel value='dokumentasjon'>
           {(etterlevelseDokumentasjon?.hasCurrentUserAccess || user.isAdmin()) &&

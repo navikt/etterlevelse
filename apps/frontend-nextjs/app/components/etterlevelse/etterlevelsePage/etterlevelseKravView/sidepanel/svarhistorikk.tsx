@@ -153,17 +153,17 @@ const Svarhistorikk: FunctionComponent<TProps> = ({
               borderWidth='1'
               borderRadius='8'
             >
-              <div className='flex flex-wrap items-center justify-between gap-2 mb-2'>
-                <BodyShort size='small'>
-                  Suksesskriterium {index + 1} av {forrigeKrav.suksesskriterier.length}
-                </BodyShort>
-                <SuksesskriterieEndringTag
-                  suksesskriterie={suksesskriterie}
-                  sammenlignMed={gjeldendeSuksesskriterier}
-                  versjon='forrige'
-                />
-              </div>
               <Heading level='4' size='xsmall' className='mb-2'>
+                <span className='flex flex-wrap items-center justify-between gap-2 mb-2'>
+                  <BodyShort as='span' size='medium'>
+                    Suksesskriterium {index + 1} av {forrigeKrav.suksesskriterier.length}
+                  </BodyShort>
+                  <SuksesskriterieEndringTag
+                    suksesskriterie={suksesskriterie}
+                    sammenlignMed={gjeldendeSuksesskriterier}
+                    versjon='forrige'
+                  />
+                </span>
                 {suksesskriterie.navn}
               </Heading>
 
