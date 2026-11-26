@@ -13,6 +13,7 @@ import {
   LocalAlert,
   Radio,
   RadioGroup,
+  ReadMore,
   TextField,
   ToggleGroup,
 } from '@navikt/ds-react'
@@ -486,6 +487,20 @@ const Kriterie = ({
                     )
                   }}
                 >
+                  <ReadMore
+                    header={`Når du vurderer om et suksesskriterium burde ha status “Ikke relevant”.`}
+                    className='mb-4 mt-3'
+                  >
+                    Det er i noen tilfeller mulig å rute etterleveren forbi suksesskriterier eller
+                    krav som ikke vil være relevant, slik at de slipper unødig kravdokumentasjon.
+                    Som kraveier kan du bruke funksjonen Styre flyt etter at etterlever har vurdert
+                    suksesskritieriet. Her kan du velge om etterlever skal slippe å besvare noen
+                    suksesskriterier, basert på hvilken vurdering de har kommet fram til. Når du
+                    bruker denne funksjonaliteten, vil noen etterfølgende suksesskriterier eller
+                    krav kun være tilgjengelig for etterlevere, basert på svar de har oppgitt. I så
+                    fall kan du droppe “Ikke relevant” som valg.
+                  </ReadMore>
+
                   {suksesskriterieStatusOptions.map((option) => (
                     <Checkbox
                       key={option.value}
