@@ -3,6 +3,7 @@ import { ICode, IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
 import { IBegrep } from '../behandlingskatalogen/behandlingskatalogConstants'
 import {
   EEtterlevelseStatus,
+  ESuksesskriterieStatus,
   TEtterlevelseQL,
 } from '../etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import {
@@ -58,6 +59,20 @@ export interface ISuksesskriterie {
   navn: string
   beskrivelse?: string
   behovForBegrunnelse: boolean
+  deaktiverteSuksesskriterieStatus: ESuksesskriterieStatus[]
+  oppfyltStatusFlyt: ESuksesskriteriumFlyt
+  hopperOverTilSuksesskriterieIndexForOppfyltFlyt?: number
+  ikkeOppfyltStatusFlyt: ESuksesskriteriumFlyt
+  hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt?: number
+  ikkeRelevantStatusFlyt: ESuksesskriteriumFlyt
+  hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt?: number
+}
+
+export enum ESuksesskriteriumFlyt {
+  UNDEFINED = 'UNDEFINED',
+  INGEN_KONSEKVENS = 'INGEN_KONSEKVENS',
+  GA_OVER_NOEN_SUKSESSKRITERIER = 'GA_OVER_NOEN_SUKSESSKRITERIER',
+  GA_OVER_RESTERENDE_SUKSESSKRITERIER = 'GA_OVER_RESTERENDE_SUKSESSKRITERIER',
 }
 
 export type TKravQL = TReplace<

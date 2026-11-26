@@ -27,6 +27,8 @@ public class SuksesskriterieBegrunnelseRequest implements Validated {
     private String veiledningsTekst;
     private String veiledningsTekst2;
 
+    private Boolean hoppetOverPgaKontrollertFlylt;
+
     @Override
     public void format() {
         setBegrunnelse(trimToNull(begrunnelse));
@@ -52,6 +54,7 @@ public class SuksesskriterieBegrunnelseRequest implements Validated {
                 .veiledning(veiledning)
                 .veiledningsTekst(veiledningsTekst)
                 .veiledningsTekst2(veiledningsTekst2)
+                .hoppetOverPgaKontrollertFlylt(hoppetOverPgaKontrollertFlylt)
                 .build();
     }
 

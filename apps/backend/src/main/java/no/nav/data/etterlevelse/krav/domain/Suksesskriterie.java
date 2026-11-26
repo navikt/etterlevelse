@@ -4,8 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import no.nav.data.etterlevelse.etterlevelse.domain.SuksesskriterieStatus;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieRequest;
 import no.nav.data.etterlevelse.krav.dto.SuksesskriterieResponse;
+
+import java.util.List;
+
+import static no.nav.data.common.utils.StreamUtils.copyOf;
 
 @Data
 @Builder
@@ -18,7 +23,16 @@ public class Suksesskriterie {
     private String beskrivelse;
     @Builder.Default
     private boolean behovForBegrunnelse = true;
-
+    private List<SuksesskriterieStatus> deaktiverteSuksesskriterieStatus;
+    @Builder.Default
+    private SuksesskriteriumFlyt oppfyltStatusFlyt = SuksesskriteriumFlyt.UNDEFINED;
+    private Integer hopperOverTilSuksesskriterieIndexForOppfyltFlyt;
+    @Builder.Default
+    private SuksesskriteriumFlyt ikkeOppfyltStatusFlyt = SuksesskriteriumFlyt.UNDEFINED;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt;
+    @Builder.Default
+    private SuksesskriteriumFlyt ikkeRelevantStatusFlyt = SuksesskriteriumFlyt.UNDEFINED;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt;
 
     public static Suksesskriterie fromRequest(SuksesskriterieRequest request) {
         return Suksesskriterie.builder()
@@ -26,6 +40,13 @@ public class Suksesskriterie {
                 .navn(request.getNavn())
                 .beskrivelse(request.getBeskrivelse())
                 .behovForBegrunnelse(request.isBehovForBegrunnelse())
+                .deaktiverteSuksesskriterieStatus(copyOf(request.getDeaktiverteSuksesskriterieStatus()))
+                .oppfyltStatusFlyt(request.getOppfyltStatusFlyt())
+                .hopperOverTilSuksesskriterieIndexForOppfyltFlyt(request.getHopperOverTilSuksesskriterieIndexForOppfyltFlyt())
+                .ikkeOppfyltStatusFlyt(request.getIkkeOppfyltStatusFlyt())
+                .hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt(request.getHopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt())
+                .ikkeRelevantStatusFlyt(request.getIkkeRelevantStatusFlyt())
+                .hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt(request.getHopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt())
                 .build();
     }
 
@@ -35,6 +56,13 @@ public class Suksesskriterie {
                 .navn(navn)
                 .beskrivelse(beskrivelse)
                 .behovForBegrunnelse(behovForBegrunnelse)
+                .deaktiverteSuksesskriterieStatus(copyOf(deaktiverteSuksesskriterieStatus))
+                .oppfyltStatusFlyt(oppfyltStatusFlyt)
+                .hopperOverTilSuksesskriterieIndexForOppfyltFlyt(hopperOverTilSuksesskriterieIndexForOppfyltFlyt)
+                .ikkeOppfyltStatusFlyt(ikkeOppfyltStatusFlyt)
+                .hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt(hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt)
+                .ikkeRelevantStatusFlyt(ikkeRelevantStatusFlyt)
+                .hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt(hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt)
                 .build();
     }
 

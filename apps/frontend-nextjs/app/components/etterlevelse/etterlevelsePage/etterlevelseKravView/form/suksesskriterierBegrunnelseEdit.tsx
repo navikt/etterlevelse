@@ -1,12 +1,13 @@
 'use client'
 
+import { InformationSquareIcon } from '@navikt/aksel-icons'
 import {
-  Alert,
   BodyShort,
   Box,
   Checkbox,
   CheckboxGroup,
   Heading,
+  InfoCard,
   Label,
   List,
   Radio,
@@ -27,6 +28,7 @@ import {
   ESuksesskriterieStatus,
   IEtterlevelse,
   ISuksesskriterieBegrunnelse,
+  suksesskriterieStatusOptions,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { ISuksesskriterie } from '@/constants/krav/kravConstants'
 import {
@@ -333,13 +335,16 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                     width='100%'
                   />
                 )}
+
                 {veiledningsTekstMode === 'view' && (
-                  <Alert variant='info'>
-                    <Label>
-                      Navs tolkning av loven og besluttede praksiser i denne konteksten:
-                    </Label>
-                    <Markdown source={veiledningTekst} />
-                  </Alert>
+                  <InfoCard data-color='info' className='mb-5'>
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                      <Label>
+                        Navs tolkning av loven og besluttede praksiser i denne konteksten:
+                      </Label>
+                      <Markdown source={veiledningTekst} />
+                    </InfoCard.Message>
+                  </InfoCard>
                 )}
                 <div className='flex-col flex items-end justify-end -mt-px'>
                   <ToggleGroup defaultValue='edit' onChange={setVeiledningsTekstMode} size='small'>
@@ -364,11 +369,14 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                     width='100%'
                   />
                 )}
+
                 {veiledningsTekst2Mode === 'view' && (
-                  <Alert variant='info'>
-                    <Label>Slik kan suksesskriteriet etterleves:</Label>
-                    <Markdown source={veiledningTekst2} />
-                  </Alert>
+                  <InfoCard data-color='info' className='mb-5'>
+                    <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+                      <Label>Slik kan suksesskriteriet etterleves:</Label>
+                      <Markdown source={veiledningTekst2} />
+                    </InfoCard.Message>
+                  </InfoCard>
                 )}
                 <div className='flex-col flex items-end justify-end -mt-px'>
                   <ToggleGroup defaultValue='edit' onChange={setVeiledningsTekst2Mode} size='small'>
@@ -384,32 +392,39 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
 
       {morEtterlevelse &&
         hasVeildningTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
-          <Alert variant='info' className='mb-5'>
-            <Label>
-              Følgende veiledning er skrevet av{' '}
-              {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
-            </Label>
-            <br />
-            <Label>Navs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
-            <Markdown
-              source={getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
-            />
-          </Alert>
+          <InfoCard data-color='info' className='mb-5'>
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+              <Label>
+                Følgende veiledning er skrevet av{' '}
+                {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
+              </Label>
+              <br />
+              <Label>Navs tolkning av loven og besluttede praksiser i denne konteksten:</Label>
+              <Markdown
+                source={getVeiledningsTekstFromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
+              />
+            </InfoCard.Message>
+          </InfoCard>
         )}
 
       {morEtterlevelse &&
         hasVeildningTekst2FromMorEtterlevelse(morEtterlevelse, suksesskriterie.id) && (
-          <Alert variant='info' className='mb-5'>
-            <Label>
-              Følgende veiledning er skrevet av{' '}
-              {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
-            </Label>
-            <br />
-            <Label>Slik kan suksesskriteriet etterleves:</Label>
-            <Markdown
-              source={getVeiledningsTekst2FromMorEtterlevelse(morEtterlevelse, suksesskriterie.id)}
-            />
-          </Alert>
+          <InfoCard data-color='info' className='mb-5'>
+            <InfoCard.Message icon={<InformationSquareIcon aria-hidden />}>
+              <Label>
+                Følgende veiledning er skrevet av{' '}
+                {morEtterlevelse.changeStamp.lastModifiedBy.split(' - ')[1]}
+              </Label>
+              <br />
+              <Label>Slik kan suksesskriteriet etterleves:</Label>
+              <Markdown
+                source={getVeiledningsTekst2FromMorEtterlevelse(
+                  morEtterlevelse,
+                  suksesskriterie.id
+                )}
+              />
+            </InfoCard.Message>
+          </InfoCard>
         )}
 
       <div className='w-full mt-5 bg-blue-50 rounded-lg p-4'>
@@ -444,11 +459,16 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
                 )}
               </div>
               <div className='block lg:flex lg:flex-wrap lg:gap-x-4 [&_label]:whitespace-nowrap'>
-                <Radio value={ESuksesskriterieStatus.IKKE_PAABEGYNT}>Ikke påbegynt</Radio>
-                <Radio value={ESuksesskriterieStatus.UNDER_ARBEID}>Under arbeid</Radio>
-                <Radio value={ESuksesskriterieStatus.OPPFYLT}>Oppfylt</Radio>
-                <Radio value={ESuksesskriterieStatus.IKKE_OPPFYLT}>Ikke oppfylt</Radio>
-                <Radio value={ESuksesskriterieStatus.IKKE_RELEVANT}>Ikke relevant</Radio>
+                {suksesskriterieStatusOptions
+                  .filter(
+                    (option) =>
+                      !suksesskriterie.deaktiverteSuksesskriterieStatus?.includes(option.value)
+                  )
+                  .map((option) => (
+                    <Radio key={option.value} value={option.value}>
+                      {option.label}
+                    </Radio>
+                  ))}
               </div>
             </div>
           </RadioGroup>
