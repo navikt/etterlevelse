@@ -22,6 +22,8 @@ public class SuksesskriterieBegrunnelseResponse {
     private boolean veiledning;
     private String veiledningsTekst;
     private String veiledningsTekst2;
+
+    private Boolean hoppetOverPgaKontrollertFlylt;
     
     public static SuksesskriterieBegrunnelseResponse buildFrom(SuksesskriterieBegrunnelse sb) {
         return SuksesskriterieBegrunnelseResponse.builder()
@@ -31,6 +33,7 @@ public class SuksesskriterieBegrunnelseResponse {
                 .veiledning(sb.isVeiledning())
                 .veiledningsTekst(sb.getVeiledningsTekst())
                 .veiledningsTekst2(sb.getVeiledningsTekst2())
+                .hoppetOverPgaKontrollertFlylt(sb.getHoppetOverPgaKontrollertFlylt())
                 .build();
     }
 

@@ -20,4 +20,6 @@ public class SuksesskriterieBegrunnelse {
     private String veiledningsTekst;
     private String veiledningsTekst2;
 
+    private Boolean hoppetOverPgaKontrollertFlylt;
+
 }

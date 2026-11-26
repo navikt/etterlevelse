@@ -572,7 +572,6 @@ public class EtterlevelseDokumentasjonToDoc {
                 case IKKE_RELEVANT -> "Ikke relevant";
                 case IKKE_OPPFYLT -> "Ikke oppfylt";
                 case IKKE_PAABEGYNT -> "Ikke påbegynt";
-                case HOPPET_OVER_PGA_KONTROLLERT_FLYT -> "Hoppet over";
             };
         }
 
