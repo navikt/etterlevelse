@@ -3971,7 +3971,7 @@ __metadata:
     graphql: "npm:17.1.0"
     husky: "npm:^9.1.7"
     json-diff-kit: "npm:^1.0.35"
-    knip: "npm:^6.45.1"
+    knip: "npm:^6.48.0"
     lint-staged: "npm:17.6.1"
     lodash: "npm:^4.18.1"
     marked: "npm:^18.2.0"
@@ -4929,9 +4929,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knip@npm:^6.45.1":
-  version: 6.45.1
-  resolution: "knip@npm:6.45.1"
+"knip@npm:^6.48.0":
+  version: 6.48.0
+  resolution: "knip@npm:6.48.0"
   dependencies:
     formatly: "npm:^0.11.4"
     get-tsconfig: "npm:4.14.3"
@@ -4947,7 +4947,7 @@ __metadata:
   bin:
     knip: bin/knip.js
     knip-bun: bin/knip-bun.js
-  checksum: 10c0/22ead3ad1f50f35b83e67e26f9e4624fe849e840146c03954dec6a062fcda520e2311daec6f7326f46a55f3e6cb06f1243e6a2f3fb0fadd14dbc04b94a268320
+  checksum: 10c0/9073707d5a24cd5ae265329848343c30de68e28d1e62b1db4fa023b95297b8cee09e9d36891a1eea3a42570bd433e2124fe2440a2fc2219ef4ef80adfb062610
   languageName: node
   linkType: hard
 
