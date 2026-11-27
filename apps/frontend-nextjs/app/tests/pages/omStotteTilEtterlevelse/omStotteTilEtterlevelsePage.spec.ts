@@ -1,4 +1,4 @@
-import { Locator, expect, test } from '@playwright/test'
+import { Locator } from '@playwright/test'
 import { omPVKUrl, oversiktOverLosningeneUrl } from '@/routes/omSidene/omSideneUrl'
 import {
   behandlerPersonopplysningerId,
@@ -21,9 +21,15 @@ import {
   temainndelingOgTemaoversiktUrl,
   tilretteleggeForGjenbrukId,
 } from '@/routes/omstottetiletterlevelse/omstottetiletterlevelseRoutes'
+import { test as base, expect, frontendUrl } from '@/tests/utils/fixtures'
+import { mockNyligeEtterlevelseDokumentasjoner } from '../../utils/mocks'
 import { mockAdmin, mockIdent, mockRead } from '../../utils/roller'
 
-const baseUrl = 'http://localhost:3000'
+const test = base.extend<{ userRole: 'admin' | 'read' }>({
+  userRole: ['admin', { option: true }],
+})
+
+const baseUrl = frontendUrl
 const pageUrl = `${baseUrl}${omStotteTilEtterlevelseUrl}`
 
 const sections = [
@@ -148,14 +154,78 @@ const toggleExample = async (button: Locator) => {
 }
 
 test.describe('Om Støtte til etterlevelse', () => {
-  test.beforeEach(async ({ page }) => {
-    await mockAdmin(page)
-    await page.goto(pageUrl, { waitUntil: 'domcontentloaded' })
+  test.beforeEach(async ({ context, page, userRole }) => {
+    await context.route('**/api/codelist?refresh=false', async (route) => {
+      await route.fulfill({ json: { codelist: {} } })
+    })
+    await context.route('**/api/melding/type/SYSTEM', async (route) => {
+      await route.fulfill({
+        json: {
+          pageNumber: 0,
+          pageSize: 20,
+          pages: 0,
+          numberOfElements: 0,
+          totalElements: 0,
+          content: [],
+        },
+      })
+    })
+    await (userRole === 'admin' ? mockAdmin : mockRead)(page)
+    const [userInfoResponse] = await Promise.all([
+      page.waitForResponse('**/userinfo'),
+      page.goto(pageUrl, { waitUntil: 'domcontentloaded' }),
+    ])
+    expect(userInfoResponse.status()).toBe(200)
     await expect(
       page.getByRole('heading', { name: 'Om Støtte til etterlevelse', exact: true })
     ).toBeVisible()
     await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
   })
+
+  for (const failure of ['HTTP 500', 'connection reset'] as const) {
+    test(`Message requests log ${failure} without unhandled rejections`, async ({ page }) => {
+      const pageErrors: string[] = []
+      const consoleErrors: string[] = []
+      page.on('pageerror', (error) => pageErrors.push(error.message))
+      page.on('console', (message) => {
+        if (message.type() === 'error') consoleErrors.push(message.text())
+      })
+      await page.route('**/graphql', async (route) => {
+        const requestBody = route.request().postDataJSON() as { operationName?: string }
+
+        if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
+          await route.fallback()
+          return
+        }
+
+        await route.fulfill({ json: mockNyligeEtterlevelseDokumentasjoner })
+      })
+      await page.route('**/api/melding/type/*', async (route) => {
+        if (failure === 'HTTP 500') {
+          await route.fulfill({ status: 500, body: 'Internal Server Error' })
+        } else {
+          await route.abort('connectionreset')
+        }
+      })
+
+      await page.goto(`${baseUrl}/`, { waitUntil: 'domcontentloaded' })
+      await expect(
+        page.getByRole('heading', { name: 'Støtte til etterlevelse', exact: true })
+      ).toBeVisible()
+      await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
+      await expect
+        .poll(() =>
+          consoleErrors.some((message) => message.includes('Failed to fetch system message:'))
+        )
+        .toBe(true)
+      await expect
+        .poll(() =>
+          consoleErrors.some((message) => message.includes('Failed to fetch frontpage message:'))
+        )
+        .toBe(true)
+      expect(pageErrors).toEqual([])
+    })
+  }
 
   test('Som en bruker vil jeg se innhold, overskrifter, illustrasjon og introduksjonsvideo', async ({
     page,
@@ -275,15 +345,16 @@ test.describe('Om Støtte til etterlevelse', () => {
         })
       })
       const accordion = page.getByRole('main').locator(`[id="${item.id}"]`)
-      const header = accordion.getByRole('button').filter({ hasText: item.title }).first()
+      const header = accordion.getByRole('button', { name: item.title, exact: true })
       const copyButton = accordion.getByRole('button', { name: 'Kopier lenke', exact: true })
+      await expect(copyButton).toHaveCount(1)
       await expect(header).toHaveAttribute('aria-expanded', 'false')
       await copyButton.click()
       await expect
         .poll(() => page.evaluate(() => sessionStorage.getItem('copiedAccordionLink')))
         .toBe(`${pageUrl}#${item.id}`)
       await expect(header).toHaveAttribute('aria-expanded', 'false')
-      await page.goto(`${pageUrl}#${item.id}`)
+      await page.goto(`${pageUrl}#${item.id}`, { waitUntil: 'domcontentloaded' })
       await expect(header).toHaveAttribute('aria-expanded', 'true')
       await expect(accordion.getByText(item.content, { exact: false })).toBeVisible()
       await expect(header).toBeInViewport()
@@ -309,19 +380,20 @@ test.describe('Om Støtte til etterlevelse', () => {
     await expect(first).toHaveAttribute('aria-expanded', 'true')
   })
 
-  test('Som en bruker med lesetilgang vil jeg åpne veiledningen uten å se administratorens kopieringsknapper', async ({
-    page,
-  }) => {
-    await mockRead(page)
-    await page.reload({ waitUntil: 'domcontentloaded' })
-    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
-    const main = page.getByRole('main')
-    await expect(main.getByRole('button', { name: 'Kopier lenke', exact: true })).toHaveCount(0)
-    for (const item of accordionItems) {
-      const accordion = main.locator(`[id="${item.id}"]`)
-      await accordion.getByRole('button', { name: item.title, exact: true }).click()
-      await expect(accordion.getByText(item.content, { exact: false })).toBeVisible()
-    }
+  test.describe('Lesetilgang', () => {
+    test.use({ userRole: 'read' })
+
+    test('Som en bruker med lesetilgang vil jeg åpne veiledningen uten å se administratorens kopieringsknapper', async ({
+      page,
+    }) => {
+      const main = page.getByRole('main')
+      await expect(main.getByRole('button', { name: 'Kopier lenke', exact: true })).toHaveCount(0)
+      for (const item of accordionItems) {
+        const accordion = main.locator(`[id="${item.id}"]`)
+        await accordion.getByRole('button', { name: item.title, exact: true }).click()
+        await expect(accordion.getByText(item.content, { exact: false })).toBeVisible()
+      }
+    })
   })
 
   for (const [accordionId, name, path] of [
@@ -385,15 +457,49 @@ test.describe('Om Støtte til etterlevelse', () => {
     })
   }
 
-  for (const [name, path, role] of [
-    ['Forsiden', '/', 'link'],
-    ['Tilbake til Oversikt over løsningene', oversiktOverLosningeneUrl, 'button'],
-    ['Fortsett til Om Digital PVK', omPVKUrl, 'button'],
+  for (const [name, path, role, heading] of [
+    ['Forsiden', '/', 'link', 'Støtte til etterlevelse'],
+    [
+      'Tilbake til Oversikt over løsningene',
+      oversiktOverLosningeneUrl,
+      'button',
+      'Oversikt over Behandlingskatalogen, Støtte til etterlevelse og Digital PVK',
+    ],
+    ['Fortsett til Om Digital PVK', omPVKUrl, 'button', 'Om Digital PVK'],
   ] as const) {
     test(`Som en bruker vil jeg navigere videre via «${name}»`, async ({ page }) => {
+      if (path === '/') {
+        await page.route('**/api/melding/type/FORSIDE', async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        })
+        await page.route('**/graphql', async (route) => {
+          const requestBody = route.request().postDataJSON() as { operationName?: string }
+
+          if (requestBody.operationName !== 'getEtterlevelseDokumentasjoner') {
+            await route.fallback()
+            return
+          }
+
+          await route.fulfill({ json: mockNyligeEtterlevelseDokumentasjoner })
+        })
+      }
+
       await page.getByRole('main').getByRole(role, { name, exact: true }).click()
       await expect(page).toHaveURL(`${baseUrl}${path}`)
       await expect(page.getByRole('main')).toBeVisible()
+      await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible()
+      if (path === '/') {
+        await expect(page.getByRole('link', { name: 'E716.1 Justice League' })).toBeVisible()
+      }
     })
   }
 })

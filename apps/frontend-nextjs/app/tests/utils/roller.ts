@@ -10,6 +10,23 @@ const mockUser = {
   groups: ['ADMIN', 'WRITE', 'READ'],
 }
 
+const mockUserUnauthorised = {
+  loggedIn: false,
+  ident: '',
+  name: 'Batman',
+  email: 'batman@cave.inc',
+  groups: [],
+}
+
+export const mockUnauthorised = async (page: Page | BrowserContext) => {
+  await page.route('**/userinfo', async (route) => {
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify(mockUserUnauthorised),
+    })
+  })
+}
+
 export const mockAdmin = async (page: Page | BrowserContext) => {
   await page.route('**/userinfo', async (route) => {
     await route.fulfill({

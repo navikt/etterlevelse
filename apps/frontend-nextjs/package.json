@@ -35,7 +35,7 @@
       "bash -c 'yarn knip --max-show-issues 5'",
       "bash -c 'yarn knip --cache --max-issues=0'",
       "bash -c 'yarn playwright install'",
-      "bash -c 'yarn playwright test'"
+      "bash -c 'yarn playwright test --project=chromium'"
     ]
   },
   "dependencies": {

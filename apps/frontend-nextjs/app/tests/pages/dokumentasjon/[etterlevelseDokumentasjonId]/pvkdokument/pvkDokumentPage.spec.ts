@@ -1,4 +1,3 @@
-import { Page, test as base, expect } from '@playwright/test'
 import { IBehandlingensArtOgOmfang } from '@/constants/behandlingensArtOgOmfang/behandlingensArtOgOmfangConstants'
 import { IBehandlingensLivslop } from '@/constants/etterlevelseDokumentasjon/behandlingensLivslop/behandlingensLivslopConstants'
 import {
@@ -15,6 +14,7 @@ import { IRisikoscenario } from '@/constants/etterlevelseDokumentasjon/personver
 import { ITiltak } from '@/constants/etterlevelseDokumentasjon/personvernkonsekvensevurdering/tiltak/tiltakConstants'
 import { ITeamResource } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { mockNomOrganisering } from '@/tests/utils/etterlevelsesdokument'
+import { test as base, expect, frontendUrl } from '@/tests/utils/fixtures'
 import { IPvkMockData, createPvkMockData, mockPvkApi } from '@/tests/utils/pvkDokument'
 import {
   mockAdmin,
@@ -65,37 +65,7 @@ const roleScenarios = [
 
 const dokumentasjonId = 'pvk-navigation-document'
 const pvkDokumentId = 'pvk-navigation-pvk'
-const baseUrl = `http://localhost:3000/dokumentasjon/${dokumentasjonId}/pvkdokument/${pvkDokumentId}`
-
-const waitForSendInnRefetch = (page: Page, isRefetch: () => boolean = () => true) =>
-  page.waitForResponse(
-    (response) => response.url().endsWith(`/api/tiltak/pvkdokument/${pvkDokumentId}`) && isRefetch()
-  )
-
-const waitForSendInnLoaded = async (page: Page, refetch: Promise<unknown>) => {
-  await refetch
-  await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
-}
-
-const waitForScrollToSettle = (page: Page) =>
-  page.waitForFunction(
-    () =>
-      new Promise<boolean>((resolve) => {
-        let lastScrollY = window.scrollY
-        let stableFrames = 0
-        const tick = () => {
-          if (window.scrollY === lastScrollY) {
-            stableFrames += 1
-          } else {
-            stableFrames = 0
-            lastScrollY = window.scrollY
-          }
-          if (stableFrames >= 5) resolve(true)
-          else requestAnimationFrame(tick)
-        }
-        requestAnimationFrame(tick)
-      })
-  )
+const baseUrl = `${frontendUrl}/dokumentasjon/${dokumentasjonId}/pvkdokument/${pvkDokumentId}`
 const changeStamp = {
   lastModifiedDate: '2026-10-26T10:00:00Z',
   lastModifiedBy: mockIdent,
@@ -291,56 +261,35 @@ const test = base.extend<{
   },
   mockIsolation: [
     async ({ context }, use) => {
-      const unmockedRequests: string[] = []
       const pageErrors: string[] = []
+      const cacheWarnings: string[] = []
       context.on('page', (page) => {
-        page.on('pageerror', (error) => {
-          if (error.message === 'ResizeObserver loop completed with undelivered notifications.') {
-            console.warn(`Browser layout warning: ${error.message}`)
-            return
+        page.on('console', (message) => {
+          const text = message.text()
+          if (
+            (message.type() === 'error' && /Missing field/.test(text)) ||
+            (text.includes('getKravByFilter') && text.includes('partial result'))
+          ) {
+            cacheWarnings.push(text)
           }
+        })
+        page.on('pageerror', (error) => {
           pageErrors.push(error.message)
         })
       })
-      await context.route('**/*', async (route) => {
-        const request = route.request()
-        const url = new URL(request.url())
-        if (request.resourceType() === 'font') {
-          await route.abort('blockedbyclient')
-          return
-        }
-        // Only Next.js page assets and navigation may reach the local frontend.
-        if (
-          url.origin === new URL(baseUrl).origin &&
-          !url.pathname.startsWith('/api/') &&
-          url.pathname !== '/graphql' &&
-          url.pathname !== '/userinfo'
-        ) {
-          await route.continue()
-          return
-        }
-        unmockedRequests.push(`${request.method()} ${request.url()}`)
-        await route.abort('blockedbyclient')
-      })
       await use()
-      expect(unmockedRequests, 'Alle dataforespørsler skal være mocket').toEqual([])
       expect(pageErrors, 'Simuleringen skal ikke ha ubehandlede JavaScript-feil').toEqual([])
+      expect(cacheWarnings, 'Kravresponsen skal kunne leses fullstendig fra Apollo-cache').toEqual(
+        []
+      )
     },
     { auto: true },
   ],
 })
 
-test.beforeEach(async ({ context, page, mockData, role }) => {
+test.beforeEach(async ({ context, mockData, role }) => {
   expect(mockData.dokumentasjon.id).toBe(dokumentasjonId)
-  await role.mockUser(page)
-  // Replay the shared role helper's response in tabs opened by validation links.
-  const userInfo = page.waitForResponse('**/userinfo').then((response) => response.body())
-  await context.route('**/userinfo', async (route) =>
-    route.fulfill({
-      contentType: 'application/json',
-      body: await userInfo,
-    })
-  )
+  await role.mockUser(context)
 })
 
 const stepHeadings = [
@@ -362,7 +311,7 @@ for (const role of roleScenarios) {
       test(`${role.canView ? 'se' : 'nektes tilgang til'} PVK-steg ${index + 1} med mocket data`, async ({
         page,
       }) => {
-        await page.goto(`${baseUrl}?steg=${index + 1}`)
+        await page.goto(`${baseUrl}?steg=${index + 1}`, { waitUntil: 'domcontentloaded' })
         if (!role.canView) {
           await expect(
             page.getByText('Du har ikke tilgang til å redigere på PVK dokument.', { exact: true })
@@ -418,7 +367,7 @@ for (const role of roleScenarios) {
         mockData,
       }) => {
         setDocumentAccess(mockData, false)
-        await page.goto(`${baseUrl}?steg=8`)
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByText('Du har ikke tilgang til å redigere på PVK dokument.', { exact: true })
         ).toBeVisible()
@@ -433,7 +382,7 @@ for (const role of roleScenarios) {
       mockData,
     }) => {
       mockData.pvkDokument.status = EPvkDokumentStatus.TRENGER_GODKJENNING
-      await page.goto(`${baseUrl}?steg=8`)
+      await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
       if (role.canView) {
         await expect(
           page.getByRole('heading', { name: 'Sendt oppdatert PVK', exact: true })
@@ -455,7 +404,7 @@ for (const role of roleScenarios) {
 
       test('få tilgang til godkjenning av mitt PVK-dokument', async ({ page, mockData }) => {
         mockData.pvkDokument.status = EPvkDokumentStatus.TRENGER_GODKJENNING
-        await page.goto(`${baseUrl}?steg=8`)
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByRole('button', {
             name: 'Aksepter restrisiko og arkiver i Public 360',
@@ -471,7 +420,8 @@ for (const role of roleScenarios) {
       }) => {
         await page.setViewportSize({ width: 1280, height: 400 })
         await page.goto(
-          `${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert&risikoscenario=risiko-2`
+          `${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert&risikoscenario=risiko-2`,
+          { waitUntil: 'domcontentloaded' }
         )
 
         const selectedHeader = page.getByRole('button', { name: 'Andre risiko', exact: false })
@@ -498,7 +448,9 @@ for (const role of roleScenarios) {
       })
 
       test('lar risikoscenarioene være lukket når lenken bare har et filter', async ({ page }) => {
-        await page.goto(`${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert`)
+        await page.goto(`${baseUrl}?steg=7&tab=risikoscenarioer&filter=ikke-vurdert`, {
+          waitUntil: 'domcontentloaded',
+        })
 
         for (const risiko of risikoscenarioer) {
           await expect(
@@ -557,7 +509,9 @@ for (const role of roleScenarios) {
             })
           }
         )
-        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`)
+        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`, {
+          waitUntil: 'domcontentloaded',
+        })
 
         const selectedHeader = page.getByRole('button', { name: 'Andre risiko', exact: false })
         await expect(selectedHeader).toHaveAttribute('aria-expanded', 'true')
@@ -590,7 +544,7 @@ for (const role of roleScenarios) {
           const feedback = page.waitForResponse(
             `**/api/pvotilbakemelding/pvkdokument/${pvkDokumentId}`
           )
-          await page.goto(`${baseUrl}?steg=8`)
+          await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
           expect((await feedback).ok()).toBe(true)
           await expect(
             page.getByRole('heading', { name: 'Les og send inn', exact: true })
@@ -617,7 +571,7 @@ for (const role of roleScenarios) {
           mockData.pvkDokument.godkjentAvRisikoeierDato = changeStamp.lastModifiedDate
           const tableId = step === 4 ? dokumentasjonId : pvkDokumentId
           const history = page.waitForResponse(`**/api/audit/log/${tableId}/**`)
-          await page.goto(`${baseUrl}?steg=${step}`)
+          await page.goto(`${baseUrl}?steg=${step}`, { waitUntil: 'domcontentloaded' })
           expect((await history).ok()).toBe(true)
           await expect(
             page.getByRole('heading', { name: stepHeadings[step - 1], exact: true })
@@ -630,7 +584,7 @@ for (const role of roleScenarios) {
       test('viser PVOs nåværende og tidligere tilbakemelding', async ({ page, mockData }) => {
         mockData.pvkDokument.status = EPvkDokumentStatus.VURDERT_AV_PVO
         mockData.pvkDokument.antallInnsendingTilPvo = 2
-        await page.goto(`${baseUrl}?steg=2`)
+        await page.goto(`${baseUrl}?steg=2`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByText('PVO-tilbakemelding fra innsending 2', { exact: true })
         ).toBeVisible()
@@ -642,10 +596,36 @@ for (const role of roleScenarios) {
     }
 
     if (role.canEdit) {
+      test('tilpasser tekstfelthøyden i risikoscenariomodalen ved tekst og breddeendringer', async ({
+        page,
+      }) => {
+        await page.goto(`${baseUrl}?steg=6`, { waitUntil: 'domcontentloaded' })
+        await page
+          .getByRole('button', { name: 'Legg til ikke krav-spesifikt risikoscenario' })
+          .click()
+        const dialog = page.getByRole('dialog', { name: 'Opprett nytt risikoscenario' })
+        const field = dialog.getByRole('textbox', { name: 'Beskriv risikoscenarioet' })
+        const initialHeight = await field.evaluate((element) => element.clientHeight)
+        await field.fill('En lang beskrivelse av risikoscenarioet. '.repeat(50))
+        await expect
+          .poll(() => field.evaluate((element) => element.clientHeight))
+          .toBeGreaterThan(initialHeight)
+        const wideHeight = await field.evaluate((element) => element.clientHeight)
+        await page.setViewportSize({ width: 480, height: 720 })
+        await expect
+          .poll(() => field.evaluate((element) => element.clientHeight))
+          .toBeGreaterThan(wideHeight)
+        await expect
+          .poll(() => field.evaluate((element) => element.scrollHeight - element.clientHeight))
+          .toBeLessThanOrEqual(1)
+        await dialog.getByRole('button', { name: 'Avbryt, ikke lagre' }).click()
+        await expect(dialog).toHaveCount(0)
+      })
+
       test('lagrer art og omfang i mockdata og beholder endringen etter omlasting', async ({
         page,
       }) => {
-        await page.goto(`${baseUrl}?steg=3`)
+        await page.goto(`${baseUrl}?steg=3`, { waitUntil: 'domcontentloaded' })
         const field = page.getByRole('textbox', { name: /2\. For hver av personkategoriene/ })
         await field.fill('Omtrent 100 registrerte i simuleringen')
         const saved = page.waitForResponse(
@@ -656,7 +636,9 @@ for (const role of roleScenarios) {
         await page.getByRole('button', { name: 'Lagre', exact: true }).click()
         expect((await saved).ok()).toBe(true)
         await expect(page.getByText('Lagring vellykket', { exact: true }).first()).toBeVisible()
-        await page.reload()
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
         await expect(field).toHaveValue('Omtrent 100 registrerte i simuleringen')
       })
 
@@ -665,7 +647,7 @@ for (const role of roleScenarios) {
           'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
           'base64'
         )
-        await page.goto(`${baseUrl}?steg=2`)
+        await page.goto(`${baseUrl}?steg=2`, { waitUntil: 'domcontentloaded' })
         await page.locator('input[type="file"]').setInputFiles({
           name: 'livslop.png',
           mimeType: 'image/png',
@@ -683,7 +665,9 @@ for (const role of roleScenarios) {
         expect(mockData.behandlingensLivslop.filer[0].filnavn).toBe('livslop.png')
         expect(mockData.behandlingensLivslop.filer[0].filtype).toBe('image/png')
         expect(mockData.behandlingensLivslop.filer[0].fil).toBe(buffer.toString('base64'))
-        await page.reload()
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
         await expect(page.getByText('livslop.png', { exact: true }).first()).toBeVisible()
       })
 
@@ -691,7 +675,7 @@ for (const role of roleScenarios) {
         page,
         mockData,
       }) => {
-        await page.goto(`${baseUrl}?steg=6`)
+        await page.goto(`${baseUrl}?steg=6`, { waitUntil: 'domcontentloaded' })
         await page
           .getByRole('button', { name: 'Legg til ikke krav-spesifikt risikoscenario' })
           .click()
@@ -703,7 +687,19 @@ for (const role of roleScenarios) {
         await dialog.getByRole('button', { name: 'Lagre risikoscenario', exact: true }).click()
         const header = page.getByRole('button', { name: 'Ny simulert risiko', exact: false })
         await expect(header).toHaveAttribute('aria-expanded', 'true')
-        await page.reload()
+        await expect(dialog).toHaveCount(0)
+        await expect(header).toBeFocused()
+        const created = mockData.risikoscenarioer.find(({ navn }) => navn === 'Ny simulert risiko')
+        expect(created).toMatchObject({
+          pvkDokumentId,
+          beskrivelse: 'Beskrivelse',
+          generelScenario: true,
+          tiltakIds: [],
+          relevanteKravNummer: [],
+        })
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
         await expect(header).toHaveAttribute('aria-expanded', 'true')
         await expect(header).toBeFocused()
         await page.getByRole('button', { name: 'Rediger risikoscenario', exact: true }).click()
@@ -716,6 +712,10 @@ for (const role of roleScenarios) {
         expect(
           mockData.risikoscenarioer.find(({ navn }) => navn === 'Ny simulert risiko')?.beskrivelse
         ).toBe('Oppdatert beskrivelse')
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await expect(header).toHaveAttribute('aria-expanded', 'true')
+        await expect(header).toBeFocused()
+        await expect(page.getByText('Oppdatert beskrivelse', { exact: true })).toBeVisible()
         await page.getByRole('button', { name: 'Slett risikoscenario', exact: true }).click()
         await page
           .getByRole('dialog', { name: 'Vil dere slette dette risikoscenarioet?' })
@@ -725,6 +725,12 @@ for (const role of roleScenarios) {
         expect(mockData.risikoscenarioer.some(({ navn }) => navn === 'Ny simulert risiko')).toBe(
           false
         )
+        await expect(page).toHaveURL(`${baseUrl}?steg=6`)
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await expect(
+          page.getByRole('heading', { name: stepHeadings[5], exact: true })
+        ).toBeVisible()
+        await expect(header).toHaveCount(0)
       })
 
       test('oppretter, oppdaterer og sletter tiltak med mocket tiltaksansvarlig', async ({
@@ -732,7 +738,9 @@ for (const role of roleScenarios) {
         mockData,
       }) => {
         const responsible = role.hasDocumentAccess ? resource : otherResource
-        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`)
+        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2`, {
+          waitUntil: 'domcontentloaded',
+        })
         await expect(page.getByRole('button', { name: 'Andre risiko', exact: true })).toBeFocused()
         await page.getByRole('button', { name: 'Opprett nytt tiltak', exact: true }).click()
         await page.getByRole('textbox', { name: 'Navngi tiltaket' }).fill('Nytt simulert tiltak')
@@ -745,10 +753,12 @@ for (const role of roleScenarios) {
         await page.getByRole('option', { name: responsible.fullName }).click()
         await page.getByRole('checkbox', { name: 'Marker tiltaket som iverksatt' }).check()
         await page.getByRole('button', { name: 'Lagre tiltak', exact: true }).click()
-        await expect(
-          page.getByRole('button', { name: 'Nytt simulert tiltak', exact: false })
-        ).toBeFocused()
-        await waitForScrollToSettle(page)
+        const createdHeader = page.getByRole('button', {
+          name: 'Nytt simulert tiltak',
+          exact: false,
+        })
+        await expect(createdHeader).toBeVisible()
+        await expect(createdHeader).toBeFocused()
         const created = mockData.tiltak.find(({ navn }) => navn === 'Nytt simulert tiltak')
         expect(created?.ansvarlig.navIdent).toBe(responsible.navIdent)
         expect(created?.risikoscenarioIds).toEqual(['risiko-2'])
@@ -757,62 +767,109 @@ for (const role of roleScenarios) {
           .getByRole('textbox', { name: 'Navngi tiltaket' })
           .fill('Oppdatert simulert tiltak')
         await page.getByRole('button', { name: 'Lagre tiltak', exact: true }).click()
-        await expect(
-          page.getByRole('button', { name: 'Oppdatert simulert tiltak', exact: false })
-        ).toBeVisible()
-        await page.reload()
-        await expect(
-          page.getByRole('button', { name: 'Oppdatert simulert tiltak', exact: false })
-        ).toBeFocused()
-        await waitForScrollToSettle(page)
+        const updatedHeader = page.getByRole('button', {
+          name: 'Oppdatert simulert tiltak',
+          exact: false,
+        })
+        await expect(updatedHeader).toBeVisible()
+        await page.route(`**/api/tiltak/pvkdokument/${pvkDokumentId}`, async (route) => {
+          await new Promise((resolve) => setTimeout(resolve, 1500))
+          await route.fallback()
+        })
+        await page.reload({
+          waitUntil: 'domcontentloaded',
+        })
+        await expect(updatedHeader).toBeVisible()
+        await expect(updatedHeader).toBeFocused()
         await page.getByRole('button', { name: 'Slett tiltak', exact: true }).click()
+        const deleteDialog = page.getByRole('dialog', {
+          name: 'Vil dere slette dette tiltaket?',
+        })
+        await expect(deleteDialog).toBeVisible()
         const deleted = page.waitForResponse(
           (response) =>
             new URL(response.url()).pathname === `/api/tiltak/${created?.id}` &&
             response.request().method() === 'DELETE'
         )
-        await page
-          .getByRole('dialog', { name: 'Vil dere slette dette tiltaket?' })
-          .getByRole('button', { name: 'Slett', exact: true })
-          .click()
-        await deleted
-        await expect(
-          page.getByRole('button', { name: 'Oppdatert simulert tiltak', exact: false })
-        ).toHaveCount(0)
+        await deleteDialog.getByRole('button', { name: 'Slett', exact: true }).click()
+        expect((await deleted).ok()).toBe(true)
+        await expect(updatedHeader).toHaveCount(0)
         expect(mockData.tiltak.some(({ id }) => id === created?.id)).toBe(false)
       })
 
+      test('fokuserer risikoscenarioet når tiltaket i lenken ikke finnes', async ({ page }) => {
+        await page.route(`**/api/tiltak/pvkdokument/${pvkDokumentId}`, async (route) => {
+          await new Promise((resolve) => setTimeout(resolve, 1500))
+          await route.fallback()
+        })
+        await page.goto(`${baseUrl}?steg=6&risikoscenario=risiko-2&tiltak=slettet-tiltak`, {
+          waitUntil: 'domcontentloaded',
+        })
+        await expect(page.getByRole('button', { name: 'Andre risiko', exact: true })).toBeFocused()
+      })
+
       test('sender fullstendig PVK til PVO med kun mockdata', async ({ page, mockData }) => {
+        const waitForSave = () =>
+          page.waitForResponse(
+            (response) =>
+              new URL(response.url()).pathname === `/api/pvkdokument/${pvkDokumentId}` &&
+              response.request().method() === 'PUT'
+          )
         mockData.risikoscenarioer.forEach((risiko) => {
           risiko.sannsynlighetsNivaaEtterTiltak = 1
           risiko.konsekvensNivaaEtterTiltak = 1
           risiko.nivaaBegrunnelseEtterTiltak = 'Tiltaket reduserer risikoen'
         })
         mockData.pvkDokument.berOmNyVurderingFraPvo = true
-        await page.goto(`${baseUrl}?steg=8`)
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await expect(
           page.getByText('Et begrenset antall registrerte', { exact: true })
         ).toBeVisible()
         await expect(page.getByText(/Det er vurdert totalt sett 8 risikoscenarioer/)).toBeVisible()
-        const refetchedAfterSend = waitForSendInnRefetch(
-          page,
-          () => mockData.pvkDokument.status === EPvkDokumentStatus.SENDT_TIL_PVO
-        )
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
+        const sent = waitForSave()
         await page
           .getByRole('button', { name: 'Lagre og send til Personvernombudet', exact: true })
           .click()
+        const sentResponse = await sent
+        expect(sentResponse.ok()).toBe(true)
+        expect(await sentResponse.json()).toMatchObject({
+          status: EPvkDokumentStatus.SENDT_TIL_PVO,
+          antallInnsendingTilPvo: 1,
+          innsendingTrukket: false,
+          berOmNyVurderingFraPvo: true,
+        })
         await expect(
           page.getByRole('button', { name: 'Trekk innsending', exact: true })
         ).toBeVisible()
         expect(mockData.pvkDokument.status).toBe(EPvkDokumentStatus.SENDT_TIL_PVO)
         expect(mockData.pvkDokument.meldingerTilPvo[0].sendtTilPvoAv).toContain(mockIdent)
-        await waitForSendInnLoaded(page, refetchedAfterSend)
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
+        const withdrawn = waitForSave()
         await page.getByRole('button', { name: 'Trekk innsending', exact: true }).click()
+        const withdrawnResponse = await withdrawn
+        expect(withdrawnResponse.ok()).toBe(true)
+        expect(await withdrawnResponse.json()).toMatchObject({
+          status: EPvkDokumentStatus.UNDERARBEID,
+          antallInnsendingTilPvo: 0,
+          innsendingTrukket: true,
+          berOmNyVurderingFraPvo: true,
+        })
         await expect(
           page.getByRole('button', { name: 'Lagre og send til Personvernombudet', exact: true })
         ).toBeVisible()
         expect(mockData.pvkDokument.status).toBe(EPvkDokumentStatus.UNDERARBEID)
         expect(mockData.pvkDokument.innsendingTrukket).toBe(true)
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
+        await page.reload({ waitUntil: 'domcontentloaded' })
+        await expect(
+          page.getByRole('button', { name: 'Lagre og send til Personvernombudet', exact: true })
+        ).toBeVisible()
+        await expect(page.getByText('Innsending trukket', { exact: true })).toBeVisible()
+        await expect(
+          page.getByRole('button', { name: 'Trekk innsending', exact: true })
+        ).toHaveCount(0)
+        await expect(page.locator('.aksel-loader:visible')).toHaveCount(0)
       })
     }
 
@@ -830,13 +887,7 @@ for (const role of roleScenarios) {
         mockData.pvkDokument.merknadTilRisikoeier = 'Dokumentasjonen er klar for godkjenning'
         mockData.dokumentasjon.risikoeiere = [mockIdent]
         mockData.dokumentasjon.risikoeiereData = [resource]
-        const initialLoad = waitForSendInnRefetch(page)
-        await page.goto(`${baseUrl}?steg=8`)
-        await waitForSendInnLoaded(page, initialLoad)
-        const refetchedAfterSend = waitForSendInnRefetch(
-          page,
-          () => mockData.pvkDokument.status === EPvkDokumentStatus.TRENGER_GODKJENNING
-        )
+        await page.goto(`${baseUrl}?steg=8`, { waitUntil: 'domcontentloaded' })
         await page
           .getByRole('button', { name: 'Lagre og send til risikoeier', exact: true })
           .click()
@@ -845,7 +896,6 @@ for (const role of roleScenarios) {
         })
         await expect(approve).toBeVisible()
         expect(mockData.pvkDokument.status).toBe(EPvkDokumentStatus.TRENGER_GODKJENNING)
-        await waitForSendInnLoaded(page, refetchedAfterSend)
         const archived = page.waitForResponse(`**/api/pvkdokument/godkjenning/${pvkDokumentId}`)
         await approve.click()
         expect((await archived).ok()).toBe(true)

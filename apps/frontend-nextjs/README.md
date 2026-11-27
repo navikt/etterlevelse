@@ -30,7 +30,7 @@ Remember to flush sockets when you can't login
 
 ### Run locally, with port forward to dev-gcp
 
-`kubectl port-forward deployment/etterlevelse-backend`
+`kubectl port-forward deployment/etterlevelse-backend 8080:8080 --namespace teamdatajegerne`
 
 OR
 
@@ -52,7 +52,39 @@ With UI:
 
 `yarn playwright test --ui`
 
-It's important to having `dev-gcp` and `frontend` running locally while committing, otherwise the Playwright tests will fail.
+Playwright builds and starts its own production frontend on `http://127.0.0.1:3100`.
+It uses `.next-playwright` so a development server on port 3000 can keep running.
+Port 3100 must be free; Playwright deliberately does not reuse an existing server.
+No backend port-forward is needed: shared fixtures mock common data requests and
+fail tests on unexpected requests instead of forwarding them to a real backend.
+Fonts are blocked and user photos are mocked. Image optimization is disabled
+only for the test server so server-side image fetches cannot bypass browser mocks.
+
+Local runs use two workers; CI uses one worker per browser job. The pre-commit
+hook runs Chromium only. `yarn playwright test` runs Chromium, Firefox and WebKit,
+and the Playwright workflow runs all three browsers on frontend pull requests
+and pushes to master.
+
+`yarn verify:deps-upgrade` runs formatting, linting, type checking, two Knip
+checks, a production build, browser installation and tests in all three browsers
+sequentially. Playwright also builds its isolated test server. ESLint excludes
+both `.next` and `.next-playwright` to avoid linting generated bundles.
+
+The unchanged `app/tests/example.spec.ts` visits `https://playwright.dev` and
+still requires an internet connection.
+
+The PVK page tests in `app/tests/pages/dokumentasjon/[etterlevelseDokumentasjonId]/pvkdokument/pvkDokumentPage.spec.ts`
+mock their data using `app/tests/utils/pvkDokument.ts`, validate GraphQL response
+completeness against the actual query using Apollo's cache, and reject Apollo
+missing-field errors. The risk-scenario CRUD tests verify header focus and
+mock-data persistence after reload, including a delayed tiltak response.
+An additional test verifies scenario-header focus for a deleted tiltak.
+The PVO submission test checks the saved submission and withdrawal responses,
+waits for loading to finish before withdrawing, and verifies the withdrawn state after reload.
+
+```bash
+yarn playwright test pvkDokumentPage.spec.ts --project=chromium --grep 'oppretter, oppdaterer og sletter tiltak|tiltaket i lenken' --workers=1
+```
 
 ## Other
 
@@ -62,6 +94,47 @@ It's important to having `dev-gcp` and `frontend` running locally while committi
 2. `brew install node`
 
 ## Common errors
+
+#### ResizeObserver loop completed with undelivered notifications
+
+This means a resize callback changed layout during the browser's resize-observer
+delivery cycle, so further notifications were deferred to another frame.
+It does not necessarily mean an infinite loop.
+
+WebKit reproduced this when opening the risk-scenario modal: Aksel's autosizing
+textareas updated their height synchronously inside a resize callback.
+The existing `@navikt/ds-react` Yarn patch defers observer-triggered resizing with
+`requestAnimationFrame` and cancels pending work on cleanup, preserving autosizing.
+Run `yarn install` after pulling the patch and restart the frontend.
+The PVK tests treat this warning as a page error rather than suppressing it.
+
+#### Message requests fail with HTTP 500 / ECONNRESET
+
+In development, Next.js proxies `/api/melding/type/SYSTEM` and
+`/api/melding/type/FORSIDE` to `http://localhost:8080`. A
+`Failed to proxy ... ECONNRESET` error means the upstream connection was reset;
+the HTTP 500 seen by Axios can originate from the proxy, not the message controller.
+
+Check the backend connection directly:
+
+```bash
+curl -i --max-time 10 http://localhost:8080/melding/type/SYSTEM
+```
+
+If the connection resets, check the port-forward terminal and backend pod health.
+A port-forward can still listen locally after its connection becomes unusable.
+Stop it in its original terminal and restart it using the command above.
+For mocked Playwright tests, intercept message requests before navigating so they
+do not depend on the forwarded backend.
+
+Message-loading failures are logged in the browser console without becoming
+unhandled promise rejections. This does not repair the backend connection.
+
+Keep message-failure tests authenticated and mock the front-page GraphQL query.
+An unauthenticated `/userinfo` response triggers a login redirect, cancelling
+in-flight requests. WebKit can report those cancellations as `pageerror` events
+with "due to access control checks", including Next.js development stack-frame
+requests, even when promise rejections are caught.
 
 ###
 

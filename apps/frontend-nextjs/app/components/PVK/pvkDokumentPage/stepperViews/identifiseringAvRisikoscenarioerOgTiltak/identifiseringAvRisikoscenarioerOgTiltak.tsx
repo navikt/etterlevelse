@@ -47,6 +47,8 @@ const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
   const [risikoscenarioList, setRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [allRisikoscenarioList, setAllRisikoscenarioList] = useState<IRisikoscenario[]>([])
   const [tiltakList, setTiltakList] = useState<ITiltak[]>([])
+  const [loadedTiltakFor, setLoadedTiltakFor] = useState<IPvkDokument | null>(null)
+  const isTiltakLoading = loadedTiltakFor !== pvkDokument
   const [isTiltakFormActive, setIsTiltakFormActive] = useState<boolean>(false)
   const [isIngenTilgangFormDirty, setIsIngenTilgangFormDirty] = useState<boolean>(false)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false)
@@ -79,6 +81,7 @@ const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
         )
         await getTiltakByPvkDokumentId(pvkDokument.id).then((response: IPageResponse<ITiltak>) => {
           setTiltakList(response.content)
+          setLoadedTiltakFor(pvkDokument)
         })
       })()
     }
@@ -117,6 +120,7 @@ const IdentifiseringAvRisikoscenarioerOgTiltak: FunctionComponent<TProps> = ({
                   allRisikoscenarioList={allRisikoscenarioList}
                   setAllRisikoscenarioList={setAllRisikoscenarioList}
                   tiltakList={tiltakList}
+                  isTiltakLoading={isTiltakLoading}
                   etterlevelseDokumentasjonId={etterlevelseDokumentasjon.id}
                   setTiltakList={setTiltakList}
                   setRisikoscenarioList={setRisikoscenarioList}

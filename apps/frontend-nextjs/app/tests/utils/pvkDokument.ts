@@ -1,4 +1,6 @@
+import { InMemoryCache } from '@apollo/client'
 import { BrowserContext, Route, expect } from '@playwright/test'
+import { parse } from 'graphql'
 import { mapRisikoscenarioToFormValue } from '@/api/risikoscenario/risikoscenarioApi'
 import { mapTiltakToFormValue } from '@/api/tiltak/tiltakApi'
 import { EAuditAction, EObjectType, IAuditItem } from '@/constants/admin/audit/auditConstants'
@@ -177,6 +179,8 @@ export const createPvkMockData = (
     rettskilder: [],
     tagger: ['Personvernkonsekvensvurdering'],
     regelverk: [{ lov }],
+    avdeling: code(EListName.AVDELING, 'JURIDISK', 'Juridisk avdeling'),
+    underavdeling: code(EListName.UNDERAVDELING, 'PERSONVERN', 'Personvern'),
     relevansFor: [],
     status: EKravStatus.AKTIV,
     suksesskriterier: [],
@@ -265,27 +269,49 @@ export const mockPvkApi = async (context: BrowserContext, data: IPvkMockData) =>
   })
 
   await context.route('**/graphql', (route) => {
-    const body: { operationName: string; variables: { nummer?: number; tagger?: string[] } } = route
-      .request()
-      .postDataJSON()
+    const body: {
+      operationName: string
+      query: string
+      variables: { nummer?: number; tagger?: string[] }
+    } = route.request().postDataJSON()
     expect(body.operationName).toBe('getKravByFilter')
-    return route.fulfill({
-      json: {
-        data: {
-          krav: {
-            ...mockPage(
-              data.krav.filter(
-                (krav) =>
-                  (!body.variables.nummer || krav.kravNummer === body.variables.nummer) &&
-                  (!body.variables.tagger ||
-                    body.variables.tagger.every((tag) => krav.tagger.includes(tag)))
-              )
-            ),
-            paged: false,
-          },
-        },
+    const response = {
+      krav: {
+        __typename: 'KravPage',
+        ...mockPage(
+          data.krav
+            .filter(
+              (krav) =>
+                (!body.variables.nummer || krav.kravNummer === body.variables.nummer) &&
+                (!body.variables.tagger ||
+                  body.variables.tagger.every((tag) => krav.tagger.includes(tag)))
+            )
+            .map((krav) => ({
+              ...krav,
+              __typename: 'Krav',
+              changeStamp: { ...krav.changeStamp, __typename: 'ChangeStamp' },
+              avdeling: krav.avdeling && { ...krav.avdeling, __typename: 'Code' },
+              underavdeling: krav.underavdeling && { ...krav.underavdeling, __typename: 'Code' },
+              regelverk: krav.regelverk.map((regelverk) => ({
+                ...regelverk,
+                __typename: 'Regelverk',
+                lov: { ...regelverk.lov, __typename: 'Code' },
+              })),
+              etterlevelser: krav.etterlevelser.map((etterlevelse) => ({
+                ...etterlevelse,
+                __typename: 'Etterlevelse',
+              })),
+            }))
+        ),
+        paged: false,
       },
-    })
+    }
+    const cache = new InMemoryCache()
+    const queryOptions = { query: parse(body.query), variables: body.variables }
+    cache.writeQuery({ ...queryOptions, data: response })
+    const diff = cache.diff({ ...queryOptions, optimistic: false })
+    expect(diff.complete, diff.missing?.message).toBe(true)
+    return route.fulfill({ json: { data: response } })
   })
   await context.route('**/api/**', async (route) => {
     const request = route.request()
@@ -294,6 +320,11 @@ export const mockPvkApi = async (context: BrowserContext, data: IPvkMockData) =>
     const method = request.method()
     const resource = data.dokumentasjon.resourcesData?.[0]
     const team = data.dokumentasjon.teamsData?.[0]
+
+    if (method === 'GET' && /^\/team\/resource\/[^/]+\/photo$/.test(path)) {
+      await route.fallback()
+      return
+    }
 
     if (method === 'GET') {
       const reads: Record<string, unknown> = {

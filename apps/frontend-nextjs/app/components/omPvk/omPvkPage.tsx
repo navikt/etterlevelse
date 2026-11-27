@@ -58,6 +58,7 @@ const OmPvkPage = () => {
             Word-malen.
           </BodyLong>
           <Image
+            loading='eager'
             className='mr-2.5 mt-6 mb-12'
             src={SkjermbildePVK}
             alt='Skjermbilde fra forsiden av vår digitale PVK-løsning.'
@@ -125,6 +126,7 @@ const OmPvkPage = () => {
           </BodyLong>
           <ReadMore header='Vis meg hvor jeg finner Digital PVK' className='mb-6'>
             <Image
+              loading='eager'
               className='mr-2.5 mt-6 mb-12'
               src={VisMegHvorJegFinnerDigitalPVK}
               alt='Skjermbilde som viser hvor man finner Digital PVK'

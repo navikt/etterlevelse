@@ -1073,7 +1073,7 @@ __metadata:
 
 "@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.19.1#~/.yarn/patches/@navikt-ds-react-npm-8.19.1-214d066732.patch":
   version: 8.19.1
-  resolution: "@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.19.1#~/.yarn/patches/@navikt-ds-react-npm-8.19.1-214d066732.patch::version=8.19.1&hash=e1fe3b"
+  resolution: "@navikt/ds-react@patch:@navikt/ds-react@npm%3A8.19.1#~/.yarn/patches/@navikt-ds-react-npm-8.19.1-214d066732.patch::version=8.19.1&hash=959203"
   dependencies:
     "@floating-ui/react": "npm:0.27.20"
     "@floating-ui/react-dom": "npm:^2.1.9"
@@ -1088,7 +1088,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10c0/7789047756d30e788bdabc7494f61a97b6b2cbe1f1510d075755dacb3d1908e1e8e41f4dedbc858159adcf6a07389f6d4573a16d0f801d29d94b05f9757bfaef
+  checksum: 10c0/4c9df933aff240a4025627be1e8ac1055af14d45c936b0e6edde4f7d8bde796172f0d3b7cf3956115eee3c2c7558edf6bfa458879d5116004ca3274092e2b8df
   languageName: node
   linkType: hard
 

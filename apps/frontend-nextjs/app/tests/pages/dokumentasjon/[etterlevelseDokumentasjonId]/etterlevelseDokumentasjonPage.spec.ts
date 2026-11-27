@@ -1,9 +1,11 @@
-import test, { expect } from '@playwright/test'
+import { InMemoryCache } from '@apollo/client'
 import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
+import { getEtterlevelseDokumentasjonStatsQuery } from '@/query/etterlevelseDokumentasjon/etterlevelseDokumentasjonQuery'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
 } from '@/tests/utils/etterlevelsesdokument'
+import { expect, frontendUrl, test } from '@/tests/utils/fixtures'
 import {
   mockAdmin,
   mockIdent,
@@ -234,7 +236,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       }
     )
     await context.route(
-      `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+      `**/behandlingens-art-og-omfang/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
       async (route) => {
         await route.fulfill({ status: 404 })
       }
@@ -256,26 +258,33 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       const requestBody = route.request().postDataJSON() as { operationName?: string }
 
       if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
-        await route.fulfill({
-          json: {
-            data: {
-              etterlevelseDokumentasjon: {
-                content: [{ stats: { relevantKrav: [], utgaattKrav: [] } }],
-              },
-            },
+        const data = {
+          etterlevelseDokumentasjon: {
+            content: [{ stats: { relevantKrav: [], irrelevantKrav: [], utgaattKrav: [] } }],
           },
+        }
+        const cache = new InMemoryCache()
+        const queryOptions = {
+          query: getEtterlevelseDokumentasjonStatsQuery,
+          variables: { etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id },
+        }
+        cache.writeQuery({ ...queryOptions, data })
+        expect(cache.diff({ ...queryOptions, optimistic: false }).complete).toBe(true)
+
+        await route.fulfill({
+          json: { data },
         })
         return
       }
 
-      await route.continue()
+      await route.fallback()
     })
 
-    await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
+    await page.goto(`${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`, {
+      waitUntil: 'domcontentloaded',
+    })
 
-    await expect(page).toHaveURL(
-      `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
-    )
+    await expect(page).toHaveURL(`${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
     await expect(
       page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
     ).toBeVisible()
@@ -334,7 +343,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
   })
 
   test.describe('se liste av krav som følger etterlevelsesdokumentet jeg har opprettet', () => {
-    const documentUrl = `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
+    const documentUrl = `${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
     const documentOverviewUrl = `${documentUrl}?tema=all-open`
     const requirementLinks = [
       ...visibleRequirements.slice(0, 2).map((requirement) => ({
@@ -441,7 +450,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         }
       )
       await context.route(
-        `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+        `**/behandlingens-art-og-omfang/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
           await route.fulfill({ status: 404 })
         }
@@ -673,12 +682,12 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
           return
         }
 
-        await route.continue()
+        await route.fallback()
       })
     })
 
     test('viser kravoversikten og lar alle temaer ekspanderes', async ({ page }) => {
-      await page.goto(documentUrl)
+      await page.goto(documentUrl, { waitUntil: 'domcontentloaded' })
       const expandAllThemes = page.getByRole('checkbox', { name: 'Ekspander alle temaer' })
       await expect(expandAllThemes).not.toBeChecked()
       await expandAllThemes.click()
@@ -717,7 +726,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       test(`åpner K${requirement.number}.${requirement.version} og bevarer ekspanderte temaer ved retur`, async ({
         page,
       }) => {
-        await page.goto(documentOverviewUrl)
+        await page.goto(documentOverviewUrl, { waitUntil: 'domcontentloaded' })
         const expandAllThemes = page.getByRole('checkbox', { name: 'Ekspander alle temaer' })
         await expect(expandAllThemes).toBeChecked()
         const requirementUrl =
@@ -735,7 +744,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
 
         await expect(requirementLink).toHaveAttribute('href', requirementUrl)
         await requirementLink.click()
-        await expect(page).toHaveURL(`http://localhost:3000${requirementUrl}`)
+        await expect(page).toHaveURL(`${frontendUrl}${requirementUrl}`)
         await expect(
           page.getByRole('heading', { name: requirement.name, exact: false })
         ).toBeVisible()
@@ -746,7 +755,7 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     }
 
     test('viser bare prioriterte krav i prioritert kravliste', async ({ page }) => {
-      await page.goto(documentOverviewUrl)
+      await page.goto(documentOverviewUrl, { waitUntil: 'domcontentloaded' })
       await page.getByRole('tab', { name: 'Prioritert kravliste' }).click()
       await expect(
         page.getByRole('link', {
@@ -782,6 +791,40 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       page,
     }) => {
       await role.mockUser(page)
+
+      await context.route('**/api/melding/type/SYSTEM', async (route) => {
+        await route.fulfill({ json: { content: [] } })
+      })
+      await context.route(
+        `**/etterlevelsemetadata/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
+      await context.route(
+        `**/etterlevelse/etterlevelseDokumentasjon/${oppretteEtterlevelsesdokument.id}/**`,
+        async (route) => {
+          await route.fulfill({
+            json: {
+              pageNumber: 0,
+              pageSize: 20,
+              pages: 0,
+              numberOfElements: 0,
+              totalElements: 0,
+              content: [],
+            },
+          })
+        }
+      )
 
       await context.route('**/api/codelist?refresh=false', async (route) => {
         await route.fulfill({
@@ -909,63 +952,78 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
         const requestBody = route.request().postDataJSON() as { operationName?: string }
 
         if (requestBody.operationName === 'getEtterlevelseDokumentasjonStats') {
-          await route.fulfill({
-            json: {
-              data: {
-                etterlevelseDokumentasjon: {
-                  content: [
-                    {
-                      stats: {
-                        relevantKrav: visibleRequirements.map((requirement, index) => ({
-                          kravNummer: requirement.number,
-                          kravVersjon: requirement.version,
-                          navn: requirement.name,
-                          status: 'AKTIV',
-                          aktivertDato: '2025-01-01T00:00:00Z',
-                          tagger: [],
-                          suksesskriterier: [],
-                          changeStamp: {
-                            createdDate: '2025-01-01T00:00:00Z',
-                            lastModifiedDate: '2025-01-01T00:00:00Z',
-                            lastModifiedBy: mockIdent,
-                          },
-                          etterlevelser:
-                            index === 0
-                              ? [
-                                  {
-                                    id: `etterlevelse-${requirement.number}`,
-                                    status: 'FERDIG_DOKUMENTERT',
-                                    etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
-                                    suksesskriterieBegrunnelser: [],
-                                  },
-                                ]
-                              : [],
-                          regelverk: [
-                            {
-                              lov: {
-                                code:
-                                  index < 2
-                                    ? 'PERSONOPPLYSNINGSLOVEN'
-                                    : 'INTERNKONTROLLFORSKRIFTEN',
-                              },
-                            },
-                          ],
-                        })),
-                        utgaattKrav: [],
+          const data = {
+            etterlevelseDokumentasjon: {
+              content: [
+                {
+                  stats: {
+                    relevantKrav: visibleRequirements.map((requirement, index) => ({
+                      kravNummer: requirement.number,
+                      kravVersjon: requirement.version,
+                      navn: requirement.name,
+                      status: 'AKTIV',
+                      aktivertDato: '2025-01-01T00:00:00Z',
+                      tagger: [],
+                      suksesskriterier: [],
+                      changeStamp: {
+                        createdDate: '2025-01-01T00:00:00Z',
+                        lastModifiedDate: '2025-01-01T00:00:00Z',
+                        lastModifiedBy: mockIdent,
                       },
-                    },
-                  ],
+                      etterlevelser:
+                        index === 0
+                          ? [
+                              {
+                                id: `etterlevelse-${requirement.number}`,
+                                status: 'FERDIG_DOKUMENTERT',
+                                etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id,
+                                fristForFerdigstillelse: '',
+                                ikkeBehovForRevurdering: false,
+                                suksesskriterieBegrunnelser: [],
+                                changeStamp: {
+                                  createdDate: '2025-01-01T00:00:00Z',
+                                  lastModifiedDate: '2025-01-01T00:00:00Z',
+                                  lastModifiedBy: mockIdent,
+                                },
+                              },
+                            ]
+                          : [],
+                      regelverk: [
+                        {
+                          lov: {
+                            code:
+                              index < 2 ? 'PERSONOPPLYSNINGSLOVEN' : 'INTERNKONTROLLFORSKRIFTEN',
+                            shortName:
+                              index < 2 ? 'Personopplysningsloven' : 'Internkontrollforskriften',
+                          },
+                        },
+                      ],
+                    })),
+                    irrelevantKrav: [],
+                    utgaattKrav: [],
+                  },
                 },
-              },
+              ],
             },
+          }
+          const cache = new InMemoryCache()
+          const queryOptions = {
+            query: getEtterlevelseDokumentasjonStatsQuery,
+            variables: { etterlevelseDokumentasjonId: oppretteEtterlevelsesdokument.id },
+          }
+          cache.writeQuery({ ...queryOptions, data })
+          expect(cache.diff({ ...queryOptions, optimistic: false }).complete).toBe(true)
+
+          await route.fulfill({
+            json: { data },
           })
           return
         }
 
-        await route.continue()
+        await route.fallback()
       })
 
-      const documentUrl = `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
+      const documentUrl = `${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
       const navigationUrls = [
         documentUrl,
         `${documentUrl}?tema=PERSONVERN`,
@@ -974,14 +1032,14 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
       ]
 
       for (const navigationUrl of navigationUrls) {
-        await page.goto(navigationUrl)
+        await page.goto(navigationUrl, { waitUntil: 'domcontentloaded' })
         await expect(page).toHaveURL(navigationUrl)
         await expect(
           page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
         ).toBeVisible()
       }
 
-      await page.goto(`${documentUrl}?tema=all-open`)
+      await page.goto(`${documentUrl}?tema=all-open`, { waitUntil: 'domcontentloaded' })
       await expect(
         page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
       ).toBeVisible()

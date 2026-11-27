@@ -104,12 +104,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.oppretteEllerOppdatere}
         open={openItems[accordionId.oppretteEllerOppdatere]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.oppretteEllerOppdatere)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.oppretteEllerOppdatere)}
+          >
             <h3>{accordionTittel.oppretteEllerOppdatere}</h3>
-            <CopyAccordionLinkButton id={accordionId.oppretteEllerOppdatere} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.oppretteEllerOppdatere} />
+        </div>
         <Accordion.Content>
           <BodyLong spacing>
             Dersom dere ikke allerede har et etterlevelsesdokument dere skal oppdatere, må dere
@@ -147,12 +150,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.redigereDokumentegenskaper}
         open={openItems[accordionId.redigereDokumentegenskaper]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.redigereDokumentegenskaper)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.redigereDokumentegenskaper)}
+          >
             <h3>{accordionTittel.redigereDokumentegenskaper}</h3>
-            <CopyAccordionLinkButton id={accordionId.redigereDokumentegenskaper} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.redigereDokumentegenskaper} />
+        </div>
         <Accordion.Content>
           <BodyLong spacing>
             Når dere skal opprette eller oppdatere et etterlevelsesdokument, må dere fylle
@@ -221,14 +227,18 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.jobbeITemaoversikten}
         open={openItems[accordionId.jobbeITemaoversikten]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.jobbeITemaoversikten)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.jobbeITemaoversikten)}
+          >
             <h3>{accordionTittel.jobbeITemaoversikten}</h3>
-            <CopyAccordionLinkButton id={accordionId.jobbeITemaoversikten} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.jobbeITemaoversikten} />
+        </div>
         <Accordion.Content>
           <Image
+            loading='eager'
             className='mr-2.5 mt-6 mb-12'
             src={JobbeITemaoversikten}
             alt='Skjermbilde som viser temaoversikten'
@@ -250,12 +260,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.besvareEtterlevelseskrav}
         open={openItems[accordionId.besvareEtterlevelseskrav]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.besvareEtterlevelseskrav)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.besvareEtterlevelseskrav)}
+          >
             <h3>{accordionTittel.besvareEtterlevelseskrav}</h3>
-            <CopyAccordionLinkButton id={accordionId.besvareEtterlevelseskrav} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.besvareEtterlevelseskrav} />
+        </div>
         <Accordion.Content>
           <ReadMore header='Vis meg hvordan jeg besvarer etterlevelseskrav' className='mb-6'>
             <div className='my-6'>
@@ -324,12 +337,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.behandlerPersonopplysninger}
         open={openItems[accordionId.behandlerPersonopplysninger]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.behandlerPersonopplysninger)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.behandlerPersonopplysninger)}
+          >
             <h3>{accordionTittel.behandlerPersonopplysninger}</h3>
-            <CopyAccordionLinkButton id={accordionId.behandlerPersonopplysninger} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.behandlerPersonopplysninger} />
+        </div>
         <Accordion.Content>
           <BodyLong spacing>
             Når dere behandler personopplysninger, skal dere vurdere om det er behov for å
@@ -343,6 +359,7 @@ const OmStotteTilEtterlevelseAccordion = () => {
           </BodyLong>
           <ReadMore header='Vis meg hvor jeg finner inngangen til disse sidene' className='mb-6'>
             <Image
+              loading='eager'
               className='mr-2.5 mt-6 mb-12'
               src={VisMegHvorJegFinnerDigitalPVK}
               alt='Skjermbilde som viser hvor man finner Digital PVK'
@@ -358,12 +375,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.faEtterlevelsenGodkjent}
         open={openItems[accordionId.faEtterlevelsenGodkjent]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.faEtterlevelsenGodkjent)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.faEtterlevelsenGodkjent)}
+          >
             <h3>{accordionTittel.faEtterlevelsenGodkjent}</h3>
-            <CopyAccordionLinkButton id={accordionId.faEtterlevelsenGodkjent} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.faEtterlevelsenGodkjent} />
+        </div>
         <Accordion.Content>
           <ReadMore
             header='Vis meg hvordan jeg får etterlevelsen godkjent av risikoeier'
@@ -433,12 +453,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item id={accordionId.forRisikoeiere} open={openItems[accordionId.forRisikoeiere]}>
-        <Accordion.Header onClick={() => toggle(accordionId.forRisikoeiere)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header className='flex-1' onClick={() => toggle(accordionId.forRisikoeiere)}>
             <h3>{accordionTittel.forRisikoeiere}</h3>
-            <CopyAccordionLinkButton id={accordionId.forRisikoeiere} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.forRisikoeiere} />
+        </div>
         <Accordion.Content>
           <ReadMore
             header={'Vis meg hvordan jeg som risikoeier godkjenner et etterlevelsesdokument'}
@@ -494,12 +514,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.oppdatereEtterGodkjenning}
         open={openItems[accordionId.oppdatereEtterGodkjenning]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.oppdatereEtterGodkjenning)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.oppdatereEtterGodkjenning)}
+          >
             <h3>{accordionTittel.oppdatereEtterGodkjenning} </h3>
-            <CopyAccordionLinkButton id={accordionId.oppdatereEtterGodkjenning} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.oppdatereEtterGodkjenning} />
+        </div>
         <Accordion.Content>
           <ReadMore
             header='Vis meg hvordan jeg oppdaterer et etterlevelsesdokument etter godkjenning'
@@ -525,12 +548,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
         </Accordion.Content>
       </Accordion.Item>
       <Accordion.Item id={accordionId.gjenbruk} open={openItems[accordionId.gjenbruk]}>
-        <Accordion.Header onClick={() => toggle(accordionId.gjenbruk)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header className='flex-1' onClick={() => toggle(accordionId.gjenbruk)}>
             <h3>{accordionTittel.gjenbruk}</h3>
-            <CopyAccordionLinkButton id={accordionId.gjenbruk} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.gjenbruk} />
+        </div>
         <Accordion.Content>
           <Heading size='small' level='4' spacing>
             Generelt om gjenbruk
@@ -609,12 +632,15 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.tilretteleggeForGjenbruk}
         open={openItems[accordionId.tilretteleggeForGjenbruk]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.tilretteleggeForGjenbruk)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header
+            className='flex-1'
+            onClick={() => toggle(accordionId.tilretteleggeForGjenbruk)}
+          >
             <h3>{accordionTittel.tilretteleggeForGjenbruk}</h3>
-            <CopyAccordionLinkButton id={accordionId.tilretteleggeForGjenbruk} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.tilretteleggeForGjenbruk} />
+        </div>
         <Accordion.Content>
           <ReadMore
             header='Vis meg hvordan jeg tilrettelegger for gjenbruk av etterlevelsesdokument mitt'
@@ -738,12 +764,12 @@ const OmStotteTilEtterlevelseAccordion = () => {
         id={accordionId.slikGjenbrukerDu}
         open={openItems[accordionId.slikGjenbrukerDu]}
       >
-        <Accordion.Header onClick={() => toggle(accordionId.slikGjenbrukerDu)}>
-          <div className='flex flex-row'>
+        <div className='flex items-center'>
+          <Accordion.Header className='flex-1' onClick={() => toggle(accordionId.slikGjenbrukerDu)}>
             <h3>{accordionTittel.slikGjenbrukerDu}</h3>
-            <CopyAccordionLinkButton id={accordionId.slikGjenbrukerDu} />
-          </div>
-        </Accordion.Header>
+          </Accordion.Header>
+          <CopyAccordionLinkButton id={accordionId.slikGjenbrukerDu} />
+        </div>
         <Accordion.Content>
           <ReadMore
             header='Vis meg hvordan jeg tar gjenbrukskopi av et etterlevelsesdokument'

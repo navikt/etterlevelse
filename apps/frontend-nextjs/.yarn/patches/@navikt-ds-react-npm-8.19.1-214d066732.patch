@@ -11,6 +11,97 @@ index ae2650dbe23ad609287fe26847bafe5730e412d5..8e4344da52dd3ca61fe0ebbf42201993
        "data-color"?: AkselColor;
      }
    }
+diff --git a/cjs/utils/components/textarea-autosize/TextareaAutoSize.js b/cjs/utils/components/textarea-autosize/TextareaAutoSize.js
+index c41f04302a098d53e147851f9f5c023b2e50a0be..27318abd8a256c6e389ba9853e2b24be0598cac9 100644
+--- a/cjs/utils/components/textarea-autosize/TextareaAutoSize.js
++++ b/cjs/utils/components/textarea-autosize/TextareaAutoSize.js
+@@ -172,11 +172,24 @@ const TextareaAutosize = (0, react_1.forwardRef)((_a, ref) => {
+         const containerWindow = (0, helpers_1.ownerWindow)(input);
+         containerWindow.addEventListener("resize", handleResize);
+         let resizeObserver;
++        let resizeFrame;
+         if (typeof ResizeObserver !== "undefined") {
+-            resizeObserver = new ResizeObserver(handleResize);
++            resizeObserver = new ResizeObserver(() => {
++                // Defer height changes until after ResizeObserver delivery.
++                if (resizeFrame !== undefined) {
++                    containerWindow.cancelAnimationFrame(resizeFrame);
++                }
++                resizeFrame = containerWindow.requestAnimationFrame(() => {
++                    resizeFrame = undefined;
++                    handleResize();
++                });
++            });
+             resizeObserver.observe(input);
+         }
+         return () => {
++            if (resizeFrame !== undefined) {
++                containerWindow.cancelAnimationFrame(resizeFrame);
++            }
+             handleResize.clear();
+             containerWindow.removeEventListener("resize", handleResize);
+             if (resizeObserver) {
+diff --git a/esm/utils/components/textarea-autosize/TextareaAutoSize.js b/esm/utils/components/textarea-autosize/TextareaAutoSize.js
+index 4d808cf3d9b8dafcccf4c30ab9e33fa81d3e0730..96bfdc8eb4af973b7a650ce3286e3c46efbed526 100644
+--- a/esm/utils/components/textarea-autosize/TextareaAutoSize.js
++++ b/esm/utils/components/textarea-autosize/TextareaAutoSize.js
+@@ -134,11 +134,24 @@ const TextareaAutosize = forwardRef((_a, ref) => {
+         const containerWindow = ownerWindow(input);
+         containerWindow.addEventListener("resize", handleResize);
+         let resizeObserver;
++        let resizeFrame;
+         if (typeof ResizeObserver !== "undefined") {
+-            resizeObserver = new ResizeObserver(handleResize);
++            resizeObserver = new ResizeObserver(() => {
++                // Defer height changes until after ResizeObserver delivery.
++                if (resizeFrame !== undefined) {
++                    containerWindow.cancelAnimationFrame(resizeFrame);
++                }
++                resizeFrame = containerWindow.requestAnimationFrame(() => {
++                    resizeFrame = undefined;
++                    handleResize();
++                });
++            });
+             resizeObserver.observe(input);
+         }
+         return () => {
++            if (resizeFrame !== undefined) {
++                containerWindow.cancelAnimationFrame(resizeFrame);
++            }
+             handleResize.clear();
+             containerWindow.removeEventListener("resize", handleResize);
+             if (resizeObserver) {
+diff --git a/src/utils/components/textarea-autosize/TextareaAutoSize.tsx b/src/utils/components/textarea-autosize/TextareaAutoSize.tsx
+index ee56f9bd77358384e76e1a1ed59e1d425f7955e3..623dff7537f8fb331325a28385ee602092d3f71b 100644
+--- a/src/utils/components/textarea-autosize/TextareaAutoSize.tsx
++++ b/src/utils/components/textarea-autosize/TextareaAutoSize.tsx
+@@ -205,12 +205,25 @@ const TextareaAutosize = forwardRef<HTMLTextAreaElement, TextareaAutosizeProps>(
+       containerWindow.addEventListener("resize", handleResize);
+ 
+       let resizeObserver: ResizeObserver;
++      let resizeFrame: number | undefined;
+       if (typeof ResizeObserver !== "undefined") {
+-        resizeObserver = new ResizeObserver(handleResize);
++        resizeObserver = new ResizeObserver(() => {
++          // Defer height changes until after ResizeObserver delivery.
++          if (resizeFrame !== undefined) {
++            containerWindow.cancelAnimationFrame(resizeFrame);
++          }
++          resizeFrame = containerWindow.requestAnimationFrame(() => {
++            resizeFrame = undefined;
++            handleResize();
++          });
++        });
+         resizeObserver.observe(input);
+       }
+ 
+       return () => {
++        if (resizeFrame !== undefined) {
++          containerWindow.cancelAnimationFrame(resizeFrame);
++        }
+         handleResize.clear();
+         containerWindow.removeEventListener("resize", handleResize);
+         if (resizeObserver) {
 diff --git a/src/types/theme.d.ts b/src/types/theme.d.ts
 index ae2650dbe23ad609287fe26847bafe5730e412d5..8e4344da52dd3ca61fe0ebbf422019937ec47aad 100644
 --- a/src/types/theme.d.ts

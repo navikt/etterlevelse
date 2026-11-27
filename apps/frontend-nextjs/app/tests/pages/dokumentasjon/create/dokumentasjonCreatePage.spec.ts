@@ -1,15 +1,17 @@
-import test, { expect } from '@playwright/test'
+import { etterlevelseDokumentasjonMapToFormVal } from '@/api/etterlevelseDokumentasjon/etterlevelseDokumentasjonApi'
 import { EEtterlevelseDokumentFormConstants } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonForm/etterlevelseDokumentasjonFormConstants'
 import {
   mockNomOrganisering,
   oppretteEtterlevelsesdokument,
 } from '@/tests/utils/etterlevelsesdokument'
+import { expect, frontendUrl, test } from '@/tests/utils/fixtures'
 import {
   mockAdmin,
   mockIdent,
   mockKraveier,
   mockPersonvernombud,
   mockRead,
+  mockUnauthorised,
   mockWrite,
 } from '@/tests/utils/roller'
 
@@ -71,14 +73,19 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
         return
       }
 
-      await route.continue()
+      await route.fallback()
     })
 
-    await page.goto('http://localhost:3000/')
+    await page.goto(`${frontendUrl}/`, {
+      waitUntil: 'domcontentloaded',
+    })
 
     await expect(page).toHaveTitle(/Etterlevelse/)
-    await expect(page.getByRole('button', { name: 'Nytt etterlevelsesdokument' })).toBeVisible()
-    await page.getByRole('button', { name: 'Nytt etterlevelsesdokument' }).click()
+    // Wait for hydration and user loading before interacting with the server-rendered button.
+    await expect(page.getByRole('button', { name: mockIdent, exact: true })).toBeVisible()
+    await page
+      .getByRole('button', { name: 'Opprett nytt etterlevelsesdokument', exact: true })
+      .click()
 
     // The dev server may compile the create route on first navigation
     await expect(page).toHaveURL(/\/dokumentasjon\/create$/, { timeout: 15000 })
@@ -161,7 +168,61 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
       await route.fulfill({ json: { id: oppretteEtterlevelsesdokument.id } })
     })
 
-    await page.goto('http://localhost:3000/dokumentasjon/create')
+    await context.route(
+      `**/api/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+      (route) =>
+        route.fulfill({
+          json: {
+            ...etterlevelseDokumentasjonMapToFormVal({}),
+            id: oppretteEtterlevelsesdokument.id,
+            title: oppretteEtterlevelsesdokument.title,
+            etterlevelseNummer: 1,
+            etterlevelseDokumentVersjon: 1,
+          },
+        })
+    )
+    await context.route('**/graphql', async (route) => {
+      if (route.request().postDataJSON().operationName !== 'getEtterlevelseDokumentasjonStats') {
+        await route.fallback()
+        return
+      }
+      await route.fulfill({
+        json: {
+          data: {
+            etterlevelseDokumentasjon: {
+              content: [{ stats: { relevantKrav: [], irrelevantKrav: [], utgaattKrav: [] } }],
+            },
+          },
+        },
+      })
+    })
+    await context.route(
+      `**/documentrelation/todocument/${oppretteEtterlevelsesdokument.id}**`,
+      (route) => route.fulfill({ json: [] })
+    )
+    for (const path of [
+      '/pvkdokument/etterlevelsedokument/',
+      '/behandlingenslivslop/etterlevelsedokument/',
+      '/behandlingens-art-og-omfang/etterlevelsedokument/',
+    ]) {
+      await context.route(`**/api${path}${oppretteEtterlevelsesdokument.id}`, (route) =>
+        route.fulfill({ status: 404 })
+      )
+    }
+    await context.route('**/kravprioritylist?pageNumber=0&pageSize=100', (route) =>
+      route.fulfill({
+        json: {
+          pageNumber: 0,
+          pageSize: 100,
+          pages: 0,
+          numberOfElements: 0,
+          totalElements: 0,
+          content: [],
+        },
+      })
+    )
+
+    await page.goto(`${frontendUrl}/dokumentasjon/create`, { waitUntil: 'domcontentloaded' })
 
     const titleField = page.getByLabel('Navngi det nye dokumentet ditt')
     const relevanceCheckbox = page.getByRole('checkbox', {
@@ -196,10 +257,53 @@ test.describe('Som en admin bruker skal jeg kunne', () => {
     await page.getByRole('combobox', { name: 'Seksjon', exact: true }).selectOption('seksjon-1')
     await page.getByRole('button', { name: 'Opprett', exact: true }).click()
 
-    await expect(page).toHaveURL(
-      `http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`
-    )
+    await expect(page).toHaveURL(`${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
+    await expect(
+      page.getByRole('heading', {
+        name: `E1.1 ${oppretteEtterlevelsesdokument.title}`,
+        exact: true,
+      })
+    ).toBeVisible()
   })
+})
+
+test.describe('Ingen tilgang for uautoriserte brukere', () => {
+  for (const [name, path] of [
+    ['forsiden', '/'],
+    ['oppretting', '/dokumentasjon/create'],
+    ['lesing', `/dokumentasjon/${oppretteEtterlevelsesdokument.id}`],
+    ['redigering', `/dokumentasjon/edit/${oppretteEtterlevelsesdokument.id}`],
+  ]) {
+    test(`bruker uten @nav.no-adresse har ikke tilgang til ${name}`, async ({ context, page }) => {
+      await context.route('**/api/**', async (route) => {
+        await route.fulfill({ status: 403 })
+      })
+      await context.route('**/graphql', async (route) => {
+        await route.fulfill({ status: 403 })
+      })
+      await mockUnauthorised(page)
+
+      // The authentication backend is outside this frontend test.
+      await context.route('**/login?redirect_uri=**', async (route) => {
+        await route.fulfill({
+          status: 401,
+          contentType: 'text/plain',
+          body: 'Unauthorized',
+        })
+      })
+
+      const pageUrl = `${frontendUrl}${path}`
+      const loginResponse = page.waitForResponse(
+        (response) => new URL(response.url()).pathname === '/login'
+      )
+      await page.goto(pageUrl, { waitUntil: 'domcontentloaded' })
+
+      expect((await loginResponse).status()).toBe(401)
+      await expect(page).toHaveURL(`${frontendUrl}/login?redirect_uri=${pageUrl}`)
+      await expect(page.getByRole('main')).toHaveCount(0)
+      await expect(page.getByRole('button', { name: mockIdent, exact: true })).toHaveCount(0)
+    })
+  }
 })
 
 test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', () => {
@@ -275,7 +379,7 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
         }
       )
       await context.route(
-        `**/behandlings-art-og-omfang/etterlevelsedokumentasjon/${oppretteEtterlevelsesdokument.id}`,
+        `**/behandlingens-art-og-omfang/etterlevelsedokument/${oppretteEtterlevelsesdokument.id}`,
         async (route) => {
           await route.fulfill({ status: 404 })
         }
@@ -301,7 +405,7 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
             json: {
               data: {
                 etterlevelseDokumentasjon: {
-                  content: [{ stats: { relevantKrav: [], utgaattKrav: [] } }],
+                  content: [{ stats: { relevantKrav: [], irrelevantKrav: [], utgaattKrav: [] } }],
                 },
               },
             },
@@ -309,15 +413,19 @@ test.describe('Tilgang til etterlevelsesdokumentasjon for alle brukerroller', ()
           return
         }
 
-        await route.continue()
+        await route.fallback()
       })
 
-      await page.goto('http://localhost:3000/dokumentasjon/create')
+      await page.goto(`${frontendUrl}/dokumentasjon/create`, {
+        waitUntil: 'domcontentloaded',
+      })
       await expect(
         page.getByRole('heading', { name: 'Opprett nytt etterlevelsesdokument' })
       ).toBeVisible()
 
-      await page.goto(`http://localhost:3000/dokumentasjon/${oppretteEtterlevelsesdokument.id}`)
+      await page.goto(`${frontendUrl}/dokumentasjon/${oppretteEtterlevelsesdokument.id}`, {
+        waitUntil: 'domcontentloaded',
+      })
       await expect(
         page.getByRole('heading', { name: `E1.1 ${oppretteEtterlevelsesdokument.title}` })
       ).toBeVisible()

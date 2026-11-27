@@ -41,6 +41,7 @@ export const OmBehandlingskatalogen = () => {
             Om Behandlingskatalogen
           </Heading>
           <Image
+            loading='eager'
             className='mr-2.5 mt-6 mb-12'
             src={OmBehandlingskatalogenImage}
             alt='Skjermbilde fra Behandlingskatalogens forside.'

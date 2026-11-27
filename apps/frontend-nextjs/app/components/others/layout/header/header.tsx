@@ -36,13 +36,13 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
   }, [source])
 
   useEffect(() => {
-    ;(async () => {
-      await getMeldingByType(EMeldingType.SYSTEM).then((response: IPageResponse<IMelding>) => {
+    getMeldingByType(EMeldingType.SYSTEM)
+      .then((response: IPageResponse<IMelding>) => {
         if (response.numberOfElements > 0) {
           setSystemVarsel(response.content[0])
         }
       })
-    })()
+      .catch((error) => console.error('Failed to fetch system message:', error))
   }, [pathname])
 
   return (
@@ -104,6 +104,7 @@ const Header: FunctionComponent<TProps> = ({ noSearchBar, noLoginButton }) => {
             <div className='flex gap-2'>
               <div className='flex items-baseline pt-1'>
                 <Image
+                  loading='eager'
                   src={systemVarsel.alertType === EAlertType.INFO ? informationIcon : warningAlert}
                   width='18'
                   height='18'
