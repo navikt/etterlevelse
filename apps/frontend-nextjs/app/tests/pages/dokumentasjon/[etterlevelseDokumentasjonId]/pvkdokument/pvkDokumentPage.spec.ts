@@ -274,10 +274,6 @@ const test = base.extend<{
           }
         })
         page.on('pageerror', (error) => {
-          if (error.message === 'ResizeObserver loop completed with undelivered notifications.') {
-            console.warn(`Browser layout warning: ${error.message}`)
-            return
-          }
           pageErrors.push(error.message)
         })
       })
@@ -600,6 +596,32 @@ for (const role of roleScenarios) {
     }
 
     if (role.canEdit) {
+      test('tilpasser tekstfelthøyden i risikoscenariomodalen ved tekst og breddeendringer', async ({
+        page,
+      }) => {
+        await page.goto(`${baseUrl}?steg=6`, { waitUntil: 'domcontentloaded' })
+        await page
+          .getByRole('button', { name: 'Legg til ikke krav-spesifikt risikoscenario' })
+          .click()
+        const dialog = page.getByRole('dialog', { name: 'Opprett nytt risikoscenario' })
+        const field = dialog.getByRole('textbox', { name: 'Beskriv risikoscenarioet' })
+        const initialHeight = await field.evaluate((element) => element.clientHeight)
+        await field.fill('En lang beskrivelse av risikoscenarioet. '.repeat(50))
+        await expect
+          .poll(() => field.evaluate((element) => element.clientHeight))
+          .toBeGreaterThan(initialHeight)
+        const wideHeight = await field.evaluate((element) => element.clientHeight)
+        await page.setViewportSize({ width: 480, height: 720 })
+        await expect
+          .poll(() => field.evaluate((element) => element.clientHeight))
+          .toBeGreaterThan(wideHeight)
+        await expect
+          .poll(() => field.evaluate((element) => element.scrollHeight - element.clientHeight))
+          .toBeLessThanOrEqual(1)
+        await dialog.getByRole('button', { name: 'Avbryt, ikke lagre' }).click()
+        await expect(dialog).toHaveCount(0)
+      })
+
       test('lagrer art og omfang i mockdata og beholder endringen etter omlasting', async ({
         page,
       }) => {

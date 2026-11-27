@@ -1,0 +1,43 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "apps/frontend-nextjs/**"
+      - ".github/workflows/playwright.yml"
+  pull_request:
+    paths:
+      - "apps/frontend-nextjs/**"
+      - ".github/workflows/playwright.yml"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: apps/frontend-nextjs
+
+jobs:
+  test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "26.x"
+      - run: npm install --global corepack && corepack enable
+      - run: yarn install --immutable
+      - run: yarn playwright install --with-deps ${{ matrix.browser }}
+      - run: yarn playwright test --project=${{ matrix.browser }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: apps/frontend-nextjs/playwright-report/
+          retention-days: 14

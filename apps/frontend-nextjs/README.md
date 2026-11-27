@@ -65,6 +65,11 @@ hook runs Chromium only. `yarn playwright test` runs Chromium, Firefox and WebKi
 and the Playwright workflow runs all three browsers on frontend pull requests
 and pushes to master.
 
+`yarn verify:deps-upgrade` runs formatting, linting, type checking, two Knip
+checks, a production build, browser installation and tests in all three browsers
+sequentially. Playwright also builds its isolated test server. ESLint excludes
+both `.next` and `.next-playwright` to avoid linting generated bundles.
+
 The unchanged `app/tests/example.spec.ts` visits `https://playwright.dev` and
 still requires an internet connection.
 
@@ -89,6 +94,19 @@ yarn playwright test pvkDokumentPage.spec.ts --project=chromium --grep 'opprette
 2. `brew install node`
 
 ## Common errors
+
+#### ResizeObserver loop completed with undelivered notifications
+
+This means a resize callback changed layout during the browser's resize-observer
+delivery cycle, so further notifications were deferred to another frame.
+It does not necessarily mean an infinite loop.
+
+WebKit reproduced this when opening the risk-scenario modal: Aksel's autosizing
+textareas updated their height synchronously inside a resize callback.
+The existing `@navikt/ds-react` Yarn patch defers observer-triggered resizing with
+`requestAnimationFrame` and cancels pending work on cleanup, preserving autosizing.
+Run `yarn install` after pulling the patch and restart the frontend.
+The PVK tests treat this warning as a page error rather than suppressing it.
 
 #### Message requests fail with HTTP 500 / ECONNRESET
 
