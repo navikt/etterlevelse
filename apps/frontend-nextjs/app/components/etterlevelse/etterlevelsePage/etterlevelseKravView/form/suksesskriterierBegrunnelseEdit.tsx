@@ -8,6 +8,7 @@ import {
   CheckboxGroup,
   Heading,
   InfoCard,
+  InlineMessage,
   Label,
   List,
   Radio,
@@ -33,6 +34,7 @@ import {
 import { ISuksesskriterie } from '@/constants/krav/kravConstants'
 import {
   getLabelForSuksessKriterie,
+  getSkipUpperBound,
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
@@ -93,6 +95,7 @@ const KriterieBegrunnelseList: FunctionComponent<TPropsKriterieBegrunnelseList> 
             status={fieldArrayRenderProps.form.values.status}
             disableEdit={disableEdit}
             suksesskriterie={suksesskriterium}
+            suksesskriterier={suksesskriterier}
             index={index}
             suksesskriterieBegrunnelser={suksesskriterieBegrunnelser}
             update={(updated) => fieldArrayRenderProps.replace(index, updated)}
@@ -110,6 +113,7 @@ const KriterieBegrunnelseList: FunctionComponent<TPropsKriterieBegrunnelseList> 
 
 type TPropsKriterieBegrunnelse = {
   suksesskriterie: ISuksesskriterie
+  suksesskriterier: ISuksesskriterie[]
   index: number
   suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
   disableEdit: boolean
@@ -124,6 +128,7 @@ type TPropsKriterieBegrunnelse = {
 
 const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
   suksesskriterie,
+  suksesskriterier,
   index,
   suksesskriterieBegrunnelser,
   disableEdit,
@@ -160,6 +165,20 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
 
   const [veiledningsTekstMode, setVeiledningsTekstMode] = useState('edit')
   const [veiledningsTekst2Mode, setVeiledningsTekst2Mode] = useState('edit')
+  const hoppetOverPgaKontrollertFlylt =
+    !!feildArrayRenderProps.form.values.suksesskriterieBegrunnelser[index]
+      ?.hoppetOverPgaKontrollertFlylt
+  const [isUtfyllendeReadMoreOpen, setIsUtfyllendeReadMoreOpen] = useState<boolean>(
+    !hoppetOverPgaKontrollertFlylt
+  )
+  const [prevHoppetOverPgaKontrollertFlylt, setPrevHoppetOverPgaKontrollertFlylt] = useState(
+    hoppetOverPgaKontrollertFlylt
+  )
+
+  if (prevHoppetOverPgaKontrollertFlylt !== hoppetOverPgaKontrollertFlylt) {
+    setPrevHoppetOverPgaKontrollertFlylt(hoppetOverPgaKontrollertFlylt)
+    setIsUtfyllendeReadMoreOpen(!hoppetOverPgaKontrollertFlylt)
+  }
 
   const getVeiledningsTekstFromMorEtterlevelse = (
     morEtterlevelse: IEtterlevelse,
@@ -261,9 +280,53 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
     }
   }
 
+  const begrunnelser = feildArrayRenderProps.form.values
+    .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
+
+  const hoppetOverAvIndex = begrunnelser[index]?.hoppetOverPgaKontrollertFlylt
+    ? begrunnelser.findLastIndex(
+        (begrunnelse, begrunnelseIndex) =>
+          begrunnelseIndex < index &&
+          (getSkipUpperBound(
+            suksesskriterier[begrunnelseIndex],
+            begrunnelse.suksesskriterieStatus
+          ) ?? 0) > index
+      )
+    : -1
+
+  const hoppetOverAvStatusLabel =
+    hoppetOverAvIndex !== -1
+      ? suksesskriterieStatusOptions
+          .find((option) => option.value === begrunnelser[hoppetOverAvIndex].suksesskriterieStatus)
+          ?.label.toLowerCase()
+      : undefined
+
+  const checkForKontrollertFlyt = (newStatus: ESuksesskriterieStatus) => {
+    const previousUpperBound =
+      getSkipUpperBound(suksesskriterie, suksessKriterieStatus) ?? index + 1
+    const newUpperBound = getSkipUpperBound(suksesskriterie, newStatus) ?? index + 1
+
+    if (previousUpperBound === newUpperBound) return
+
+    feildArrayRenderProps.form.setFieldValue(
+      'suksesskriterieBegrunnelser',
+      begrunnelser.map((begrunnelse, begrunnelseIndex) => {
+        if (begrunnelseIndex <= index) return begrunnelse
+        if (begrunnelseIndex < newUpperBound) {
+          return { ...begrunnelse, hoppetOverPgaKontrollertFlylt: true }
+        }
+        if (begrunnelseIndex < previousUpperBound) {
+          return { ...begrunnelse, hoppetOverPgaKontrollertFlylt: false }
+        }
+        return begrunnelse
+      })
+    )
+  }
+
   return (
     <Box
       className='mb-4'
+      background={hoppetOverPgaKontrollertFlylt ? 'neutral-soft' : undefined}
       borderColor={getBorderColor()}
       padding='space-8'
       borderWidth='3'
@@ -285,16 +348,16 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
           {suksesskriterie.navn}
         </Heading>
 
+        {hoppetOverAvIndex !== -1 && (
+          <InlineMessage status='info' className='my-5'>
+            Fordi suksesskriterium {hoppetOverAvIndex + 1} av {totalSuksesskriterie} er vurdert som{' '}
+            {hoppetOverAvStatusLabel}, trenger dere ikke dokumentere dette suksesskriteriet.
+          </InlineMessage>
+        )}
+
         <ReadMore
-          defaultOpen
-          // onOpenChange={(isOpen) => {
-          //   if (isOpen) {
-          //     ampli.logEvent('knapp klikket', {
-          //       tekst: `Utfyllende om kriteriet ${index + 1} av ${totalSuksesskriterie}`,
-          //       pagePath: location.pathname,
-          //     })
-          //   }
-          // }}
+          open={isUtfyllendeReadMoreOpen}
+          onOpenChange={setIsUtfyllendeReadMoreOpen}
           header='Utfyllende om kriteriet'
         >
           <Markdown source={suksesskriterie.beskrivelse} />
@@ -427,116 +490,122 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
           </InfoCard>
         )}
 
-      <div className='w-full mt-5 bg-blue-50 rounded-lg p-4'>
-        <div>
-          <RadioGroup
-            id={'suksesskriterieStatus_' + index}
-            value={suksessKriterieStatus}
-            legend='Oppgi status på suksesskriteriet'
-            onChange={(val) => setSuksessKriterieStatus(val as ESuksesskriterieStatus)}
-            name={'suksesskriterieStatus' + suksesskriterie.id}
-          >
-            <div>
+      {feildArrayRenderProps.form.values.suksesskriterieBegrunnelser[index]
+        .hoppetOverPgaKontrollertFlylt !== true && (
+        <div className='w-full mt-5 bg-blue-50 rounded-lg p-4'>
+          <div>
+            <RadioGroup
+              id={'suksesskriterieStatus_' + index}
+              value={suksessKriterieStatus}
+              legend='Oppgi status på suksesskriteriet'
+              onChange={(val) => {
+                setSuksessKriterieStatus(val as ESuksesskriterieStatus)
+                checkForKontrollertFlyt(val as ESuksesskriterieStatus)
+              }}
+              name={'suksesskriterieStatus' + suksesskriterie.id}
+            >
               <div>
+                <div>
+                  {veiledning && (
+                    <ReadMore
+                      size='medium'
+                      header='Skal jeg som har skrevet veiledning endre på status?'
+                    >
+                      Når noen gjenbruker etterlevelsesdokumentet ditt, vil de arve statusen du
+                      setter her.
+                      <List>
+                        <List.Item>
+                          Som hovedregel burde statusen settes til “Ikke oppfylt” fram til
+                          etterleveren har gjort sin egen vurdering.
+                        </List.Item>
+                        <List.Item>
+                          Hvis kravet er svart ut sentralt, kan det være aktuelt å sette status til
+                          “Oppfylt” eller “Ikke relevant”.
+                        </List.Item>
+                      </List>
+                    </ReadMore>
+                  )}
+                </div>
+                <div className='block lg:flex lg:flex-wrap lg:gap-x-4 [&_label]:whitespace-nowrap'>
+                  {suksesskriterieStatusOptions
+                    .filter(
+                      (option) =>
+                        !suksesskriterie.deaktiverteSuksesskriterieStatus?.includes(option.value)
+                    )
+                    .map((option) => (
+                      <Radio key={option.value} value={option.value}>
+                        {option.label}
+                      </Radio>
+                    ))}
+                </div>
+              </div>
+            </RadioGroup>
+          </div>
+          {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
+            <div id={'begrunnelse_' + index} className='w-full mt-8'>
+              <div className='flex w-full justify-between items-center mb-1'>
+                <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
+              </div>
+              <div className='mb-3'>
                 {veiledning && (
-                  <ReadMore
-                    size='medium'
-                    header='Skal jeg som har skrevet veiledning endre på status?'
-                  >
-                    Når noen gjenbruker etterlevelsesdokumentet ditt, vil de arve statusen du setter
-                    her.
-                    <List>
-                      <List.Item>
-                        Som hovedregel burde statusen settes til “Ikke oppfylt” fram til
-                        etterleveren har gjort sin egen vurdering.
-                      </List.Item>
-                      <List.Item>
-                        Hvis kravet er svart ut sentralt, kan det være aktuelt å sette status til
-                        “Oppfylt” eller “Ikke relevant”.
-                      </List.Item>
-                    </List>
+                  <ReadMore size='medium' header='Skal jeg som har skrevet veiledning svare her?'>
+                    De som gjenbruker vurderingen din skal svare i fritekstfeltet under. I noen
+                    tilfeller kan det likevel være aktuelt for deg å skrive i feltet, for eksempel
+                    hvis du skal forklare hvorfor du har satt status til “Ikke relevant”. Du kan
+                    også velge å skrive i feltet dersom du vil kladde et svar som etterleveren kan
+                    bygge på selv. Ikke skriv veiledning i denne boksen.
                   </ReadMore>
                 )}
               </div>
-              <div className='block lg:flex lg:flex-wrap lg:gap-x-4 [&_label]:whitespace-nowrap'>
-                {suksesskriterieStatusOptions
-                  .filter(
-                    (option) =>
-                      !suksesskriterie.deaktiverteSuksesskriterieStatus?.includes(option.value)
-                  )
-                  .map((option) => (
-                    <Radio key={option.value} value={option.value}>
-                      {option.label}
-                    </Radio>
-                  ))}
-              </div>
-            </div>
-          </RadioGroup>
-        </div>
-        {!disableEdit && suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div id={'begrunnelse_' + index} className='w-full mt-8'>
-            <div className='flex w-full justify-between items-center mb-1'>
-              <Label>{getLabelForSuksessKriterie(suksessKriterieStatus)}</Label>
-            </div>
-            <div className='mb-3'>
-              {veiledning && (
-                <ReadMore size='medium' header='Skal jeg som har skrevet veiledning svare her?'>
-                  De som gjenbruker vurderingen din skal svare i fritekstfeltet under. I noen
-                  tilfeller kan det likevel være aktuelt for deg å skrive i feltet, for eksempel
-                  hvis du skal forklare hvorfor du har satt status til “Ikke relevant”. Du kan også
-                  velge å skrive i feltet dersom du vil kladde et svar som etterleveren kan bygge på
-                  selv. Ikke skriv veiledning i denne boksen.
-                </ReadMore>
+              {mode === 'edit' && (
+                <TextEditor
+                  initialValue={begrunnelse}
+                  setValue={setBegrunnelse}
+                  height='11.75rem'
+                  errors={feildArrayRenderProps.form.errors}
+                  simple
+                  maxWidth='49.375rem'
+                  width='100%'
+                />
               )}
-            </div>
-            {mode === 'edit' && (
-              <TextEditor
-                initialValue={begrunnelse}
-                setValue={setBegrunnelse}
-                height='11.75rem'
-                errors={feildArrayRenderProps.form.errors}
-                simple
-                maxWidth='49.375rem'
-                width='100%'
-              />
-            )}
 
-            {mode === 'view' && (
-              <div className='p-8 border-border-subtle-hover border border-solid rounded-md'>
-                <Markdown source={begrunnelse} />
+              {mode === 'view' && (
+                <div className='p-8 border-border-subtle-hover border border-solid rounded-md'>
+                  <Markdown source={begrunnelse} />
+                </div>
+              )}
+              <div className='flex justify-end -mt-px'>
+                <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
+                  <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
+                  <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
+                </ToggleGroup>
               </div>
-            )}
-            <div className='flex justify-end -mt-px'>
-              <ToggleGroup defaultValue='edit' onChange={setMode} size='small'>
-                <ToggleGroup.Item value='edit'>Redigering</ToggleGroup.Item>
-                <ToggleGroup.Item value='view'>Forhåndsvisning</ToggleGroup.Item>
-              </ToggleGroup>
-            </div>
 
-            <div className='mt-1'>
-              <FormError
-                fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`}
-                akselStyling
+              <div className='mt-1'>
+                <FormError
+                  fieldName={`suksesskriterieBegrunnelser[${index}].begrunnelse`}
+                  akselStyling
+                />
+              </div>
+            </div>
+          )}
+
+          {!disableEdit && !suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
+            <div className='w-full mt-4'>
+              <Label>Suksesskriteriet har ikke behov for begrunnelse.</Label>
+            </div>
+          )}
+          {disableEdit && (
+            <div className='w-full mt-4'>
+              <LabelAboveContent
+                fullWidth
+                title={getLabelForSuksessKriterie()}
+                markdown={begrunnelse}
               />
             </div>
-          </div>
-        )}
-
-        {!disableEdit && !suksesskriterie.behovForBegrunnelse && suksessKriterieStatus && (
-          <div className='w-full mt-4'>
-            <Label>Suksesskriteriet har ikke behov for begrunnelse.</Label>
-          </div>
-        )}
-        {disableEdit && (
-          <div className='w-full mt-4'>
-            <LabelAboveContent
-              fullWidth
-              title={getLabelForSuksessKriterie()}
-              markdown={begrunnelse}
-            />
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
       <FormError
         fieldName={`suksesskriterieBegrunnelser[${index}].suksesskriterieStatus`}
         akselStyling

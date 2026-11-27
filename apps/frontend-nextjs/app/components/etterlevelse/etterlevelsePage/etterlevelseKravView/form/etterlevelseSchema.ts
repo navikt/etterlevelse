@@ -15,7 +15,8 @@ export const etterlevelseSchema = () => {
             message:
               'Du kan ikke dokumentere ferdig hvis et suksesskriterium er under arbeid eller ikke påbegynt.',
             test: function (suksesskriterieStatus) {
-              const { options } = this
+              const { options, parent } = this
+              if (parent.hoppetOverPgaKontrollertFlylt) return true
               if (
                 (options.context?.status === EEtterlevelseStatus.FERDIG ||
                   options.context?.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT) &&
@@ -29,13 +30,18 @@ export const etterlevelseSchema = () => {
               return true
             },
           })
-          .required('Du må velge et status'),
+          .when('hoppetOverPgaKontrollertFlylt', {
+            is: true,
+            otherwise: (schema) => schema.required('Du må velge et status'),
+          }),
+        hoppetOverPgaKontrollertFlylt: yup.boolean(),
         behovForBegrunnelse: yup.boolean(),
         begrunnelse: yup.string().test({
           name: 'begrunnelseText',
           message: 'Du må fylle ut beskrivelsen.',
           test: function (begrunnelse) {
             const { parent, options } = this
+            if (parent.hoppetOverPgaKontrollertFlylt) return true
             if (
               (options.context?.status === EEtterlevelseStatus.FERDIG ||
                 options.context?.status === EEtterlevelseStatus.FERDIG_DOKUMENTERT) &&
@@ -77,7 +83,9 @@ export const etterlevelseSchema = () => {
           status === EEtterlevelseStatus.FERDIG ||
           status === EEtterlevelseStatus.FERDIG_DOKUMENTERT
         ) {
-          return parent.suksesskriterieBegrunnelser.every((skb: any) => skb.suksesskriterieStatus)
+          return parent.suksesskriterieBegrunnelser.every(
+            (skb: any) => skb.hoppetOverPgaKontrollertFlylt || skb.suksesskriterieStatus
+          )
         }
         return true
       },

@@ -50,6 +50,7 @@
     ".next/dev/types/**/*.ts",
     ".next/dev/types/**/*.tsx",
     ".next/types/**/*.ts",
-    ".next/types/**/*.tsx"
+    ".next/types/**/*.tsx",
+    ".next-playwright"
   ]
 }

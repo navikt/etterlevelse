@@ -8,7 +8,7 @@ import {
   TEtterlevelseQL,
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { INomSeksjon } from '@/constants/etterlevelseDokumentasjon/etterlevelseDokumentasjonConstants'
-import { ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
+import { ESuksesskriteriumFlyt, ISuksesskriterie, TKravQL } from '@/constants/krav/kravConstants'
 import { ITeam } from '@/constants/teamkatalogen/teamkatalogConstants'
 import { kravNummerView } from '../krav/kravUtil'
 
@@ -244,3 +244,41 @@ export const getLabelForSuksessKriterie = (suksessKriterieStatus?: ESuksesskrite
 
 export const etterlevelseName = (etterlevelse: IEtterlevelse): string =>
   `${kravNummerView(etterlevelse.kravVersjon, etterlevelse.kravNummer)}`
+
+export const getSkipUpperBound = (
+  suksesskriterie: ISuksesskriterie | undefined,
+  status?: ESuksesskriterieStatus
+): number | undefined => {
+  if (!suksesskriterie || !status) return
+
+  const flytConfig: Partial<
+    Record<
+      ESuksesskriterieStatus,
+      { flyt?: ESuksesskriteriumFlyt; nextSuksesskriterieIndex?: number }
+    >
+  > = {
+    [ESuksesskriterieStatus.OPPFYLT]: {
+      flyt: suksesskriterie.oppfyltStatusFlyt,
+      nextSuksesskriterieIndex: suksesskriterie.hopperOverTilSuksesskriterieIndexForOppfyltFlyt,
+    },
+    [ESuksesskriterieStatus.IKKE_OPPFYLT]: {
+      flyt: suksesskriterie.ikkeOppfyltStatusFlyt,
+      nextSuksesskriterieIndex: suksesskriterie.hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt,
+    },
+    [ESuksesskriterieStatus.IKKE_RELEVANT]: {
+      flyt: suksesskriterie.ikkeRelevantStatusFlyt,
+      nextSuksesskriterieIndex:
+        suksesskriterie.hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt,
+    },
+  }
+
+  const config = flytConfig[status]
+  if (!config) return
+
+  if (config.flyt === ESuksesskriteriumFlyt.GA_OVER_NOEN_SUKSESSKRITERIER) {
+    return config.nextSuksesskriterieIndex
+  }
+  if (config.flyt === ESuksesskriteriumFlyt.GA_OVER_RESTERENDE_SUKSESSKRITERIER) {
+    return Infinity
+  }
+}
