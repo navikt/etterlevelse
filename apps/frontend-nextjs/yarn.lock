@@ -3937,7 +3937,7 @@ __metadata:
     "@navikt/aksel-icons": "npm:^8.23.0"
     "@navikt/analytics-types": "npm:^0.0.13"
     "@navikt/ds-css": "npm:^8.23.0"
-    "@navikt/ds-react": "npm:^8.23.0"
+    "@navikt/ds-react": "npm:^8.23.1"
     "@navikt/ds-tailwind": "npm:^8.23.0"
     "@next/eslint-plugin-next": "npm:^16.4.6"
     "@playwright/test": "npm:^1.65.1"
