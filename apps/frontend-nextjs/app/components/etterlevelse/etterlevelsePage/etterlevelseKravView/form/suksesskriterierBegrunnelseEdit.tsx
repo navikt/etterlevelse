@@ -33,8 +33,8 @@ import {
 } from '@/constants/etterlevelseDokumentasjon/etterlevelse/etterlevelseConstants'
 import { ISuksesskriterie } from '@/constants/krav/kravConstants'
 import {
+  getHoppetOverFlags,
   getLabelForSuksessKriterie,
-  getSkipUpperBound,
   getSuksesskriterieBegrunnelse,
 } from '@/util/etterlevelseUtil/etterlevelseUtil'
 import { useDebouncedState } from '@/util/hooks/customHooks/customHooks'
@@ -86,6 +86,23 @@ const KriterieBegrunnelseList: FunctionComponent<TPropsKriterieBegrunnelseList> 
 }) => {
   const suksesskriterieBegrunnelser = fieldArrayRenderProps.form.values
     .suksesskriterieBegrunnelser as ISuksesskriterieBegrunnelse[]
+
+  useEffect(() => {
+    const hoppetOverFlags = getHoppetOverFlags(suksesskriterier, suksesskriterieBegrunnelser)
+    const isSuksesskriterierInSync = suksesskriterieBegrunnelser.every(
+      (begrunnelse, index) => !!begrunnelse.hoppetOverPgaKontrollertFlylt === hoppetOverFlags[index]
+    )
+    if (isSuksesskriterierInSync) return
+
+    fieldArrayRenderProps.form.setFieldValue(
+      'suksesskriterieBegrunnelser',
+      suksesskriterieBegrunnelser.map((begrunnelse, index) =>
+        !!begrunnelse.hoppetOverPgaKontrollertFlylt === hoppetOverFlags[index]
+          ? begrunnelse
+          : { ...begrunnelse, hoppetOverPgaKontrollertFlylt: hoppetOverFlags[index] }
+      )
+    )
+  }, [])
 
   return (
     <div>
@@ -262,6 +279,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
       veiledning: veiledning,
       veiledningsTekst: veiledningTekst,
       veiledningsTekst2: veiledningTekst2,
+      hoppetOverPgaKontrollertFlylt: hoppetOverPgaKontrollertFlylt,
     })
   }, [begrunnelse, suksessKriterieStatus, veiledning, veiledningTekst, veiledningTekst2])
 
@@ -286,11 +304,7 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
   const hoppetOverAvIndex = begrunnelser[index]?.hoppetOverPgaKontrollertFlylt
     ? begrunnelser.findLastIndex(
         (begrunnelse, begrunnelseIndex) =>
-          begrunnelseIndex < index &&
-          (getSkipUpperBound(
-            suksesskriterier[begrunnelseIndex],
-            begrunnelse.suksesskriterieStatus
-          ) ?? 0) > index
+          begrunnelseIndex < index && !begrunnelse.hoppetOverPgaKontrollertFlylt
       )
     : -1
 
@@ -302,24 +316,31 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
       : undefined
 
   const checkForKontrollertFlyt = (newStatus: ESuksesskriterieStatus) => {
-    const previousUpperBound =
-      getSkipUpperBound(suksesskriterie, suksessKriterieStatus) ?? index + 1
-    const newUpperBound = getSkipUpperBound(suksesskriterie, newStatus) ?? index + 1
+    const hoppetOverFlags = getHoppetOverFlags(
+      suksesskriterier,
+      begrunnelser.map((begrunnelse, begrunnelseIndex) =>
+        begrunnelseIndex === index
+          ? { ...begrunnelse, suksesskriterieStatus: newStatus }
+          : begrunnelse
+      )
+    )
 
-    if (previousUpperBound === newUpperBound) return
+    if (
+      begrunnelser.every(
+        (begrunnelse, begrunnelseIndex) =>
+          !!begrunnelse.hoppetOverPgaKontrollertFlylt === hoppetOverFlags[begrunnelseIndex]
+      )
+    ) {
+      return
+    }
 
     feildArrayRenderProps.form.setFieldValue(
       'suksesskriterieBegrunnelser',
-      begrunnelser.map((begrunnelse, begrunnelseIndex) => {
-        if (begrunnelseIndex <= index) return begrunnelse
-        if (begrunnelseIndex < newUpperBound) {
-          return { ...begrunnelse, hoppetOverPgaKontrollertFlylt: true }
-        }
-        if (begrunnelseIndex < previousUpperBound) {
-          return { ...begrunnelse, hoppetOverPgaKontrollertFlylt: false }
-        }
-        return begrunnelse
-      })
+      begrunnelser.map((begrunnelse, begrunnelseIndex) =>
+        !!begrunnelse.hoppetOverPgaKontrollertFlylt === hoppetOverFlags[begrunnelseIndex]
+          ? begrunnelse
+          : { ...begrunnelse, hoppetOverPgaKontrollertFlylt: hoppetOverFlags[begrunnelseIndex] }
+      )
     )
   }
 

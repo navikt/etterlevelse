@@ -282,3 +282,18 @@ export const getSkipUpperBound = (
     return Infinity
   }
 }
+
+export const getHoppetOverFlags = (
+  suksesskriterier: ISuksesskriterie[],
+  suksesskriterieBegrunnelser: ISuksesskriterieBegrunnelse[]
+): boolean[] => {
+  let skipUntilIndex = -1
+
+  return suksesskriterieBegrunnelser.map((begrunnelse, index) => {
+    if (index < skipUntilIndex) return true
+
+    skipUntilIndex =
+      getSkipUpperBound(suksesskriterier[index], begrunnelse.suksesskriterieStatus) ?? -1
+    return false
+  })
+}
