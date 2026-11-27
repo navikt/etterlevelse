@@ -109,6 +109,7 @@ export const mapEtterlevelseToFormValue = (
           veiledning: false,
           veiledningsTekst: '',
           veiledningsTekst2: '',
+          hoppetOverPgaKontrollertFlylt: false,
         })
       }
     })

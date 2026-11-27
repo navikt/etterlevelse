@@ -306,10 +306,12 @@ public class DashboardService {
                     int antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav = 0;
                     for (Etterlevelse e : oppfyltEtterlevelseList) {
                         for (var begrunnelse : e.getSuksesskriterieBegrunnelser()) {
-                            if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
-                                antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav++;
-                            } else if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT) {
-                                antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav++;
+                            if (!Boolean.TRUE.equals(begrunnelse.getHoppetOverPgaKontrollertFlylt())) {
+                                if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
+                                    antallSuksesskriterierOppfyltPaaFerdigDokumentertKrav++;
+                                } else if (begrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT) {
+                                    antallSuksesskriterierIkkeOppfyltPaaFerdigDokumentertKrav++;
+                                }
                             }
                         }
                     }
@@ -594,19 +596,21 @@ public class DashboardService {
         int ikkeRelevantAntall = 0;
 
         for (Etterlevelse etterlevelse : etterlevelser) {
-            totalSuksesskriterier += etterlevelse.getSuksesskriterieBegrunnelser().size();
+            totalSuksesskriterier = (int) (totalSuksesskriterier + etterlevelse.getSuksesskriterieBegrunnelser().stream().filter(skb -> !Boolean.TRUE.equals(skb.getHoppetOverPgaKontrollertFlylt())).count());
 
             for (SuksesskriterieBegrunnelse suksesskriterieBegrunnelse : etterlevelse.getSuksesskriterieBegrunnelser()) {
-                if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_PAABEGYNT) {
-                    ikkePaabegyntAntall += 1;
-                } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.UNDER_ARBEID) {
-                    underArbeidAntall += 1;
-                } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
-                    oppfyltAntall += 1;
-                } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT) {
-                    ikkeOppfyltAntall += 1;
-                } else {
-                    ikkeRelevantAntall += 1;
+                if (!Boolean.TRUE.equals(suksesskriterieBegrunnelse.getHoppetOverPgaKontrollertFlylt())) {
+                    if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_PAABEGYNT) {
+                        ikkePaabegyntAntall += 1;
+                    } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.UNDER_ARBEID) {
+                        underArbeidAntall += 1;
+                    } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.OPPFYLT) {
+                        oppfyltAntall += 1;
+                    } else if (suksesskriterieBegrunnelse.getSuksesskriterieStatus() == SuksesskriterieStatus.IKKE_OPPFYLT) {
+                        ikkeOppfyltAntall += 1;
+                    } else {
+                        ikkeRelevantAntall += 1;
+                    }
                 }
             }
         }

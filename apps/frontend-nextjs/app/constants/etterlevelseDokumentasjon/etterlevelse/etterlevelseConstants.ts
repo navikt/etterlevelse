@@ -26,6 +26,7 @@ export interface ISuksesskriterieBegrunnelse {
   veiledning: boolean
   veiledningsTekst: string
   veiledningsTekst2: string
+  hoppetOverPgaKontrollertFlylt?: boolean
 }
 
 export enum EEtterlevelseStatus {

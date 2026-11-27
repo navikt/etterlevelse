@@ -269,19 +269,19 @@ const KriterieBegrunnelse: FunctionComponent<TPropsKriterieBegrunnelse> = ({
       borderWidth='3'
       borderRadius='8'
     >
-      <div className='flex flex-wrap items-center gap-3 mb-4'>
-        <BodyShort>
-          Suksesskriterium {index + 1} av {totalSuksesskriterie}
-        </BodyShort>
-        <SuksesskriterieEndringTag
-          suksesskriterie={suksesskriterie}
-          sammenlignMed={forrigeSuksesskriterier}
-          versjon='gjeldende'
-        />
-      </div>
-
       <div className='flex flex-col gap-4 mb-4'>
         <Heading size='xsmall' level='3'>
+          <span className='flex flex-wrap items-center gap-3 mb-4'>
+            <BodyShort as='span'>
+              Suksesskriterium {index + 1} av {totalSuksesskriterie}
+            </BodyShort>
+
+            <SuksesskriterieEndringTag
+              suksesskriterie={suksesskriterie}
+              sammenlignMed={forrigeSuksesskriterier}
+              versjon='gjeldende'
+            />
+          </span>
           {suksesskriterie.navn}
         </Heading>
 

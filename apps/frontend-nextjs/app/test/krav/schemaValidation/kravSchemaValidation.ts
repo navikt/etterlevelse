@@ -1,8 +1,9 @@
 import * as yup from 'yup'
 import { IRegelverk } from '@/constants/kodeverk/kodeverkConstants'
-import { EKravStatus, ISuksesskriterie } from '@/constants/krav/kravConstants'
+import { EKravStatus } from '@/constants/krav/kravConstants'
 import { EYupErrorMessage } from '@/constants/krav/test/testConstants'
 import { IVarslingsadresse } from '@/constants/teamkatalogen/varslingsadresse/varslingsadresseConstants'
+import { suksesskriterierCheck } from '@/test/krav/schemaValidation/suksesskriterierValidation'
 
 const isKravActiveStatus = (status: EKravStatus): boolean => status === EKravStatus.AKTIV
 
@@ -23,25 +24,6 @@ const hensiktCheck = yup.string().test({
   test: function (hensikt) {
     const { parent } = this
     return activeStatusValueValidation(parent.status, checkIfHensiktHasValue(hensikt as string))
-  },
-})
-
-const checkIfAllSuksesskriterieHasName = (suksesskriterier: ISuksesskriterie[]): boolean => {
-  return (
-    suksesskriterier.length > 0 &&
-    suksesskriterier.every((suksesskriterium) => suksesskriterium.navn)
-  )
-}
-
-const suksesskriterierCheck = yup.array().test({
-  name: 'suksesskriterierCheck',
-  message: 'Alle sukesskriterie må ha en tittel',
-  test: function (suksesskriterier) {
-    const { parent } = this
-    return activeStatusValueValidation(
-      parent.status,
-      !!checkIfAllSuksesskriterieHasName(suksesskriterier as ISuksesskriterie[])
-    )
   },
 })
 

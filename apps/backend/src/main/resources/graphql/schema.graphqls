@@ -140,6 +140,12 @@ type Suksesskriterie {
     beskrivelse: String
     behovForBegrunnelse: Boolean
     deaktiverteSuksesskriterieStatus: [SuksesskriterieStatus!]!
+    oppfyltStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForOppfyltFlyt: Int
+    ikkeOppfyltStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt: Int
+    ikkeRelevantStatusFlyt: SuksesskriteriumFlyt!
+    hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt: Int
 }
 
 type Regelverk {
@@ -152,6 +158,13 @@ enum KravStatus {
     UNDER_ARBEID,
     AKTIV,
     UTGAATT
+}
+
+enum SuksesskriteriumFlyt {
+    UNDEFINED,
+    INGEN_KONSEKVENS,
+    GA_OVER_NOEN_SUKSESSKRITERIER,
+    GA_OVER_RESTERENDE_SUKSESSKRITERIER,
 }
 
 type Varslingsadresse {
@@ -210,6 +223,7 @@ type SuksesskriterieBegrunnelse {
     veiledning: Boolean
     veiledningsTekst: String
     veiledningsTekst2: String
+    hoppetOverPgaKontrollertFlylt: Boolean
 }
 
 enum EtterlevelseStatus {
@@ -227,7 +241,7 @@ enum SuksesskriterieStatus {
     OPPFYLT,
     IKKE_RELEVANT,
     IKKE_OPPFYLT,
-    IKKE_PAABEGYNT
+    IKKE_PAABEGYNT,
 }
 
 type Behandling {

@@ -24,7 +24,15 @@ public class Suksesskriterie {
     @Builder.Default
     private boolean behovForBegrunnelse = true;
     private List<SuksesskriterieStatus> deaktiverteSuksesskriterieStatus;
-
+    @Builder.Default
+    private SuksesskriteriumFlyt oppfyltStatusFlyt = SuksesskriteriumFlyt.UNDEFINED;
+    private Integer hopperOverTilSuksesskriterieIndexForOppfyltFlyt;
+    @Builder.Default
+    private SuksesskriteriumFlyt ikkeOppfyltStatusFlyt = SuksesskriteriumFlyt.UNDEFINED;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt;
+    @Builder.Default
+    private SuksesskriteriumFlyt ikkeRelevantStatusFlyt = SuksesskriteriumFlyt.UNDEFINED;
+    private Integer hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt;
 
     public static Suksesskriterie fromRequest(SuksesskriterieRequest request) {
         return Suksesskriterie.builder()
@@ -33,6 +41,12 @@ public class Suksesskriterie {
                 .beskrivelse(request.getBeskrivelse())
                 .behovForBegrunnelse(request.isBehovForBegrunnelse())
                 .deaktiverteSuksesskriterieStatus(copyOf(request.getDeaktiverteSuksesskriterieStatus()))
+                .oppfyltStatusFlyt(request.getOppfyltStatusFlyt())
+                .hopperOverTilSuksesskriterieIndexForOppfyltFlyt(request.getHopperOverTilSuksesskriterieIndexForOppfyltFlyt())
+                .ikkeOppfyltStatusFlyt(request.getIkkeOppfyltStatusFlyt())
+                .hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt(request.getHopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt())
+                .ikkeRelevantStatusFlyt(request.getIkkeRelevantStatusFlyt())
+                .hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt(request.getHopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt())
                 .build();
     }
 
@@ -43,6 +57,12 @@ public class Suksesskriterie {
                 .beskrivelse(beskrivelse)
                 .behovForBegrunnelse(behovForBegrunnelse)
                 .deaktiverteSuksesskriterieStatus(copyOf(deaktiverteSuksesskriterieStatus))
+                .oppfyltStatusFlyt(oppfyltStatusFlyt)
+                .hopperOverTilSuksesskriterieIndexForOppfyltFlyt(hopperOverTilSuksesskriterieIndexForOppfyltFlyt)
+                .ikkeOppfyltStatusFlyt(ikkeOppfyltStatusFlyt)
+                .hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt(hopperOverTilSuksesskriterieIndexForIkkeOppfyltFlyt)
+                .ikkeRelevantStatusFlyt(ikkeRelevantStatusFlyt)
+                .hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt(hopperOverTilSuksesskriterieIndexForIkkeRelevantFlyt)
                 .build();
     }
 
